@@ -1,0 +1,164 @@
+
+## Exercise: Transformation
+
+*by Josh von Nonn (2021)*
+
+The impetus behind this exercise came from the movie *Dark Waters*
+(<https://www.youtube.com/watch?v=RvAOuhyunhY>), inspired by a true
+story of negligent chemical waste disposal by Dupont.
+
+First create a new RStudio project, named `GAMA` and save this .Rmd file
+there, and create a folder `GAMA_water_data` in the project folder; the
+path to the data can then be specifierd as
+`"GAMA_water_data/gama_pfas_statewide_v2.txt"` assuming that the latter
+name matches what is unzipped from your download. Change to match the
+actual name if it differs.
+
+Then download from the California Water Boards, GAMA groundwater
+website: <https://gamagroundwater.waterboards.ca.gov/gama/datadownload>
+
+Then select "Statewide Downloads" then "Statewide PFOS Data" and extract
+the zip file into the `GAMA_water_data` folder. This is a large txt file
+so if you open it with notepad it may take some time to load. Notice
+that this is a tab-delimited file, so is best read with `read.delim()` which defaults to tabs.
+
+**Note** that this data structure is similar to what was discussed in
+the introductory chapter in how you should use RStudio projects to
+organize your data, allowing *relative paths* to your data, such as
+"GAMA_water_data/gama_pfas_statewide_v2.txt", which will work wherever
+you copy your project folder. An absolute path to somewhere on your
+computer in contrast won't work for anyone else trying to run your code;
+absolute paths should only be used for servers that other users have
+access to and URLs on the web.
+
+Required packages:
+
+```{r}
+library(tidyverse)
+library(lubridate)
+```
+
+1.  Read in the downloaded file `"gama_pfas_statewide_v2.txt"` and call
+    it `cal_pfas` and have a look at the data set. You can select it
+    from the Environment pane or use `view(cal_pfas)`.
+
+```{r trans.ex1}
+library(tidyverse)
+cal_pfas <- read.delim("GAMA_water_data\\gama_pfas_statewide_v2.txt")
+```
+
+2.  Before we clean up this data, let's preserve the locations of all
+    the wells. Create a new data frame, `cal_pfas_loc`, retaining the
+    well id and geographic coordinate variables (see 3.4.1) from the
+    fields starting with `GM`, and remove all the duplicate wells (see
+    3.3). (Hint: use `distinct()`)
+
+```{r}
+
+```
+
+```{r echo=T, results='markup'}
+
+```
+
+3.  Now to trim down the data. Create a new data frame, `cal_pfas_trim`;
+    add a new `DATE` variable using the associated function (see 3.6) to
+    read this from the GM sample collection date. Also from the GM
+    fields, retain the date variable you just created, plus well id,
+    chemical VVL, and the numerical result variables, and finally sort
+    (see 3.4.7) by the well id.
+
+```{r}
+
+```
+
+The resulting data frame should have the following structure:
+
+```{r echo=T, results='markup'}
+
+```
+
+4.  Use the method in 5.4.2 to create new columns from the chemical
+    names and values from the result column and store the new data frame
+    as `cal_pfas_wide`.\
+    \
+    Notice the warnings. While we get a lot of warnings in R that are
+    safely ignored (after you're used to those that are), we need to
+    watch out for things that are going to give us results we don't
+    want. Some of the wells have multiple samples on the same day so
+    they will be put into a list (see this in the Environment tab). So
+    we'll want to derive average values for those, so rerun the pivot
+    but include the argument `values_fn = mean`. This will return only
+    the average of all the samples.\
+    \
+    Once the pivot is working correctly, keep the variables
+    `GM_WELL_ID`,`DATE`,`PFOS`,`PFOA` and create a new one, `SUMPFS`,
+    that is the sum of `PFOS` and `PFOA`. See 3.4.1.
+
+```{r trans.ex4}
+
+```
+
+
+> The US EPA has established a lifetime Health Advisory Level (HAL) for
+> PFOA and PFOS of 70 ng/L. When both PFOA and PFOS are found in
+> drinking water, the combined concentrations of PFOA and PFOS should be
+> compared with the 70 ng/L HAL. From the GROUNDWATER INFORMATION SHEET
+> for PFOA
+> (website:<https://www.waterboards.ca.gov/water_issues/programs/gama/factsheets.html>)
+
+5.  For the sake of creating an interesting time series plot, let's take
+    the data frame you just created, filter data for wells that have a
+    `SUMPFS` greater than 70 and that have more than 10 sampling dates
+    (see 3.4.6; how many well ids do you have?). Start by creating a new
+    data frame- `cal_pfas_index` from the pivoted data frame. Hint: one
+    way to do this is to first filter, then count, then filter for a
+    sufficient count. See 3.4.2 and 3.4.6. The resulting data frame
+    downloaded in 2021 had 11 observations and 2 variables.
+
+```{r}
+
+```
+
+
+6.  Create a new data frame, `cal_pfas_max` to locate the well with the
+    most sampling dates (n). See 3.4.3, where we found the most massive
+    female penguins, for a relevant method.
+
+```{r}
+
+```
+
+
+7.  Now let's pull all the data on that well by joining the max indexed
+    well with `cal_pfas_wide`, remove `n` (3.4.1), and call the new data
+    frame `cal_pfas_join`.
+
+```{r}
+
+```
+
+8.  Create a new data frame, `cal_pfs_long` and `pivot_longer` the
+    `cal_pfs_join` data, creating new columns: `"Chemical"` and `"ngl"`.
+
+
+9.  Plot the well using the wide data from `cal_pfs_join` , to create
+    the graph shown here (see 4.4.3.1 and 4.7), plotting the three
+    variables (`PFOS,PFOA,SUMPFS`) with different colored lines of your
+    choice. Add a horizontal reference line
+    (`geom_hline(yintercept = 70)`) for the HAL limit at 70. Note that
+    the axis labels have been clarified (see 4.7).
+
+```{r, echo=F}
+knitr::include_graphics(here::here("img","transform_ex9.png"))
+```
+
+10. Plot the well using the long data from `cal_pfs_long` using DATE on
+    the x axis and `ngl` on the y axis. Distinguish the chemicals by
+    setting the line color to `Chemical` in the aesthetics. As before,
+    add the horizontal reference at 70 and improve the axis labels, but
+    also tweak where the legend goes (see 4.7).
+
+```{r transGoal10, echo=F, out.width='50%',fig.align="center",fig.cap="Goal"}
+knitr::include_graphics(here::here("img","transform_ex10.png"))
+```

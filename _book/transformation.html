@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Data Transformation | Introduction to Environmental Data Science</title>
+  <meta name="description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Data Transformation | Introduction to Environmental Data Science" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  <meta name="github-repo" content="iGISc/EnvDataSci" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Data Transformation | Introduction to Environmental Data Science" />
+  
+  <meta name="twitter:description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  
+
+<meta name="author" content="Jerry Davis, SFSU Institute for Geographic Information Science" />
+
+
+<meta name="date" content="2026-09-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="visualization.html"/>
+<link rel="next" href="spatial.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script>
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.2.3/leaflet.js"></script>
+<script src="libs/leaflet-providers-3.0.0/leaflet-providers.js"></script>
+<script src="libs/leaflet-providers-plugin-2.2.3/leaflet-providers-plugin.js"></script>
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<link href="libs/sierra___TEMPERATURE-CSS-0.0.1/sierra___TEMPERATURE_home-button.css" rel="stylesheet" />
+<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><img src="img/eaRth_anna296.png"></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background, Goals and Data</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#environmental-data-science"><i class="fa fa-check"></i><b>1.1</b> Environmental Data Science</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#environmental-data-and-methods"><i class="fa fa-check"></i><b>1.2</b> Environmental Data and Methods</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#goals"><i class="fa fa-check"></i><b>1.3</b> Goals</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#some-definitions"><i class="fa fa-check"></i><b>1.3.1</b> Some definitions:</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>1.4</b> Exploratory Data Analysis</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#software-and-data"><i class="fa fa-check"></i><b>1.5</b> Software and Data</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#data"><i class="fa fa-check"></i><b>1.5.1</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i><b>1.6</b> Acknowledgements</a></li>
+</ul></li>
+<li class="part"><span><b>I Exploratory Data Analysis</b></span></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction to R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#data-objects"><i class="fa fa-check"></i><b>2.1</b> Data Objects</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#scalars-and-assignment"><i class="fa fa-check"></i><b>2.1.1</b> Scalars and assignment</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#functions"><i class="fa fa-check"></i><b>2.2</b> Functions</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#expressions"><i class="fa fa-check"></i><b>2.3</b> Expressions and Statements</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#class"><i class="fa fa-check"></i><b>2.4</b> Data Classes</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introduction.html"><a href="introduction.html#integers"><i class="fa fa-check"></i><b>2.4.1</b> Integers</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#rectangular-data"><i class="fa fa-check"></i><b>2.5</b> Rectangular Data</a></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#data-structures-in-r"><i class="fa fa-check"></i><b>2.6</b> Data Structures in R</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="introduction.html"><a href="introduction.html#vector"><i class="fa fa-check"></i><b>2.6.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.6.2" data-path="introduction.html"><a href="introduction.html#list"><i class="fa fa-check"></i><b>2.6.2</b> Lists</a></li>
+<li class="chapter" data-level="2.6.3" data-path="introduction.html"><a href="introduction.html#matrix"><i class="fa fa-check"></i><b>2.6.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.6.4" data-path="introduction.html"><a href="introduction.html#dataframes"><i class="fa fa-check"></i><b>2.6.4</b> Data frames</a></li>
+<li class="chapter" data-level="2.6.5" data-path="introduction.html"><a href="introduction.html#factors"><i class="fa fa-check"></i><b>2.6.5</b> Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#accessors"><i class="fa fa-check"></i><b>2.7</b> Accessors and Subsetting</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="introduction.html"><a href="introduction.html#subsetting"><i class="fa fa-check"></i><b>2.7.1</b> <code>[]</code> Subsetting</a></li>
+<li class="chapter" data-level="2.7.2" data-path="introduction.html"><a href="introduction.html#the-mysterious-double-bracket"><i class="fa fa-check"></i><b>2.7.2</b> <code>[[]]</code> The mysterious double bracket</a></li>
+<li class="chapter" data-level="2.7.3" data-path="introduction.html"><a href="introduction.html#accessing-a-vector-from-a-data-frame"><i class="fa fa-check"></i><b>2.7.3</b> <code>$</code> Accessing a vector from a data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#programming"><i class="fa fa-check"></i><b>2.8</b> Programming scripts in RStudio</a>
+<ul>
+<li class="chapter" data-level="2.8.1" data-path="introduction.html"><a href="introduction.html#functions-writing"><i class="fa fa-check"></i><b>2.8.1</b> <code>function</code> : creating your own</a></li>
+<li class="chapter" data-level="2.8.2" data-path="introduction.html"><a href="introduction.html#if-conditional-operations"><i class="fa fa-check"></i><b>2.8.2</b> <code>if</code> : conditional operations</a></li>
+<li class="chapter" data-level="2.8.3" data-path="introduction.html"><a href="introduction.html#for"><i class="fa fa-check"></i><b>2.8.3</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="2.8.4" data-path="introduction.html"><a href="introduction.html#subsetting-with-logic"><i class="fa fa-check"></i><b>2.8.4</b> Subsetting with logic</a></li>
+<li class="chapter" data-level="2.8.5" data-path="introduction.html"><a href="introduction.html#apply"><i class="fa fa-check"></i><b>2.8.5</b> Apply functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.9" data-path="introduction.html"><a href="introduction.html#rstudio"><i class="fa fa-check"></i><b>2.9</b> RStudio projects</a>
+<ul>
+<li class="chapter" data-level="2.9.1" data-path="introduction.html"><a href="introduction.html#rmarkdown"><i class="fa fa-check"></i><b>2.9.1</b> R Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="2.10" data-path="introduction.html"><a href="introduction.html#exercises-introduction-to-r"><i class="fa fa-check"></i><b>2.10</b> Exercises: Introduction to R</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="abstraction.html"><a href="abstraction.html"><i class="fa fa-check"></i><b>3</b> Data Abstraction</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="abstraction.html"><a href="abstraction.html#tidyverse"><i class="fa fa-check"></i><b>3.1</b> The Tidyverse</a></li>
+<li class="chapter" data-level="3.2" data-path="abstraction.html"><a href="abstraction.html#tibbles"><i class="fa fa-check"></i><b>3.2</b> Tibbles</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="abstraction.html"><a href="abstraction.html#building-a-tibble-from-vectors"><i class="fa fa-check"></i><b>3.2.1</b> Building a tibble from vectors</a></li>
+<li class="chapter" data-level="3.2.2" data-path="abstraction.html"><a href="abstraction.html#tribble"><i class="fa fa-check"></i><b>3.2.2</b> tribble</a></li>
+<li class="chapter" data-level="3.2.3" data-path="abstraction.html"><a href="abstraction.html#csv"><i class="fa fa-check"></i><b>3.2.3</b> read_csv</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="abstraction.html"><a href="abstraction.html#summarizing-variable-distributions"><i class="fa fa-check"></i><b>3.3</b> Summarizing variable distributions</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="abstraction.html"><a href="abstraction.html#stratifying-variables-by-site-using-a-tukey-box-plot"><i class="fa fa-check"></i><b>3.3.1</b> Stratifying variables by site using a Tukey box plot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="abstraction.html"><a href="abstraction.html#dplyr"><i class="fa fa-check"></i><b>3.4</b> Database operations</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="abstraction.html"><a href="abstraction.html#pipe"><i class="fa fa-check"></i><b>3.4.1</b> Select, mutate, and the pipe</a></li>
+<li class="chapter" data-level="3.4.2" data-path="abstraction.html"><a href="abstraction.html#filter"><i class="fa fa-check"></i><b>3.4.2</b> Filtering observations</a></li>
+<li class="chapter" data-level="3.4.3" data-path="abstraction.html"><a href="abstraction.html#subsetting-data-with-base-rs-subset"><i class="fa fa-check"></i><b>3.4.3</b> Subsetting data with base R’s <code>subset</code></a></li>
+<li class="chapter" data-level="3.4.4" data-path="abstraction.html"><a href="abstraction.html#writing-a-data-frame-to-a-csv"><i class="fa fa-check"></i><b>3.4.4</b> Writing a data frame to a csv</a></li>
+<li class="chapter" data-level="3.4.5" data-path="abstraction.html"><a href="abstraction.html#group-summary"><i class="fa fa-check"></i><b>3.4.5</b> Summarize by group</a></li>
+<li class="chapter" data-level="3.4.6" data-path="abstraction.html"><a href="abstraction.html#count"><i class="fa fa-check"></i><b>3.4.6</b> Count</a></li>
+<li class="chapter" data-level="3.4.7" data-path="abstraction.html"><a href="abstraction.html#sorting-after-summarizing"><i class="fa fa-check"></i><b>3.4.7</b> Sorting after summarizing</a></li>
+<li class="chapter" data-level="3.4.8" data-path="abstraction.html"><a href="abstraction.html#the-dot-operator"><i class="fa fa-check"></i><b>3.4.8</b> The dot operator</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="abstraction.html"><a href="abstraction.html#stringr"><i class="fa fa-check"></i><b>3.5</b> String abstraction</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="abstraction.html"><a href="abstraction.html#detecting-matches"><i class="fa fa-check"></i><b>3.5.1</b> Detecting matches</a></li>
+<li class="chapter" data-level="3.5.2" data-path="abstraction.html"><a href="abstraction.html#subset-string"><i class="fa fa-check"></i><b>3.5.2</b> Subsetting strings</a></li>
+<li class="chapter" data-level="3.5.3" data-path="abstraction.html"><a href="abstraction.html#string-length"><i class="fa fa-check"></i><b>3.5.3</b> String length</a></li>
+<li class="chapter" data-level="3.5.4" data-path="abstraction.html"><a href="abstraction.html#replacing-substrings-with-other-text-mutating-strings"><i class="fa fa-check"></i><b>3.5.4</b> Replacing substrings with other text (“mutating” strings)</a></li>
+<li class="chapter" data-level="3.5.5" data-path="abstraction.html"><a href="abstraction.html#concatenating-and-splitting"><i class="fa fa-check"></i><b>3.5.5</b> Concatenating and splitting</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="abstraction.html"><a href="abstraction.html#lubridate"><i class="fa fa-check"></i><b>3.6</b> Dates and times with <code>lubridate</code></a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="abstraction.html"><a href="abstraction.html#dates-used-for-annual-time-series"><i class="fa fa-check"></i><b>3.6.1</b> Dates used for annual time series</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="abstraction.html"><a href="abstraction.html#extending-abstractions-with-functions"><i class="fa fa-check"></i><b>3.7</b> Extending abstractions with functions</a></li>
+<li class="chapter" data-level="3.8" data-path="abstraction.html"><a href="abstraction.html#exercises-data-abstraction"><i class="fa fa-check"></i><b>3.8</b> Exercises: Data Abstraction</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>4</b> Visualization</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="visualization.html"><a href="visualization.html#plot-in-base-r"><i class="fa fa-check"></i><b>4.1</b> plot in base R</a></li>
+<li class="chapter" data-level="4.2" data-path="visualization.html"><a href="visualization.html#ggplot2"><i class="fa fa-check"></i><b>4.2</b> ggplot2</a></li>
+<li class="chapter" data-level="4.3" data-path="visualization.html"><a href="visualization.html#plotting-one-variable"><i class="fa fa-check"></i><b>4.3</b> Plotting one variable</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="visualization.html"><a href="visualization.html#histogram"><i class="fa fa-check"></i><b>4.3.1</b> Histogram</a></li>
+<li class="chapter" data-level="4.3.2" data-path="visualization.html"><a href="visualization.html#density-plot"><i class="fa fa-check"></i><b>4.3.2</b> Density plot</a></li>
+<li class="chapter" data-level="4.3.3" data-path="visualization.html"><a href="visualization.html#boxplot"><i class="fa fa-check"></i><b>4.3.3</b> Boxplot</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="visualization.html"><a href="visualization.html#plotting-two-variables"><i class="fa fa-check"></i><b>4.4</b> Plotting Two Variables</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="visualization.html"><a href="visualization.html#two-continuous-variables"><i class="fa fa-check"></i><b>4.4.1</b> Two continuous variables</a></li>
+<li class="chapter" data-level="4.4.2" data-path="visualization.html"><a href="visualization.html#two-variables-one-discrete"><i class="fa fa-check"></i><b>4.4.2</b> Two variables, one discrete</a></li>
+<li class="chapter" data-level="4.4.3" data-path="visualization.html"><a href="visualization.html#color-systems"><i class="fa fa-check"></i><b>4.4.3</b> Color systems</a></li>
+<li class="chapter" data-level="4.4.4" data-path="visualization.html"><a href="visualization.html#trend-line"><i class="fa fa-check"></i><b>4.4.4</b> Trend line</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="visualization.html"><a href="visualization.html#general-symbology"><i class="fa fa-check"></i><b>4.5</b> General Symbology</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="visualization.html"><a href="visualization.html#categorical-symbology"><i class="fa fa-check"></i><b>4.5.1</b> Categorical symbology</a></li>
+<li class="chapter" data-level="4.5.2" data-path="visualization.html"><a href="visualization.html#log-scales-instead-of-transform"><i class="fa fa-check"></i><b>4.5.2</b> Log scales instead of transform</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="visualization.html"><a href="visualization.html#graphs-from-grouped-data"><i class="fa fa-check"></i><b>4.6</b> Graphs from Grouped Data</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="visualization.html"><a href="visualization.html#faceted-graphs"><i class="fa fa-check"></i><b>4.6.1</b> Faceted graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="visualization.html"><a href="visualization.html#titles-subtitles-axis-labels-and-legend-position"><i class="fa fa-check"></i><b>4.7</b> Titles, Subtitles, Axis Labels, and Legend Position</a></li>
+<li class="chapter" data-level="4.8" data-path="visualization.html"><a href="visualization.html#pairs-plot"><i class="fa fa-check"></i><b>4.8</b> Pairs Plot</a></li>
+<li class="chapter" data-level="4.9" data-path="visualization.html"><a href="visualization.html#exercises-visualization"><i class="fa fa-check"></i><b>4.9</b> Exercises: Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="transformation.html"><a href="transformation.html"><i class="fa fa-check"></i><b>5</b> Data Transformation</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="transformation.html"><a href="transformation.html#joins"><i class="fa fa-check"></i><b>5.1</b> Data joins</a></li>
+<li class="chapter" data-level="5.2" data-path="transformation.html"><a href="transformation.html#set"><i class="fa fa-check"></i><b>5.2</b> Set operations</a></li>
+<li class="chapter" data-level="5.3" data-path="transformation.html"><a href="transformation.html#binding"><i class="fa fa-check"></i><b>5.3</b> Binding rows and columns</a></li>
+<li class="chapter" data-level="5.4" data-path="transformation.html"><a href="transformation.html#pivots"><i class="fa fa-check"></i><b>5.4</b> Pivoting data frames</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="transformation.html"><a href="transformation.html#pivot_longer"><i class="fa fa-check"></i><b>5.4.1</b> <code>pivot_longer</code></a></li>
+<li class="chapter" data-level="5.4.2" data-path="transformation.html"><a href="transformation.html#pivot_wider"><i class="fa fa-check"></i><b>5.4.2</b> <code>pivot_wider</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="transformation.html"><a href="transformation.html#combining-transformation-methods-to-create-a-free_y-faceted-graph"><i class="fa fa-check"></i><b>5.5</b> Combining transformation methods to create a <code>free_y</code> faceted graph</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="transformation.html"><a href="transformation.html#air-pollutant-emissions-trends-epa"><i class="fa fa-check"></i><b>5.5.1</b> Air pollutant emissions trends (EPA)</a></li>
+<li class="chapter" data-level="5.5.2" data-path="transformation.html"><a href="transformation.html#flux-tower-data"><i class="fa fa-check"></i><b>5.5.2</b> Flux tower data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="transformation.html"><a href="transformation.html#exercise-transformation"><i class="fa fa-check"></i><b>5.6</b> Exercise: Transformation</a></li>
+</ul></li>
+<li class="part"><span><b>II Spatial</b></span></li>
+<li class="chapter" data-level="6" data-path="spatial.html"><a href="spatial.html"><i class="fa fa-check"></i><b>6</b> Spatial Data and Maps</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="spatial.html"><a href="spatial.html#spatial-data"><i class="fa fa-check"></i><b>6.1</b> Spatial Data</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="spatial.html"><a href="spatial.html#simple-geometry-building-in-sf"><i class="fa fa-check"></i><b>6.1.1</b> Simple geometry building in sf</a></li>
+<li class="chapter" data-level="6.1.2" data-path="spatial.html"><a href="spatial.html#building-points-from-a-data-frame"><i class="fa fa-check"></i><b>6.1.2</b> Building points from a data frame</a></li>
+<li class="chapter" data-level="6.1.3" data-path="spatial.html"><a href="spatial.html#spatvectors-in-terra"><i class="fa fa-check"></i><b>6.1.3</b> SpatVectors in <code>terra</code></a></li>
+<li class="chapter" data-level="6.1.4" data-path="spatial.html"><a href="spatial.html#creating-features-from-shapefiles"><i class="fa fa-check"></i><b>6.1.4</b> Creating features from shapefiles</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="spatial.html"><a href="spatial.html#coordinate-referencing-systems"><i class="fa fa-check"></i><b>6.2</b> Coordinate Referencing Systems</a></li>
+<li class="chapter" data-level="6.3" data-path="spatial.html"><a href="spatial.html#creating-sf-data-from-data-frames"><i class="fa fa-check"></i><b>6.3</b> Creating sf Data from Data Frames</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="spatial.html"><a href="spatial.html#removing-geometry"><i class="fa fa-check"></i><b>6.3.1</b> <em>Removing</em> geometry</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="spatial.html"><a href="spatial.html#base-rs-plot-with-terra"><i class="fa fa-check"></i><b>6.4</b> Base R’s <code>plot()</code> with <code>terra</code></a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="spatial.html"><a href="spatial.html#using-maptiles-to-create-a-basemap"><i class="fa fa-check"></i><b>6.4.1</b> Using maptiles to create a basemap</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="spatial.html"><a href="spatial.html#raster-data"><i class="fa fa-check"></i><b>6.5</b> Raster data</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="spatial.html"><a href="spatial.html#building-rasters"><i class="fa fa-check"></i><b>6.5.1</b> Building rasters</a></li>
+<li class="chapter" data-level="6.5.2" data-path="spatial.html"><a href="spatial.html#vector-to-raster-conversion"><i class="fa fa-check"></i><b>6.5.2</b> Vector to raster conversion</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="spatial.html"><a href="spatial.html#ggplot2-for-maps"><i class="fa fa-check"></i><b>6.6</b> ggplot2 for Maps</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="spatial.html"><a href="spatial.html#rasters-in-ggplot2"><i class="fa fa-check"></i><b>6.6.1</b> Rasters in ggplot2</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="spatial.html"><a href="spatial.html#using-bounding-boxes-to-zoom-to-the-extent-of-data-layers-in-any-mapping-package"><i class="fa fa-check"></i><b>6.7</b> Using bounding boxes to zoom to the extent of data layers (in any mapping package)</a></li>
+<li class="chapter" data-level="6.8" data-path="spatial.html"><a href="spatial.html#tmap"><i class="fa fa-check"></i><b>6.8</b> tmap</a>
+<ul>
+<li class="chapter" data-level="6.8.1" data-path="spatial.html"><a href="spatial.html#color"><i class="fa fa-check"></i><b>6.8.1</b> Color</a></li>
+<li class="chapter" data-level="6.8.2" data-path="spatial.html"><a href="spatial.html#basemap-with-tmap"><i class="fa fa-check"></i><b>6.8.2</b> Basemap with tmap</a></li>
+</ul></li>
+<li class="chapter" data-level="6.9" data-path="spatial.html"><a href="spatial.html#interactive-maps"><i class="fa fa-check"></i><b>6.9</b> Interactive Maps</a>
+<ul>
+<li class="chapter" data-level="6.9.1" data-path="spatial.html"><a href="spatial.html#leaflet"><i class="fa fa-check"></i><b>6.9.1</b> Leaflet</a></li>
+<li class="chapter" data-level="6.9.2" data-path="spatial.html"><a href="spatial.html#mapview"><i class="fa fa-check"></i><b>6.9.2</b> Mapview</a></li>
+<li class="chapter" data-level="6.9.3" data-path="spatial.html"><a href="spatial.html#tmap-view-mode"><i class="fa fa-check"></i><b>6.9.3</b> tmap (view mode)</a></li>
+<li class="chapter" data-level="6.9.4" data-path="spatial.html"><a href="spatial.html#interactive-mapping-of-individual-penguins-abstracted-from-a-big-dataset"><i class="fa fa-check"></i><b>6.9.4</b> Interactive mapping of individual penguins abstracted from a big dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="6.10" data-path="spatial.html"><a href="spatial.html#exercises-spatial-data-and-maps"><i class="fa fa-check"></i><b>6.10</b> Exercises: Spatial Data and Maps</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="spatial-analysis.html"><a href="spatial-analysis.html"><i class="fa fa-check"></i><b>7</b> Spatial Analysis</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#data-frame-operations"><i class="fa fa-check"></i><b>7.1</b> Data Frame Operations</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#GroupedSummaries"><i class="fa fa-check"></i><b>7.1.1</b> Using grouped summaries, and filtering by a selection</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-analysis-operations"><i class="fa fa-check"></i><b>7.2</b> Spatial Analysis Operations</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#using-topology-to-subset"><i class="fa fa-check"></i><b>7.2.1</b> Using topology to subset</a></li>
+<li class="chapter" data-level="7.2.2" data-path="spatial-analysis.html"><a href="spatial-analysis.html#centroid"><i class="fa fa-check"></i><b>7.2.2</b> Centroid</a></li>
+<li class="chapter" data-level="7.2.3" data-path="spatial-analysis.html"><a href="spatial-analysis.html#distance"><i class="fa fa-check"></i><b>7.2.3</b> Distance</a></li>
+<li class="chapter" data-level="7.2.4" data-path="spatial-analysis.html"><a href="spatial-analysis.html#buffers"><i class="fa fa-check"></i><b>7.2.4</b> Buffers</a></li>
+<li class="chapter" data-level="7.2.5" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-overlay-union-and-intersection"><i class="fa fa-check"></i><b>7.2.5</b> Spatial overlay: union and intersection</a></li>
+<li class="chapter" data-level="7.2.6" data-path="spatial-analysis.html"><a href="spatial-analysis.html#clip-with-st_crop"><i class="fa fa-check"></i><b>7.2.6</b> Clip with st_crop</a></li>
+<li class="chapter" data-level="7.2.7" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-join-with-st_join"><i class="fa fa-check"></i><b>7.2.7</b> Spatial join with <code>st_join</code></a></li>
+<li class="chapter" data-level="7.2.8" data-path="spatial-analysis.html"><a href="spatial-analysis.html#further-exploration-of-spatial-analysis"><i class="fa fa-check"></i><b>7.2.8</b> Further exploration of spatial analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="spatial-analysis.html"><a href="spatial-analysis.html#exercises-spatial-analysis"><i class="fa fa-check"></i><b>7.3</b> Exercises: Spatial Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="raster.html"><a href="raster.html"><i class="fa fa-check"></i><b>8</b> Raster Spatial Analysis</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="raster.html"><a href="raster.html#terrain"><i class="fa fa-check"></i><b>8.1</b> Terrain functions</a></li>
+<li class="chapter" data-level="8.2" data-path="raster.html"><a href="raster.html#map-algebra-in-terra"><i class="fa fa-check"></i><b>8.2</b> Map Algebra in terra</a></li>
+<li class="chapter" data-level="8.3" data-path="raster.html"><a href="raster.html#distance-1"><i class="fa fa-check"></i><b>8.3</b> Distance</a></li>
+<li class="chapter" data-level="8.4" data-path="raster.html"><a href="raster.html#extracting-values"><i class="fa fa-check"></i><b>8.4</b> Extracting Values</a></li>
+<li class="chapter" data-level="8.5" data-path="raster.html"><a href="raster.html#focal-statistics"><i class="fa fa-check"></i><b>8.5</b> Focal Statistics</a></li>
+<li class="chapter" data-level="8.6" data-path="raster.html"><a href="raster.html#zonal-statistics"><i class="fa fa-check"></i><b>8.6</b> Zonal Statistics</a></li>
+<li class="chapter" data-level="8.7" data-path="raster.html"><a href="raster.html#exercises-raster-spatial-analysis"><i class="fa fa-check"></i><b>8.7</b> Exercises: Raster Spatial Analysis</a></li>
+</ul></li>
+<li class="part"><span><b>III Statistics and Modeling</b></span></li>
+<li class="chapter" data-level="9" data-path="statistics.html"><a href="statistics.html"><i class="fa fa-check"></i><b>9</b> Statistical Summaries and Tests</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="statistics.html"><a href="statistics.html#goals-of-statistical-analysis"><i class="fa fa-check"></i><b>9.1</b> Goals of Statistical Analysis</a></li>
+<li class="chapter" data-level="9.2" data-path="statistics.html"><a href="statistics.html#summary-statistics"><i class="fa fa-check"></i><b>9.2</b> Summary Statistics</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="statistics.html"><a href="statistics.html#summarize-by-group-stratifying-a-summary"><i class="fa fa-check"></i><b>9.2.1</b> Summarize by group: <em>stratifying a summary</em></a></li>
+<li class="chapter" data-level="9.2.2" data-path="statistics.html"><a href="statistics.html#boxplot-for-visualizing-distributions-by-group"><i class="fa fa-check"></i><b>9.2.2</b> Boxplot for visualizing distributions by group</a></li>
+<li class="chapter" data-level="9.2.3" data-path="statistics.html"><a href="statistics.html#random"><i class="fa fa-check"></i><b>9.2.3</b> Generating pseudorandom numbers</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="statistics.html"><a href="statistics.html#correlation"><i class="fa fa-check"></i><b>9.3</b> Correlation r and Coefficient of Determination r<sup>2</sup></a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="statistics.html"><a href="statistics.html#displaying-correlation-in-a-pairs-plot"><i class="fa fa-check"></i><b>9.3.1</b> Displaying correlation in a pairs plot</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="statistics.html"><a href="statistics.html#statistical-tests"><i class="fa fa-check"></i><b>9.4</b> Statistical Tests</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="statistics.html"><a href="statistics.html#comparing-samples-and-groupings-with-a-t-test-and-a-non-parametric-kruskal-wallis-rank-sum-test"><i class="fa fa-check"></i><b>9.4.1</b> Comparing samples and groupings with a t test and a non-parametric Kruskal-Wallis Rank Sum test</a></li>
+<li class="chapter" data-level="9.4.2" data-path="statistics.html"><a href="statistics.html#analysis-of-variance"><i class="fa fa-check"></i><b>9.4.2</b> Analysis of variance</a></li>
+<li class="chapter" data-level="9.4.3" data-path="statistics.html"><a href="statistics.html#post-hoc-analysis-of-variance-with-tukeys-test"><i class="fa fa-check"></i><b>9.4.3</b> Post-Hoc Analysis of Variance with Tukey’s Test</a></li>
+<li class="chapter" data-level="9.4.4" data-path="statistics.html"><a href="statistics.html#testing-a-correlation"><i class="fa fa-check"></i><b>9.4.4</b> Testing a correlation</a></li>
+<li class="chapter" data-level="9.4.5" data-path="statistics.html"><a href="statistics.html#additional-resources"><i class="fa fa-check"></i><b>9.4.5</b> Additional resources</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="statistics.html"><a href="statistics.html#exercises-statistics"><i class="fa fa-check"></i><b>9.5</b> Exercises: Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="modeling.html"><a href="modeling.html"><i class="fa fa-check"></i><b>10</b> Modeling</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="modeling.html"><a href="modeling.html#some-common-statistical-models"><i class="fa fa-check"></i><b>10.1</b> Some Common Statistical Models</a></li>
+<li class="chapter" data-level="10.2" data-path="modeling.html"><a href="modeling.html#lm"><i class="fa fa-check"></i><b>10.2</b> Linear Model (<code>lm</code>)</a></li>
+<li class="chapter" data-level="10.3" data-path="modeling.html"><a href="modeling.html#spatial-influences-on-statistical-analysis"><i class="fa fa-check"></i><b>10.3</b> Spatial Influences on Statistical Analysis</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="modeling.html"><a href="modeling.html#mapping-residuals"><i class="fa fa-check"></i><b>10.3.1</b> Mapping residuals</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="modeling.html"><a href="modeling.html#analysis-of-covariance"><i class="fa fa-check"></i><b>10.4</b> Analysis of Covariance</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="modeling.html"><a href="modeling.html#tukey-test-for-the-ancova-model"><i class="fa fa-check"></i><b>10.4.1</b> Tukey test for the ANCOVA model</a></li>
+<li class="chapter" data-level="10.4.2" data-path="modeling.html"><a href="modeling.html#the-karst-water-chemistry-model"><i class="fa fa-check"></i><b>10.4.2</b> The karst water chemistry model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="modeling.html"><a href="modeling.html#generalized-linear-model-glm"><i class="fa fa-check"></i><b>10.5</b> Generalized linear model (GLM)</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="modeling.html"><a href="modeling.html#binomial-family-logistic-glm"><i class="fa fa-check"></i><b>10.5.1</b> Binomial family: Logistic GLM</a></li>
+<li class="chapter" data-level="10.5.2" data-path="modeling.html"><a href="modeling.html#logistic-landslide-model"><i class="fa fa-check"></i><b>10.5.2</b> Logistic landslide model</a></li>
+<li class="chapter" data-level="10.5.3" data-path="modeling.html"><a href="modeling.html#poisson-regression"><i class="fa fa-check"></i><b>10.5.3</b> Poisson regression</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="modeling.html"><a href="modeling.html#other-modeling-methods"><i class="fa fa-check"></i><b>10.6</b> Other modeling methods</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="modeling.html"><a href="modeling.html#curve-fitting"><i class="fa fa-check"></i><b>10.6.1</b> Curve fitting</a></li>
+<li class="chapter" data-level="10.6.2" data-path="modeling.html"><a href="modeling.html#models-employing-machine-learning"><i class="fa fa-check"></i><b>10.6.2</b> Models employing machine learning</a></li>
+</ul></li>
+<li class="chapter" data-level="10.7" data-path="modeling.html"><a href="modeling.html#exercises-modeling"><i class="fa fa-check"></i><b>10.7</b> Exercises: Modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="imagery.html"><a href="imagery.html"><i class="fa fa-check"></i><b>11</b> Imagery and Classification Models</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="imagery.html"><a href="imagery.html#reading-and-displaying-sentinel-2-imagery"><i class="fa fa-check"></i><b>11.1</b> Reading and Displaying Sentinel-2 Imagery</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="imagery.html"><a href="imagery.html#individual-bands"><i class="fa fa-check"></i><b>11.1.1</b> Individual bands</a></li>
+<li class="chapter" data-level="11.1.2" data-path="imagery.html"><a href="imagery.html#spectral-subsets-to-create-three-band-r-g-b-and-nir-r-g-for-visualization"><i class="fa fa-check"></i><b>11.1.2</b> Spectral subsets to create three-band R-G-B and NIR-R-G for visualization</a></li>
+<li class="chapter" data-level="11.1.3" data-path="imagery.html"><a href="imagery.html#crop-to-study-area-extent"><i class="fa fa-check"></i><b>11.1.3</b> Crop to study area extent</a></li>
+<li class="chapter" data-level="11.1.4" data-path="imagery.html"><a href="imagery.html#saving-results"><i class="fa fa-check"></i><b>11.1.4</b> Saving results</a></li>
+<li class="chapter" data-level="11.1.5" data-path="imagery.html"><a href="imagery.html#band-scatter-plots"><i class="fa fa-check"></i><b>11.1.5</b> Band scatter plots</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="imagery.html"><a href="imagery.html#spectral-profiles"><i class="fa fa-check"></i><b>11.2</b> Spectral Profiles</a></li>
+<li class="chapter" data-level="11.3" data-path="imagery.html"><a href="imagery.html#map-algebra-and-vegetation-indices"><i class="fa fa-check"></i><b>11.3</b> Map Algebra and Vegetation Indices</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="imagery.html"><a href="imagery.html#vegetation-indices"><i class="fa fa-check"></i><b>11.3.1</b> Vegetation indices</a></li>
+<li class="chapter" data-level="11.3.2" data-path="imagery.html"><a href="imagery.html#histogram-1"><i class="fa fa-check"></i><b>11.3.2</b> Histogram</a></li>
+<li class="chapter" data-level="11.3.3" data-path="imagery.html"><a href="imagery.html#other-vegetation-indices"><i class="fa fa-check"></i><b>11.3.3</b> Other vegetation indices</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="imagery.html"><a href="imagery.html#unsupervised-classification-with-k-means"><i class="fa fa-check"></i><b>11.4</b> Unsupervised Classification with k-means</a></li>
+<li class="chapter" data-level="11.5" data-path="imagery.html"><a href="imagery.html#machine-learning-classification-of-imagery"><i class="fa fa-check"></i><b>11.5</b> Machine Learning Classification of Imagery</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="imagery.html"><a href="imagery.html#read-imagery-and-training-data-and-extract-sample-values-for-training"><i class="fa fa-check"></i><b>11.5.1</b> Read imagery and training data and extract sample values for training</a></li>
+<li class="chapter" data-level="11.5.2" data-path="imagery.html"><a href="imagery.html#training-the-cart-model"><i class="fa fa-check"></i><b>11.5.2</b> Training the CART model</a></li>
+<li class="chapter" data-level="11.5.3" data-path="imagery.html"><a href="imagery.html#prediction-using-the-cart-model"><i class="fa fa-check"></i><b>11.5.3</b> Prediction using the CART model</a></li>
+<li class="chapter" data-level="11.5.4" data-path="imagery.html"><a href="imagery.html#validating-the-model"><i class="fa fa-check"></i><b>11.5.4</b> Validating the model</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="imagery.html"><a href="imagery.html#classifying-with-10-m-sentinel-2-imagery"><i class="fa fa-check"></i><b>11.6</b> Classifying with 10 m Sentinel-2 Imagery</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="imagery.html"><a href="imagery.html#subset-bands-10-m"><i class="fa fa-check"></i><b>11.6.1</b> Subset bands (10 m)</a></li>
+<li class="chapter" data-level="11.6.2" data-path="imagery.html"><a href="imagery.html#crop-to-rcv-extent-and-extract-pixel-values"><i class="fa fa-check"></i><b>11.6.2</b> Crop to RCV extent and extract pixel values</a></li>
+<li class="chapter" data-level="11.6.3" data-path="imagery.html"><a href="imagery.html#training-the-cart-model-10-m-and-plot-the-tree"><i class="fa fa-check"></i><b>11.6.3</b> Training the CART model (10 m) and plot the tree</a></li>
+<li class="chapter" data-level="11.6.4" data-path="imagery.html"><a href="imagery.html#prediction-using-the-cart-model-10-m"><i class="fa fa-check"></i><b>11.6.4</b> Prediction using the CART model (10 m)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="imagery.html"><a href="imagery.html#classification-using-multiple-images-capturing-phenology"><i class="fa fa-check"></i><b>11.7</b> Classification Using Multiple Images Capturing Phenology</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="imagery.html"><a href="imagery.html#create-a-10-band-stack-from-both-images"><i class="fa fa-check"></i><b>11.7.1</b> Create a 10-band stack from both images</a></li>
+<li class="chapter" data-level="11.7.2" data-path="imagery.html"><a href="imagery.html#extract-the-training-data-10-m-spring-summer"><i class="fa fa-check"></i><b>11.7.2</b> Extract the training data (10 m spring + summer)</a></li>
+<li class="chapter" data-level="11.7.3" data-path="imagery.html"><a href="imagery.html#cart-model-and-prediction-10-m-spring-summer"><i class="fa fa-check"></i><b>11.7.3</b> CART model and prediction (10 m spring + summer)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.8" data-path="imagery.html"><a href="imagery.html#classification-using-multiple-images-capturing-phenology-20m"><i class="fa fa-check"></i><b>11.8</b> Classification Using Multiple Images Capturing Phenology : 20m</a>
+<ul>
+<li class="chapter" data-level="11.8.1" data-path="imagery.html"><a href="imagery.html#create-a-18-band-stack-from-both-images"><i class="fa fa-check"></i><b>11.8.1</b> Create a 18-band stack from both images</a></li>
+<li class="chapter" data-level="11.8.2" data-path="imagery.html"><a href="imagery.html#extract-the-training-data-20-m-spring-summer"><i class="fa fa-check"></i><b>11.8.2</b> Extract the training data (20 m spring + summer)</a></li>
+<li class="chapter" data-level="11.8.3" data-path="imagery.html"><a href="imagery.html#cart-model-and-prediction-20-m-spring-summer"><i class="fa fa-check"></i><b>11.8.3</b> CART model and prediction (20 m spring + summer)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.9" data-path="imagery.html"><a href="imagery.html#conclusions-and-next-steps-for-imagery-classification"><i class="fa fa-check"></i><b>11.9</b> Conclusions and Next Steps for Imagery Classification</a></li>
+<li class="chapter" data-level="11.10" data-path="imagery.html"><a href="imagery.html#exercises-imagery-analysis-and-classification-models"><i class="fa fa-check"></i><b>11.10</b> Exercises: Imagery Analysis and Classification Models</a></li>
+</ul></li>
+<li class="part"><span><b>IV Time Series</b></span></li>
+<li class="chapter" data-level="12" data-path="ts.html"><a href="ts.html"><i class="fa fa-check"></i><b>12</b> Time Series Visualization and Analysis</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="ts.html"><a href="ts.html#structure-seasonality-and-decomposition-of-time-series"><i class="fa fa-check"></i><b>12.1</b> Structure, Seasonality, and Decomposition of Time Series</a></li>
+<li class="chapter" data-level="12.2" data-path="ts.html"><a href="ts.html#creation-of-time-series-ts-data"><i class="fa fa-check"></i><b>12.2</b> Creation of Time Series (ts) Data</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="ts.html"><a href="ts.html#frequency-start-and-end-parameters-for-ts"><i class="fa fa-check"></i><b>12.2.1</b> Frequency, start, and end parameters for <code>ts()</code></a></li>
+<li class="chapter" data-level="12.2.2" data-path="ts.html"><a href="ts.html#associating-times-with-time-series"><i class="fa fa-check"></i><b>12.2.2</b> Associating times with time series</a></li>
+<li class="chapter" data-level="12.2.3" data-path="ts.html"><a href="ts.html#subsetting-time-series-by-times"><i class="fa fa-check"></i><b>12.2.3</b> Subsetting time series by times</a></li>
+<li class="chapter" data-level="12.2.4" data-path="ts.html"><a href="ts.html#changing-the-frequency-to-use-a-different-period"><i class="fa fa-check"></i><b>12.2.4</b> Changing the frequency to use a different period</a></li>
+<li class="chapter" data-level="12.2.5" data-path="ts.html"><a href="ts.html#time-stamps-and-extensible-time-series"><i class="fa fa-check"></i><b>12.2.5</b> Time stamps and extensible time series</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="ts.html"><a href="ts.html#data-smoothing-moving-average-ma"><i class="fa fa-check"></i><b>12.3</b> Data smoothing: moving average (<code>ma</code>)</a></li>
+<li class="chapter" data-level="12.4" data-path="ts.html"><a href="ts.html#decomposition-of-data-logger-data-marble-mountains"><i class="fa fa-check"></i><b>12.4</b> Decomposition of data logger data: Marble Mountains</a></li>
+<li class="chapter" data-level="12.5" data-path="ts.html"><a href="ts.html#facet-graphs-for-comparing-variables-over-time"><i class="fa fa-check"></i><b>12.5</b> Facet Graphs for Comparing Variables over Time</a></li>
+<li class="chapter" data-level="12.6" data-path="ts.html"><a href="ts.html#lag-regression"><i class="fa fa-check"></i><b>12.6</b> Lag Regression</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="ts.html"><a href="ts.html#the-lag-regression-using-a-lag-function-in-a-linear-model"><i class="fa fa-check"></i><b>12.6.1</b> The lag regression, using a lag function in a linear model</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="ts.html"><a href="ts.html#ensemble-summary-statistics"><i class="fa fa-check"></i><b>12.7</b> Ensemble Summary Statistics</a></li>
+<li class="chapter" data-level="12.8" data-path="ts.html"><a href="ts.html#learning-more-about-time-series-in-r"><i class="fa fa-check"></i><b>12.8</b> Learning more about Time Series in R</a></li>
+<li class="chapter" data-level="12.9" data-path="ts.html"><a href="ts.html#exercises-time-series"><i class="fa fa-check"></i><b>12.9</b> Exercises: Time Series</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction to Environmental Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="transformation" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Data Transformation<a href="transformation.html#transformation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><img src="EnvDataScience_files/figure-html/Transformation-1.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<p>The goal of this section is to continue where we started in the earlier
+chapter on data abstraction with <strong><code>dplyr</code></strong> to look at the
+more transformational functions applied to data in a database, and
+<strong><code>tidyr</code></strong> adds other tools like pivot tables.</p>
+<ul>
+<li><p><strong><code>dplyr</code></strong> tools:</p>
+<ul>
+<li>joins: <code>left_join</code>, <code>right_join</code>, <code>inner_join</code>, <code>full_join</code>,
+<code>semi_join</code>, <code>anti_join</code></li>
+<li>set operations: <code>intersect</code>, <code>union</code>, <code>setdiff</code></li>
+<li>binding rows and columns: <code>bind_cols</code>, <code>bind_rows</code></li>
+</ul></li>
+<li><p><strong><code>tidyr</code></strong> tools:</p>
+<ul>
+<li>pivot tables: <code>pivot_longer</code>, <code>pivot_wider</code></li>
+</ul></li>
+</ul>
+<p>The term “data wrangling” has been used for what we’re doing with these
+tools, and the relevant cheat sheet used to be called that, but now they
+have names like “Data transformation with dplyr” and “Data tidying with
+tidyr”, but those could change too. See what’s current at
+<a href="https://www.rstudio.com/resources/cheatsheets/" class="uri">https://www.rstudio.com/resources/cheatsheets/</a></p>
+<div id="joins" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Data joins<a href="transformation.html#joins" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To bring in variables from another data frame based on
+a common join field. There are multiple types of joins. Probably the
+most common is <strong><code>left_join</code></strong> since it starts from the data frame (or
+sf) you want to continue working with and bring in data from an
+additional source. You’ll retain all records of the first data set. For
+any non-matches, <code>NA</code> is assigned.</p>
+<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb427-1"><a href="transformation.html#cb427-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb427-2"><a href="transformation.html#cb427-2" tabindex="-1"></a><span class="fu">library</span>(igisci)</span>
+<span id="cb427-3"><a href="transformation.html#cb427-3" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb427-4"><a href="transformation.html#cb427-4" tabindex="-1"></a>income <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;CA/CA_MdInc.csv&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb427-5"><a href="transformation.html#cb427-5" tabindex="-1"></a>   dplyr<span class="sc">::</span><span class="fu">select</span>(trID, HHinc2016) <span class="sc">|&gt;</span></span>
+<span id="cb427-6"><a href="transformation.html#cb427-6" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">HHinc2016 =</span> <span class="fu">as.numeric</span>(HHinc2016),</span>
+<span id="cb427-7"><a href="transformation.html#cb427-7" tabindex="-1"></a>          <span class="at">joinid =</span> <span class="fu">str_c</span>(<span class="st">&quot;0&quot;</span>, trID)) <span class="sc">|&gt;</span></span>
+<span id="cb427-8"><a href="transformation.html#cb427-8" tabindex="-1"></a>   dplyr<span class="sc">::</span><span class="fu">select</span>(joinid, HHinc2016)</span>
+<span id="cb427-9"><a href="transformation.html#cb427-9" tabindex="-1"></a>census <span class="ot">&lt;-</span> BayAreaTracts <span class="sc">|&gt;</span></span>
+<span id="cb427-10"><a href="transformation.html#cb427-10" tabindex="-1"></a>   <span class="fu">left_join</span>(income, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;FIPS&quot;</span> <span class="ot">=</span> <span class="st">&quot;joinid&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb427-11"><a href="transformation.html#cb427-11" tabindex="-1"></a>   dplyr<span class="sc">::</span><span class="fu">select</span>(FIPS, POP12_SQMI, POP2012, HHinc2016)</span>
+<span id="cb427-12"><a href="transformation.html#cb427-12" tabindex="-1"></a><span class="fu">head</span>(census <span class="sc">|&gt;</span> <span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>))</span></code></pre></div>
+<pre><code>##          FIPS POP12_SQMI POP2012 HHinc2016
+## 1 06001400100   1118.797    2976    177417
+## 2 06001400200   9130.435    2100    153125
+## 3 06001400300  11440.476    4805     85313
+## 4 06001400400  14573.077    3789     99539
+## 5 06001400500  15582.609    3584     83650
+## 6 06001400600  13516.667    1622     61597</code></pre>
+<p>Other joins are:</p>
+<ul>
+<li><strong><code>right_join</code></strong> where you end up retaining all
+the rows of the second data set and NA is assigned to non-matches</li>
+<li><strong><code>inner_join</code></strong> where you only retain records
+for matches</li>
+<li><strong><code>full_join</code></strong> where records are retained for
+both sides, and NAs are assigned to non-matches</li>
+</ul>
+<p><strong>Right join example</strong> We need to join NCDC monthly climate data for all
+California weather stations to a selection of 82 stations that are in
+the Sierra.</p>
+<ul>
+<li>The monthly data has 12 rows (1/month) for each station</li>
+<li>The right_join gets all months for all stations, so we weed out the
+non-Sierra stations by removing NAs from a field only with Sierra
+station data</li>
+</ul>
+<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb429-1"><a href="transformation.html#cb429-1" tabindex="-1"></a>sierra <span class="ot">&lt;-</span> <span class="fu">right_join</span>(sierraStations, CA_ClimateNormals, <span class="at">by=</span><span class="st">&quot;STATION&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb429-2"><a href="transformation.html#cb429-2" tabindex="-1"></a>   <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(STATION_NA)) <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>STATION_NA)</span>
+<span id="cb429-3"><a href="transformation.html#cb429-3" tabindex="-1"></a><span class="fu">head</span>(sierra <span class="sc">|&gt;</span> <span class="fu">filter</span>(DATE <span class="sc">==</span> <span class="st">&quot;01&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb429-4"><a href="transformation.html#cb429-4" tabindex="-1"></a>   dplyr<span class="sc">::</span><span class="fu">select</span>(NAME, ELEVATION, <span class="st">`</span><span class="at">MLY-TAVG-NORMAL</span><span class="st">`</span>), <span class="at">n=</span><span class="dv">10</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 10 × 3
+##    NAME                              ELEVATION `MLY-TAVG-NORMAL`
+##    &lt;chr&gt;                                 &lt;dbl&gt;             &lt;dbl&gt;
+##  1 GROVELAND 2, CA US                    853.                5.6
+##  2 CANYON DAM, CA US                    1390.                0.2
+##  3 KERN RIVER PH 3, CA US                824.                7.6
+##  4 DONNER MEMORIAL ST PARK, CA US       1810.               -1.9
+##  5 BOWMAN DAM, CA US                    1641.                3  
+##  6 BRUSH CREEK RANGER STATION, CA US    1085.               NA  
+##  7 GRANT GROVE, CA US                   2012.                1.9
+##  8 LEE VINING, CA US                    2072.               -1.2
+##  9 OROVILLE MUNICIPAL AIRPORT, CA US      57.9               7.7
+## 10 LEMON COVE, CA US                     156.                8.6</code></pre>
+<p>The exact same thing, however, could be accomplished with an inner_join,
+and it doesn’t required removing the NAs:</p>
+<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb431-1"><a href="transformation.html#cb431-1" tabindex="-1"></a>sierraAlso <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(sierraStations, CA_ClimateNormals, <span class="at">by=</span><span class="st">&quot;STATION&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb431-2"><a href="transformation.html#cb431-2" tabindex="-1"></a>   dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>STATION_NA)</span></code></pre></div>
+</div>
+<div id="set" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Set operations<a href="transformation.html#set" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Set operations compare two data frames (or
+vectors) to handle observations or rows that are the same for each, or
+not the same. The three set methods are:</p>
+<ul>
+<li><code>dplyr::intersect(x,y)</code> retains rows that appear in
+<em>both</em> x and y</li>
+<li><code>dplyr::union(x,y)</code> retains rows that appear in either
+or both of x and y</li>
+<li><code>dplyr::setdiff(x,y)</code> retains rows that appear in x
+but not in y</li>
+</ul>
+<div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb432-1"><a href="transformation.html#cb432-1" tabindex="-1"></a>squares <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb432-2"><a href="transformation.html#cb432-2" tabindex="-1"></a>evens <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">2</span>)</span>
+<span id="cb432-3"><a href="transformation.html#cb432-3" tabindex="-1"></a>squares</span></code></pre></div>
+<pre><code>##  [1]   1   4   9  16  25  36  49  64  81 100</code></pre>
+<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb434-1"><a href="transformation.html#cb434-1" tabindex="-1"></a>evens</span></code></pre></div>
+<pre><code>##  [1]   0   2   4   6   8  10  12  14  16  18  20  22  24  26  28  30  32  34  36
+## [20]  38  40  42  44  46  48  50  52  54  56  58  60  62  64  66  68  70  72  74
+## [39]  76  78  80  82  84  86  88  90  92  94  96  98 100</code></pre>
+<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="transformation.html#cb436-1" tabindex="-1"></a><span class="fu">intersect</span>(squares,evens)</span></code></pre></div>
+<pre><code>## [1]   4  16  36  64 100</code></pre>
+<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb438-1"><a href="transformation.html#cb438-1" tabindex="-1"></a><span class="fu">sort</span>(<span class="fu">union</span>(squares,evens))</span></code></pre></div>
+<pre><code>##  [1]   0   1   2   4   6   8   9  10  12  14  16  18  20  22  24  25  26  28  30
+## [20]  32  34  36  38  40  42  44  46  48  49  50  52  54  56  58  60  62  64  66
+## [39]  68  70  72  74  76  78  80  81  82  84  86  88  90  92  94  96  98 100</code></pre>
+<div class="sourceCode" id="cb440"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb440-1"><a href="transformation.html#cb440-1" tabindex="-1"></a><span class="fu">sort</span>(<span class="fu">setdiff</span>(squares,evens))</span></code></pre></div>
+<pre><code>## [1]  1  9 25 49 81</code></pre>
+</div>
+<div id="binding" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Binding rows and columns<a href="transformation.html#binding" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>These <code>dplyr</code> functions are similar
+to <code>cbind</code> and <code>rbind</code> in base R, but always create data frames. For
+instance, <code>cbind</code> usually creates matrices and makes all vectors the
+same class. Note that in <code>bind_cols</code>, the order of data in rows must be
+the same.</p>
+<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="transformation.html#cb442-1" tabindex="-1"></a>states <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(<span class="at">abb=</span>state.abb,</span>
+<span id="cb442-2"><a href="transformation.html#cb442-2" tabindex="-1"></a>                    <span class="at">name=</span>state.name,</span>
+<span id="cb442-3"><a href="transformation.html#cb442-3" tabindex="-1"></a>                    <span class="at">region=</span>state.region,</span>
+<span id="cb442-4"><a href="transformation.html#cb442-4" tabindex="-1"></a>                    state.x77)</span>
+<span id="cb442-5"><a href="transformation.html#cb442-5" tabindex="-1"></a><span class="fu">head</span>(states)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 11
+##   abb   name     region Population Income Illiteracy `Life Exp` Murder `HS Grad`
+##   &lt;chr&gt; &lt;chr&gt;    &lt;fct&gt;       &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
+## 1 AL    Alabama  South        3615   3624        2.1       69.0   15.1      41.3
+## 2 AK    Alaska   West          365   6315        1.5       69.3   11.3      66.7
+## 3 AZ    Arizona  West         2212   4530        1.8       70.6    7.8      58.1
+## 4 AR    Arkansas South        2110   3378        1.9       70.7   10.1      39.9
+## 5 CA    Califor… West        21198   5114        1.1       71.7   10.3      62.6
+## 6 CO    Colorado West         2541   4884        0.7       72.1    6.8      63.9
+## # ℹ 2 more variables: Frost &lt;dbl&gt;, Area &lt;dbl&gt;</code></pre>
+<p>To compare, note that <code>cbind</code> converts numeric fields to character type
+when any other field is character, and character fields are converted to
+character integers where there are any repeats, which would require
+manipulating them into factors:</p>
+<div class="sourceCode" id="cb444"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb444-1"><a href="transformation.html#cb444-1" tabindex="-1"></a>states <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">cbind</span>(<span class="at">abb=</span>state.abb, </span>
+<span id="cb444-2"><a href="transformation.html#cb444-2" tabindex="-1"></a>                          <span class="at">name=</span>state.name, </span>
+<span id="cb444-3"><a href="transformation.html#cb444-3" tabindex="-1"></a>                          <span class="at">region=</span>state.region,</span>
+<span id="cb444-4"><a href="transformation.html#cb444-4" tabindex="-1"></a>                          <span class="at">division=</span>state.division,</span>
+<span id="cb444-5"><a href="transformation.html#cb444-5" tabindex="-1"></a>                          state.x77))</span>
+<span id="cb444-6"><a href="transformation.html#cb444-6" tabindex="-1"></a><span class="fu">head</span>(states)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 12
+##   abb   name      region division Population Income Illiteracy `Life Exp` Murder
+##   &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt; 
+## 1 AL    Alabama   2      4        3615       3624   2.1        69.05      15.1  
+## 2 AK    Alaska    4      9        365        6315   1.5        69.31      11.3  
+## 3 AZ    Arizona   4      8        2212       4530   1.8        70.55      7.8   
+## 4 AR    Arkansas  2      5        2110       3378   1.9        70.66      10.1  
+## 5 CA    Californ… 4      9        21198      5114   1.1        71.71      10.3  
+## 6 CO    Colorado  4      8        2541       4884   0.7        72.06      6.8   
+## # ℹ 3 more variables: `HS Grad` &lt;chr&gt;, Frost &lt;chr&gt;, Area &lt;chr&gt;</code></pre>
+</div>
+<div id="pivots" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Pivoting data frames<a href="transformation.html#pivots" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Pivot tables are a popular tool in Excel, allowing you
+to transform your data to be more useful in a particular analysis. A
+common need to pivot is 2+ variables with the same data where the
+variable name should be a factor. <code>Tidyr</code> has <strong><code>pivot_wider</code></strong> and
+<strong><code>pivot_longer</code></strong>.</p>
+<ul>
+<li><strong><code>pivot_wider</code></strong> pivots rows into variables.</li>
+<li><strong><code>pivot_longer</code></strong> pivots variables into rows,
+creating factors.</li>
+</ul>
+<div id="pivot_longer" class="section level3 hasAnchor" number="5.4.1">
+<h3><span class="header-section-number">5.4.1</span> <code>pivot_longer</code><a href="transformation.html#pivot_longer" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In our meadows study cross-section <span class="citation">(<a href="#ref-NDVI">Davis et al. 2020</a>)</span> created by intersecting
+normalized difference vegetation index (NDVI) values from multispectral
+drone imagery with surveyed elevation and vegetation types (xeric,
+mesic, and hydric), we have fields <code>NDVIgrowing</code> from a July 2019
+growing season and <code>NDVIsenescent</code> from a September 2020 dry season, but
+would like “growing” and “senescent” to be factors with a single <code>NDVI</code>
+variable. This is how we used <code>pivot_longer</code> to accomplish this, using
+data from the <code>igisci</code> data package:</p>
+<div class="sourceCode" id="cb446"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb446-1"><a href="transformation.html#cb446-1" tabindex="-1"></a>XSptsPheno <span class="ot">&lt;-</span> XSptsNDVI <span class="sc">|&gt;</span></span>
+<span id="cb446-2"><a href="transformation.html#cb446-2" tabindex="-1"></a>      <span class="fu">filter</span>(vegetation <span class="sc">!=</span> <span class="st">&quot;pine&quot;</span>) <span class="sc">|&gt;</span>    <span class="co"># trees removed</span></span>
+<span id="cb446-3"><a href="transformation.html#cb446-3" tabindex="-1"></a>      <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">&quot;NDVI&quot;</span>), </span>
+<span id="cb446-4"><a href="transformation.html#cb446-4" tabindex="-1"></a>                   <span class="at">names_to =</span> <span class="st">&quot;phenology&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;NDVI&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb446-5"><a href="transformation.html#cb446-5" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">phenology =</span> <span class="fu">str_sub</span>(phenology, <span class="dv">5</span>, <span class="fu">str_length</span>(phenology)))</span></code></pre></div>
+<p>To see what the reverse would be, we’d use <code>pivot_wider</code> to return to
+the original, but note that we’re not writing over our <code>XSptsPheno</code> data
+frame.</p>
+<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb447-1"><a href="transformation.html#cb447-1" tabindex="-1"></a>XSptsPheno <span class="sc">|&gt;</span></span>
+<span id="cb447-2"><a href="transformation.html#cb447-2" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> phenology, <span class="at">names_prefix =</span> <span class="st">&quot;NDVI&quot;</span>, </span>
+<span id="cb447-3"><a href="transformation.html#cb447-3" tabindex="-1"></a>              <span class="at">values_from =</span> NDVI)</span></code></pre></div>
+<pre><code>## # A tibble: 19 × 6
+##    DistNtoS elevation vegetation      geometry         NDVIgrowing NDVIsenescent
+##       &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;                  &lt;dbl&gt;         &lt;dbl&gt;
+##  1      0       1510. Artemisia       c(718649.456, 4…       0.326         0.140
+##  2     16.7     1510. mixed graminoid c(718649.4309, …       0.627         0.259
+##  3     28.6     1510. mixed graminoid c(718649.413, 4…       0.686         0.329
+##  4     30.5     1510. mixed graminoid c(718649.4101, …       0.668         0.282
+##  5     31.1     1510. mixed graminoid c(718649.4092, …       0.655         0.266
+##  6     33.4     1510. mixed graminoid c(718649.4058, …       0.617         0.274
+##  7     35.6     1510. mixed graminoid c(718649.4025, …       0.623         0.275
+##  8     37       1510. mixed graminoid c(718649.4004, …       0.589         0.242
+##  9     74       1510. mixed graminoid c(718649.3448, …       0.641         0.325
+## 10    101       1510. mixed graminoid c(718649.3042, …       0.558         0.312
+## 11    126.      1511. Artemisia       c(718649.2672, …       0.391         0.163
+## 12    137       1510. mixed graminoid c(718649.25, 43…       0.583         0.272
+## 13    149.      1510. Carex           c(718649.2317, …       0.736         0.392
+## 14    154.      1510. Carex           c(718649.224, 4…       0.744         0.424
+## 15    175       1511. mixed graminoid c(718649.1929, …       0.455         0.204
+## 16    195.      1511. mixed graminoid c(718649.1633, …       0.512         0.237
+## 17    197.      1510. mixed graminoid c(718649.1597, …       0.489         0.197
+## 18    201.      1511. mixed graminoid c(718649.1544, …       0.533         0.275
+## 19    259.      1511. mixed graminoid c(718649.0663, …       0.505         0.193</code></pre>
+<div class="sourceCode" id="cb449"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb449-1"><a href="transformation.html#cb449-1" tabindex="-1"></a>XSptsPheno</span></code></pre></div>
+<pre><code>## # A tibble: 38 × 6
+##    DistNtoS elevation vegetation      geometry                   phenology  NDVI
+##       &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;                      &lt;chr&gt;     &lt;dbl&gt;
+##  1      0       1510. Artemisia       c(718649.456, 4397466.714) growing   0.326
+##  2      0       1510. Artemisia       c(718649.456, 4397466.714) senescent 0.140
+##  3     16.7     1510. mixed graminoid c(718649.4309, 4397450.07… growing   0.627
+##  4     16.7     1510. mixed graminoid c(718649.4309, 4397450.07… senescent 0.259
+##  5     28.6     1510. mixed graminoid c(718649.413, 4397438.222) growing   0.686
+##  6     28.6     1510. mixed graminoid c(718649.413, 4397438.222) senescent 0.329
+##  7     30.5     1510. mixed graminoid c(718649.4101, 4397436.33) growing   0.668
+##  8     30.5     1510. mixed graminoid c(718649.4101, 4397436.33) senescent 0.282
+##  9     31.1     1510. mixed graminoid c(718649.4092, 4397435.73… growing   0.655
+## 10     31.1     1510. mixed graminoid c(718649.4092, 4397435.73… senescent 0.266
+## # ℹ 28 more rows</code></pre>
+<p>We’ll use the <code>pivot_longer</code> result (the one we actually assigned to
+<code>XSptsPheno</code>) to allow us to create the graph we’re after (Figure
+<a href="transformation.html#fig:transPivotPheno">5.1</a>).</p>
+<div class="sourceCode" id="cb451"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb451-1"><a href="transformation.html#cb451-1" tabindex="-1"></a>XSptsPheno <span class="sc">|&gt;</span></span>
+<span id="cb451-2"><a href="transformation.html#cb451-2" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb451-3"><a href="transformation.html#cb451-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(elevation, NDVI, <span class="at">shape=</span>vegetation, </span>
+<span id="cb451-4"><a href="transformation.html#cb451-4" tabindex="-1"></a>                 <span class="at">color =</span> phenology), <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb451-5"><a href="transformation.html#cb451-5" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(elevation, NDVI, </span>
+<span id="cb451-6"><a href="transformation.html#cb451-6" tabindex="-1"></a>                 <span class="at">color =</span> phenology), <span class="at">method=</span><span class="st">&quot;lm&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:transPivotPheno"></span>
+<img src="EnvDataScience_files/figure-html/transPivotPheno-1.png" alt="Color classified by phenology, data created by a pivot" width="75%" />
+<p class="caption">
+FIGURE 5.1: Color classified by phenology, data created by a pivot
+</p>
+</div>
+<p>Pivots turn out to be commonly useful. We’ve already seen their use in
+the Visualization chapter, such as when we graphed runoff from the
+Eucalyptus/Oak study <span class="citation">(<a href="#ref-eucoak">Thompson et al. 2016</a>)</span>, where we used a <code>pivot_longer</code> (Figure
+<a href="transformation.html#fig:transEucOakPivot">5.2</a>).</p>
+<div class="sourceCode" id="cb452"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb452-1"><a href="transformation.html#cb452-1" tabindex="-1"></a>eucoakrainfallrunoffTDR <span class="sc">|&gt;</span></span>
+<span id="cb452-2"><a href="transformation.html#cb452-2" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">&quot;runoffL&quot;</span>),</span>
+<span id="cb452-3"><a href="transformation.html#cb452-3" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;tree&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;runoffL&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb452-4"><a href="transformation.html#cb452-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tree =</span> <span class="fu">str_sub</span>(tree, <span class="fu">str_length</span>(tree)<span class="sc">-</span><span class="dv">2</span>, <span class="fu">str_length</span>(tree))) <span class="sc">|&gt;</span></span>
+<span id="cb452-5"><a href="transformation.html#cb452-5" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(site, runoffL)) <span class="sc">+</span></span>
+<span id="cb452-6"><a href="transformation.html#cb452-6" tabindex="-1"></a>    <span class="fu">facet_grid</span>(tree <span class="sc">~</span> .)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:transEucOakPivot"></span>
+<img src="EnvDataScience_files/figure-html/transEucOakPivot-1.png" alt="Euc vs oak graphs created using a pivot" width="75%" />
+<p class="caption">
+FIGURE 5.2: Euc vs oak graphs created using a pivot
+</p>
+</div>
+<p><strong>Combining a pivot with bind_rows to create a runoff/rainfall
+scatterplot colored by tree</strong></p>
+<p>With a bit more code, we can combine pivoting with binding rows to set
+up a useful scatter plot (Figure <a href="transformation.html#fig:transEucOakScatterplot">5.3</a>).</p>
+<div class="sourceCode" id="cb453"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb453-1"><a href="transformation.html#cb453-1" tabindex="-1"></a>runoffPivot <span class="ot">&lt;-</span> eucoakrainfallrunoffTDR <span class="sc">|&gt;</span></span>
+<span id="cb453-2"><a href="transformation.html#cb453-2" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">&quot;runoffL&quot;</span>),</span>
+<span id="cb453-3"><a href="transformation.html#cb453-3" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;tree&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;runoffL&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb453-4"><a href="transformation.html#cb453-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tree =</span> <span class="fu">str_sub</span>(tree, <span class="fu">str_length</span>(tree)<span class="sc">-</span><span class="dv">2</span>, <span class="fu">str_length</span>(tree)),</span>
+<span id="cb453-5"><a href="transformation.html#cb453-5" tabindex="-1"></a>         <span class="at">Date =</span> <span class="fu">as.Date</span>(date, <span class="st">&quot;%m/%d/%Y&quot;</span>))</span>
+<span id="cb453-6"><a href="transformation.html#cb453-6" tabindex="-1"></a>euc <span class="ot">&lt;-</span> runoffPivot <span class="sc">|&gt;</span></span>
+<span id="cb453-7"><a href="transformation.html#cb453-7" tabindex="-1"></a>  <span class="fu">filter</span>(tree <span class="sc">==</span> <span class="st">&quot;euc&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb453-8"><a href="transformation.html#cb453-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rain_subcanopy =</span> rain_euc,</span>
+<span id="cb453-9"><a href="transformation.html#cb453-9" tabindex="-1"></a>         <span class="at">slope =</span> slope_euc,    <span class="at">aspect =</span> aspect_euc,</span>
+<span id="cb453-10"><a href="transformation.html#cb453-10" tabindex="-1"></a>         <span class="at">surface_tension =</span> surface_tension_euc,</span>
+<span id="cb453-11"><a href="transformation.html#cb453-11" tabindex="-1"></a>         <span class="at">runoff_rainfall_ratio =</span> runoff_rainfall_ratio_euc) <span class="sc">|&gt;</span></span>
+<span id="cb453-12"><a href="transformation.html#cb453-12" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(site, <span class="st">`</span><span class="at">site #</span><span class="st">`</span>, tree, Date, month, rain_mm, </span>
+<span id="cb453-13"><a href="transformation.html#cb453-13" tabindex="-1"></a>         rain_subcanopy, slope, aspect, runoffL,     </span>
+<span id="cb453-14"><a href="transformation.html#cb453-14" tabindex="-1"></a>         surface_tension, runoff_rainfall_ratio)</span>
+<span id="cb453-15"><a href="transformation.html#cb453-15" tabindex="-1"></a>oak <span class="ot">&lt;-</span> runoffPivot <span class="sc">|&gt;</span></span>
+<span id="cb453-16"><a href="transformation.html#cb453-16" tabindex="-1"></a>  <span class="fu">filter</span>(tree <span class="sc">==</span> <span class="st">&quot;oak&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb453-17"><a href="transformation.html#cb453-17" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rain_subcanopy =</span> rain_oak,</span>
+<span id="cb453-18"><a href="transformation.html#cb453-18" tabindex="-1"></a>         <span class="at">slope =</span> slope_oak, <span class="at">aspect =</span> aspect_oak,</span>
+<span id="cb453-19"><a href="transformation.html#cb453-19" tabindex="-1"></a>         <span class="at">surface_tension =</span> surface_tension_oak,</span>
+<span id="cb453-20"><a href="transformation.html#cb453-20" tabindex="-1"></a>         <span class="at">runoff_rainfall_ratio =</span> runoff_rainfall_ratio_oak) <span class="sc">|&gt;</span></span>
+<span id="cb453-21"><a href="transformation.html#cb453-21" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(site, <span class="st">`</span><span class="at">site #</span><span class="st">`</span>, tree, Date, month, rain_mm, </span>
+<span id="cb453-22"><a href="transformation.html#cb453-22" tabindex="-1"></a>         rain_subcanopy, slope, aspect, runoffL, </span>
+<span id="cb453-23"><a href="transformation.html#cb453-23" tabindex="-1"></a>         surface_tension, runoff_rainfall_ratio)</span>
+<span id="cb453-24"><a href="transformation.html#cb453-24" tabindex="-1"></a><span class="fu">bind_rows</span>(euc, oak) <span class="sc">|&gt;</span></span>
+<span id="cb453-25"><a href="transformation.html#cb453-25" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb453-26"><a href="transformation.html#cb453-26" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> rain_mm, <span class="at">y =</span> runoffL, <span class="at">color =</span> tree)) <span class="sc">+</span></span>
+<span id="cb453-27"><a href="transformation.html#cb453-27" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> rain_mm, <span class="at">y=</span> runoffL, <span class="at">color =</span> tree), </span>
+<span id="cb453-28"><a href="transformation.html#cb453-28" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span></span>
+<span id="cb453-29"><a href="transformation.html#cb453-29" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;seagreen4&quot;</span>, <span class="st">&quot;orange3&quot;</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:transEucOakScatterplot"></span>
+<img src="EnvDataScience_files/figure-html/transEucOakScatterplot-1.png" alt="Runoff/rainfall scatterplot colored by tree, created by pivot and binding rows" width="75%" />
+<p class="caption">
+FIGURE 5.3: Runoff/rainfall scatterplot colored by tree, created by pivot and binding rows
+</p>
+</div>
+</div>
+<div id="pivot_wider" class="section level3 hasAnchor" number="5.4.2">
+<h3><span class="header-section-number">5.4.2</span> <code>pivot_wider</code><a href="transformation.html#pivot_wider" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The opposite of <code>pivot_longer</code>, <code>pivot_wider</code> is
+less commonly used for tidying data, but can be useful for creating
+tables of that desired format. An environmental application of
+<code>pivot_wider</code> can be found in <code>vignette("pivot")</code> (modified below) for
+studying fish detected by automatic monitors, with <code>fish_encounters</code>
+data contributed by <span class="citation">Johnston and Rudis (<a href="#ref-JohnstonRudis">n.d.</a>)</span> . This pivot makes it easier to see
+fish encounters by station. See <span class="citation">Johnston and Rudis (<a href="#ref-JohnstonRudis">n.d.</a>)</span> and <code>vignette("pivot")</code>
+for more information on the dataset and how the pivot provides this
+view.</p>
+<div class="sourceCode" id="cb454"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb454-1"><a href="transformation.html#cb454-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb454-2"><a href="transformation.html#cb454-2" tabindex="-1"></a>fish_encounters <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;fishdata.csv&quot;</span>))</span>
+<span id="cb454-3"><a href="transformation.html#cb454-3" tabindex="-1"></a>fish_encounters</span></code></pre></div>
+<pre><code>## # A tibble: 209 × 3
+##    TagID Station value
+##    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+##  1  4842 Release     1
+##  2  4843 Release     1
+##  3  4844 Release     1
+##  4  4845 Release     1
+##  5  4847 Release     1
+##  6  4848 Release     1
+##  7  4849 Release     1
+##  8  4850 Release     1
+##  9  4851 Release     1
+## 10  4854 Release     1
+## # ℹ 199 more rows</code></pre>
+<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb456-1"><a href="transformation.html#cb456-1" tabindex="-1"></a>fishEncountersWide <span class="ot">&lt;-</span> fish_encounters <span class="sc">|&gt;</span> </span>
+<span id="cb456-2"><a href="transformation.html#cb456-2" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> Station, <span class="at">values_from =</span> value, <span class="at">values_fill =</span> <span class="dv">0</span>)</span>
+<span id="cb456-3"><a href="transformation.html#cb456-3" tabindex="-1"></a>fishEncountersWide</span></code></pre></div>
+<pre><code>## # A tibble: 19 × 12
+##    TagID Release I80_1 Lisbon  Rstr Base_TD   BCE   BCW  BCE2  BCW2   MAE   MAW
+##    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1  4842       1     1      1     1       1     1     1     1     1     1     1
+##  2  4843       1     1      1     1       1     1     1     1     1     1     1
+##  3  4844       1     1      1     1       1     1     1     1     1     1     1
+##  4  4845       1     1      1     1       1     0     0     0     0     0     0
+##  5  4847       1     1      1     0       0     0     0     0     0     0     0
+##  6  4848       1     1      1     1       0     0     0     0     0     0     0
+##  7  4849       1     1      0     0       0     0     0     0     0     0     0
+##  8  4850       1     1      0     1       1     1     1     0     0     0     0
+##  9  4851       1     1      0     0       0     0     0     0     0     0     0
+## 10  4854       1     1      0     0       0     0     0     0     0     0     0
+## 11  4855       1     1      1     1       1     0     0     0     0     0     0
+## 12  4857       1     1      1     1       1     1     1     1     1     0     0
+## 13  4858       1     1      1     1       1     1     1     1     1     1     1
+## 14  4859       1     1      1     1       1     0     0     0     0     0     0
+## 15  4861       1     1      1     1       1     1     1     1     1     1     1
+## 16  4862       1     1      1     1       1     1     1     1     1     0     0
+## 17  4863       1     1      0     0       0     0     0     0     0     0     0
+## 18  4864       1     1      0     0       0     0     0     0     0     0     0
+## 19  4865       1     1      1     0       0     0     0     0     0     0     0</code></pre>
+</div>
+</div>
+<div id="combining-transformation-methods-to-create-a-free_y-faceted-graph" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> Combining transformation methods to create a <code>free_y</code> faceted graph<a href="transformation.html#combining-transformation-methods-to-create-a-free_y-faceted-graph" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Creating parallel multi-parameter
+graphs over a time series can be challenging. We need to link the graphs
+with a common x axis, but we may need to vary the scaling on the y axis,
+unlike the faceted graph of grouped data we looked at in the
+visualization chapter. We’ll look at time series in a later chapter, but
+this is a good time to explore the use of a pivot_longer to set up the
+data for a graph like this, and at the same time to expand upon our
+visualization toolkit.</p>
+<div id="air-pollutant-emissions-trends-epa" class="section level3 hasAnchor" number="5.5.1">
+<h3><span class="header-section-number">5.5.1</span> Air pollutant emissions trends (EPA)<a href="transformation.html#air-pollutant-emissions-trends-epa" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The National Emissions Inventory (NEI) program of the US EPA is a
+detailed estimate of air emissions of criteria and hazardous air
+pollutants from a wide variety of air emissions sources. The inventory
+is released every three years based primarily upon data provided by
+state, local, and tribal air resources agencies for pollution sources
+they monitor, supplemented by data developed by the US EPA.</p>
+<p>Air pollutant data was downloaded from
+<a href="https://www.epa.gov/air-emissions-inventories/air-pollutant-emissions-trends-data" class="uri">https://www.epa.gov/air-emissions-inventories/air-pollutant-emissions-trends-data</a>
+and provided in the <code>igisci</code> package.</p>
+<p>Processing this data to create a <code>free_y</code> faceted graph employs several
+data transformation methods we’ve looked at, and some details and tricks
+we haven’t covered:</p>
+<ul>
+<li><code>summarize_all</code> gets means of <em>all</em> variables, though since we’re
+just using the totals, this just causes worksheets with multiple
+<code>Total</code> rows to merge into one; they’re actually the same value</li>
+<li><code>pivot_longer</code> is used twice, first to create columns for each
+pollutant, so the columns can be bound together, then later to
+create a facet graph where each pollutant becomes a parameter factor</li>
+<li><code>bind_cols</code> to combine a series of data frames with each having the
+same years (1990:2016) when data for all parameters were collected</li>
+<li>A fix for dealing data not all being read in as numeric, needed for
+an entry error for the NH3 data, was developed by first reading in
+the <code>Source Category</code> column, then the yearly data values, setting
+<code>col_types="numeric"</code>, then binding the columns</li>
+<li>Using a character string variable to store a pollutant name that can
+be passed to a function and used to access a worksheet, a variable,
+and part of other variables: see how <code>pollutant</code> is used for
+multiple purposes in the function, and how this option of using a
+character string for a variable name is a handy alternative</li>
+</ul>
+<div class="sourceCode" id="cb458"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb458-1"><a href="transformation.html#cb458-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(readxl); <span class="fu">library</span>(igisci)</span>
+<span id="cb458-2"><a href="transformation.html#cb458-2" tabindex="-1"></a>dtaPath <span class="ot">&lt;-</span> <span class="fu">ex</span>(<span class="st">&quot;airquality/Pollution by type US 1970 to 2016.xlsx&quot;</span>)</span>
+<span id="cb458-3"><a href="transformation.html#cb458-3" tabindex="-1"></a>YearColumn <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(dtaPath, <span class="at">sheet =</span> <span class="st">&quot;SO2&quot;</span>, <span class="at">skip=</span><span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb458-4"><a href="transformation.html#cb458-4" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="st">`</span><span class="at">1990</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2016</span><span class="st">`</span>, <span class="at">names_to=</span><span class="st">&quot;Year&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb458-5"><a href="transformation.html#cb458-5" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Year) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">Year=</span><span class="fu">as.numeric</span>(Year))</span>
+<span id="cb458-6"><a href="transformation.html#cb458-6" tabindex="-1"></a>YearCol <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">unique</span>(YearColumn<span class="sc">$</span>Year))</span>
+<span id="cb458-7"><a href="transformation.html#cb458-7" tabindex="-1"></a><span class="fu">names</span>(YearCol) <span class="ot">=</span> <span class="st">&quot;Year&quot;</span></span>
+<span id="cb458-8"><a href="transformation.html#cb458-8" tabindex="-1"></a></span>
+<span id="cb458-9"><a href="transformation.html#cb458-9" tabindex="-1"></a>getPollutant <span class="ot">&lt;-</span> <span class="cf">function</span>(pollutant){</span>
+<span id="cb458-10"><a href="transformation.html#cb458-10" tabindex="-1"></a>  thedata <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(dtaPath,<span class="at">sheet=</span>pollutant,<span class="at">skip=</span><span class="dv">2</span>,</span>
+<span id="cb458-11"><a href="transformation.html#cb458-11" tabindex="-1"></a>                               <span class="at">col_types=</span><span class="st">&quot;numeric&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb458-12"><a href="transformation.html#cb458-12" tabindex="-1"></a>     dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="st">`</span><span class="at">Source Category</span><span class="st">`</span>)</span>
+<span id="cb458-13"><a href="transformation.html#cb458-13" tabindex="-1"></a>  rowheaders <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(dtaPath,<span class="at">sheet=</span>pollutant,<span class="at">skip=</span><span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb458-14"><a href="transformation.html#cb458-14" tabindex="-1"></a>     dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="st">`</span><span class="at">Source Category</span><span class="st">`</span>)</span>
+<span id="cb458-15"><a href="transformation.html#cb458-15" tabindex="-1"></a>  <span class="fu">bind_cols</span>(rowheaders,thedata) <span class="sc">|&gt;</span></span>
+<span id="cb458-16"><a href="transformation.html#cb458-16" tabindex="-1"></a>     dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="st">`</span><span class="at">Source Category</span><span class="st">`</span>,<span class="st">`</span><span class="at">1990</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2016</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
+<span id="cb458-17"><a href="transformation.html#cb458-17" tabindex="-1"></a>     <span class="fu">filter</span>(<span class="st">`</span><span class="at">Source Category</span><span class="st">`</span><span class="sc">==</span><span class="st">&quot;Total&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb458-18"><a href="transformation.html#cb458-18" tabindex="-1"></a>     <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Source Category</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
+<span id="cb458-19"><a href="transformation.html#cb458-19" tabindex="-1"></a>     <span class="fu">summarize_all</span>(<span class="fu">list</span>(mean)) <span class="sc">|&gt;</span></span>
+<span id="cb458-20"><a href="transformation.html#cb458-20" tabindex="-1"></a>     <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="st">`</span><span class="at">1990</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">2016</span><span class="st">`</span>,<span class="at">names_to=</span><span class="st">&quot;Year&quot;</span>,<span class="at">values_to=</span>pollutant) <span class="sc">|&gt;</span></span>
+<span id="cb458-21"><a href="transformation.html#cb458-21" tabindex="-1"></a>     dplyr<span class="sc">::</span><span class="fu">select</span>(pollutant)</span>
+<span id="cb458-22"><a href="transformation.html#cb458-22" tabindex="-1"></a>}</span>
+<span id="cb458-23"><a href="transformation.html#cb458-23" tabindex="-1"></a>SO2  <span class="ot">&lt;-</span> <span class="fu">getPollutant</span>(<span class="st">&quot;SO2&quot;</span>)</span>
+<span id="cb458-24"><a href="transformation.html#cb458-24" tabindex="-1"></a>PM25 <span class="ot">&lt;-</span> <span class="fu">getPollutant</span>(<span class="st">&quot;PM25Primary&quot;</span>) <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">PM25=</span>PM25Primary)</span>
+<span id="cb458-25"><a href="transformation.html#cb458-25" tabindex="-1"></a>PM10 <span class="ot">&lt;-</span> <span class="fu">getPollutant</span>(<span class="st">&quot;PM10Primary&quot;</span>) <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">PM10=</span>PM10Primary)</span>
+<span id="cb458-26"><a href="transformation.html#cb458-26" tabindex="-1"></a>NOX  <span class="ot">&lt;-</span> <span class="fu">getPollutant</span>(<span class="st">&quot;NOX&quot;</span>)</span>
+<span id="cb458-27"><a href="transformation.html#cb458-27" tabindex="-1"></a>CO   <span class="ot">&lt;-</span> <span class="fu">getPollutant</span>(<span class="st">&quot;CO&quot;</span>)</span>
+<span id="cb458-28"><a href="transformation.html#cb458-28" tabindex="-1"></a>VOC  <span class="ot">&lt;-</span> <span class="fu">getPollutant</span>(<span class="st">&quot;VOC&quot;</span>)</span>
+<span id="cb458-29"><a href="transformation.html#cb458-29" tabindex="-1"></a>NH3  <span class="ot">&lt;-</span> <span class="fu">getPollutant</span>(<span class="st">&quot;NH3&quot;</span>)</span>
+<span id="cb458-30"><a href="transformation.html#cb458-30" tabindex="-1"></a>pollutants <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(YearCol,CO,NOX,SO2,PM25,PM10,VOC,NH3)<span class="co">#</span></span></code></pre></div>
+<div id="the-free_y-faceted-graph" class="section level4 hasAnchor" number="5.5.1.1">
+<h4><span class="header-section-number">5.5.1.1</span> The <code>free_y</code> faceted graph<a href="transformation.html#the-free_y-faceted-graph" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Processing this data to create a <code>free_y</code> faceted graph
+(<a href="transformation.html#fig:USairpollution">5.4</a>) makes the second use of the pivot_longer, in
+order to essentially use the parameter as a factor. We could have used
+color to put these on the same graph, but the <code>free_y</code> method allows
+each line to have a separate y axis based on its units, with the year on
+the x axis to allow easy comparison of multiple parameters over time.</p>
+<div class="sourceCode" id="cb459"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb459-1"><a href="transformation.html#cb459-1" tabindex="-1"></a>pollutant_long <span class="ot">&lt;-</span> pollutants <span class="sc">|&gt;</span></span>
+<span id="cb459-2"><a href="transformation.html#cb459-2" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> CO<span class="sc">:</span>NH3, <span class="at">names_to=</span><span class="st">&quot;parameter&quot;</span>, <span class="at">values_to=</span><span class="st">&quot;value&quot;</span>)</span>
+<span id="cb459-3"><a href="transformation.html#cb459-3" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> pollutant_long, <span class="fu">aes</span>(<span class="at">x=</span>Year, <span class="at">y=</span>value)) <span class="sc">+</span> <span class="fu">geom_line</span>()</span>
+<span id="cb459-4"><a href="transformation.html#cb459-4" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">facet_grid</span>(parameter <span class="sc">~</span> ., <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:USairpollution"></span>
+<img src="EnvDataScience_files/figure-html/USairpollution-1.png" alt="Facet graph of air pollutants in the US, 1990-2016" width="75%" />
+<p class="caption">
+FIGURE 5.4: Facet graph of air pollutants in the US, 1990-2016
+</p>
+</div>
+</div>
+</div>
+<div id="flux-tower-data" class="section level3 hasAnchor" number="5.5.2">
+<h3><span class="header-section-number">5.5.2</span> Flux tower data<a href="transformation.html#flux-tower-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>While the above graphic comes from summary data, and it’s certainly not
+big data, when we’re collecting data using an electronic data logger, we
+can develop quite big datasets. Even data already summarized from
+sub-second intervals to half hour values can be pretty voluminous so it
+will be useful to be able to abstract the signal more clearly using
+further grouped summaries.</p>
+<p>We’ll look at this data set in more depth in the time series chapter,
+but here’s a quick introduction. To look at micrometeorological changes
+related to phenological changes in vegetation from seasonal hydrologic
+changes from snowmelt through summer drying, we captured an array of
+variables at a flux tower in Loney Meadow in the South Yuba River
+watershed of the northern Sierra during the 2016 season (Figure
+<a href="transformation.html#fig:transLoneyFlux">5.5</a>).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:transLoneyFlux"></span>
+<img src="img/LoneyFluxTowerWide.png" alt="Flux tower installed at Loney Meadow, 2016. Photo credit: Darren Blackburn" width="75%" />
+<p class="caption">
+FIGURE 5.5: Flux tower installed at Loney Meadow, 2016. Photo credit: Darren Blackburn
+</p>
+</div>
+<p>A spreadsheet of 30-minute summaries from 17 May to 6 September can be
+found in the igisci extdata folder as
+“meadows/LoneyMeadow_30minCO2fluxes_Geog604.xls”, and among other
+parameters includes data on CO<sub>2</sub> flux, net radiation (Qnet), air
+temperature (Tair), and relative humidity (RH). There’s clearly a lot
+more we can do with this data (see <span class="citation">Blackburn et al. (<a href="#ref-blackburn2021carbon">2021</a>)</span>), but we’ll
+look at this selection of parameters to see how we can use a pivot to
+create a multi-parameter graph.</p>
+<p>First, we’ll read in the data and simplify some of the variables. Since
+the second row of data contains measurement units, we needed to wrangle
+the data a bit to capture the variable names then add those back after
+removing the first two rows:</p>
+<div class="sourceCode" id="cb460"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb460-1"><a href="transformation.html#cb460-1" tabindex="-1"></a><span class="fu">library</span>(readxl); <span class="fu">library</span>(tidyverse); <span class="fu">library</span>(lubridate); <span class="fu">library</span>(igisci)</span>
+<span id="cb460-2"><a href="transformation.html#cb460-2" tabindex="-1"></a>vnames <span class="ot">&lt;-</span> <span class="fu">read_xls</span>(<span class="fu">ex</span>(<span class="st">&quot;meadows/LoneyMeadow_30minCO2fluxes_Geog604.xls&quot;</span>),</span>
+<span id="cb460-3"><a href="transformation.html#cb460-3" tabindex="-1"></a>                   <span class="at">n_max=</span><span class="dv">0</span>) <span class="sc">|&gt;</span> <span class="fu">names</span>()</span>
+<span id="cb460-4"><a href="transformation.html#cb460-4" tabindex="-1"></a>vunits <span class="ot">&lt;-</span> <span class="fu">read_xls</span>(<span class="fu">ex</span>(<span class="st">&quot;meadows/LoneyMeadow_30minCO2fluxes_Geog604.xls&quot;</span>), </span>
+<span id="cb460-5"><a href="transformation.html#cb460-5" tabindex="-1"></a>                   <span class="at">n_max=</span><span class="dv">0</span>, <span class="at">skip=</span><span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="fu">names</span>()</span>
+<span id="cb460-6"><a href="transformation.html#cb460-6" tabindex="-1"></a>Loney <span class="ot">&lt;-</span> <span class="fu">read_xls</span>(<span class="fu">ex</span>(<span class="st">&quot;meadows/LoneyMeadow_30minCO2fluxes_Geog604.xls&quot;</span>), </span>
+<span id="cb460-7"><a href="transformation.html#cb460-7" tabindex="-1"></a>                  <span class="at">skip=</span><span class="dv">2</span>, <span class="at">col_names=</span>vnames) <span class="sc">|&gt;</span></span>
+<span id="cb460-8"><a href="transformation.html#cb460-8" tabindex="-1"></a>         <span class="fu">rename</span>(<span class="at">YDay =</span> <span class="st">`</span><span class="at">Day of Year</span><span class="st">`</span>, <span class="at">CO2flux =</span> <span class="st">`</span><span class="at">CO2 Flux</span><span class="st">`</span>)</span></code></pre></div>
+<p>The time unit we’ll want to use for time series is going to be days, and
+we can also then look at the data over time, and a group_by
+summarization by days will give us a generalized picture of changes over
+the collection period reflecting phenological changes from first
+exposure after snowmelt through the maximum growth period and through
+the major senescence period of late summer. We’ll create the data to
+graph by using a group_by summarize to create a daily picture of a
+selection of four micrometeorological parameters:</p>
+<div class="sourceCode" id="cb461"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb461-1"><a href="transformation.html#cb461-1" tabindex="-1"></a>LoneyDaily <span class="ot">&lt;-</span> Loney <span class="sc">|&gt;</span></span>
+<span id="cb461-2"><a href="transformation.html#cb461-2" tabindex="-1"></a>  <span class="fu">group_by</span>(YDay) <span class="sc">|&gt;</span></span>
+<span id="cb461-3"><a href="transformation.html#cb461-3" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">CO2flux =</span> <span class="fu">mean</span>(CO2flux),</span>
+<span id="cb461-4"><a href="transformation.html#cb461-4" tabindex="-1"></a>            <span class="at">Qnet =</span> <span class="fu">mean</span>(Qnet),</span>
+<span id="cb461-5"><a href="transformation.html#cb461-5" tabindex="-1"></a>            <span class="at">Tair =</span> <span class="fu">mean</span>(Tair),</span>
+<span id="cb461-6"><a href="transformation.html#cb461-6" tabindex="-1"></a>            <span class="at">RH =</span> <span class="fu">mean</span>(RH))</span></code></pre></div>
+<blockquote>
+<p>Note that YDay is essentially an integer variable. While
+<code>typeof(Loney$YDay)</code> will return <code>"double"</code>, there are only integer
+numeric values, so they will work to define groups – for summary
+values for each given day. In fact, there’s no requirement that groups
+defined by a numeric value be an integer; there just need to be
+multiple instances of that value. In the time series chapter, we’ll
+group flux-tower micrometeorological values (like temperature) by
+half-hour periods over the day (0, 0.5, 1.0, 1.5, …, 23.5), with a
+season of days providing values to summarize by those periods.</p>
+</blockquote>
+<p>Then from this daily data frame, we pivot_longer to store all of the
+parameter names in a <code>parameter</code> variable and all parameter values in a
+<code>value</code> variable:</p>
+<div class="sourceCode" id="cb462"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb462-1"><a href="transformation.html#cb462-1" tabindex="-1"></a>LoneyDailyLong <span class="ot">&lt;-</span> LoneyDaily <span class="sc">|&gt;</span></span>
+<span id="cb462-2"><a href="transformation.html#cb462-2" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> CO2flux<span class="sc">:</span>RH,</span>
+<span id="cb462-3"><a href="transformation.html#cb462-3" tabindex="-1"></a>               <span class="at">names_to=</span><span class="st">&quot;parameter&quot;</span>,</span>
+<span id="cb462-4"><a href="transformation.html#cb462-4" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">&quot;value&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb462-5"><a href="transformation.html#cb462-5" tabindex="-1"></a>  <span class="fu">filter</span>(parameter <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;CO2flux&quot;</span>, <span class="st">&quot;Qnet&quot;</span>, <span class="st">&quot;Tair&quot;</span>, <span class="st">&quot;RH&quot;</span>))</span></code></pre></div>
+<p>Now we have what we need to create a multi-parameter graph using
+facet_grid – note the scales = “free_y” setting to allow each
+variable’s y axis to correspond to its value range (Figure
+<a href="transformation.html#fig:transFacet">5.6</a>).</p>
+<div class="sourceCode" id="cb463"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb463-1"><a href="transformation.html#cb463-1" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> LoneyDailyLong, <span class="fu">aes</span>(<span class="at">x=</span>YDay, <span class="at">y=</span>value)) <span class="sc">+</span> </span>
+<span id="cb463-2"><a href="transformation.html#cb463-2" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span>
+<span id="cb463-3"><a href="transformation.html#cb463-3" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">facet_grid</span>(parameter <span class="sc">~</span> ., <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:transFacet"></span>
+<img src="EnvDataScience_files/figure-html/transFacet-1.png" alt="free-y facet graph supported by pivot (note the y axis scaling varies among variables)" width="75%" />
+<p class="caption">
+FIGURE 5.6: free-y facet graph supported by pivot (note the y axis scaling varies among variables)
+</p>
+</div>
+<p>The need to create a similar graph from soil CO<sub>2</sub> data inspired me
+years ago to learn how to program Excel. It was otherwise impossible to
+get Excel to make all the x scales the same, so I learned how to force
+it with code…</p>
+<div style="page-break-after: always;"></div>
+
+</div>
+</div>
+<div id="exercise-transformation" class="section level2 hasAnchor" number="5.6">
+<h2><span class="header-section-number">5.6</span> Exercise: Transformation<a href="transformation.html#exercise-transformation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><em>by Josh von Nonn (2021)</em></p>
+<p>The impetus behind this exercise came from the movie <em>Dark Waters</em>
+(<a href="https://www.youtube.com/watch?v=RvAOuhyunhY" class="uri">https://www.youtube.com/watch?v=RvAOuhyunhY</a>), inspired by a true
+story of negligent chemical waste disposal by Dupont.</p>
+<p>First create a new RStudio project, named <code>GAMA</code> and save this .Rmd file
+there, and create a folder <code>GAMA_water_data</code> in the project folder; the
+path to the data can then be specifierd as
+<code>"GAMA_water_data/gama_pfas_statewide_v2.txt"</code> assuming that the latter
+name matches what is unzipped from your download. Change to match the
+actual name if it differs.</p>
+<p>Then download from the California Water Boards, GAMA groundwater
+website: <a href="https://gamagroundwater.waterboards.ca.gov/gama/datadownload" class="uri">https://gamagroundwater.waterboards.ca.gov/gama/datadownload</a></p>
+<p>Then select “Statewide Downloads” then “Statewide PFOS Data” and extract
+the zip file into the <code>GAMA_water_data</code> folder. This is a large txt file
+so if you open it with notepad it may take some time to load. Notice
+that this is a tab-delimited file, so is best read with <code>read.delim()</code> which defaults to tabs.</p>
+<p><strong>Note</strong> that this data structure is similar to what was discussed in
+the introductory chapter in how you should use RStudio projects to
+organize your data, allowing <em>relative paths</em> to your data, such as
+“GAMA_water_data/gama_pfas_statewide_v2.txt”, which will work wherever
+you copy your project folder. An absolute path to somewhere on your
+computer in contrast won’t work for anyone else trying to run your code;
+absolute paths should only be used for servers that other users have
+access to and URLs on the web.</p>
+<p>Required packages:</p>
+<div class="sourceCode" id="cb464"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb464-1"><a href="transformation.html#cb464-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb464-2"><a href="transformation.html#cb464-2" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code></pre></div>
+<ol style="list-style-type: decimal">
+<li>Read in the downloaded file <code>"gama_pfas_statewide_v2.txt"</code> and call
+it <code>cal_pfas</code> and have a look at the data set. You can select it
+from the Environment pane or use <code>view(cal_pfas)</code>.</li>
+</ol>
+<div class="sourceCode" id="cb465"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb465-1"><a href="transformation.html#cb465-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb465-2"><a href="transformation.html#cb465-2" tabindex="-1"></a>cal_pfas <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">&quot;GAMA_water_data</span><span class="sc">\\</span><span class="st">gama_pfas_statewide_v2.txt&quot;</span>)</span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Before we clean up this data, let’s preserve the locations of all
+the wells. Create a new data frame, <code>cal_pfas_loc</code>, retaining the
+well id and geographic coordinate variables (see 3.4.1) from the
+fields starting with <code>GM</code>, and remove all the duplicate wells (see
+3.3). (Hint: use <code>distinct()</code>)</p></li>
+<li><p>Now to trim down the data. Create a new data frame, <code>cal_pfas_trim</code>;
+add a new <code>DATE</code> variable using the associated function (see 3.6) to
+read this from the GM sample collection date. Also from the GM
+fields, retain the date variable you just created, plus well id,
+chemical VVL, and the numerical result variables, and finally sort
+(see 3.4.7) by the well id.</p></li>
+</ol>
+<p>The resulting data frame should have the following structure:</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Use the method in 5.4.2 to create new columns from the chemical
+names and values from the result column and store the new data frame
+as <code>cal_pfas_wide</code>.<br />
+<br />
+Notice the warnings. While we get a lot of warnings in R that are
+safely ignored (after you’re used to those that are), we need to
+watch out for things that are going to give us results we don’t
+want. Some of the wells have multiple samples on the same day so
+they will be put into a list (see this in the Environment tab). So
+we’ll want to derive average values for those, so rerun the pivot
+but include the argument <code>values_fn = mean</code>. This will return only
+the average of all the samples.<br />
+<br />
+Once the pivot is working correctly, keep the variables
+<code>GM_WELL_ID</code>,<code>DATE</code>,<code>PFOS</code>,<code>PFOA</code> and create a new one, <code>SUMPFS</code>,
+that is the sum of <code>PFOS</code> and <code>PFOA</code>. See 3.4.1.</li>
+</ol>
+<blockquote>
+<p>The US EPA has established a lifetime Health Advisory Level (HAL) for
+PFOA and PFOS of 70 ng/L. When both PFOA and PFOS are found in
+drinking water, the combined concentrations of PFOA and PFOS should be
+compared with the 70 ng/L HAL. From the GROUNDWATER INFORMATION SHEET
+for PFOA
+(website:<a href="https://www.waterboards.ca.gov/water_issues/programs/gama/factsheets.html" class="uri">https://www.waterboards.ca.gov/water_issues/programs/gama/factsheets.html</a>)</p>
+</blockquote>
+<ol start="5" style="list-style-type: decimal">
+<li><p>For the sake of creating an interesting time series plot, let’s take
+the data frame you just created, filter data for wells that have a
+<code>SUMPFS</code> greater than 70 and that have more than 10 sampling dates
+(see 3.4.6; how many well ids do you have?). Start by creating a new
+data frame- <code>cal_pfas_index</code> from the pivoted data frame. Hint: one
+way to do this is to first filter, then count, then filter for a
+sufficient count. See 3.4.2 and 3.4.6. The resulting data frame
+downloaded in 2021 had 11 observations and 2 variables.</p></li>
+<li><p>Create a new data frame, <code>cal_pfas_max</code> to locate the well with the
+most sampling dates (n). See 3.4.3, where we found the most massive
+female penguins, for a relevant method.</p></li>
+<li><p>Now let’s pull all the data on that well by joining the max indexed
+well with <code>cal_pfas_wide</code>, remove <code>n</code> (3.4.1), and call the new data
+frame <code>cal_pfas_join</code>.</p></li>
+<li><p>Create a new data frame, <code>cal_pfs_long</code> and <code>pivot_longer</code> the
+<code>cal_pfs_join</code> data, creating new columns: <code>"Chemical"</code> and <code>"ngl"</code>.</p></li>
+<li><p>Plot the well using the wide data from <code>cal_pfs_join</code> , to create
+the graph shown here (see 4.4.3.1 and 4.7), plotting the three
+variables (<code>PFOS,PFOA,SUMPFS</code>) with different colored lines of your
+choice. Add a horizontal reference line
+(<code>geom_hline(yintercept = 70)</code>) for the HAL limit at 70. Note that
+the axis labels have been clarified (see 4.7).</p></li>
+</ol>
+<p><img src="img/transform_ex9.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<ol start="10" style="list-style-type: decimal">
+<li>Plot the well using the long data from <code>cal_pfs_long</code> using DATE on
+the x axis and <code>ngl</code> on the y axis. Distinguish the chemicals by
+setting the line color to <code>Chemical</code> in the aesthetics. As before,
+add the horizontal reference at 70 and improve the axis labels, but
+also tweak where the legend goes (see 4.7).</li>
+</ol>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:transGoal10"></span>
+<img src="img/transform_ex10.png" alt="Goal" width="50%" />
+<p class="caption">
+FIGURE 5.7: Goal
+</p>
+</div>
+
+</div>
+</div>
+
+
+
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-blackburn2021carbon" class="csl-entry">
+Blackburn, Darren A, Andrew J Oliphant, and Jerry D Davis. 2021. <span>“Carbon and Water Exchanges in a Mountain Meadow Ecosystem, Sierra Nevada, California.”</span> <em>Wetlands</em> 41 (3): 1–17. <a href="https://doi.org/10.1007/s13157-021-01437-2">https://doi.org/10.1007/s13157-021-01437-2</a>.
+</div>
+<div id="ref-NDVI" class="csl-entry">
+Davis, JD, L Blesius, M Slocombe, et al. 2020. <span>“Unpiloted Aerial System (UAS)-Supported Biogeomorphic Analysis of Restored Sierra Nevada Montane Meadows.”</span> <em>Remote Sensing</em> 12. <a href="https://www.mdpi.com/2072-4292/12/11/1828">https://www.mdpi.com/2072-4292/12/11/1828</a>.
+</div>
+<div id="ref-JohnstonRudis" class="csl-entry">
+Johnston, Myfanwy, and Bob Rudis. n.d. <em>Visualizing Fish Encounter Histories</em>. <a href="https://fishsciences.github.io/post/visualizing-fish-encounter-histories/">https://fishsciences.github.io/post/visualizing-fish-encounter-histories/</a>.
+</div>
+<div id="ref-eucoak" class="csl-entry">
+Thompson, A, JD Davis, and AJ Oliphant. 2016. <span>“Surface Runoff and Soil Erosion Under Eucalyptus and Oak Canopy.”</span> <em>Earth Surface Processes and Landforms</em>, ahead of print. <a href="https://doi.org/10.1002/esp.3881">https://doi.org/10.1002/esp.3881</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="visualization.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="spatial.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section"
+  },
+  "book_filename": "envdatasci",
+  "toc_depth": 4
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

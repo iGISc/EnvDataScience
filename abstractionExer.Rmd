@@ -1,0 +1,132 @@
+
+## Exercises: Data Abstraction
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(include=F, echo=F)
+```
+
+Create an R Markdown document (.Rmd) to complete the exercise. For each question, start by copying in the question text below, then create two code chunks. The first will be used to set up libraries, read and produce data, and try methods. The code in the first chunk will probably have outputs in the form of data frame tables and graphics, but the final outputs are reserved for the second code chunk. When the .Rmd file is knitted, it should show the code for both chunks, but only the outputs from the second, which should produce a clean knitted result.
+
+To do this use the following  options for the first chunk: `{r results="hide", warning=F, message=F, echo=T}`. You can run the first code chunk to learn from what it produces, but only the second chunk (without those options) will produce your final results when you knit the document. 
+
+> For a simple explanation of code chunk options, see https://yihui.org/knitr/options/. 
+
+There may also be questions to answer, which should go in the markdown section, just below the question.
+
+
+::: exercise
+Create a tibble with 20 rows of two variables `norm` and `unif` with `norm` created with `rnorm()` and `unif` created with `runif()`.
+
+> Consider how you might use similar methods to 3.2.2, and explain whether this might (or might not) be a good approach.
+
+> > :
+
+> Code chunk output: your resulting tibble:
+
+```{r}
+
+```
+:::
+
+::: exercise
+Read in "TRI/TRI_2017_CA.csv" in two ways, as a normal data frame assigned to df and as a tibble assigned to tbl. Do not create an output from the code chunk; instead use the Environment tab to answer the question.
+
+> What field names result in the data frame and in the tibble for what's listed in the CSV as `5.1_FUGITIVE_AIR`?
+> > df:            tibble: 
+
+```{r, show_col_types=F}
+
+```
+:::
+
+::: exercise
+Use the summary function or other methods to investigate the variables in either the data.frame or tibble you just created. While you can temporarily create outputs from your code chunk to investigate, after you have your the information needed to answer the question, comment out the code producing output: don't display any output; just answer the question below.
+
+> What type of field and what values are assigned to `BIA_CODE`?
+> > :
+
+```{r}
+
+```
+:::
+
+::: exercise
+Create a boxplot of `body_mass_g` by `species` from the `penguins` data
+frame in the palmerpenguins package [@palmer], using methods in 3.3.1.
+
+```{r}
+
+```
+
+```{r}
+
+```
+:::
+
+::: exercise
+Use select, mutate, and the pipe to create a `penguinMass` tibble where the only original variable retained is `species`, but with `body_mass_kg` created as $\frac{1}{1000}$ the `body_mass_g`. The statement should start with `penguinMass <- penguins` and use a pipe plus the other functions after that.
+
+> The output should be the tibble created.
+
+```{r abstraction.ex5}
+
+```
+:::
+
+::: exercise
+Now, also with `penguins`, create `FemaleChinstaps` to include only the female Chinstrap penguins. Start with `FemaleChinstraps <- penguins %>%.`
+
+> Similarly, the output should be the resulting `FemaleChinstaps.`
+
+```{r abstraction.ex6}
+
+```
+:::
+
+::: exercise
+Now, summarize by `species` groups to create mean and standard deviation variables from `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, and `body_mass_g`. Preface the variable names with either `avg.` or `sd.` Include `na.rm=T` with all statistics function calls.
+
+> Similarly the output should be the resulting data frame.
+
+```{r abstraction.ex7}
+
+```
+:::
+
+::: exercise
+Sort the penguins by `body_mass_g`, and provide that output.
+
+```{r abstraction.ex8}
+
+```
+:::
+
+::: exercise
+Using `stringr` methods, detect and print out a vector of sites in the`ConcentrationReport` that are parks (include the substring `"Park"` in the variable `Shoreline Name`), then detect and print out the longest shoreline name. See the method in 3.2 for identifying just a single result among duplicates.
+
+```{r abstraction.ex9}
+
+```
+:::
+
+::: exercise
+The `sierraStations` data frame has weather stations only in California, but includes "`CA US`" at the end of the name. Use dplyr and stringr methods to create a new `STATION_NAME` that truncates the name, removing that part at the end, and provide the resulting data frame as the only output.
+
+```{r abstraction.ex10}
+
+```
+:::
+
+::: exercise
+Use `dplyr` and `lubridate` methods to create a new date-type variable
+`sampleDate` from the existing `DATE` character variable in
+`soilCO2_97`, then use this to plot a graph of soil CO2 over time, with
+`sampleDate` as x, and `CO2pct` as y. Then use code to answer the
+question: What's the length of time (time difference) from beginning to
+end for this data set [Hint: two approaches might use sorting or `max()`
+and `min()`]?
+
+```{r}
+
+```
+:::

@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 8 Raster Spatial Analysis | Introduction to Environmental Data Science</title>
+  <meta name="description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 8 Raster Spatial Analysis | Introduction to Environmental Data Science" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  <meta name="github-repo" content="iGISc/EnvDataSci" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 8 Raster Spatial Analysis | Introduction to Environmental Data Science" />
+  
+  <meta name="twitter:description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  
+
+<meta name="author" content="Jerry Davis, SFSU Institute for Geographic Information Science" />
+
+
+<meta name="date" content="2026-09-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="spatial-analysis.html"/>
+<link rel="next" href="statistics.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script>
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.2.3/leaflet.js"></script>
+<script src="libs/leaflet-providers-3.0.0/leaflet-providers.js"></script>
+<script src="libs/leaflet-providers-plugin-2.2.3/leaflet-providers-plugin.js"></script>
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<link href="libs/sierra___TEMPERATURE-CSS-0.0.1/sierra___TEMPERATURE_home-button.css" rel="stylesheet" />
+<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><img src="img/eaRth_anna296.png"></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background, Goals and Data</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#environmental-data-science"><i class="fa fa-check"></i><b>1.1</b> Environmental Data Science</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#environmental-data-and-methods"><i class="fa fa-check"></i><b>1.2</b> Environmental Data and Methods</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#goals"><i class="fa fa-check"></i><b>1.3</b> Goals</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#some-definitions"><i class="fa fa-check"></i><b>1.3.1</b> Some definitions:</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>1.4</b> Exploratory Data Analysis</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#software-and-data"><i class="fa fa-check"></i><b>1.5</b> Software and Data</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#data"><i class="fa fa-check"></i><b>1.5.1</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i><b>1.6</b> Acknowledgements</a></li>
+</ul></li>
+<li class="part"><span><b>I Exploratory Data Analysis</b></span></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction to R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#data-objects"><i class="fa fa-check"></i><b>2.1</b> Data Objects</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#scalars-and-assignment"><i class="fa fa-check"></i><b>2.1.1</b> Scalars and assignment</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#functions"><i class="fa fa-check"></i><b>2.2</b> Functions</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#expressions"><i class="fa fa-check"></i><b>2.3</b> Expressions and Statements</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#class"><i class="fa fa-check"></i><b>2.4</b> Data Classes</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introduction.html"><a href="introduction.html#integers"><i class="fa fa-check"></i><b>2.4.1</b> Integers</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#rectangular-data"><i class="fa fa-check"></i><b>2.5</b> Rectangular Data</a></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#data-structures-in-r"><i class="fa fa-check"></i><b>2.6</b> Data Structures in R</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="introduction.html"><a href="introduction.html#vector"><i class="fa fa-check"></i><b>2.6.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.6.2" data-path="introduction.html"><a href="introduction.html#list"><i class="fa fa-check"></i><b>2.6.2</b> Lists</a></li>
+<li class="chapter" data-level="2.6.3" data-path="introduction.html"><a href="introduction.html#matrix"><i class="fa fa-check"></i><b>2.6.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.6.4" data-path="introduction.html"><a href="introduction.html#dataframes"><i class="fa fa-check"></i><b>2.6.4</b> Data frames</a></li>
+<li class="chapter" data-level="2.6.5" data-path="introduction.html"><a href="introduction.html#factors"><i class="fa fa-check"></i><b>2.6.5</b> Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#accessors"><i class="fa fa-check"></i><b>2.7</b> Accessors and Subsetting</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="introduction.html"><a href="introduction.html#subsetting"><i class="fa fa-check"></i><b>2.7.1</b> <code>[]</code> Subsetting</a></li>
+<li class="chapter" data-level="2.7.2" data-path="introduction.html"><a href="introduction.html#the-mysterious-double-bracket"><i class="fa fa-check"></i><b>2.7.2</b> <code>[[]]</code> The mysterious double bracket</a></li>
+<li class="chapter" data-level="2.7.3" data-path="introduction.html"><a href="introduction.html#accessing-a-vector-from-a-data-frame"><i class="fa fa-check"></i><b>2.7.3</b> <code>$</code> Accessing a vector from a data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#programming"><i class="fa fa-check"></i><b>2.8</b> Programming scripts in RStudio</a>
+<ul>
+<li class="chapter" data-level="2.8.1" data-path="introduction.html"><a href="introduction.html#functions-writing"><i class="fa fa-check"></i><b>2.8.1</b> <code>function</code> : creating your own</a></li>
+<li class="chapter" data-level="2.8.2" data-path="introduction.html"><a href="introduction.html#if-conditional-operations"><i class="fa fa-check"></i><b>2.8.2</b> <code>if</code> : conditional operations</a></li>
+<li class="chapter" data-level="2.8.3" data-path="introduction.html"><a href="introduction.html#for"><i class="fa fa-check"></i><b>2.8.3</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="2.8.4" data-path="introduction.html"><a href="introduction.html#subsetting-with-logic"><i class="fa fa-check"></i><b>2.8.4</b> Subsetting with logic</a></li>
+<li class="chapter" data-level="2.8.5" data-path="introduction.html"><a href="introduction.html#apply"><i class="fa fa-check"></i><b>2.8.5</b> Apply functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.9" data-path="introduction.html"><a href="introduction.html#rstudio"><i class="fa fa-check"></i><b>2.9</b> RStudio projects</a>
+<ul>
+<li class="chapter" data-level="2.9.1" data-path="introduction.html"><a href="introduction.html#rmarkdown"><i class="fa fa-check"></i><b>2.9.1</b> R Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="2.10" data-path="introduction.html"><a href="introduction.html#exercises-introduction-to-r"><i class="fa fa-check"></i><b>2.10</b> Exercises: Introduction to R</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="abstraction.html"><a href="abstraction.html"><i class="fa fa-check"></i><b>3</b> Data Abstraction</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="abstraction.html"><a href="abstraction.html#tidyverse"><i class="fa fa-check"></i><b>3.1</b> The Tidyverse</a></li>
+<li class="chapter" data-level="3.2" data-path="abstraction.html"><a href="abstraction.html#tibbles"><i class="fa fa-check"></i><b>3.2</b> Tibbles</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="abstraction.html"><a href="abstraction.html#building-a-tibble-from-vectors"><i class="fa fa-check"></i><b>3.2.1</b> Building a tibble from vectors</a></li>
+<li class="chapter" data-level="3.2.2" data-path="abstraction.html"><a href="abstraction.html#tribble"><i class="fa fa-check"></i><b>3.2.2</b> tribble</a></li>
+<li class="chapter" data-level="3.2.3" data-path="abstraction.html"><a href="abstraction.html#csv"><i class="fa fa-check"></i><b>3.2.3</b> read_csv</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="abstraction.html"><a href="abstraction.html#summarizing-variable-distributions"><i class="fa fa-check"></i><b>3.3</b> Summarizing variable distributions</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="abstraction.html"><a href="abstraction.html#stratifying-variables-by-site-using-a-tukey-box-plot"><i class="fa fa-check"></i><b>3.3.1</b> Stratifying variables by site using a Tukey box plot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="abstraction.html"><a href="abstraction.html#dplyr"><i class="fa fa-check"></i><b>3.4</b> Database operations</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="abstraction.html"><a href="abstraction.html#pipe"><i class="fa fa-check"></i><b>3.4.1</b> Select, mutate, and the pipe</a></li>
+<li class="chapter" data-level="3.4.2" data-path="abstraction.html"><a href="abstraction.html#filter"><i class="fa fa-check"></i><b>3.4.2</b> Filtering observations</a></li>
+<li class="chapter" data-level="3.4.3" data-path="abstraction.html"><a href="abstraction.html#subsetting-data-with-base-rs-subset"><i class="fa fa-check"></i><b>3.4.3</b> Subsetting data with base R’s <code>subset</code></a></li>
+<li class="chapter" data-level="3.4.4" data-path="abstraction.html"><a href="abstraction.html#writing-a-data-frame-to-a-csv"><i class="fa fa-check"></i><b>3.4.4</b> Writing a data frame to a csv</a></li>
+<li class="chapter" data-level="3.4.5" data-path="abstraction.html"><a href="abstraction.html#group-summary"><i class="fa fa-check"></i><b>3.4.5</b> Summarize by group</a></li>
+<li class="chapter" data-level="3.4.6" data-path="abstraction.html"><a href="abstraction.html#count"><i class="fa fa-check"></i><b>3.4.6</b> Count</a></li>
+<li class="chapter" data-level="3.4.7" data-path="abstraction.html"><a href="abstraction.html#sorting-after-summarizing"><i class="fa fa-check"></i><b>3.4.7</b> Sorting after summarizing</a></li>
+<li class="chapter" data-level="3.4.8" data-path="abstraction.html"><a href="abstraction.html#the-dot-operator"><i class="fa fa-check"></i><b>3.4.8</b> The dot operator</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="abstraction.html"><a href="abstraction.html#stringr"><i class="fa fa-check"></i><b>3.5</b> String abstraction</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="abstraction.html"><a href="abstraction.html#detecting-matches"><i class="fa fa-check"></i><b>3.5.1</b> Detecting matches</a></li>
+<li class="chapter" data-level="3.5.2" data-path="abstraction.html"><a href="abstraction.html#subset-string"><i class="fa fa-check"></i><b>3.5.2</b> Subsetting strings</a></li>
+<li class="chapter" data-level="3.5.3" data-path="abstraction.html"><a href="abstraction.html#string-length"><i class="fa fa-check"></i><b>3.5.3</b> String length</a></li>
+<li class="chapter" data-level="3.5.4" data-path="abstraction.html"><a href="abstraction.html#replacing-substrings-with-other-text-mutating-strings"><i class="fa fa-check"></i><b>3.5.4</b> Replacing substrings with other text (“mutating” strings)</a></li>
+<li class="chapter" data-level="3.5.5" data-path="abstraction.html"><a href="abstraction.html#concatenating-and-splitting"><i class="fa fa-check"></i><b>3.5.5</b> Concatenating and splitting</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="abstraction.html"><a href="abstraction.html#lubridate"><i class="fa fa-check"></i><b>3.6</b> Dates and times with <code>lubridate</code></a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="abstraction.html"><a href="abstraction.html#dates-used-for-annual-time-series"><i class="fa fa-check"></i><b>3.6.1</b> Dates used for annual time series</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="abstraction.html"><a href="abstraction.html#extending-abstractions-with-functions"><i class="fa fa-check"></i><b>3.7</b> Extending abstractions with functions</a></li>
+<li class="chapter" data-level="3.8" data-path="abstraction.html"><a href="abstraction.html#exercises-data-abstraction"><i class="fa fa-check"></i><b>3.8</b> Exercises: Data Abstraction</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>4</b> Visualization</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="visualization.html"><a href="visualization.html#plot-in-base-r"><i class="fa fa-check"></i><b>4.1</b> plot in base R</a></li>
+<li class="chapter" data-level="4.2" data-path="visualization.html"><a href="visualization.html#ggplot2"><i class="fa fa-check"></i><b>4.2</b> ggplot2</a></li>
+<li class="chapter" data-level="4.3" data-path="visualization.html"><a href="visualization.html#plotting-one-variable"><i class="fa fa-check"></i><b>4.3</b> Plotting one variable</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="visualization.html"><a href="visualization.html#histogram"><i class="fa fa-check"></i><b>4.3.1</b> Histogram</a></li>
+<li class="chapter" data-level="4.3.2" data-path="visualization.html"><a href="visualization.html#density-plot"><i class="fa fa-check"></i><b>4.3.2</b> Density plot</a></li>
+<li class="chapter" data-level="4.3.3" data-path="visualization.html"><a href="visualization.html#boxplot"><i class="fa fa-check"></i><b>4.3.3</b> Boxplot</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="visualization.html"><a href="visualization.html#plotting-two-variables"><i class="fa fa-check"></i><b>4.4</b> Plotting Two Variables</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="visualization.html"><a href="visualization.html#two-continuous-variables"><i class="fa fa-check"></i><b>4.4.1</b> Two continuous variables</a></li>
+<li class="chapter" data-level="4.4.2" data-path="visualization.html"><a href="visualization.html#two-variables-one-discrete"><i class="fa fa-check"></i><b>4.4.2</b> Two variables, one discrete</a></li>
+<li class="chapter" data-level="4.4.3" data-path="visualization.html"><a href="visualization.html#color-systems"><i class="fa fa-check"></i><b>4.4.3</b> Color systems</a></li>
+<li class="chapter" data-level="4.4.4" data-path="visualization.html"><a href="visualization.html#trend-line"><i class="fa fa-check"></i><b>4.4.4</b> Trend line</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="visualization.html"><a href="visualization.html#general-symbology"><i class="fa fa-check"></i><b>4.5</b> General Symbology</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="visualization.html"><a href="visualization.html#categorical-symbology"><i class="fa fa-check"></i><b>4.5.1</b> Categorical symbology</a></li>
+<li class="chapter" data-level="4.5.2" data-path="visualization.html"><a href="visualization.html#log-scales-instead-of-transform"><i class="fa fa-check"></i><b>4.5.2</b> Log scales instead of transform</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="visualization.html"><a href="visualization.html#graphs-from-grouped-data"><i class="fa fa-check"></i><b>4.6</b> Graphs from Grouped Data</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="visualization.html"><a href="visualization.html#faceted-graphs"><i class="fa fa-check"></i><b>4.6.1</b> Faceted graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="visualization.html"><a href="visualization.html#titles-subtitles-axis-labels-and-legend-position"><i class="fa fa-check"></i><b>4.7</b> Titles, Subtitles, Axis Labels, and Legend Position</a></li>
+<li class="chapter" data-level="4.8" data-path="visualization.html"><a href="visualization.html#pairs-plot"><i class="fa fa-check"></i><b>4.8</b> Pairs Plot</a></li>
+<li class="chapter" data-level="4.9" data-path="visualization.html"><a href="visualization.html#exercises-visualization"><i class="fa fa-check"></i><b>4.9</b> Exercises: Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="transformation.html"><a href="transformation.html"><i class="fa fa-check"></i><b>5</b> Data Transformation</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="transformation.html"><a href="transformation.html#joins"><i class="fa fa-check"></i><b>5.1</b> Data joins</a></li>
+<li class="chapter" data-level="5.2" data-path="transformation.html"><a href="transformation.html#set"><i class="fa fa-check"></i><b>5.2</b> Set operations</a></li>
+<li class="chapter" data-level="5.3" data-path="transformation.html"><a href="transformation.html#binding"><i class="fa fa-check"></i><b>5.3</b> Binding rows and columns</a></li>
+<li class="chapter" data-level="5.4" data-path="transformation.html"><a href="transformation.html#pivots"><i class="fa fa-check"></i><b>5.4</b> Pivoting data frames</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="transformation.html"><a href="transformation.html#pivot_longer"><i class="fa fa-check"></i><b>5.4.1</b> <code>pivot_longer</code></a></li>
+<li class="chapter" data-level="5.4.2" data-path="transformation.html"><a href="transformation.html#pivot_wider"><i class="fa fa-check"></i><b>5.4.2</b> <code>pivot_wider</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="transformation.html"><a href="transformation.html#combining-transformation-methods-to-create-a-free_y-faceted-graph"><i class="fa fa-check"></i><b>5.5</b> Combining transformation methods to create a <code>free_y</code> faceted graph</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="transformation.html"><a href="transformation.html#air-pollutant-emissions-trends-epa"><i class="fa fa-check"></i><b>5.5.1</b> Air pollutant emissions trends (EPA)</a></li>
+<li class="chapter" data-level="5.5.2" data-path="transformation.html"><a href="transformation.html#flux-tower-data"><i class="fa fa-check"></i><b>5.5.2</b> Flux tower data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="transformation.html"><a href="transformation.html#exercise-transformation"><i class="fa fa-check"></i><b>5.6</b> Exercise: Transformation</a></li>
+</ul></li>
+<li class="part"><span><b>II Spatial</b></span></li>
+<li class="chapter" data-level="6" data-path="spatial.html"><a href="spatial.html"><i class="fa fa-check"></i><b>6</b> Spatial Data and Maps</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="spatial.html"><a href="spatial.html#spatial-data"><i class="fa fa-check"></i><b>6.1</b> Spatial Data</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="spatial.html"><a href="spatial.html#simple-geometry-building-in-sf"><i class="fa fa-check"></i><b>6.1.1</b> Simple geometry building in sf</a></li>
+<li class="chapter" data-level="6.1.2" data-path="spatial.html"><a href="spatial.html#building-points-from-a-data-frame"><i class="fa fa-check"></i><b>6.1.2</b> Building points from a data frame</a></li>
+<li class="chapter" data-level="6.1.3" data-path="spatial.html"><a href="spatial.html#spatvectors-in-terra"><i class="fa fa-check"></i><b>6.1.3</b> SpatVectors in <code>terra</code></a></li>
+<li class="chapter" data-level="6.1.4" data-path="spatial.html"><a href="spatial.html#creating-features-from-shapefiles"><i class="fa fa-check"></i><b>6.1.4</b> Creating features from shapefiles</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="spatial.html"><a href="spatial.html#coordinate-referencing-systems"><i class="fa fa-check"></i><b>6.2</b> Coordinate Referencing Systems</a></li>
+<li class="chapter" data-level="6.3" data-path="spatial.html"><a href="spatial.html#creating-sf-data-from-data-frames"><i class="fa fa-check"></i><b>6.3</b> Creating sf Data from Data Frames</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="spatial.html"><a href="spatial.html#removing-geometry"><i class="fa fa-check"></i><b>6.3.1</b> <em>Removing</em> geometry</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="spatial.html"><a href="spatial.html#base-rs-plot-with-terra"><i class="fa fa-check"></i><b>6.4</b> Base R’s <code>plot()</code> with <code>terra</code></a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="spatial.html"><a href="spatial.html#using-maptiles-to-create-a-basemap"><i class="fa fa-check"></i><b>6.4.1</b> Using maptiles to create a basemap</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="spatial.html"><a href="spatial.html#raster-data"><i class="fa fa-check"></i><b>6.5</b> Raster data</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="spatial.html"><a href="spatial.html#building-rasters"><i class="fa fa-check"></i><b>6.5.1</b> Building rasters</a></li>
+<li class="chapter" data-level="6.5.2" data-path="spatial.html"><a href="spatial.html#vector-to-raster-conversion"><i class="fa fa-check"></i><b>6.5.2</b> Vector to raster conversion</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="spatial.html"><a href="spatial.html#ggplot2-for-maps"><i class="fa fa-check"></i><b>6.6</b> ggplot2 for Maps</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="spatial.html"><a href="spatial.html#rasters-in-ggplot2"><i class="fa fa-check"></i><b>6.6.1</b> Rasters in ggplot2</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="spatial.html"><a href="spatial.html#using-bounding-boxes-to-zoom-to-the-extent-of-data-layers-in-any-mapping-package"><i class="fa fa-check"></i><b>6.7</b> Using bounding boxes to zoom to the extent of data layers (in any mapping package)</a></li>
+<li class="chapter" data-level="6.8" data-path="spatial.html"><a href="spatial.html#tmap"><i class="fa fa-check"></i><b>6.8</b> tmap</a>
+<ul>
+<li class="chapter" data-level="6.8.1" data-path="spatial.html"><a href="spatial.html#color"><i class="fa fa-check"></i><b>6.8.1</b> Color</a></li>
+<li class="chapter" data-level="6.8.2" data-path="spatial.html"><a href="spatial.html#basemap-with-tmap"><i class="fa fa-check"></i><b>6.8.2</b> Basemap with tmap</a></li>
+</ul></li>
+<li class="chapter" data-level="6.9" data-path="spatial.html"><a href="spatial.html#interactive-maps"><i class="fa fa-check"></i><b>6.9</b> Interactive Maps</a>
+<ul>
+<li class="chapter" data-level="6.9.1" data-path="spatial.html"><a href="spatial.html#leaflet"><i class="fa fa-check"></i><b>6.9.1</b> Leaflet</a></li>
+<li class="chapter" data-level="6.9.2" data-path="spatial.html"><a href="spatial.html#mapview"><i class="fa fa-check"></i><b>6.9.2</b> Mapview</a></li>
+<li class="chapter" data-level="6.9.3" data-path="spatial.html"><a href="spatial.html#tmap-view-mode"><i class="fa fa-check"></i><b>6.9.3</b> tmap (view mode)</a></li>
+<li class="chapter" data-level="6.9.4" data-path="spatial.html"><a href="spatial.html#interactive-mapping-of-individual-penguins-abstracted-from-a-big-dataset"><i class="fa fa-check"></i><b>6.9.4</b> Interactive mapping of individual penguins abstracted from a big dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="6.10" data-path="spatial.html"><a href="spatial.html#exercises-spatial-data-and-maps"><i class="fa fa-check"></i><b>6.10</b> Exercises: Spatial Data and Maps</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="spatial-analysis.html"><a href="spatial-analysis.html"><i class="fa fa-check"></i><b>7</b> Spatial Analysis</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#data-frame-operations"><i class="fa fa-check"></i><b>7.1</b> Data Frame Operations</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#GroupedSummaries"><i class="fa fa-check"></i><b>7.1.1</b> Using grouped summaries, and filtering by a selection</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-analysis-operations"><i class="fa fa-check"></i><b>7.2</b> Spatial Analysis Operations</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#using-topology-to-subset"><i class="fa fa-check"></i><b>7.2.1</b> Using topology to subset</a></li>
+<li class="chapter" data-level="7.2.2" data-path="spatial-analysis.html"><a href="spatial-analysis.html#centroid"><i class="fa fa-check"></i><b>7.2.2</b> Centroid</a></li>
+<li class="chapter" data-level="7.2.3" data-path="spatial-analysis.html"><a href="spatial-analysis.html#distance"><i class="fa fa-check"></i><b>7.2.3</b> Distance</a></li>
+<li class="chapter" data-level="7.2.4" data-path="spatial-analysis.html"><a href="spatial-analysis.html#buffers"><i class="fa fa-check"></i><b>7.2.4</b> Buffers</a></li>
+<li class="chapter" data-level="7.2.5" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-overlay-union-and-intersection"><i class="fa fa-check"></i><b>7.2.5</b> Spatial overlay: union and intersection</a></li>
+<li class="chapter" data-level="7.2.6" data-path="spatial-analysis.html"><a href="spatial-analysis.html#clip-with-st_crop"><i class="fa fa-check"></i><b>7.2.6</b> Clip with st_crop</a></li>
+<li class="chapter" data-level="7.2.7" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-join-with-st_join"><i class="fa fa-check"></i><b>7.2.7</b> Spatial join with <code>st_join</code></a></li>
+<li class="chapter" data-level="7.2.8" data-path="spatial-analysis.html"><a href="spatial-analysis.html#further-exploration-of-spatial-analysis"><i class="fa fa-check"></i><b>7.2.8</b> Further exploration of spatial analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="spatial-analysis.html"><a href="spatial-analysis.html#exercises-spatial-analysis"><i class="fa fa-check"></i><b>7.3</b> Exercises: Spatial Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="raster.html"><a href="raster.html"><i class="fa fa-check"></i><b>8</b> Raster Spatial Analysis</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="raster.html"><a href="raster.html#terrain"><i class="fa fa-check"></i><b>8.1</b> Terrain functions</a></li>
+<li class="chapter" data-level="8.2" data-path="raster.html"><a href="raster.html#map-algebra-in-terra"><i class="fa fa-check"></i><b>8.2</b> Map Algebra in terra</a></li>
+<li class="chapter" data-level="8.3" data-path="raster.html"><a href="raster.html#distance-1"><i class="fa fa-check"></i><b>8.3</b> Distance</a></li>
+<li class="chapter" data-level="8.4" data-path="raster.html"><a href="raster.html#extracting-values"><i class="fa fa-check"></i><b>8.4</b> Extracting Values</a></li>
+<li class="chapter" data-level="8.5" data-path="raster.html"><a href="raster.html#focal-statistics"><i class="fa fa-check"></i><b>8.5</b> Focal Statistics</a></li>
+<li class="chapter" data-level="8.6" data-path="raster.html"><a href="raster.html#zonal-statistics"><i class="fa fa-check"></i><b>8.6</b> Zonal Statistics</a></li>
+<li class="chapter" data-level="8.7" data-path="raster.html"><a href="raster.html#exercises-raster-spatial-analysis"><i class="fa fa-check"></i><b>8.7</b> Exercises: Raster Spatial Analysis</a></li>
+</ul></li>
+<li class="part"><span><b>III Statistics and Modeling</b></span></li>
+<li class="chapter" data-level="9" data-path="statistics.html"><a href="statistics.html"><i class="fa fa-check"></i><b>9</b> Statistical Summaries and Tests</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="statistics.html"><a href="statistics.html#goals-of-statistical-analysis"><i class="fa fa-check"></i><b>9.1</b> Goals of Statistical Analysis</a></li>
+<li class="chapter" data-level="9.2" data-path="statistics.html"><a href="statistics.html#summary-statistics"><i class="fa fa-check"></i><b>9.2</b> Summary Statistics</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="statistics.html"><a href="statistics.html#summarize-by-group-stratifying-a-summary"><i class="fa fa-check"></i><b>9.2.1</b> Summarize by group: <em>stratifying a summary</em></a></li>
+<li class="chapter" data-level="9.2.2" data-path="statistics.html"><a href="statistics.html#boxplot-for-visualizing-distributions-by-group"><i class="fa fa-check"></i><b>9.2.2</b> Boxplot for visualizing distributions by group</a></li>
+<li class="chapter" data-level="9.2.3" data-path="statistics.html"><a href="statistics.html#random"><i class="fa fa-check"></i><b>9.2.3</b> Generating pseudorandom numbers</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="statistics.html"><a href="statistics.html#correlation"><i class="fa fa-check"></i><b>9.3</b> Correlation r and Coefficient of Determination r<sup>2</sup></a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="statistics.html"><a href="statistics.html#displaying-correlation-in-a-pairs-plot"><i class="fa fa-check"></i><b>9.3.1</b> Displaying correlation in a pairs plot</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="statistics.html"><a href="statistics.html#statistical-tests"><i class="fa fa-check"></i><b>9.4</b> Statistical Tests</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="statistics.html"><a href="statistics.html#comparing-samples-and-groupings-with-a-t-test-and-a-non-parametric-kruskal-wallis-rank-sum-test"><i class="fa fa-check"></i><b>9.4.1</b> Comparing samples and groupings with a t test and a non-parametric Kruskal-Wallis Rank Sum test</a></li>
+<li class="chapter" data-level="9.4.2" data-path="statistics.html"><a href="statistics.html#analysis-of-variance"><i class="fa fa-check"></i><b>9.4.2</b> Analysis of variance</a></li>
+<li class="chapter" data-level="9.4.3" data-path="statistics.html"><a href="statistics.html#post-hoc-analysis-of-variance-with-tukeys-test"><i class="fa fa-check"></i><b>9.4.3</b> Post-Hoc Analysis of Variance with Tukey’s Test</a></li>
+<li class="chapter" data-level="9.4.4" data-path="statistics.html"><a href="statistics.html#testing-a-correlation"><i class="fa fa-check"></i><b>9.4.4</b> Testing a correlation</a></li>
+<li class="chapter" data-level="9.4.5" data-path="statistics.html"><a href="statistics.html#additional-resources"><i class="fa fa-check"></i><b>9.4.5</b> Additional resources</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="statistics.html"><a href="statistics.html#exercises-statistics"><i class="fa fa-check"></i><b>9.5</b> Exercises: Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="modeling.html"><a href="modeling.html"><i class="fa fa-check"></i><b>10</b> Modeling</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="modeling.html"><a href="modeling.html#some-common-statistical-models"><i class="fa fa-check"></i><b>10.1</b> Some Common Statistical Models</a></li>
+<li class="chapter" data-level="10.2" data-path="modeling.html"><a href="modeling.html#lm"><i class="fa fa-check"></i><b>10.2</b> Linear Model (<code>lm</code>)</a></li>
+<li class="chapter" data-level="10.3" data-path="modeling.html"><a href="modeling.html#spatial-influences-on-statistical-analysis"><i class="fa fa-check"></i><b>10.3</b> Spatial Influences on Statistical Analysis</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="modeling.html"><a href="modeling.html#mapping-residuals"><i class="fa fa-check"></i><b>10.3.1</b> Mapping residuals</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="modeling.html"><a href="modeling.html#analysis-of-covariance"><i class="fa fa-check"></i><b>10.4</b> Analysis of Covariance</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="modeling.html"><a href="modeling.html#tukey-test-for-the-ancova-model"><i class="fa fa-check"></i><b>10.4.1</b> Tukey test for the ANCOVA model</a></li>
+<li class="chapter" data-level="10.4.2" data-path="modeling.html"><a href="modeling.html#the-karst-water-chemistry-model"><i class="fa fa-check"></i><b>10.4.2</b> The karst water chemistry model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="modeling.html"><a href="modeling.html#generalized-linear-model-glm"><i class="fa fa-check"></i><b>10.5</b> Generalized linear model (GLM)</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="modeling.html"><a href="modeling.html#binomial-family-logistic-glm"><i class="fa fa-check"></i><b>10.5.1</b> Binomial family: Logistic GLM</a></li>
+<li class="chapter" data-level="10.5.2" data-path="modeling.html"><a href="modeling.html#logistic-landslide-model"><i class="fa fa-check"></i><b>10.5.2</b> Logistic landslide model</a></li>
+<li class="chapter" data-level="10.5.3" data-path="modeling.html"><a href="modeling.html#poisson-regression"><i class="fa fa-check"></i><b>10.5.3</b> Poisson regression</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="modeling.html"><a href="modeling.html#other-modeling-methods"><i class="fa fa-check"></i><b>10.6</b> Other modeling methods</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="modeling.html"><a href="modeling.html#curve-fitting"><i class="fa fa-check"></i><b>10.6.1</b> Curve fitting</a></li>
+<li class="chapter" data-level="10.6.2" data-path="modeling.html"><a href="modeling.html#models-employing-machine-learning"><i class="fa fa-check"></i><b>10.6.2</b> Models employing machine learning</a></li>
+</ul></li>
+<li class="chapter" data-level="10.7" data-path="modeling.html"><a href="modeling.html#exercises-modeling"><i class="fa fa-check"></i><b>10.7</b> Exercises: Modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="imagery.html"><a href="imagery.html"><i class="fa fa-check"></i><b>11</b> Imagery and Classification Models</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="imagery.html"><a href="imagery.html#reading-and-displaying-sentinel-2-imagery"><i class="fa fa-check"></i><b>11.1</b> Reading and Displaying Sentinel-2 Imagery</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="imagery.html"><a href="imagery.html#individual-bands"><i class="fa fa-check"></i><b>11.1.1</b> Individual bands</a></li>
+<li class="chapter" data-level="11.1.2" data-path="imagery.html"><a href="imagery.html#spectral-subsets-to-create-three-band-r-g-b-and-nir-r-g-for-visualization"><i class="fa fa-check"></i><b>11.1.2</b> Spectral subsets to create three-band R-G-B and NIR-R-G for visualization</a></li>
+<li class="chapter" data-level="11.1.3" data-path="imagery.html"><a href="imagery.html#crop-to-study-area-extent"><i class="fa fa-check"></i><b>11.1.3</b> Crop to study area extent</a></li>
+<li class="chapter" data-level="11.1.4" data-path="imagery.html"><a href="imagery.html#saving-results"><i class="fa fa-check"></i><b>11.1.4</b> Saving results</a></li>
+<li class="chapter" data-level="11.1.5" data-path="imagery.html"><a href="imagery.html#band-scatter-plots"><i class="fa fa-check"></i><b>11.1.5</b> Band scatter plots</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="imagery.html"><a href="imagery.html#spectral-profiles"><i class="fa fa-check"></i><b>11.2</b> Spectral Profiles</a></li>
+<li class="chapter" data-level="11.3" data-path="imagery.html"><a href="imagery.html#map-algebra-and-vegetation-indices"><i class="fa fa-check"></i><b>11.3</b> Map Algebra and Vegetation Indices</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="imagery.html"><a href="imagery.html#vegetation-indices"><i class="fa fa-check"></i><b>11.3.1</b> Vegetation indices</a></li>
+<li class="chapter" data-level="11.3.2" data-path="imagery.html"><a href="imagery.html#histogram-1"><i class="fa fa-check"></i><b>11.3.2</b> Histogram</a></li>
+<li class="chapter" data-level="11.3.3" data-path="imagery.html"><a href="imagery.html#other-vegetation-indices"><i class="fa fa-check"></i><b>11.3.3</b> Other vegetation indices</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="imagery.html"><a href="imagery.html#unsupervised-classification-with-k-means"><i class="fa fa-check"></i><b>11.4</b> Unsupervised Classification with k-means</a></li>
+<li class="chapter" data-level="11.5" data-path="imagery.html"><a href="imagery.html#machine-learning-classification-of-imagery"><i class="fa fa-check"></i><b>11.5</b> Machine Learning Classification of Imagery</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="imagery.html"><a href="imagery.html#read-imagery-and-training-data-and-extract-sample-values-for-training"><i class="fa fa-check"></i><b>11.5.1</b> Read imagery and training data and extract sample values for training</a></li>
+<li class="chapter" data-level="11.5.2" data-path="imagery.html"><a href="imagery.html#training-the-cart-model"><i class="fa fa-check"></i><b>11.5.2</b> Training the CART model</a></li>
+<li class="chapter" data-level="11.5.3" data-path="imagery.html"><a href="imagery.html#prediction-using-the-cart-model"><i class="fa fa-check"></i><b>11.5.3</b> Prediction using the CART model</a></li>
+<li class="chapter" data-level="11.5.4" data-path="imagery.html"><a href="imagery.html#validating-the-model"><i class="fa fa-check"></i><b>11.5.4</b> Validating the model</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="imagery.html"><a href="imagery.html#classifying-with-10-m-sentinel-2-imagery"><i class="fa fa-check"></i><b>11.6</b> Classifying with 10 m Sentinel-2 Imagery</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="imagery.html"><a href="imagery.html#subset-bands-10-m"><i class="fa fa-check"></i><b>11.6.1</b> Subset bands (10 m)</a></li>
+<li class="chapter" data-level="11.6.2" data-path="imagery.html"><a href="imagery.html#crop-to-rcv-extent-and-extract-pixel-values"><i class="fa fa-check"></i><b>11.6.2</b> Crop to RCV extent and extract pixel values</a></li>
+<li class="chapter" data-level="11.6.3" data-path="imagery.html"><a href="imagery.html#training-the-cart-model-10-m-and-plot-the-tree"><i class="fa fa-check"></i><b>11.6.3</b> Training the CART model (10 m) and plot the tree</a></li>
+<li class="chapter" data-level="11.6.4" data-path="imagery.html"><a href="imagery.html#prediction-using-the-cart-model-10-m"><i class="fa fa-check"></i><b>11.6.4</b> Prediction using the CART model (10 m)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="imagery.html"><a href="imagery.html#classification-using-multiple-images-capturing-phenology"><i class="fa fa-check"></i><b>11.7</b> Classification Using Multiple Images Capturing Phenology</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="imagery.html"><a href="imagery.html#create-a-10-band-stack-from-both-images"><i class="fa fa-check"></i><b>11.7.1</b> Create a 10-band stack from both images</a></li>
+<li class="chapter" data-level="11.7.2" data-path="imagery.html"><a href="imagery.html#extract-the-training-data-10-m-spring-summer"><i class="fa fa-check"></i><b>11.7.2</b> Extract the training data (10 m spring + summer)</a></li>
+<li class="chapter" data-level="11.7.3" data-path="imagery.html"><a href="imagery.html#cart-model-and-prediction-10-m-spring-summer"><i class="fa fa-check"></i><b>11.7.3</b> CART model and prediction (10 m spring + summer)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.8" data-path="imagery.html"><a href="imagery.html#classification-using-multiple-images-capturing-phenology-20m"><i class="fa fa-check"></i><b>11.8</b> Classification Using Multiple Images Capturing Phenology : 20m</a>
+<ul>
+<li class="chapter" data-level="11.8.1" data-path="imagery.html"><a href="imagery.html#create-a-18-band-stack-from-both-images"><i class="fa fa-check"></i><b>11.8.1</b> Create a 18-band stack from both images</a></li>
+<li class="chapter" data-level="11.8.2" data-path="imagery.html"><a href="imagery.html#extract-the-training-data-20-m-spring-summer"><i class="fa fa-check"></i><b>11.8.2</b> Extract the training data (20 m spring + summer)</a></li>
+<li class="chapter" data-level="11.8.3" data-path="imagery.html"><a href="imagery.html#cart-model-and-prediction-20-m-spring-summer"><i class="fa fa-check"></i><b>11.8.3</b> CART model and prediction (20 m spring + summer)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.9" data-path="imagery.html"><a href="imagery.html#conclusions-and-next-steps-for-imagery-classification"><i class="fa fa-check"></i><b>11.9</b> Conclusions and Next Steps for Imagery Classification</a></li>
+<li class="chapter" data-level="11.10" data-path="imagery.html"><a href="imagery.html#exercises-imagery-analysis-and-classification-models"><i class="fa fa-check"></i><b>11.10</b> Exercises: Imagery Analysis and Classification Models</a></li>
+</ul></li>
+<li class="part"><span><b>IV Time Series</b></span></li>
+<li class="chapter" data-level="12" data-path="ts.html"><a href="ts.html"><i class="fa fa-check"></i><b>12</b> Time Series Visualization and Analysis</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="ts.html"><a href="ts.html#structure-seasonality-and-decomposition-of-time-series"><i class="fa fa-check"></i><b>12.1</b> Structure, Seasonality, and Decomposition of Time Series</a></li>
+<li class="chapter" data-level="12.2" data-path="ts.html"><a href="ts.html#creation-of-time-series-ts-data"><i class="fa fa-check"></i><b>12.2</b> Creation of Time Series (ts) Data</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="ts.html"><a href="ts.html#frequency-start-and-end-parameters-for-ts"><i class="fa fa-check"></i><b>12.2.1</b> Frequency, start, and end parameters for <code>ts()</code></a></li>
+<li class="chapter" data-level="12.2.2" data-path="ts.html"><a href="ts.html#associating-times-with-time-series"><i class="fa fa-check"></i><b>12.2.2</b> Associating times with time series</a></li>
+<li class="chapter" data-level="12.2.3" data-path="ts.html"><a href="ts.html#subsetting-time-series-by-times"><i class="fa fa-check"></i><b>12.2.3</b> Subsetting time series by times</a></li>
+<li class="chapter" data-level="12.2.4" data-path="ts.html"><a href="ts.html#changing-the-frequency-to-use-a-different-period"><i class="fa fa-check"></i><b>12.2.4</b> Changing the frequency to use a different period</a></li>
+<li class="chapter" data-level="12.2.5" data-path="ts.html"><a href="ts.html#time-stamps-and-extensible-time-series"><i class="fa fa-check"></i><b>12.2.5</b> Time stamps and extensible time series</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="ts.html"><a href="ts.html#data-smoothing-moving-average-ma"><i class="fa fa-check"></i><b>12.3</b> Data smoothing: moving average (<code>ma</code>)</a></li>
+<li class="chapter" data-level="12.4" data-path="ts.html"><a href="ts.html#decomposition-of-data-logger-data-marble-mountains"><i class="fa fa-check"></i><b>12.4</b> Decomposition of data logger data: Marble Mountains</a></li>
+<li class="chapter" data-level="12.5" data-path="ts.html"><a href="ts.html#facet-graphs-for-comparing-variables-over-time"><i class="fa fa-check"></i><b>12.5</b> Facet Graphs for Comparing Variables over Time</a></li>
+<li class="chapter" data-level="12.6" data-path="ts.html"><a href="ts.html#lag-regression"><i class="fa fa-check"></i><b>12.6</b> Lag Regression</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="ts.html"><a href="ts.html#the-lag-regression-using-a-lag-function-in-a-linear-model"><i class="fa fa-check"></i><b>12.6.1</b> The lag regression, using a lag function in a linear model</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="ts.html"><a href="ts.html#ensemble-summary-statistics"><i class="fa fa-check"></i><b>12.7</b> Ensemble Summary Statistics</a></li>
+<li class="chapter" data-level="12.8" data-path="ts.html"><a href="ts.html#learning-more-about-time-series-in-r"><i class="fa fa-check"></i><b>12.8</b> Learning more about Time Series in R</a></li>
+<li class="chapter" data-level="12.9" data-path="ts.html"><a href="ts.html#exercises-time-series"><i class="fa fa-check"></i><b>12.9</b> Exercises: Time Series</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction to Environmental Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="raster" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Raster Spatial Analysis<a href="raster.html#raster" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Raster spatial analysis is particularly important in environmental analysis, since much environmental data is continuous in nature, based on continuous measurements from instruments (like temperature, pH, air pressure, water depth, elevation), and raster models work well with continuous data. In the Spatial Data and Maps chapter, we looked at creating rasters from scratch, or converted from features, and visualizing them. Here we’ll explore raster analytical methods, commonly working from existing information-rich rasters like elevation data, where we’ll start by looking at terrain functions.</p>
+<p>We’ll make a lot of use of <code>terra</code> functions in this chapter, as this package is replacing the <code>raster</code> package which has been widely used. One raster package that’s probably also worth considering is the <code>stars</code> package.</p>
+<div id="terrain" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> Terrain functions<a href="raster.html#terrain" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Elevation data is particularly information-rich, and a lot can be derived from them that informs us about the nature of landscapes and what drives surface hydrologic and geomorphic processes as well as biotic habitat (some slopes are drier than others, for instance). We’ll start by reading in some elevation data from the Marble Mountains of California (Figure <a href="raster.html#fig:rasMblElev">8.1</a>) and use terra’s terrain function to derive slope (Figure <a href="raster.html#fig:rasSlope">8.2</a>), aspect (Figure <a href="raster.html#fig:rasAspect">8.3</a>), and hillshade rasters.</p>
+<div class="sourceCode" id="cb621"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb621-1"><a href="raster.html#cb621-1" tabindex="-1"></a><span class="fu">library</span>(terra); <span class="fu">library</span>(igisci)</span>
+<span id="cb621-2"><a href="raster.html#cb621-2" tabindex="-1"></a>elev <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/elev.tif&quot;</span>))</span>
+<span id="cb621-3"><a href="raster.html#cb621-3" tabindex="-1"></a><span class="fu">plot</span>(elev)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasMblElev"></span>
+<img src="EnvDataScience_files/figure-html/rasMblElev-1.png" alt="Marble Mountains (California) elevation" width="75%" />
+<p class="caption">
+FIGURE 8.1: Marble Mountains (California) elevation
+</p>
+</div>
+<div class="sourceCode" id="cb622"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb622-1"><a href="raster.html#cb622-1" tabindex="-1"></a>slope <span class="ot">&lt;-</span> <span class="fu">terrain</span>(elev, <span class="at">v=</span><span class="st">&quot;slope&quot;</span>)</span>
+<span id="cb622-2"><a href="raster.html#cb622-2" tabindex="-1"></a><span class="fu">plot</span>(slope)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasSlope"></span>
+<img src="EnvDataScience_files/figure-html/rasSlope-1.png" alt="Slope" width="75%" />
+<p class="caption">
+FIGURE 8.2: Slope
+</p>
+</div>
+<div class="sourceCode" id="cb623"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb623-1"><a href="raster.html#cb623-1" tabindex="-1"></a>aspect <span class="ot">&lt;-</span> <span class="fu">terrain</span>(elev, <span class="at">v=</span><span class="st">&quot;aspect&quot;</span>)</span>
+<span id="cb623-2"><a href="raster.html#cb623-2" tabindex="-1"></a><span class="fu">plot</span>(aspect)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasAspect"></span>
+<img src="EnvDataScience_files/figure-html/rasAspect-1.png" alt="Aspect" width="75%" />
+<p class="caption">
+FIGURE 8.3: Aspect
+</p>
+</div>
+<p>… then we’ll use terra::classify to make six discrete categorical slope classes (though the legend suggests it’s continuous) (Figure <a href="raster.html#fig:rasClassifiedSlope">8.4</a>)…</p>
+<div class="sourceCode" id="cb624"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb624-1"><a href="raster.html#cb624-1" tabindex="-1"></a>slopeclasses <span class="ot">&lt;-</span><span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">00</span>,<span class="dv">10</span>,<span class="dv">1</span>, <span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">2</span>, <span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">3</span>,</span>
+<span id="cb624-2"><a href="raster.html#cb624-2" tabindex="-1"></a>                        <span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">4</span>, <span class="dv">40</span>,<span class="dv">50</span>,<span class="dv">5</span>, <span class="dv">50</span>,<span class="dv">90</span>,<span class="dv">6</span>), <span class="at">ncol=</span><span class="dv">3</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
+<span id="cb624-3"><a href="raster.html#cb624-3" tabindex="-1"></a>slopeclass <span class="ot">&lt;-</span> <span class="fu">classify</span>(slope, <span class="at">rcl =</span> slopeclasses)</span>
+<span id="cb624-4"><a href="raster.html#cb624-4" tabindex="-1"></a><span class="fu">plot</span>(slopeclass)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasClassifiedSlope"></span>
+<img src="EnvDataScience_files/figure-html/rasClassifiedSlope-1.png" alt="Classified slopes" width="75%" />
+<p class="caption">
+FIGURE 8.4: Classified slopes
+</p>
+</div>
+<p>Then a hillshade effect raster with slope and aspect as inputs after converting to radians (Figure <a href="raster.html#fig:rasHillshade">8.5</a>):</p>
+<div class="sourceCode" id="cb625"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb625-1"><a href="raster.html#cb625-1" tabindex="-1"></a>hillsh <span class="ot">&lt;-</span> <span class="fu">shade</span>(slope<span class="sc">/</span><span class="dv">180</span><span class="sc">*</span>pi, aspect<span class="sc">/</span><span class="dv">180</span><span class="sc">*</span>pi, <span class="at">angle=</span><span class="dv">40</span>, <span class="at">direction=</span><span class="dv">330</span>)</span>
+<span id="cb625-2"><a href="raster.html#cb625-2" tabindex="-1"></a><span class="fu">plot</span>(hillsh, <span class="at">col=</span><span class="fu">gray</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">100</span><span class="sc">/</span><span class="dv">100</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasHillshade"></span>
+<img src="EnvDataScience_files/figure-html/rasHillshade-1.png" alt="Hillshade" width="75%" />
+<p class="caption">
+FIGURE 8.5: Hillshade
+</p>
+</div>
+</div>
+<div id="map-algebra-in-terra" class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> Map Algebra in terra<a href="raster.html#map-algebra-in-terra" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Map algebra was originally developed by Dana Tomlin in the 1970s and 1980s (<span class="citation">Tomlin (<a href="#ref-Tomlin">1990</a>)</span>), and was the basis for his Map Analysis Package. It works by assigning raster outputs from an algebraic expression of raster inputs. Map algebra was later incorporated in Esri’s Grid and Spatial Analyst subsystems of ArcInfo and ArcGIS. Its simple and elegant syntax makes it still one of the best ways to manipulate raster data.</p>
+<p>Let’s look at a couple of simple map algebra statements to derive some new rasters, such as converting elevation in metres to feet (Figure <a href="raster.html#fig:rasMapAlgebra">8.6</a>).</p>
+<div class="sourceCode" id="cb626"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb626-1"><a href="raster.html#cb626-1" tabindex="-1"></a>elevft <span class="ot">&lt;-</span> elev <span class="sc">/</span> <span class="fl">0.3048</span></span>
+<span id="cb626-2"><a href="raster.html#cb626-2" tabindex="-1"></a><span class="fu">plot</span>(elevft)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasMapAlgebra"></span>
+<img src="EnvDataScience_files/figure-html/rasMapAlgebra-1.png" alt="Map algebra conversion of elevations from metres to feet" width="75%" />
+<p class="caption">
+FIGURE 8.6: Map algebra conversion of elevations from metres to feet
+</p>
+</div>
+<p>… including some that create and use Boolean (true-false) values, where 1 is true and 0 is false, so might answer the question “Is it steep?” (as long as we understand 1 means Yes or true) (Figure <a href="raster.html#fig:rasSlopeGT30">8.7</a>)…</p>
+<div class="sourceCode" id="cb627"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb627-1"><a href="raster.html#cb627-1" tabindex="-1"></a>steep <span class="ot">&lt;-</span> slope <span class="sc">&gt;</span> <span class="dv">30</span></span>
+<span id="cb627-2"><a href="raster.html#cb627-2" tabindex="-1"></a><span class="fu">plot</span>(steep)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasSlopeGT30"></span>
+<img src="EnvDataScience_files/figure-html/rasSlopeGT30-1.png" alt="Boolean: slope &gt; 30" width="75%" />
+<p class="caption">
+FIGURE 8.7: Boolean: slope &gt; 30
+</p>
+</div>
+<p>… or Figure <a href="raster.html#fig:rasIntersection">8.8</a>, which shows all areas that are steeper than 30 degrees <em>and</em> above 2,000 m elevation.</p>
+<div class="sourceCode" id="cb628"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb628-1"><a href="raster.html#cb628-1" tabindex="-1"></a><span class="fu">plot</span>(steep <span class="sc">*</span> (elev <span class="sc">&gt;</span> <span class="dv">2000</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasIntersection"></span>
+<img src="EnvDataScience_files/figure-html/rasIntersection-1.png" alt="Boolean intersection: (slope &gt; 30) * (elev &gt; 2000)" width="75%" />
+<p class="caption">
+FIGURE 8.8: Boolean intersection: (slope &gt; 30) * (elev &gt; 2000)
+</p>
+</div>
+<blockquote>
+<p>When plotting in tmap, it’s cartographically useful to convert zeros to NA values to be transparent. I guess the same can be said for base plot or ggplot. To make the zeros transparent and plot them, try the method in the second line of code here (though it does alter the meaning of the raster <code>steep</code> with NAs instead of zeros) (Figure <a href="raster.html#fig:rasSteepAreas">8.9</a>.</p>
+</blockquote>
+<p>Since the tm_basemap method doesn’t seem to work with rasters in tmap 4.0 (might be coming with 4.1), we could use the trick we used in the previous chapter to create a raster from the basemap and display that. We’ll plot the <code>steep</code> raster before the basemap to set the bounding box properly.</p>
+<div class="sourceCode" id="cb629"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb629-1"><a href="raster.html#cb629-1" tabindex="-1"></a><span class="fu">library</span>(tmap); <span class="fu">library</span>(maptiles); <span class="fu">library</span>(sf)</span>
+<span id="cb629-2"><a href="raster.html#cb629-2" tabindex="-1"></a>steep[steep<span class="sc">==</span><span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb629-3"><a href="raster.html#cb629-3" tabindex="-1"></a>mblBase <span class="ot">&lt;-</span> <span class="fu">get_tiles</span>(steep, <span class="at">provider=</span><span class="st">&quot;OpenTopoMap&quot;</span>)</span>
+<span id="cb629-4"><a href="raster.html#cb629-4" tabindex="-1"></a><span class="fu">tm_shape</span>(steep) <span class="sc">+</span> </span>
+<span id="cb629-5"><a href="raster.html#cb629-5" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="at">col_alpha=</span><span class="fl">0.5</span>,</span>
+<span id="cb629-6"><a href="raster.html#cb629-6" tabindex="-1"></a>            <span class="at">col.scale=</span><span class="fu">tm_scale_categorical</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>)),</span>
+<span id="cb629-7"><a href="raster.html#cb629-7" tabindex="-1"></a>            <span class="at">col.legend =</span> <span class="fu">tm_legend</span>(<span class="st">&quot;steep&quot;</span>, <span class="at">frame=</span>F)) <span class="sc">+</span></span>
+<span id="cb629-8"><a href="raster.html#cb629-8" tabindex="-1"></a>  <span class="fu">tm_shape</span>(mblBase) <span class="sc">+</span> </span>
+<span id="cb629-9"><a href="raster.html#cb629-9" tabindex="-1"></a>     <span class="fu">tm_rgb</span>(<span class="at">col_alpha=</span><span class="fl">0.5</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasSteepAreas"></span>
+<img src="EnvDataScience_files/figure-html/rasSteepAreas-1.png" alt="Steep Areas" width="75%" />
+<p class="caption">
+FIGURE 8.9: Steep Areas
+</p>
+</div>
+<p>You should be able to imagine that map algebra is particularly useful when applying a model equation to data to create a prediction map. For instance, later we’ll use <code>lm()</code> to derive linear regression parameters for predicting February temperature from elevation in the Sierra …</p>
+<p><span class="math display">\[
+Temperature_{prediction} = 11.88 - 0.006{elevation}
+\]</span></p>
+<p>… which can be coded in map algebra something like the following if we have an elevation raster, to create a tempPred raster:</p>
+<div class="sourceCode" id="cb630"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb630-1"><a href="raster.html#cb630-1" tabindex="-1"></a>tempPred <span class="ot">&lt;-</span> <span class="fl">11.88</span> <span class="sc">-</span> <span class="fl">0.006</span> <span class="sc">*</span> elev <span class="co"># ation</span></span></code></pre></div>
+</div>
+<div id="distance-1" class="section level2 hasAnchor" number="8.3">
+<h2><span class="header-section-number">8.3</span> Distance<a href="raster.html#distance-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A continuous raster of distances from significant features can be very informative in environmental analysis. For instance, distance from the coast or a body of water may be an important variable for habitat analysis and ecological niche modeling. The goal of the following is to derive distances from streams as a continuous raster.</p>
+<p>We’ll need to know what cell size to use and how far to extend our raster. If we have an existing study area raster, this process is simple. We start by converting streams from a SpatVector to a SpatRaster, as we did a couple of chapters ago. The <code>terra::distance()</code> function then uses this structure to provide the cells that we’re deriving distance from and then uses that same cell size and extent for the output raster. If we instead used vector features, the <code>distance</code> function would return point-to-point distances, very different from deriving continuous rasters of Euclidean distance (Figure <a href="raster.html#fig:rasStrDist">8.10</a>).</p>
+<div class="sourceCode" id="cb631"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb631-1"><a href="raster.html#cb631-1" tabindex="-1"></a>streams <span class="ot">&lt;-</span> <span class="fu">vect</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/streams.shp&quot;</span>))</span>
+<span id="cb631-2"><a href="raster.html#cb631-2" tabindex="-1"></a>elev <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/elev.tif&quot;</span>))</span>
+<span id="cb631-3"><a href="raster.html#cb631-3" tabindex="-1"></a>stdist <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">distance</span>(<span class="fu">rasterize</span>(streams,elev))</span>
+<span id="cb631-4"><a href="raster.html#cb631-4" tabindex="-1"></a><span class="fu">plot</span>(stdist)</span>
+<span id="cb631-5"><a href="raster.html#cb631-5" tabindex="-1"></a><span class="fu">lines</span>(streams)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasStrDist"></span>
+<img src="EnvDataScience_files/figure-html/rasStrDist-1.png" alt="Stream distance raster" width="75%" />
+<p class="caption">
+FIGURE 8.10: Stream distance raster
+</p>
+</div>
+<p>If we didn’t have an elevation raster, we could use the process we employed while converting features to rasters in the Spatial Data and Maps chapter, where we derived a raster template from the extent of streams, as shown here:</p>
+<div class="sourceCode" id="cb632"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb632-1"><a href="raster.html#cb632-1" tabindex="-1"></a>streams <span class="ot">&lt;-</span> <span class="fu">vect</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/streams.shp&quot;</span>))</span>
+<span id="cb632-2"><a href="raster.html#cb632-2" tabindex="-1"></a>XMIN <span class="ot">&lt;-</span> <span class="fu">ext</span>(streams)<span class="sc">$</span>xmin</span>
+<span id="cb632-3"><a href="raster.html#cb632-3" tabindex="-1"></a>XMAX <span class="ot">&lt;-</span> <span class="fu">ext</span>(streams)<span class="sc">$</span>xmax</span>
+<span id="cb632-4"><a href="raster.html#cb632-4" tabindex="-1"></a>YMIN <span class="ot">&lt;-</span> <span class="fu">ext</span>(streams)<span class="sc">$</span>ymin</span>
+<span id="cb632-5"><a href="raster.html#cb632-5" tabindex="-1"></a>YMAX <span class="ot">&lt;-</span> <span class="fu">ext</span>(streams)<span class="sc">$</span>ymax</span>
+<span id="cb632-6"><a href="raster.html#cb632-6" tabindex="-1"></a>aspectRatio <span class="ot">&lt;-</span> (YMAX<span class="sc">-</span>YMIN)<span class="sc">/</span>(XMAX<span class="sc">-</span>XMIN)</span>
+<span id="cb632-7"><a href="raster.html#cb632-7" tabindex="-1"></a>cellSize <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb632-8"><a href="raster.html#cb632-8" tabindex="-1"></a>NCOLS <span class="ot">&lt;-</span> <span class="fu">as.integer</span>((XMAX<span class="sc">-</span>XMIN)<span class="sc">/</span>cellSize)</span>
+<span id="cb632-9"><a href="raster.html#cb632-9" tabindex="-1"></a>NROWS <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(NCOLS <span class="sc">*</span> aspectRatio)</span>
+<span id="cb632-10"><a href="raster.html#cb632-10" tabindex="-1"></a>templateRas <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="at">ncol=</span>NCOLS, <span class="at">nrow=</span>NROWS, </span>
+<span id="cb632-11"><a href="raster.html#cb632-11" tabindex="-1"></a>                    <span class="at">xmin=</span>XMIN, <span class="at">xmax=</span>XMAX, <span class="at">ymin=</span>YMIN, <span class="at">ymax=</span>YMAX,</span>
+<span id="cb632-12"><a href="raster.html#cb632-12" tabindex="-1"></a>                    <span class="at">vals=</span><span class="dv">1</span>, <span class="at">crs=</span><span class="fu">crs</span>(streams))</span>
+<span id="cb632-13"><a href="raster.html#cb632-13" tabindex="-1"></a>strms <span class="ot">&lt;-</span> <span class="fu">rasterize</span>(streams,templateRas)</span>
+<span id="cb632-14"><a href="raster.html#cb632-14" tabindex="-1"></a>stdist <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">distance</span>(strms)</span>
+<span id="cb632-15"><a href="raster.html#cb632-15" tabindex="-1"></a><span class="fu">plot</span>(stdist)</span>
+<span id="cb632-16"><a href="raster.html#cb632-16" tabindex="-1"></a><span class="fu">lines</span>(streams)</span></code></pre></div>
+<blockquote>
+<p>In deriving distances, it’s useful to remember that distances can go on forever (well, on the planet they may go around and around, if we were using spherical coordinates) so that’s another reason we have to specify the raster structure we want to populate.</p>
+</blockquote>
+</div>
+<div id="extracting-values" class="section level2 hasAnchor" number="8.4">
+<h2><span class="header-section-number">8.4</span> Extracting Values<a href="raster.html#extracting-values" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A very useful method or environmental analysis and modeling is to extract values from rasters at specific point locations. The point locations might be observations of species, soil samples, or even random points, and getting continuous (or discrete) raster observations can be very useful in a statistical analysis associated with those points. The distance from streams raster we derived earlier, or elevation, or terrain derivatives like slope and aspect might be very useful in a ecological niche model, for instance. We’ll start by using random points and use these to extract values from four rasters:</p>
+<ul>
+<li><strong>elev</strong>: read in from elev.tif</li>
+<li><strong>slope</strong>: created from elev with <strong>terrain</strong></li>
+<li><strong>str_dist</strong>: euclidean distance to streams</li>
+<li><strong>geol</strong>: rasterized from geology polygon features</li>
+</ul>
+<div class="sourceCode" id="cb633"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb633-1"><a href="raster.html#cb633-1" tabindex="-1"></a><span class="fu">library</span>(igisci); <span class="fu">library</span>(terra); <span class="fu">library</span>(tidyverse); <span class="fu">library</span>(sf)</span>
+<span id="cb633-2"><a href="raster.html#cb633-2" tabindex="-1"></a>geolshp <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/geology.shp&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb633-3"><a href="raster.html#cb633-3" tabindex="-1"></a>           <span class="fu">rename</span>(<span class="at">geology=</span>CLASS)</span>
+<span id="cb633-4"><a href="raster.html#cb633-4" tabindex="-1"></a>streams <span class="ot">&lt;-</span> <span class="fu">vect</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/streams.shp&quot;</span>))</span>
+<span id="cb633-5"><a href="raster.html#cb633-5" tabindex="-1"></a>elev <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/elev.tif&quot;</span>))</span>
+<span id="cb633-6"><a href="raster.html#cb633-6" tabindex="-1"></a>slope <span class="ot">&lt;-</span> <span class="fu">terrain</span>(elev, <span class="at">v=</span><span class="st">&quot;slope&quot;</span>)</span>
+<span id="cb633-7"><a href="raster.html#cb633-7" tabindex="-1"></a>str_dist <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">distance</span>(<span class="fu">rasterize</span>(streams,elev))</span>
+<span id="cb633-8"><a href="raster.html#cb633-8" tabindex="-1"></a>geol <span class="ot">&lt;-</span> <span class="fu">rasterize</span>(geolshp,elev,<span class="at">field=</span><span class="st">&quot;geology&quot;</span>) </span></code></pre></div>
+<p>Note that in contrast to the other rasters, the stream distance raster ends up with no name, so we should give it a name:</p>
+<div class="sourceCode" id="cb634"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb634-1"><a href="raster.html#cb634-1" tabindex="-1"></a><span class="fu">names</span>(slope)</span></code></pre></div>
+<pre><code>## [1] &quot;slope&quot;</code></pre>
+<div class="sourceCode" id="cb636"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb636-1"><a href="raster.html#cb636-1" tabindex="-1"></a><span class="fu">names</span>(str_dist)</span></code></pre></div>
+<pre><code>## [1] &quot;layer&quot;</code></pre>
+<div class="sourceCode" id="cb638"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb638-1"><a href="raster.html#cb638-1" tabindex="-1"></a><span class="fu">names</span>(str_dist) <span class="ot">&lt;-</span> <span class="st">&quot;str_dist&quot;</span></span></code></pre></div>
+<blockquote>
+<p><strong>On the raster <code>names</code> property</strong>: You’ll find that many terra functions may not assign the <code>names</code> property you’d expect, so it’s a good idea to check with <code>names()</code> and maybe set it to what we want, as we’ve just done for <code>str_dist</code>. As we’ll see later with the focal statistics function, the name of the input is used even though we’ve modified it in the function result, and that may create confusion when we use it. We just saw that the <code>distance()</code> function produced an empty name, and there may be others you’ll run into. For many downstream uses, the names property may not matter, but it will be important when we extract values from rasters into points where the <code>names</code> property is assigned to the variable created for the points.</p>
+</blockquote>
+<p>Then we’ll create 200 <strong>random xy points</strong> <a href="statistics.html#random">9.2.3</a> within the extent of <code>elev</code>, and assign it the same <code>crs</code>.</p>
+<div class="sourceCode" id="cb639"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb639-1"><a href="raster.html#cb639-1" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb639-2"><a href="raster.html#cb639-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">200</span>, <span class="at">min=</span><span class="fu">xmin</span>(elev), <span class="at">max=</span><span class="fu">xmax</span>(elev))</span>
+<span id="cb639-3"><a href="raster.html#cb639-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">200</span>, <span class="at">min=</span><span class="fu">ymin</span>(elev), <span class="at">max=</span><span class="fu">ymax</span>(elev))</span>
+<span id="cb639-4"><a href="raster.html#cb639-4" tabindex="-1"></a>rsamps <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">data.frame</span>(x,y), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>,<span class="st">&quot;y&quot;</span>), <span class="at">crs=</span><span class="fu">crs</span>(elev))</span></code></pre></div>
+<p>To visualize where the random points land, we’ll map them on the geology sf, streams, and contours created from elev using default settings. The <code>terra::as.contour</code> function will create these as SpatVector data (Figure <a href="raster.html#fig:rasRandomPtsMarbles">8.11</a>). We’ll create a template map with a hillshade base to build on with tmap.</p>
+<div class="sourceCode" id="cb640"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb640-1"><a href="raster.html#cb640-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(tmap)</span>
+<span id="cb640-2"><a href="raster.html#cb640-2" tabindex="-1"></a>cont <span class="ot">&lt;-</span> <span class="fu">as.contour</span>(elev, <span class="at">nlevels=</span><span class="dv">30</span>)</span>
+<span id="cb640-3"><a href="raster.html#cb640-3" tabindex="-1"></a>geology <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/geology.shp&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb640-4"><a href="raster.html#cb640-4" tabindex="-1"></a>           <span class="fu">rename</span>(<span class="at">geology=</span>CLASS)</span>
+<span id="cb640-5"><a href="raster.html#cb640-5" tabindex="-1"></a>aspect <span class="ot">&lt;-</span> <span class="fu">terrain</span>(elev, <span class="at">v=</span><span class="st">&quot;aspect&quot;</span>)</span>
+<span id="cb640-6"><a href="raster.html#cb640-6" tabindex="-1"></a>hillsh <span class="ot">&lt;-</span> <span class="fu">shade</span>(slope<span class="sc">/</span><span class="dv">180</span><span class="sc">*</span>pi, aspect<span class="sc">/</span><span class="dv">180</span><span class="sc">*</span>pi, <span class="at">angle=</span><span class="dv">40</span>, <span class="at">direction=</span><span class="dv">330</span>)</span>
+<span id="cb640-7"><a href="raster.html#cb640-7" tabindex="-1"></a>marblesTemplate <span class="ot">&lt;-</span> <span class="fu">tm_graticules</span>() <span class="sc">+</span></span>
+<span id="cb640-8"><a href="raster.html#cb640-8" tabindex="-1"></a>  <span class="fu">tm_shape</span>(hillsh) <span class="sc">+</span> </span>
+<span id="cb640-9"><a href="raster.html#cb640-9" tabindex="-1"></a>    <span class="fu">tm_raster</span>(<span class="at">col.scale=</span><span class="fu">tm_scale_continuous</span>(<span class="at">values=</span><span class="st">&quot;-brewer.greys&quot;</span>),</span>
+<span id="cb640-10"><a href="raster.html#cb640-10" tabindex="-1"></a>              <span class="at">col.legend=</span><span class="fu">tm_legend</span>(<span class="at">show=</span>F),<span class="at">col_alpha=</span><span class="fl">1.0</span>) <span class="sc">+</span></span>
+<span id="cb640-11"><a href="raster.html#cb640-11" tabindex="-1"></a>  <span class="fu">tm_shape</span>(cont)    <span class="sc">+</span> <span class="fu">tm_lines</span>(<span class="at">col=</span><span class="st">&quot;darkgray&quot;</span>, <span class="at">col_alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb640-12"><a href="raster.html#cb640-12" tabindex="-1"></a>  <span class="fu">tm_shape</span>(streams) <span class="sc">+</span> <span class="fu">tm_lines</span>(<span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb641"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb641-1"><a href="raster.html#cb641-1" tabindex="-1"></a>marblesTemplate <span class="sc">+</span></span>
+<span id="cb641-2"><a href="raster.html#cb641-2" tabindex="-1"></a>  <span class="fu">tm_shape</span>(geology) <span class="sc">+</span> </span>
+<span id="cb641-3"><a href="raster.html#cb641-3" tabindex="-1"></a>    <span class="fu">tm_polygons</span>(<span class="at">fill=</span><span class="st">&quot;geology&quot;</span>, <span class="at">fill_alpha=</span><span class="fl">0.5</span>, <span class="at">fill.legend=</span><span class="fu">tm_legend</span>(<span class="at">frame=</span>F)) <span class="sc">+</span></span>
+<span id="cb641-4"><a href="raster.html#cb641-4" tabindex="-1"></a>  <span class="fu">tm_shape</span>(rsamps) <span class="sc">+</span> <span class="fu">tm_dots</span>(<span class="at">fill=</span><span class="st">&quot;black&quot;</span>, <span class="at">size=</span><span class="fl">0.3</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasRandomPtsMarbles"></span>
+<img src="EnvDataScience_files/figure-html/rasRandomPtsMarbles-1.png" alt="Random points in the Marble Valley area, Marble Mountains, California" width="75%" />
+<p class="caption">
+FIGURE 8.11: Random points in the Marble Valley area, Marble Mountains, California
+</p>
+</div>
+<p>Now we’ll extract data from each of the rasters, using an S4 version of <code>rsamps</code>, and then bind them together with the <code>rsamps</code> simple features. We’ll have to use <code>terra::vect</code> and <code>sf::st_as_sf</code> to convert feature data to the type required by specific tools, and due to a function naming issue, we’ll need to use the package prefix with <code>terra::extract</code>, but otherwise the code is pretty straightforward.</p>
+<div class="sourceCode" id="cb642"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb642-1"><a href="raster.html#cb642-1" tabindex="-1"></a>rsampS4 <span class="ot">&lt;-</span> <span class="fu">vect</span>(rsamps)</span>
+<span id="cb642-2"><a href="raster.html#cb642-2" tabindex="-1"></a>elev_ex <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(elev, rsampS4)     <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>ID)</span>
+<span id="cb642-3"><a href="raster.html#cb642-3" tabindex="-1"></a>slope_ex <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(slope, rsampS4)   <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>ID)</span>
+<span id="cb642-4"><a href="raster.html#cb642-4" tabindex="-1"></a>geol_ex <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(geol, rsampS4)     <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>ID)</span>
+<span id="cb642-5"><a href="raster.html#cb642-5" tabindex="-1"></a>strD_ex <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(str_dist, rsampS4) <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>ID)</span>
+<span id="cb642-6"><a href="raster.html#cb642-6" tabindex="-1"></a>rsampsData <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(rsamps, elev_ex, slope_ex, geol_ex, strD_ex)</span></code></pre></div>
+<p>Then plot the map with the points colored by geology (Figure <a href="raster.html#fig:rasExtractedGeology">8.12</a>)…</p>
+<div class="sourceCode" id="cb643"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb643-1"><a href="raster.html#cb643-1" tabindex="-1"></a>marblesTemplate <span class="sc">+</span> </span>
+<span id="cb643-2"><a href="raster.html#cb643-2" tabindex="-1"></a>  <span class="fu">tm_shape</span>(rsampsData) <span class="sc">+</span> <span class="fu">tm_dots</span>(<span class="at">fill=</span><span class="st">&quot;geology&quot;</span>, <span class="at">size=</span><span class="fl">0.4</span>,<span class="at">fill.legend=</span><span class="fu">tm_legend</span>(<span class="at">frame=</span>F))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasExtractedGeology"></span>
+<img src="EnvDataScience_files/figure-html/rasExtractedGeology-1.png" alt="Points colored by geology extracted from raster" width="75%" />
+<p class="caption">
+FIGURE 8.12: Points colored by geology extracted from raster
+</p>
+</div>
+<p>… and finally <code>str_dist</code> by <code>elev</code>, colored by <code>geology</code>, derived by extracting. We’ll filter out the NAs along the edge (Figure <a href="raster.html#fig:rasElevByStrDist">8.13</a>). Of course other analyses and visualizations are possible.</p>
+<div class="sourceCode" id="cb644"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb644-1"><a href="raster.html#cb644-1" tabindex="-1"></a>rsampsData <span class="sc">|&gt;</span></span>
+<span id="cb644-2"><a href="raster.html#cb644-2" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(geology)) <span class="sc">|&gt;</span> </span>
+<span id="cb644-3"><a href="raster.html#cb644-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>str_dist,<span class="at">y=</span>elev,<span class="at">col=</span>geology)) <span class="sc">+</span> </span>
+<span id="cb644-4"><a href="raster.html#cb644-4" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se=</span>F)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasElevByStrDist"></span>
+<img src="EnvDataScience_files/figure-html/rasElevByStrDist-1.png" alt="Elevation by stream distance, colored by geology, random point extraction" width="75%" />
+<p class="caption">
+FIGURE 8.13: Elevation by stream distance, colored by geology, random point extraction
+</p>
+</div>
+<p>Here’s a similar example, but using water sample data, which we can then use to relate to extracted raster values to look at relationships such as in Figures <a href="raster.html#fig:rasCarbonateGeol">8.14</a>, <a href="raster.html#fig:rasSlopeElevGeol">8.15</a>, and <a href="raster.html#fig:rasLogHardness">8.16</a>. It’s worthwhile to check various results along the way, as we did above. Most of the code is very similar to what we used above, including dealing with naming the distance rasters.</p>
+<div class="sourceCode" id="cb645"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb645-1"><a href="raster.html#cb645-1" tabindex="-1"></a>streams <span class="ot">&lt;-</span> <span class="fu">vect</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/streams.shp&quot;</span>))</span>
+<span id="cb645-2"><a href="raster.html#cb645-2" tabindex="-1"></a>trails <span class="ot">&lt;-</span> <span class="fu">vect</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/trails.shp&quot;</span>))</span>
+<span id="cb645-3"><a href="raster.html#cb645-3" tabindex="-1"></a>elev <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/elev.tif&quot;</span>)) </span>
+<span id="cb645-4"><a href="raster.html#cb645-4" tabindex="-1"></a>geology <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/geology.shp&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb645-5"><a href="raster.html#cb645-5" tabindex="-1"></a>           <span class="fu">rename</span>(<span class="at">geology=</span>CLASS)</span>
+<span id="cb645-6"><a href="raster.html#cb645-6" tabindex="-1"></a>sampsf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/samples.shp&quot;</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb645-7"><a href="raster.html#cb645-7" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(CATOT, MGTOT, PH, TEMP, TDS)</span>
+<span id="cb645-8"><a href="raster.html#cb645-8" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">vect</span>(sampsf) </span>
+<span id="cb645-9"><a href="raster.html#cb645-9" tabindex="-1"></a>strms <span class="ot">&lt;-</span> <span class="fu">rasterize</span>(streams,elev)</span>
+<span id="cb645-10"><a href="raster.html#cb645-10" tabindex="-1"></a>tr <span class="ot">&lt;-</span> <span class="fu">rasterize</span>(trails,elev)</span>
+<span id="cb645-11"><a href="raster.html#cb645-11" tabindex="-1"></a>geol <span class="ot">&lt;-</span> <span class="fu">rasterize</span>(geology,elev,<span class="at">field=</span><span class="st">&quot;geology&quot;</span>)</span>
+<span id="cb645-12"><a href="raster.html#cb645-12" tabindex="-1"></a>stdist <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">distance</span>(strms); <span class="fu">names</span>(stdist) <span class="ot">&lt;-</span> <span class="st">&quot;stDist&quot;</span></span>
+<span id="cb645-13"><a href="raster.html#cb645-13" tabindex="-1"></a>trdist <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">distance</span>(tr); <span class="fu">names</span>(trdist) <span class="ot">=</span> <span class="st">&quot;trDist&quot;</span></span>
+<span id="cb645-14"><a href="raster.html#cb645-14" tabindex="-1"></a>slope <span class="ot">&lt;-</span> <span class="fu">terrain</span>(elev, <span class="at">v=</span><span class="st">&quot;slope&quot;</span>)</span>
+<span id="cb645-15"><a href="raster.html#cb645-15" tabindex="-1"></a>aspect <span class="ot">&lt;-</span> <span class="fu">terrain</span>(elev, <span class="at">v=</span><span class="st">&quot;aspect&quot;</span>)</span>
+<span id="cb645-16"><a href="raster.html#cb645-16" tabindex="-1"></a>elev_ex <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(elev, samples)     <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>ID)</span>
+<span id="cb645-17"><a href="raster.html#cb645-17" tabindex="-1"></a>slope_ex <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(slope, samples)   <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>ID)</span>
+<span id="cb645-18"><a href="raster.html#cb645-18" tabindex="-1"></a>aspect_ex <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(aspect, samples) <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>ID)</span>
+<span id="cb645-19"><a href="raster.html#cb645-19" tabindex="-1"></a>geol_ex <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(geol, samples)     <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>ID)</span>
+<span id="cb645-20"><a href="raster.html#cb645-20" tabindex="-1"></a>strD_ex <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(stdist, samples)   <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>ID)</span>
+<span id="cb645-21"><a href="raster.html#cb645-21" tabindex="-1"></a>trailD_ex <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(trdist, samples) <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>ID)</span>
+<span id="cb645-22"><a href="raster.html#cb645-22" tabindex="-1"></a>samplePts <span class="ot">&lt;-</span> <span class="fu">cbind</span>(samples,elev_ex,slope_ex,aspect_ex,geol_ex,strD_ex,trailD_ex)</span>
+<span id="cb645-23"><a href="raster.html#cb645-23" tabindex="-1"></a>samplePtsDF <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(samplePts)</span></code></pre></div>
+<div class="sourceCode" id="cb646"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb646-1"><a href="raster.html#cb646-1" tabindex="-1"></a><span class="fu">head</span>(samplePtsDF)</span></code></pre></div>
+<pre><code>##   CATOT MGTOT   PH TEMP  TDS elev     slope     aspect geology   stDist
+## 1  0.80  0.02 7.74 15.3 0.16 1357  1.721006 123.690068     Qal   0.0000
+## 2  0.83  0.04 7.88 14.8 0.16 1359  6.926249 337.833654     Qal  30.0000
+## 3  0.83  0.04 7.47 15.1 0.12 1361  4.222687 106.389540     Qal   0.0000
+## 4  0.63  0.03 7.54 15.8 0.17 1356  2.160789 353.659808     Qal   0.0000
+## 5  0.67  0.06 7.67 14.0 0.14 1374  1.687605  81.869898     Qal   0.0000
+## 6  0.70  0.04 7.35  7.0 0.16 1399 12.713997   4.236395    msvu 192.0937
+##     trDist
+## 1 169.7056
+## 2 318.9044
+## 3 108.1665
+## 4 241.8677
+## 5 150.0000
+## 6 342.0526</code></pre>
+<div class="sourceCode" id="cb648"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb648-1"><a href="raster.html#cb648-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>samplePtsDF, <span class="fu">aes</span>(<span class="at">x=</span>geology,<span class="at">y=</span>CATOT)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasCarbonateGeol"></span>
+<img src="EnvDataScience_files/figure-html/rasCarbonateGeol-1.png" alt="Dissolved calcium carbonate grouped by geology extracted at water sample points" width="75%" />
+<p class="caption">
+FIGURE 8.14: Dissolved calcium carbonate grouped by geology extracted at water sample points
+</p>
+</div>
+<div class="sourceCode" id="cb649"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb649-1"><a href="raster.html#cb649-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>samplePtsDF, <span class="fu">aes</span>(<span class="at">x=</span>slope,<span class="at">y=</span>elev,<span class="at">col=</span>geology)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasSlopeElevGeol"></span>
+<img src="EnvDataScience_files/figure-html/rasSlopeElevGeol-1.png" alt="Slope by elevation colored by extracted geology" width="75%" />
+<p class="caption">
+FIGURE 8.15: Slope by elevation colored by extracted geology
+</p>
+</div>
+<div class="sourceCode" id="cb650"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb650-1"><a href="raster.html#cb650-1" tabindex="-1"></a>cont <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">as.contour</span>(elev, <span class="at">nlevels=</span><span class="dv">30</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb651"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb651-1"><a href="raster.html#cb651-1" tabindex="-1"></a>marblesTemplate <span class="sc">+</span></span>
+<span id="cb651-2"><a href="raster.html#cb651-2" tabindex="-1"></a>  <span class="fu">tm_shape</span>(geolshp) <span class="sc">+</span> <span class="fu">tm_polygons</span>(<span class="at">fill=</span><span class="st">&quot;geology&quot;</span>, <span class="at">fill_alpha=</span><span class="fl">0.5</span>, <span class="at">fill.legend=</span><span class="fu">tm_legend</span>(<span class="at">frame=</span>F)) <span class="sc">+</span></span>
+<span id="cb651-3"><a href="raster.html#cb651-3" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sampsf) <span class="sc">+</span> <span class="fu">tm_dots</span>(<span class="at">size=</span><span class="st">&quot;CATOT&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasLogHardness"></span>
+<img src="EnvDataScience_files/figure-html/rasLogHardness-1.png" alt="Calcium carbonate total hardness at sample points, showing geologic units" width="75%" />
+<p class="caption">
+FIGURE 8.16: Calcium carbonate total hardness at sample points, showing geologic units
+</p>
+</div>
+</div>
+<div id="focal-statistics" class="section level2 hasAnchor" number="8.5">
+<h2><span class="header-section-number">8.5</span> Focal Statistics<a href="raster.html#focal-statistics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Focal (or neighborhood) statistics work with a continuous or categorical raster to pass a moving window through it, assigning the central cell with summary statistic applied to the neighborhood, which by default is a <span class="math inline">\(3\times3\)</span> neighborhood (<code>w=3</code>) centered on the cell. One of the simplest is a low-pass filter where <code>fun="mean"</code>. This applied to a continuous raster like elevation will look very similar to the original, so we’ll apply a larger <span class="math inline">\(9\times9\)</span> (<code>w=9</code>) window so we can see the effect (Figure <a href="raster.html#fig:rasFocalMean">8.17</a>), which you can compare with the earlier plots of raw elevation.</p>
+<div class="sourceCode" id="cb652"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb652-1"><a href="raster.html#cb652-1" tabindex="-1"></a>elevLowPass9 <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">focal</span>(elev,<span class="at">w=</span><span class="dv">9</span>,<span class="at">fun=</span><span class="st">&quot;mean&quot;</span>)</span>
+<span id="cb652-2"><a href="raster.html#cb652-2" tabindex="-1"></a><span class="fu">names</span>(elevLowPass9) <span class="ot">&lt;-</span> <span class="st">&quot;elevLowPass9&quot;</span> <span class="co"># otherwise gets &quot;elev&quot;</span></span>
+<span id="cb652-3"><a href="raster.html#cb652-3" tabindex="-1"></a><span class="fu">plot</span>(elevLowPass9)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasFocalMean"></span>
+<img src="EnvDataScience_files/figure-html/rasFocalMean-1.png" alt="9x9 focal mean of elevation" width="75%" />
+<p class="caption">
+FIGURE 8.17: 9x9 focal mean of elevation
+</p>
+</div>
+<p>The effect is probably much more apparent in a hillshade, where the very smooth 9x9 low-pass filtered elevation will seem to create an out-of-focus hillshade (Figure <a href="raster.html#fig:rasHillshFocalMean">8.18</a>).</p>
+<div class="sourceCode" id="cb653"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb653-1"><a href="raster.html#cb653-1" tabindex="-1"></a>slope9 <span class="ot">&lt;-</span> <span class="fu">terrain</span>(elevLowPass9, <span class="at">v=</span><span class="st">&quot;slope&quot;</span>)</span>
+<span id="cb653-2"><a href="raster.html#cb653-2" tabindex="-1"></a>aspect9 <span class="ot">&lt;-</span> <span class="fu">terrain</span>(elevLowPass9, <span class="at">v=</span><span class="st">&quot;aspect&quot;</span>)</span>
+<span id="cb653-3"><a href="raster.html#cb653-3" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">shade</span>(slope9<span class="sc">/</span><span class="dv">180</span><span class="sc">*</span>pi, aspect9<span class="sc">/</span><span class="dv">180</span><span class="sc">*</span>pi, <span class="at">angle=</span><span class="dv">40</span>, <span class="at">direction=</span><span class="dv">330</span>),</span>
+<span id="cb653-4"><a href="raster.html#cb653-4" tabindex="-1"></a>     <span class="at">col=</span><span class="fu">gray</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">100</span><span class="sc">/</span><span class="dv">100</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasHillshFocalMean"></span>
+<img src="EnvDataScience_files/figure-html/rasHillshFocalMean-1.png" alt="Hillshade of 9x9 focal mean of elevation" width="75%" />
+<p class="caption">
+FIGURE 8.18: Hillshade of 9x9 focal mean of elevation
+</p>
+</div>
+<p>For categorical/factor data such as geology (Figure <a href="raster.html#fig:rasMblGeol">8.19</a>), the modal class in the neighborhood can be defined (Figure <a href="raster.html#fig:rasModalGeol">8.20</a>).</p>
+<div class="sourceCode" id="cb654"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb654-1"><a href="raster.html#cb654-1" tabindex="-1"></a><span class="fu">plot</span>(geol)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasMblGeol"></span>
+<img src="EnvDataScience_files/figure-html/rasMblGeol-1.png" alt="Marble Mountains geology raster" width="75%" />
+<p class="caption">
+FIGURE 8.19: Marble Mountains geology raster
+</p>
+</div>
+<div class="sourceCode" id="cb655"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb655-1"><a href="raster.html#cb655-1" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb655-2"><a href="raster.html#cb655-2" tabindex="-1"></a><span class="fu">tm_shape</span>(geol) <span class="sc">+</span> <span class="fu">tm_raster</span>()</span></code></pre></div>
+<p><img src="EnvDataScience_files/figure-html/unnamed-chunk-236-1.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb656"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb656-1"><a href="raster.html#cb656-1" tabindex="-1"></a><span class="fu">plot</span>(terra<span class="sc">::</span><span class="fu">focal</span>(geol,<span class="at">w=</span><span class="dv">9</span>,<span class="at">fun=</span><span class="st">&quot;modal&quot;</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasModalGeol"></span>
+<img src="EnvDataScience_files/figure-html/rasModalGeol-1.png" alt="Modal geology in 9 by 9 neighborhoods" width="75%" />
+<p class="caption">
+FIGURE 8.20: Modal geology in 9 by 9 neighborhoods
+</p>
+</div>
+<p>Note that while plot displayed these with a continuous legend, the modal result is going to be an integer value representing the modal class, the most common rock type in the neighborhood. This is sometimes called a <em>majority filter</em>. <em>Challenge</em>: how could we link the modes to the original character <code>geology</code> value, and produce a more useful map?</p>
+</div>
+<div id="zonal-statistics" class="section level2 hasAnchor" number="8.6">
+<h2><span class="header-section-number">8.6</span> Zonal Statistics<a href="raster.html#zonal-statistics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Zonal statistics let you stratify by zone, and is a lot like the grouped summary (<a href="abstraction.html#group-summary">3.4.5</a>) we’ve done before, but in this case the groups are connected to the input raster values by location. There’s probably a more elegant way of doing this, but here are a few that are then joined together.</p>
+<div class="sourceCode" id="cb657"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb657-1"><a href="raster.html#cb657-1" tabindex="-1"></a>meanElev <span class="ot">&lt;-</span> <span class="fu">zonal</span>(elev,geol,<span class="st">&quot;mean&quot;</span>) <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">mean=</span>elev)</span>
+<span id="cb657-2"><a href="raster.html#cb657-2" tabindex="-1"></a>maxElev <span class="ot">&lt;-</span> <span class="fu">zonal</span>(elev,geol,<span class="st">&quot;max&quot;</span>)   <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">max=</span>elev)</span>
+<span id="cb657-3"><a href="raster.html#cb657-3" tabindex="-1"></a>minElev <span class="ot">&lt;-</span> <span class="fu">zonal</span>(elev,geol,<span class="st">&quot;min&quot;</span>)   <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">min=</span>elev)</span></code></pre></div>
+<div class="sourceCode" id="cb658"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb658-1"><a href="raster.html#cb658-1" tabindex="-1"></a><span class="fu">left_join</span>(<span class="fu">left_join</span>(meanElev,maxElev,<span class="at">by=</span><span class="st">&quot;geology&quot;</span>),minElev,<span class="at">by=</span><span class="st">&quot;geology&quot;</span>)</span></code></pre></div>
+<pre><code>##   geology     mean  max  min
+## 1      Ju 1940.050 2049 1815
+## 2     Qal 1622.944 1825 1350
+## 3     mbl 1837.615 2223 1463
+## 4     mmv 1846.186 2260 1683
+## 5      ms 1636.802 1724 1535
+## 6    msvu 1750.205 2136 1336
+## 7      um 1860.758 2049 1719</code></pre>
+<div style="page-break-after: always;"></div>
+
+</div>
+<div id="exercises-raster-spatial-analysis" class="section level2 hasAnchor" number="8.7">
+<h2><span class="header-section-number">8.7</span> Exercises: Raster Spatial Analysis<a href="raster.html#exercises-raster-spatial-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-47" class="exercise"><strong>Exercise 8.1  </strong></span>See section 8.4 on deriving the extent of an elevation raster from the Marble Mountains as minimum and maximum x and y values, and of creating uniform random numbers between those limits. Modify this approach to stay away from the edges by about 5% of the range, and derive 100 points. If you derive xrange and yrange scalars that represent the positive difference between the maximum and minimum values of each, you can work out what the min and max limits are of uniform random numbers that would be 5% higher than the minimums and 5% lower than the maximums. Use methods from 3.2.1 to create a data frame <code>pts</code> with x and y columns, and display that data frame.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-48" class="exercise"><strong>Exercise 8.2  </strong></span>Create sf points from those coordinate pairs in <code>pts</code>, using methods from 6.3, and set their coordinate system to that of the elevation raster, using a method such st_crs as described in 6.2, which illustrates features but the same applies to rasters. Then use tmap to display them on a base of the elevation raster.</p>
+</div>
+<p><img src="img/ras_ex2.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-49" class="exercise"><strong>Exercise 8.3  </strong></span><strong>Geology and elevation by stream and trail distance</strong>. Now use those points to extract values from stream distance, trail distance, geology, slope, aspect, and elevation, and display that sf data frame as a table, then plot trail distance (x) vs stream distance (y) colored by geology and sized by elevation (Figure <a href="raster.html#fig:rasGeolElevDistGoal">8.21</a>).</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:rasGeolElevDistGoal"></span>
+<img src="img/ras_ex3.png" alt="Geology and elevation by stream and trail distance (goal)" width="75%" />
+<p class="caption">
+FIGURE 8.21: Geology and elevation by stream and trail distance (goal)
+</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-50" class="exercise"><strong>Exercise 8.4  </strong></span>Create a slope raster from the dem TIFF in the SanPedro folder in igisci, then a “steep” raster of all slopes &gt; 26 degrees, determined by a study of landslides to be a common landslide threshold, then display them along with roads “SanPedro/roads.shp” in “black”, streams “SanPedro/streams.shp” in “blue”, and watershed borders “SanPedro/SPCWatershed.shp” in “darkgreen” with lwd=2, using methods from 8.2, figure 8.9.</p>
+</div>
+<p><img src="img/ras_ex4.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-51" class="exercise"><strong>Exercise 8.5  </strong></span>Add a hillshade to that map.</p>
+</div>
+<p><img src="img/ras_ex5.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+
+</div>
+</div>
+
+
+
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Tomlin" class="csl-entry">
+Tomlin, C Dana. 1990. <em>Geographic Information Systems and Cartographic Modeling</em>. Englewood Cliffs, N.J: Prentice Hall.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="spatial-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="statistics.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section"
+  },
+  "book_filename": "envdatasci",
+  "toc_depth": 4
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

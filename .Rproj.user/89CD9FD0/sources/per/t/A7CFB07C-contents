@@ -1,0 +1,24 @@
+book_filename: "EnvDataScience"
+clean: [packages.bib, bookdown.bbl]
+delete_merged_file: true
+rmd_files: ["index.Rmd",
+            "introduction.Rmd",  "introductionExer.Rmd",
+            "abstraction.Rmd",       "abstractionExer.Rmd",
+            "visualization.Rmd",     "visualizationExer.Rmd",
+            "transformation.Rmd",    "transformationExer.Rmd",
+            "spatialDataMaps.Rmd",   "spatialDataMapsExer.Rmd",
+            "spatialAnalysis.Rmd",   "spatialAnalysisExer.Rmd",
+            "spatialRaster.Rmd",     "spatialRasterExer.Rmd",
+            "statistics.Rmd",        "statisticsExer.Rmd",
+            "modeling.Rmd",          "modelingExer.Rmd",
+            "ImageryAnalysisClassification.Rmd",
+            "TimeSeries.Rmd",        "TimeSeriesExer.Rmd",
+            "communication.Rmd",
+            "references.Rmd"]
+language:
+  label:
+    fig: "FIGURE "
+    tab: "TABLE "
+  ui:
+    edit: "Edit"
+    chapter_name: "Chapter "

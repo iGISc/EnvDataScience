@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 13 Communication with Shiny | Introduction to Environmental Data Science</title>
+  <meta name="description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 13 Communication with Shiny | Introduction to Environmental Data Science" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  <meta name="github-repo" content="iGISc/EnvDataSci" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 13 Communication with Shiny | Introduction to Environmental Data Science" />
+  
+  <meta name="twitter:description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  
+
+<meta name="author" content="Jerry Davis, SFSU Institute for Geographic Information Science" />
+
+
+<meta name="date" content="2026-09-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="ts.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script>
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.2.3/leaflet.js"></script>
+<script src="libs/leaflet-providers-3.0.0/leaflet-providers.js"></script>
+<script src="libs/leaflet-providers-plugin-2.2.3/leaflet-providers-plugin.js"></script>
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<link href="libs/sierra___TEMPERATURE-CSS-0.0.1/sierra___TEMPERATURE_home-button.css" rel="stylesheet" />
+<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><img src="img/eaRth_anna296.png"></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background, Goals and Data</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#environmental-data-science"><i class="fa fa-check"></i><b>1.1</b> Environmental Data Science</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#environmental-data-and-methods"><i class="fa fa-check"></i><b>1.2</b> Environmental Data and Methods</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#goals"><i class="fa fa-check"></i><b>1.3</b> Goals</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#some-definitions"><i class="fa fa-check"></i><b>1.3.1</b> Some definitions:</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>1.4</b> Exploratory Data Analysis</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#software-and-data"><i class="fa fa-check"></i><b>1.5</b> Software and Data</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#data"><i class="fa fa-check"></i><b>1.5.1</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i><b>1.6</b> Acknowledgements</a></li>
+</ul></li>
+<li class="part"><span><b>I Exploratory Data Analysis</b></span></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction to R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#data-objects"><i class="fa fa-check"></i><b>2.1</b> Data Objects</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#scalars-and-assignment"><i class="fa fa-check"></i><b>2.1.1</b> Scalars and assignment</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#functions"><i class="fa fa-check"></i><b>2.2</b> Functions</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#expressions"><i class="fa fa-check"></i><b>2.3</b> Expressions and Statements</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#class"><i class="fa fa-check"></i><b>2.4</b> Data Classes</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introduction.html"><a href="introduction.html#integers"><i class="fa fa-check"></i><b>2.4.1</b> Integers</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#rectangular-data"><i class="fa fa-check"></i><b>2.5</b> Rectangular Data</a></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#data-structures-in-r"><i class="fa fa-check"></i><b>2.6</b> Data Structures in R</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="introduction.html"><a href="introduction.html#vector"><i class="fa fa-check"></i><b>2.6.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.6.2" data-path="introduction.html"><a href="introduction.html#list"><i class="fa fa-check"></i><b>2.6.2</b> Lists</a></li>
+<li class="chapter" data-level="2.6.3" data-path="introduction.html"><a href="introduction.html#matrix"><i class="fa fa-check"></i><b>2.6.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.6.4" data-path="introduction.html"><a href="introduction.html#dataframes"><i class="fa fa-check"></i><b>2.6.4</b> Data frames</a></li>
+<li class="chapter" data-level="2.6.5" data-path="introduction.html"><a href="introduction.html#factors"><i class="fa fa-check"></i><b>2.6.5</b> Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#accessors"><i class="fa fa-check"></i><b>2.7</b> Accessors and Subsetting</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="introduction.html"><a href="introduction.html#subsetting"><i class="fa fa-check"></i><b>2.7.1</b> <code>[]</code> Subsetting</a></li>
+<li class="chapter" data-level="2.7.2" data-path="introduction.html"><a href="introduction.html#the-mysterious-double-bracket"><i class="fa fa-check"></i><b>2.7.2</b> <code>[[]]</code> The mysterious double bracket</a></li>
+<li class="chapter" data-level="2.7.3" data-path="introduction.html"><a href="introduction.html#accessing-a-vector-from-a-data-frame"><i class="fa fa-check"></i><b>2.7.3</b> <code>$</code> Accessing a vector from a data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#programming"><i class="fa fa-check"></i><b>2.8</b> Programming scripts in RStudio</a>
+<ul>
+<li class="chapter" data-level="2.8.1" data-path="introduction.html"><a href="introduction.html#functions-writing"><i class="fa fa-check"></i><b>2.8.1</b> <code>function</code> : creating your own</a></li>
+<li class="chapter" data-level="2.8.2" data-path="introduction.html"><a href="introduction.html#if-conditional-operations"><i class="fa fa-check"></i><b>2.8.2</b> <code>if</code> : conditional operations</a></li>
+<li class="chapter" data-level="2.8.3" data-path="introduction.html"><a href="introduction.html#for"><i class="fa fa-check"></i><b>2.8.3</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="2.8.4" data-path="introduction.html"><a href="introduction.html#subsetting-with-logic"><i class="fa fa-check"></i><b>2.8.4</b> Subsetting with logic</a></li>
+<li class="chapter" data-level="2.8.5" data-path="introduction.html"><a href="introduction.html#apply"><i class="fa fa-check"></i><b>2.8.5</b> Apply functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.9" data-path="introduction.html"><a href="introduction.html#rstudio"><i class="fa fa-check"></i><b>2.9</b> RStudio projects</a>
+<ul>
+<li class="chapter" data-level="2.9.1" data-path="introduction.html"><a href="introduction.html#rmarkdown"><i class="fa fa-check"></i><b>2.9.1</b> R Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="2.10" data-path="introduction.html"><a href="introduction.html#exercises-introduction-to-r"><i class="fa fa-check"></i><b>2.10</b> Exercises: Introduction to R</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="abstraction.html"><a href="abstraction.html"><i class="fa fa-check"></i><b>3</b> Data Abstraction</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="abstraction.html"><a href="abstraction.html#tidyverse"><i class="fa fa-check"></i><b>3.1</b> The Tidyverse</a></li>
+<li class="chapter" data-level="3.2" data-path="abstraction.html"><a href="abstraction.html#tibbles"><i class="fa fa-check"></i><b>3.2</b> Tibbles</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="abstraction.html"><a href="abstraction.html#building-a-tibble-from-vectors"><i class="fa fa-check"></i><b>3.2.1</b> Building a tibble from vectors</a></li>
+<li class="chapter" data-level="3.2.2" data-path="abstraction.html"><a href="abstraction.html#tribble"><i class="fa fa-check"></i><b>3.2.2</b> tribble</a></li>
+<li class="chapter" data-level="3.2.3" data-path="abstraction.html"><a href="abstraction.html#csv"><i class="fa fa-check"></i><b>3.2.3</b> read_csv</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="abstraction.html"><a href="abstraction.html#summarizing-variable-distributions"><i class="fa fa-check"></i><b>3.3</b> Summarizing variable distributions</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="abstraction.html"><a href="abstraction.html#stratifying-variables-by-site-using-a-tukey-box-plot"><i class="fa fa-check"></i><b>3.3.1</b> Stratifying variables by site using a Tukey box plot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="abstraction.html"><a href="abstraction.html#dplyr"><i class="fa fa-check"></i><b>3.4</b> Database operations</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="abstraction.html"><a href="abstraction.html#pipe"><i class="fa fa-check"></i><b>3.4.1</b> Select, mutate, and the pipe</a></li>
+<li class="chapter" data-level="3.4.2" data-path="abstraction.html"><a href="abstraction.html#filter"><i class="fa fa-check"></i><b>3.4.2</b> Filtering observations</a></li>
+<li class="chapter" data-level="3.4.3" data-path="abstraction.html"><a href="abstraction.html#subsetting-data-with-base-rs-subset"><i class="fa fa-check"></i><b>3.4.3</b> Subsetting data with base R’s <code>subset</code></a></li>
+<li class="chapter" data-level="3.4.4" data-path="abstraction.html"><a href="abstraction.html#writing-a-data-frame-to-a-csv"><i class="fa fa-check"></i><b>3.4.4</b> Writing a data frame to a csv</a></li>
+<li class="chapter" data-level="3.4.5" data-path="abstraction.html"><a href="abstraction.html#group-summary"><i class="fa fa-check"></i><b>3.4.5</b> Summarize by group</a></li>
+<li class="chapter" data-level="3.4.6" data-path="abstraction.html"><a href="abstraction.html#count"><i class="fa fa-check"></i><b>3.4.6</b> Count</a></li>
+<li class="chapter" data-level="3.4.7" data-path="abstraction.html"><a href="abstraction.html#sorting-after-summarizing"><i class="fa fa-check"></i><b>3.4.7</b> Sorting after summarizing</a></li>
+<li class="chapter" data-level="3.4.8" data-path="abstraction.html"><a href="abstraction.html#the-dot-operator"><i class="fa fa-check"></i><b>3.4.8</b> The dot operator</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="abstraction.html"><a href="abstraction.html#stringr"><i class="fa fa-check"></i><b>3.5</b> String abstraction</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="abstraction.html"><a href="abstraction.html#detecting-matches"><i class="fa fa-check"></i><b>3.5.1</b> Detecting matches</a></li>
+<li class="chapter" data-level="3.5.2" data-path="abstraction.html"><a href="abstraction.html#subset-string"><i class="fa fa-check"></i><b>3.5.2</b> Subsetting strings</a></li>
+<li class="chapter" data-level="3.5.3" data-path="abstraction.html"><a href="abstraction.html#string-length"><i class="fa fa-check"></i><b>3.5.3</b> String length</a></li>
+<li class="chapter" data-level="3.5.4" data-path="abstraction.html"><a href="abstraction.html#replacing-substrings-with-other-text-mutating-strings"><i class="fa fa-check"></i><b>3.5.4</b> Replacing substrings with other text (“mutating” strings)</a></li>
+<li class="chapter" data-level="3.5.5" data-path="abstraction.html"><a href="abstraction.html#concatenating-and-splitting"><i class="fa fa-check"></i><b>3.5.5</b> Concatenating and splitting</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="abstraction.html"><a href="abstraction.html#lubridate"><i class="fa fa-check"></i><b>3.6</b> Dates and times with <code>lubridate</code></a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="abstraction.html"><a href="abstraction.html#dates-used-for-annual-time-series"><i class="fa fa-check"></i><b>3.6.1</b> Dates used for annual time series</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="abstraction.html"><a href="abstraction.html#extending-abstractions-with-functions"><i class="fa fa-check"></i><b>3.7</b> Extending abstractions with functions</a></li>
+<li class="chapter" data-level="3.8" data-path="abstraction.html"><a href="abstraction.html#exercises-data-abstraction"><i class="fa fa-check"></i><b>3.8</b> Exercises: Data Abstraction</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>4</b> Visualization</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="visualization.html"><a href="visualization.html#plot-in-base-r"><i class="fa fa-check"></i><b>4.1</b> plot in base R</a></li>
+<li class="chapter" data-level="4.2" data-path="visualization.html"><a href="visualization.html#ggplot2"><i class="fa fa-check"></i><b>4.2</b> ggplot2</a></li>
+<li class="chapter" data-level="4.3" data-path="visualization.html"><a href="visualization.html#plotting-one-variable"><i class="fa fa-check"></i><b>4.3</b> Plotting one variable</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="visualization.html"><a href="visualization.html#histogram"><i class="fa fa-check"></i><b>4.3.1</b> Histogram</a></li>
+<li class="chapter" data-level="4.3.2" data-path="visualization.html"><a href="visualization.html#density-plot"><i class="fa fa-check"></i><b>4.3.2</b> Density plot</a></li>
+<li class="chapter" data-level="4.3.3" data-path="visualization.html"><a href="visualization.html#boxplot"><i class="fa fa-check"></i><b>4.3.3</b> Boxplot</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="visualization.html"><a href="visualization.html#plotting-two-variables"><i class="fa fa-check"></i><b>4.4</b> Plotting Two Variables</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="visualization.html"><a href="visualization.html#two-continuous-variables"><i class="fa fa-check"></i><b>4.4.1</b> Two continuous variables</a></li>
+<li class="chapter" data-level="4.4.2" data-path="visualization.html"><a href="visualization.html#two-variables-one-discrete"><i class="fa fa-check"></i><b>4.4.2</b> Two variables, one discrete</a></li>
+<li class="chapter" data-level="4.4.3" data-path="visualization.html"><a href="visualization.html#color-systems"><i class="fa fa-check"></i><b>4.4.3</b> Color systems</a></li>
+<li class="chapter" data-level="4.4.4" data-path="visualization.html"><a href="visualization.html#trend-line"><i class="fa fa-check"></i><b>4.4.4</b> Trend line</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="visualization.html"><a href="visualization.html#general-symbology"><i class="fa fa-check"></i><b>4.5</b> General Symbology</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="visualization.html"><a href="visualization.html#categorical-symbology"><i class="fa fa-check"></i><b>4.5.1</b> Categorical symbology</a></li>
+<li class="chapter" data-level="4.5.2" data-path="visualization.html"><a href="visualization.html#log-scales-instead-of-transform"><i class="fa fa-check"></i><b>4.5.2</b> Log scales instead of transform</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="visualization.html"><a href="visualization.html#graphs-from-grouped-data"><i class="fa fa-check"></i><b>4.6</b> Graphs from Grouped Data</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="visualization.html"><a href="visualization.html#faceted-graphs"><i class="fa fa-check"></i><b>4.6.1</b> Faceted graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="visualization.html"><a href="visualization.html#titles-subtitles-axis-labels-and-legend-position"><i class="fa fa-check"></i><b>4.7</b> Titles, Subtitles, Axis Labels, and Legend Position</a></li>
+<li class="chapter" data-level="4.8" data-path="visualization.html"><a href="visualization.html#pairs-plot"><i class="fa fa-check"></i><b>4.8</b> Pairs Plot</a></li>
+<li class="chapter" data-level="4.9" data-path="visualization.html"><a href="visualization.html#exercises-visualization"><i class="fa fa-check"></i><b>4.9</b> Exercises: Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="transformation.html"><a href="transformation.html"><i class="fa fa-check"></i><b>5</b> Data Transformation</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="transformation.html"><a href="transformation.html#joins"><i class="fa fa-check"></i><b>5.1</b> Data joins</a></li>
+<li class="chapter" data-level="5.2" data-path="transformation.html"><a href="transformation.html#set"><i class="fa fa-check"></i><b>5.2</b> Set operations</a></li>
+<li class="chapter" data-level="5.3" data-path="transformation.html"><a href="transformation.html#binding"><i class="fa fa-check"></i><b>5.3</b> Binding rows and columns</a></li>
+<li class="chapter" data-level="5.4" data-path="transformation.html"><a href="transformation.html#pivots"><i class="fa fa-check"></i><b>5.4</b> Pivoting data frames</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="transformation.html"><a href="transformation.html#pivot_longer"><i class="fa fa-check"></i><b>5.4.1</b> <code>pivot_longer</code></a></li>
+<li class="chapter" data-level="5.4.2" data-path="transformation.html"><a href="transformation.html#pivot_wider"><i class="fa fa-check"></i><b>5.4.2</b> <code>pivot_wider</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="transformation.html"><a href="transformation.html#combining-transformation-methods-to-create-a-free_y-faceted-graph"><i class="fa fa-check"></i><b>5.5</b> Combining transformation methods to create a <code>free_y</code> faceted graph</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="transformation.html"><a href="transformation.html#air-pollutant-emissions-trends-epa"><i class="fa fa-check"></i><b>5.5.1</b> Air pollutant emissions trends (EPA)</a></li>
+<li class="chapter" data-level="5.5.2" data-path="transformation.html"><a href="transformation.html#flux-tower-data"><i class="fa fa-check"></i><b>5.5.2</b> Flux tower data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="transformation.html"><a href="transformation.html#exercise-transformation"><i class="fa fa-check"></i><b>5.6</b> Exercise: Transformation</a></li>
+</ul></li>
+<li class="part"><span><b>II Spatial</b></span></li>
+<li class="chapter" data-level="6" data-path="spatial.html"><a href="spatial.html"><i class="fa fa-check"></i><b>6</b> Spatial Data and Maps</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="spatial.html"><a href="spatial.html#spatial-data"><i class="fa fa-check"></i><b>6.1</b> Spatial Data</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="spatial.html"><a href="spatial.html#simple-geometry-building-in-sf"><i class="fa fa-check"></i><b>6.1.1</b> Simple geometry building in sf</a></li>
+<li class="chapter" data-level="6.1.2" data-path="spatial.html"><a href="spatial.html#building-points-from-a-data-frame"><i class="fa fa-check"></i><b>6.1.2</b> Building points from a data frame</a></li>
+<li class="chapter" data-level="6.1.3" data-path="spatial.html"><a href="spatial.html#spatvectors-in-terra"><i class="fa fa-check"></i><b>6.1.3</b> SpatVectors in <code>terra</code></a></li>
+<li class="chapter" data-level="6.1.4" data-path="spatial.html"><a href="spatial.html#creating-features-from-shapefiles"><i class="fa fa-check"></i><b>6.1.4</b> Creating features from shapefiles</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="spatial.html"><a href="spatial.html#coordinate-referencing-systems"><i class="fa fa-check"></i><b>6.2</b> Coordinate Referencing Systems</a></li>
+<li class="chapter" data-level="6.3" data-path="spatial.html"><a href="spatial.html#creating-sf-data-from-data-frames"><i class="fa fa-check"></i><b>6.3</b> Creating sf Data from Data Frames</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="spatial.html"><a href="spatial.html#removing-geometry"><i class="fa fa-check"></i><b>6.3.1</b> <em>Removing</em> geometry</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="spatial.html"><a href="spatial.html#base-rs-plot-with-terra"><i class="fa fa-check"></i><b>6.4</b> Base R’s <code>plot()</code> with <code>terra</code></a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="spatial.html"><a href="spatial.html#using-maptiles-to-create-a-basemap"><i class="fa fa-check"></i><b>6.4.1</b> Using maptiles to create a basemap</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="spatial.html"><a href="spatial.html#raster-data"><i class="fa fa-check"></i><b>6.5</b> Raster data</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="spatial.html"><a href="spatial.html#building-rasters"><i class="fa fa-check"></i><b>6.5.1</b> Building rasters</a></li>
+<li class="chapter" data-level="6.5.2" data-path="spatial.html"><a href="spatial.html#vector-to-raster-conversion"><i class="fa fa-check"></i><b>6.5.2</b> Vector to raster conversion</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="spatial.html"><a href="spatial.html#ggplot2-for-maps"><i class="fa fa-check"></i><b>6.6</b> ggplot2 for Maps</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="spatial.html"><a href="spatial.html#rasters-in-ggplot2"><i class="fa fa-check"></i><b>6.6.1</b> Rasters in ggplot2</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="spatial.html"><a href="spatial.html#using-bounding-boxes-to-zoom-to-the-extent-of-data-layers-in-any-mapping-package"><i class="fa fa-check"></i><b>6.7</b> Using bounding boxes to zoom to the extent of data layers (in any mapping package)</a></li>
+<li class="chapter" data-level="6.8" data-path="spatial.html"><a href="spatial.html#tmap"><i class="fa fa-check"></i><b>6.8</b> tmap</a>
+<ul>
+<li class="chapter" data-level="6.8.1" data-path="spatial.html"><a href="spatial.html#color"><i class="fa fa-check"></i><b>6.8.1</b> Color</a></li>
+<li class="chapter" data-level="6.8.2" data-path="spatial.html"><a href="spatial.html#basemap-with-tmap"><i class="fa fa-check"></i><b>6.8.2</b> Basemap with tmap</a></li>
+</ul></li>
+<li class="chapter" data-level="6.9" data-path="spatial.html"><a href="spatial.html#interactive-maps"><i class="fa fa-check"></i><b>6.9</b> Interactive Maps</a>
+<ul>
+<li class="chapter" data-level="6.9.1" data-path="spatial.html"><a href="spatial.html#leaflet"><i class="fa fa-check"></i><b>6.9.1</b> Leaflet</a></li>
+<li class="chapter" data-level="6.9.2" data-path="spatial.html"><a href="spatial.html#mapview"><i class="fa fa-check"></i><b>6.9.2</b> Mapview</a></li>
+<li class="chapter" data-level="6.9.3" data-path="spatial.html"><a href="spatial.html#tmap-view-mode"><i class="fa fa-check"></i><b>6.9.3</b> tmap (view mode)</a></li>
+<li class="chapter" data-level="6.9.4" data-path="spatial.html"><a href="spatial.html#interactive-mapping-of-individual-penguins-abstracted-from-a-big-dataset"><i class="fa fa-check"></i><b>6.9.4</b> Interactive mapping of individual penguins abstracted from a big dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="6.10" data-path="spatial.html"><a href="spatial.html#exercises-spatial-data-and-maps"><i class="fa fa-check"></i><b>6.10</b> Exercises: Spatial Data and Maps</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="spatial-analysis.html"><a href="spatial-analysis.html"><i class="fa fa-check"></i><b>7</b> Spatial Analysis</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#data-frame-operations"><i class="fa fa-check"></i><b>7.1</b> Data Frame Operations</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#GroupedSummaries"><i class="fa fa-check"></i><b>7.1.1</b> Using grouped summaries, and filtering by a selection</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-analysis-operations"><i class="fa fa-check"></i><b>7.2</b> Spatial Analysis Operations</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#using-topology-to-subset"><i class="fa fa-check"></i><b>7.2.1</b> Using topology to subset</a></li>
+<li class="chapter" data-level="7.2.2" data-path="spatial-analysis.html"><a href="spatial-analysis.html#centroid"><i class="fa fa-check"></i><b>7.2.2</b> Centroid</a></li>
+<li class="chapter" data-level="7.2.3" data-path="spatial-analysis.html"><a href="spatial-analysis.html#distance"><i class="fa fa-check"></i><b>7.2.3</b> Distance</a></li>
+<li class="chapter" data-level="7.2.4" data-path="spatial-analysis.html"><a href="spatial-analysis.html#buffers"><i class="fa fa-check"></i><b>7.2.4</b> Buffers</a></li>
+<li class="chapter" data-level="7.2.5" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-overlay-union-and-intersection"><i class="fa fa-check"></i><b>7.2.5</b> Spatial overlay: union and intersection</a></li>
+<li class="chapter" data-level="7.2.6" data-path="spatial-analysis.html"><a href="spatial-analysis.html#clip-with-st_crop"><i class="fa fa-check"></i><b>7.2.6</b> Clip with st_crop</a></li>
+<li class="chapter" data-level="7.2.7" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-join-with-st_join"><i class="fa fa-check"></i><b>7.2.7</b> Spatial join with <code>st_join</code></a></li>
+<li class="chapter" data-level="7.2.8" data-path="spatial-analysis.html"><a href="spatial-analysis.html#further-exploration-of-spatial-analysis"><i class="fa fa-check"></i><b>7.2.8</b> Further exploration of spatial analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="spatial-analysis.html"><a href="spatial-analysis.html#exercises-spatial-analysis"><i class="fa fa-check"></i><b>7.3</b> Exercises: Spatial Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="raster.html"><a href="raster.html"><i class="fa fa-check"></i><b>8</b> Raster Spatial Analysis</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="raster.html"><a href="raster.html#terrain"><i class="fa fa-check"></i><b>8.1</b> Terrain functions</a></li>
+<li class="chapter" data-level="8.2" data-path="raster.html"><a href="raster.html#map-algebra-in-terra"><i class="fa fa-check"></i><b>8.2</b> Map Algebra in terra</a></li>
+<li class="chapter" data-level="8.3" data-path="raster.html"><a href="raster.html#distance-1"><i class="fa fa-check"></i><b>8.3</b> Distance</a></li>
+<li class="chapter" data-level="8.4" data-path="raster.html"><a href="raster.html#extracting-values"><i class="fa fa-check"></i><b>8.4</b> Extracting Values</a></li>
+<li class="chapter" data-level="8.5" data-path="raster.html"><a href="raster.html#focal-statistics"><i class="fa fa-check"></i><b>8.5</b> Focal Statistics</a></li>
+<li class="chapter" data-level="8.6" data-path="raster.html"><a href="raster.html#zonal-statistics"><i class="fa fa-check"></i><b>8.6</b> Zonal Statistics</a></li>
+<li class="chapter" data-level="8.7" data-path="raster.html"><a href="raster.html#exercises-raster-spatial-analysis"><i class="fa fa-check"></i><b>8.7</b> Exercises: Raster Spatial Analysis</a></li>
+</ul></li>
+<li class="part"><span><b>III Statistics and Modeling</b></span></li>
+<li class="chapter" data-level="9" data-path="statistics.html"><a href="statistics.html"><i class="fa fa-check"></i><b>9</b> Statistical Summaries and Tests</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="statistics.html"><a href="statistics.html#goals-of-statistical-analysis"><i class="fa fa-check"></i><b>9.1</b> Goals of Statistical Analysis</a></li>
+<li class="chapter" data-level="9.2" data-path="statistics.html"><a href="statistics.html#summary-statistics"><i class="fa fa-check"></i><b>9.2</b> Summary Statistics</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="statistics.html"><a href="statistics.html#summarize-by-group-stratifying-a-summary"><i class="fa fa-check"></i><b>9.2.1</b> Summarize by group: <em>stratifying a summary</em></a></li>
+<li class="chapter" data-level="9.2.2" data-path="statistics.html"><a href="statistics.html#boxplot-for-visualizing-distributions-by-group"><i class="fa fa-check"></i><b>9.2.2</b> Boxplot for visualizing distributions by group</a></li>
+<li class="chapter" data-level="9.2.3" data-path="statistics.html"><a href="statistics.html#random"><i class="fa fa-check"></i><b>9.2.3</b> Generating pseudorandom numbers</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="statistics.html"><a href="statistics.html#correlation"><i class="fa fa-check"></i><b>9.3</b> Correlation r and Coefficient of Determination r<sup>2</sup></a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="statistics.html"><a href="statistics.html#displaying-correlation-in-a-pairs-plot"><i class="fa fa-check"></i><b>9.3.1</b> Displaying correlation in a pairs plot</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="statistics.html"><a href="statistics.html#statistical-tests"><i class="fa fa-check"></i><b>9.4</b> Statistical Tests</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="statistics.html"><a href="statistics.html#comparing-samples-and-groupings-with-a-t-test-and-a-non-parametric-kruskal-wallis-rank-sum-test"><i class="fa fa-check"></i><b>9.4.1</b> Comparing samples and groupings with a t test and a non-parametric Kruskal-Wallis Rank Sum test</a></li>
+<li class="chapter" data-level="9.4.2" data-path="statistics.html"><a href="statistics.html#analysis-of-variance"><i class="fa fa-check"></i><b>9.4.2</b> Analysis of variance</a></li>
+<li class="chapter" data-level="9.4.3" data-path="statistics.html"><a href="statistics.html#post-hoc-analysis-of-variance-with-tukeys-test"><i class="fa fa-check"></i><b>9.4.3</b> Post-Hoc Analysis of Variance with Tukey’s Test</a></li>
+<li class="chapter" data-level="9.4.4" data-path="statistics.html"><a href="statistics.html#testing-a-correlation"><i class="fa fa-check"></i><b>9.4.4</b> Testing a correlation</a></li>
+<li class="chapter" data-level="9.4.5" data-path="statistics.html"><a href="statistics.html#additional-resources"><i class="fa fa-check"></i><b>9.4.5</b> Additional resources</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="statistics.html"><a href="statistics.html#exercises-statistics"><i class="fa fa-check"></i><b>9.5</b> Exercises: Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="modeling.html"><a href="modeling.html"><i class="fa fa-check"></i><b>10</b> Modeling</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="modeling.html"><a href="modeling.html#some-common-statistical-models"><i class="fa fa-check"></i><b>10.1</b> Some Common Statistical Models</a></li>
+<li class="chapter" data-level="10.2" data-path="modeling.html"><a href="modeling.html#lm"><i class="fa fa-check"></i><b>10.2</b> Linear Model (<code>lm</code>)</a></li>
+<li class="chapter" data-level="10.3" data-path="modeling.html"><a href="modeling.html#spatial-influences-on-statistical-analysis"><i class="fa fa-check"></i><b>10.3</b> Spatial Influences on Statistical Analysis</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="modeling.html"><a href="modeling.html#mapping-residuals"><i class="fa fa-check"></i><b>10.3.1</b> Mapping residuals</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="modeling.html"><a href="modeling.html#analysis-of-covariance"><i class="fa fa-check"></i><b>10.4</b> Analysis of Covariance</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="modeling.html"><a href="modeling.html#tukey-test-for-the-ancova-model"><i class="fa fa-check"></i><b>10.4.1</b> Tukey test for the ANCOVA model</a></li>
+<li class="chapter" data-level="10.4.2" data-path="modeling.html"><a href="modeling.html#the-karst-water-chemistry-model"><i class="fa fa-check"></i><b>10.4.2</b> The karst water chemistry model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="modeling.html"><a href="modeling.html#generalized-linear-model-glm"><i class="fa fa-check"></i><b>10.5</b> Generalized linear model (GLM)</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="modeling.html"><a href="modeling.html#binomial-family-logistic-glm"><i class="fa fa-check"></i><b>10.5.1</b> Binomial family: Logistic GLM</a></li>
+<li class="chapter" data-level="10.5.2" data-path="modeling.html"><a href="modeling.html#logistic-landslide-model"><i class="fa fa-check"></i><b>10.5.2</b> Logistic landslide model</a></li>
+<li class="chapter" data-level="10.5.3" data-path="modeling.html"><a href="modeling.html#poisson-regression"><i class="fa fa-check"></i><b>10.5.3</b> Poisson regression</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="modeling.html"><a href="modeling.html#other-modeling-methods"><i class="fa fa-check"></i><b>10.6</b> Other modeling methods</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="modeling.html"><a href="modeling.html#curve-fitting"><i class="fa fa-check"></i><b>10.6.1</b> Curve fitting</a></li>
+<li class="chapter" data-level="10.6.2" data-path="modeling.html"><a href="modeling.html#models-employing-machine-learning"><i class="fa fa-check"></i><b>10.6.2</b> Models employing machine learning</a></li>
+</ul></li>
+<li class="chapter" data-level="10.7" data-path="modeling.html"><a href="modeling.html#exercises-modeling"><i class="fa fa-check"></i><b>10.7</b> Exercises: Modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="imagery.html"><a href="imagery.html"><i class="fa fa-check"></i><b>11</b> Imagery and Classification Models</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="imagery.html"><a href="imagery.html#reading-and-displaying-sentinel-2-imagery"><i class="fa fa-check"></i><b>11.1</b> Reading and Displaying Sentinel-2 Imagery</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="imagery.html"><a href="imagery.html#individual-bands"><i class="fa fa-check"></i><b>11.1.1</b> Individual bands</a></li>
+<li class="chapter" data-level="11.1.2" data-path="imagery.html"><a href="imagery.html#spectral-subsets-to-create-three-band-r-g-b-and-nir-r-g-for-visualization"><i class="fa fa-check"></i><b>11.1.2</b> Spectral subsets to create three-band R-G-B and NIR-R-G for visualization</a></li>
+<li class="chapter" data-level="11.1.3" data-path="imagery.html"><a href="imagery.html#crop-to-study-area-extent"><i class="fa fa-check"></i><b>11.1.3</b> Crop to study area extent</a></li>
+<li class="chapter" data-level="11.1.4" data-path="imagery.html"><a href="imagery.html#saving-results"><i class="fa fa-check"></i><b>11.1.4</b> Saving results</a></li>
+<li class="chapter" data-level="11.1.5" data-path="imagery.html"><a href="imagery.html#band-scatter-plots"><i class="fa fa-check"></i><b>11.1.5</b> Band scatter plots</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="imagery.html"><a href="imagery.html#spectral-profiles"><i class="fa fa-check"></i><b>11.2</b> Spectral Profiles</a></li>
+<li class="chapter" data-level="11.3" data-path="imagery.html"><a href="imagery.html#map-algebra-and-vegetation-indices"><i class="fa fa-check"></i><b>11.3</b> Map Algebra and Vegetation Indices</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="imagery.html"><a href="imagery.html#vegetation-indices"><i class="fa fa-check"></i><b>11.3.1</b> Vegetation indices</a></li>
+<li class="chapter" data-level="11.3.2" data-path="imagery.html"><a href="imagery.html#histogram-1"><i class="fa fa-check"></i><b>11.3.2</b> Histogram</a></li>
+<li class="chapter" data-level="11.3.3" data-path="imagery.html"><a href="imagery.html#other-vegetation-indices"><i class="fa fa-check"></i><b>11.3.3</b> Other vegetation indices</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="imagery.html"><a href="imagery.html#unsupervised-classification-with-k-means"><i class="fa fa-check"></i><b>11.4</b> Unsupervised Classification with k-means</a></li>
+<li class="chapter" data-level="11.5" data-path="imagery.html"><a href="imagery.html#machine-learning-classification-of-imagery"><i class="fa fa-check"></i><b>11.5</b> Machine Learning Classification of Imagery</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="imagery.html"><a href="imagery.html#read-imagery-and-training-data-and-extract-sample-values-for-training"><i class="fa fa-check"></i><b>11.5.1</b> Read imagery and training data and extract sample values for training</a></li>
+<li class="chapter" data-level="11.5.2" data-path="imagery.html"><a href="imagery.html#training-the-cart-model"><i class="fa fa-check"></i><b>11.5.2</b> Training the CART model</a></li>
+<li class="chapter" data-level="11.5.3" data-path="imagery.html"><a href="imagery.html#prediction-using-the-cart-model"><i class="fa fa-check"></i><b>11.5.3</b> Prediction using the CART model</a></li>
+<li class="chapter" data-level="11.5.4" data-path="imagery.html"><a href="imagery.html#validating-the-model"><i class="fa fa-check"></i><b>11.5.4</b> Validating the model</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="imagery.html"><a href="imagery.html#classifying-with-10-m-sentinel-2-imagery"><i class="fa fa-check"></i><b>11.6</b> Classifying with 10 m Sentinel-2 Imagery</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="imagery.html"><a href="imagery.html#subset-bands-10-m"><i class="fa fa-check"></i><b>11.6.1</b> Subset bands (10 m)</a></li>
+<li class="chapter" data-level="11.6.2" data-path="imagery.html"><a href="imagery.html#crop-to-rcv-extent-and-extract-pixel-values"><i class="fa fa-check"></i><b>11.6.2</b> Crop to RCV extent and extract pixel values</a></li>
+<li class="chapter" data-level="11.6.3" data-path="imagery.html"><a href="imagery.html#training-the-cart-model-10-m-and-plot-the-tree"><i class="fa fa-check"></i><b>11.6.3</b> Training the CART model (10 m) and plot the tree</a></li>
+<li class="chapter" data-level="11.6.4" data-path="imagery.html"><a href="imagery.html#prediction-using-the-cart-model-10-m"><i class="fa fa-check"></i><b>11.6.4</b> Prediction using the CART model (10 m)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="imagery.html"><a href="imagery.html#classification-using-multiple-images-capturing-phenology"><i class="fa fa-check"></i><b>11.7</b> Classification Using Multiple Images Capturing Phenology</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="imagery.html"><a href="imagery.html#create-a-10-band-stack-from-both-images"><i class="fa fa-check"></i><b>11.7.1</b> Create a 10-band stack from both images</a></li>
+<li class="chapter" data-level="11.7.2" data-path="imagery.html"><a href="imagery.html#extract-the-training-data-10-m-spring-summer"><i class="fa fa-check"></i><b>11.7.2</b> Extract the training data (10 m spring + summer)</a></li>
+<li class="chapter" data-level="11.7.3" data-path="imagery.html"><a href="imagery.html#cart-model-and-prediction-10-m-spring-summer"><i class="fa fa-check"></i><b>11.7.3</b> CART model and prediction (10 m spring + summer)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.8" data-path="imagery.html"><a href="imagery.html#classification-using-multiple-images-capturing-phenology-20m"><i class="fa fa-check"></i><b>11.8</b> Classification Using Multiple Images Capturing Phenology : 20m</a>
+<ul>
+<li class="chapter" data-level="11.8.1" data-path="imagery.html"><a href="imagery.html#create-a-18-band-stack-from-both-images"><i class="fa fa-check"></i><b>11.8.1</b> Create a 18-band stack from both images</a></li>
+<li class="chapter" data-level="11.8.2" data-path="imagery.html"><a href="imagery.html#extract-the-training-data-20-m-spring-summer"><i class="fa fa-check"></i><b>11.8.2</b> Extract the training data (20 m spring + summer)</a></li>
+<li class="chapter" data-level="11.8.3" data-path="imagery.html"><a href="imagery.html#cart-model-and-prediction-20-m-spring-summer"><i class="fa fa-check"></i><b>11.8.3</b> CART model and prediction (20 m spring + summer)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.9" data-path="imagery.html"><a href="imagery.html#conclusions-and-next-steps-for-imagery-classification"><i class="fa fa-check"></i><b>11.9</b> Conclusions and Next Steps for Imagery Classification</a></li>
+<li class="chapter" data-level="11.10" data-path="imagery.html"><a href="imagery.html#exercises-imagery-analysis-and-classification-models"><i class="fa fa-check"></i><b>11.10</b> Exercises: Imagery Analysis and Classification Models</a></li>
+</ul></li>
+<li class="part"><span><b>IV Time Series</b></span></li>
+<li class="chapter" data-level="12" data-path="ts.html"><a href="ts.html"><i class="fa fa-check"></i><b>12</b> Time Series Visualization and Analysis</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="ts.html"><a href="ts.html#structure-seasonality-and-decomposition-of-time-series"><i class="fa fa-check"></i><b>12.1</b> Structure, Seasonality, and Decomposition of Time Series</a></li>
+<li class="chapter" data-level="12.2" data-path="ts.html"><a href="ts.html#creation-of-time-series-ts-data"><i class="fa fa-check"></i><b>12.2</b> Creation of Time Series (ts) Data</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="ts.html"><a href="ts.html#frequency-start-and-end-parameters-for-ts"><i class="fa fa-check"></i><b>12.2.1</b> Frequency, start, and end parameters for <code>ts()</code></a></li>
+<li class="chapter" data-level="12.2.2" data-path="ts.html"><a href="ts.html#associating-times-with-time-series"><i class="fa fa-check"></i><b>12.2.2</b> Associating times with time series</a></li>
+<li class="chapter" data-level="12.2.3" data-path="ts.html"><a href="ts.html#subsetting-time-series-by-times"><i class="fa fa-check"></i><b>12.2.3</b> Subsetting time series by times</a></li>
+<li class="chapter" data-level="12.2.4" data-path="ts.html"><a href="ts.html#changing-the-frequency-to-use-a-different-period"><i class="fa fa-check"></i><b>12.2.4</b> Changing the frequency to use a different period</a></li>
+<li class="chapter" data-level="12.2.5" data-path="ts.html"><a href="ts.html#time-stamps-and-extensible-time-series"><i class="fa fa-check"></i><b>12.2.5</b> Time stamps and extensible time series</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="ts.html"><a href="ts.html#data-smoothing-moving-average-ma"><i class="fa fa-check"></i><b>12.3</b> Data smoothing: moving average (<code>ma</code>)</a></li>
+<li class="chapter" data-level="12.4" data-path="ts.html"><a href="ts.html#decomposition-of-data-logger-data-marble-mountains"><i class="fa fa-check"></i><b>12.4</b> Decomposition of data logger data: Marble Mountains</a></li>
+<li class="chapter" data-level="12.5" data-path="ts.html"><a href="ts.html#facet-graphs-for-comparing-variables-over-time"><i class="fa fa-check"></i><b>12.5</b> Facet Graphs for Comparing Variables over Time</a></li>
+<li class="chapter" data-level="12.6" data-path="ts.html"><a href="ts.html#lag-regression"><i class="fa fa-check"></i><b>12.6</b> Lag Regression</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="ts.html"><a href="ts.html#the-lag-regression-using-a-lag-function-in-a-linear-model"><i class="fa fa-check"></i><b>12.6.1</b> The lag regression, using a lag function in a linear model</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="ts.html"><a href="ts.html#ensemble-summary-statistics"><i class="fa fa-check"></i><b>12.7</b> Ensemble Summary Statistics</a></li>
+<li class="chapter" data-level="12.8" data-path="ts.html"><a href="ts.html#learning-more-about-time-series-in-r"><i class="fa fa-check"></i><b>12.8</b> Learning more about Time Series in R</a></li>
+<li class="chapter" data-level="12.9" data-path="ts.html"><a href="ts.html#exercises-time-series"><i class="fa fa-check"></i><b>12.9</b> Exercises: Time Series</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction to Environmental Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="communication-with-shiny" class="section level1 hasAnchor" number="13">
+<h1><span class="header-section-number">Chapter 13</span> Communication with Shiny<a href="communication-with-shiny.html#communication-with-shiny" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Communication of research is central to environmental data science, and while this can use many venues such as professional meetings and publications, outreach on the internet is especially important. This chapter will delve into probably the best way to build a web site for communicating our research: <strong>Shiny</strong>, used for building interactive web apps, using interactive controls to allow the user to manipulate any of the R analyses and graphics you’ve learned about. But as we’ll see right away, these interactive controls can also be used in R Markdown.</p>
+<p><strong>Four ways to use Shiny</strong>:</p>
+<ul>
+<li><strong>Shiny Web App</strong>: As a web application hosted on a server. This is probably the best way to communicate your work, and includes all of Shiny interactive methods. But to get it on the web, you’ll need to get it hosted. One option for this is to use <a href="https://www.shinyapps.io" class="uri">https://www.shinyapps.io</a> which will host 5 apps with 25 hours usage/month for free, or you can pay for more access. We’ll look at some complete Shiny Web Apps later in this chapter, but also see <a href="https://shiny.rstudio.com" class="uri">https://shiny.rstudio.com</a> and <a href="https://shiny.rstudio.com/tutorial" class="uri">https://shiny.rstudio.com/tutorial</a> to learn more.</li>
+<li><strong>Shiny app run locally</strong>: The same Shiny web app but run locally on your own computer in RStudio. When you’re building your web app, this is where you’ll start anyway, prepping your app to run well before publishing it to the web.</li>
+<li><strong>Shiny Document</strong>: As an R Markdown document with the shiny runtime. It creates an HTML document, using interactive Shiny components. We’re going to start with this method, since it’s the easiest introduction to the input widgets and output options. To learn more, see <a href="http://rmarkdown.rstudio.com/authoring_shiny.html">Chapter 19 in R Markdown, the Definitive Guide</a> (<span class="citation">Xie et al. (<a href="#ref-RMarkdown">2019</a>)</span>) and <a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf</a>.</li>
+<li><strong>Shiny Presentation</strong>: Also using the R Markdown system, creates an IOSlides presentation which uses interactive Shiny components.</li>
+</ul>
+<div id="shiny-document" class="section level2 hasAnchor" number="13.1">
+<h2><span class="header-section-number">13.1</span> Shiny Document<a href="communication-with-shiny.html#shiny-document" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We’ll start with creating a <strong>Shiny Document</strong> as a way to introduce Shiny interactive components, but it’s also not a bad option if you just want to create an interactive environment for your own work, and it’s also pretty easy to share with others, like we’ve already seen with R Markdown. But since Shiny requires a host to run the R code on, we can’t really create it as interactive objects in this book without accessing a hosted Shiny app (which you can do, see <span class="citation">Xie (<a href="#ref-Bookdown">2021</a>)</span>), but we’ll include snips below to show you what it looks like. After we’ve learned about these interactive components, we can also use them in a Shiny Web App, but there will be other structural elements we’ll need to add.</p>
+<p><strong>To create a Shiny Document</strong>, use File&gt;New File&gt;R Markdown… to initiate the process, where we’ll specify that we want to create a <strong>Shiny</strong> document and give it a title. For this first one, we’ll just create its default document that accesses the <strong>faithful</strong> (Old Faithful eruptions) built-in data, so we’ll give it that name (Figure <a href="communication-with-shiny.html#fig:comNewShiny">13.1</a>).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comNewShiny"></span>
+<img src="img/Shiny/NewShinyDocument.png" alt="New Shiny Document dialog" width="50%" />
+<p class="caption">
+FIGURE 13.1: New Shiny Document dialog
+</p>
+</div>
+<p>When we OK this, we’ll see the R Markdown document opened in the RStudio script editor (Figure <a href="communication-with-shiny.html#fig:comShinyEditor">13.2</a>).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comShinyEditor"></span>
+<img src="img/Shiny/NewShinyDocumentEditor.png" alt="Shiny Document Editor" width="50%" />
+<p class="caption">
+FIGURE 13.2: Shiny Document Editor
+</p>
+</div>
+<p>The key to this document working in the <strong>shiny</strong> runtime environment is to make sure to specify this in the YAML header. At minimum, this header needs to include two settings:</p>
+<pre><code>---
+output: html_document
+runtime: shiny
+---</code></pre>
+<p>Let’s start by going ahead and running it with the <code>Run Document</code> button, which due to the shiny runtime option replaces the <code>Knit</code> button we’d normally see in R Markdown (Figure <a href="communication-with-shiny.html#fig:comOldFaithful">13.3</a>).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comOldFaithful"></span>
+<img src="img/Shiny/Shiny1.01.eruptions.IO.png" alt="Old Faithful geyser eruptions Shiny interface" width="60%" />
+<p class="caption">
+FIGURE 13.3: Old Faithful geyser eruptions Shiny interface
+</p>
+</div>
+<p>So now we have a simple example to explore how it works. We’ll start by exploring its components, so keep this document open to try things out.</p>
+<div id="input-and-output-objects-in-the-old-faithful-eruptions-document" class="section level3 hasAnchor" number="13.1.1">
+<h3><span class="header-section-number">13.1.1</span> Input and output objects in the Old Faithful Eruptions document<a href="communication-with-shiny.html#input-and-output-objects-in-the-old-faithful-eruptions-document" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In either markdown or app mode, we can create a variety of Shiny input widgets and output objects:</p>
+<ul>
+<li>Inputs are the interactive controls (widgets) that let the user change the resulting output.</li>
+<li>Outputs are the graphs, maps, or tables, and are automatically updated whenever inputs change.</li>
+</ul>
+<p>The code for the Old Faithful Eruptions document includes a couple of widget-controlled input settings to be used in a plot produced by <code>renderPlot</code></p>
+<ul>
+<li>a <code>selectInput</code> that is used to set the <code>breaks</code> parameter for the <code>hist</code> function as a number of bins</li>
+<li>a <code>sliderInput</code> to set the <code>adjust</code> (bandwidth adjustment) parameter for the density plot</li>
+</ul>
+<p>Note how the input variables are accessed by the output function as <code>input$n_breaks</code> and <code>input$bw_adjust</code>:</p>
+<div class="sourceCode" id="cb1030"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1030-1"><a href="communication-with-shiny.html#cb1030-1" tabindex="-1"></a><span class="fu">inputPanel</span>(</span>
+<span id="cb1030-2"><a href="communication-with-shiny.html#cb1030-2" tabindex="-1"></a>  <span class="fu">selectInput</span>(<span class="st">&quot;n_breaks&quot;</span>, <span class="at">label =</span> <span class="st">&quot;Number of bins:&quot;</span>,</span>
+<span id="cb1030-3"><a href="communication-with-shiny.html#cb1030-3" tabindex="-1"></a>              <span class="at">choices =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">35</span>, <span class="dv">50</span>), <span class="at">selected =</span> <span class="dv">20</span>),</span>
+<span id="cb1030-4"><a href="communication-with-shiny.html#cb1030-4" tabindex="-1"></a>  </span>
+<span id="cb1030-5"><a href="communication-with-shiny.html#cb1030-5" tabindex="-1"></a>  <span class="fu">sliderInput</span>(<span class="st">&quot;bw_adjust&quot;</span>, <span class="at">label =</span> <span class="st">&quot;Bandwidth adjustment:&quot;</span>,</span>
+<span id="cb1030-6"><a href="communication-with-shiny.html#cb1030-6" tabindex="-1"></a>              <span class="at">min =</span> <span class="fl">0.2</span>, <span class="at">max =</span> <span class="dv">2</span>, <span class="at">value =</span> <span class="dv">1</span>, <span class="at">step =</span> <span class="fl">0.2</span>)</span>
+<span id="cb1030-7"><a href="communication-with-shiny.html#cb1030-7" tabindex="-1"></a>)</span></code></pre></div>
+<p>This is then followed by the plot object:</p>
+<div class="sourceCode" id="cb1031"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1031-1"><a href="communication-with-shiny.html#cb1031-1" tabindex="-1"></a><span class="fu">renderPlot</span>({</span>
+<span id="cb1031-2"><a href="communication-with-shiny.html#cb1031-2" tabindex="-1"></a>  <span class="fu">hist</span>(faithful<span class="sc">$</span>eruptions, <span class="at">probability =</span> <span class="cn">TRUE</span>, <span class="at">breaks =</span> <span class="fu">as.numeric</span>(input<span class="sc">$</span>n_breaks),</span>
+<span id="cb1031-3"><a href="communication-with-shiny.html#cb1031-3" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Duration (minutes)&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Geyser eruption duration&quot;</span>)</span>
+<span id="cb1031-4"><a href="communication-with-shiny.html#cb1031-4" tabindex="-1"></a>  </span>
+<span id="cb1031-5"><a href="communication-with-shiny.html#cb1031-5" tabindex="-1"></a>  dens <span class="ot">&lt;-</span> <span class="fu">density</span>(faithful<span class="sc">$</span>eruptions, <span class="at">adjust =</span> input<span class="sc">$</span>bw_adjust)</span>
+<span id="cb1031-6"><a href="communication-with-shiny.html#cb1031-6" tabindex="-1"></a>  <span class="fu">lines</span>(dens, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb1031-7"><a href="communication-with-shiny.html#cb1031-7" tabindex="-1"></a>})</span></code></pre></div>
+<p>This is then followed by an embedded shiny app, but we won’t look at it.</p>
+</div>
+<div id="input-widgets" class="section level3 hasAnchor" number="13.1.2">
+<h3><span class="header-section-number">13.1.2</span> Input widgets<a href="communication-with-shiny.html#input-widgets" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We’ll continue to explore the various input widgets and related outputs, and stick with R Markdown. You’ll still need to run the entire document, so you might want to make separate documents – just make sure they have the YAML header above. Go ahead and create a new Shiny document, the same as above, but create an empty document and then enter the YAML header and one code chunk to create a simple numericInput widget and print output (Figure <a href="communication-with-shiny.html#fig:comNumericInput">13.4</a>).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comNumericInput"></span>
+<img src="img/Shiny/Shiny1.02.numericInputPrint.png" alt="numericInput and renderPrint code" width="60%" />
+<p class="caption">
+FIGURE 13.4: numericInput and renderPrint code
+</p>
+</div>
+<div class="sourceCode" id="cb1032"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1032-1"><a href="communication-with-shiny.html#cb1032-1" tabindex="-1"></a><span class="fu">numericInput</span>(<span class="at">inputId=</span><span class="st">&quot;n&quot;</span>, <span class="st">&quot;sample size&quot;</span>, <span class="at">value =</span> <span class="dv">25</span>)</span>
+<span id="cb1032-2"><a href="communication-with-shiny.html#cb1032-2" tabindex="-1"></a><span class="fu">renderPrint</span>(<span class="fu">print</span>(input<span class="sc">$</span>n))</span></code></pre></div>
+<p>Once you save it, you’ll see the Run Document button if the YAML code is right. Go ahead and run it to see the input. It’s not very interesting, but you can see that the printed output changes with the input. Let’s add a slider (Figure <a href="communication-with-shiny.html#fig:comNumericSlider">13.5</a>).</p>
+<div class="sourceCode" id="cb1033"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1033-1"><a href="communication-with-shiny.html#cb1033-1" tabindex="-1"></a><span class="fu">numericInput</span>(<span class="at">inputId=</span><span class="st">&quot;n&quot;</span>, <span class="st">&quot;sample size&quot;</span>, <span class="at">value =</span> <span class="dv">25</span>)</span>
+<span id="cb1033-2"><a href="communication-with-shiny.html#cb1033-2" tabindex="-1"></a><span class="fu">renderPrint</span>(<span class="fu">print</span>(input<span class="sc">$</span>n))</span>
+<span id="cb1033-3"><a href="communication-with-shiny.html#cb1033-3" tabindex="-1"></a><span class="fu">sliderInput</span>(<span class="at">inputId=</span><span class="st">&quot;i&quot;</span>, <span class="st">&quot;input&quot;</span>, <span class="at">min=</span><span class="dv">1</span>, <span class="at">max=</span><span class="dv">30</span>, <span class="at">value =</span> <span class="dv">15</span>)</span>
+<span id="cb1033-4"><a href="communication-with-shiny.html#cb1033-4" tabindex="-1"></a><span class="fu">renderPrint</span>(<span class="fu">print</span>(input<span class="sc">$</span>i))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comNumericSlider"></span>
+<img src="img/Shiny/Shiny1.02.sliderInputPrint.png" alt="Numeric and slider inputs and print outputs" width="60%" />
+<p class="caption">
+FIGURE 13.5: Numeric and slider inputs and print outputs
+</p>
+</div>
+<p>We’ll explore some other input widgets and outputs. You can also see these on the Shiny cheatsheet …</p>
+<p><a href="https://shiny.rstudio.com/images/shiny-cheatsheet.pdf" class="uri">https://shiny.rstudio.com/images/shiny-cheatsheet.pdf</a></p>
+<p>… but just look at the part about the input and output objects. The cheatsheet is focused on creating Shiny Web Apps, so there’s a lot there about building that structure, with a user interface (ui) and server. We’ll get to those later.</p>
+<div id="a-plot-output" class="section level4 hasAnchor" number="13.1.2.1">
+<h4><span class="header-section-number">13.1.2.1</span> A plot output<a href="communication-with-shiny.html#a-plot-output" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The above widgets went to a rendered print output, but the same simple inputs can of course be used to create a plot (Figure <a href="communication-with-shiny.html#fig:comSliderInputPlot">13.6</a>).</p>
+<div class="sourceCode" id="cb1034"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1034-1"><a href="communication-with-shiny.html#cb1034-1" tabindex="-1"></a><span class="fu">sliderInput</span>(<span class="at">inputId=</span><span class="st">&quot;bins&quot;</span>, <span class="st">&quot;number of bins&quot;</span>, <span class="at">min=</span><span class="dv">1</span>, <span class="at">max=</span><span class="dv">30</span>, <span class="at">value =</span> <span class="dv">15</span>)</span>
+<span id="cb1034-2"><a href="communication-with-shiny.html#cb1034-2" tabindex="-1"></a><span class="fu">renderPlot</span>(<span class="fu">hist</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>), <span class="at">breaks=</span>input<span class="sc">$</span>bins))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comSliderInputPlot"></span>
+<img src="img/Shiny/Shiny1.03.sliderInputPlot.render.png" alt="Plot modified by input" width="60%" />
+<p class="caption">
+FIGURE 13.6: Plot modified by input
+</p>
+</div>
+</div>
+</div>
+<div id="other-input-widgets" class="section level3 hasAnchor" number="13.1.3">
+<h3><span class="header-section-number">13.1.3</span> Other input widgets<a href="communication-with-shiny.html#other-input-widgets" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>There are lots of other input widgets that are pretty easy to see how they apply based on the type of control we need to set, such as radio buttons and check boxes (Figure <a href="communication-with-shiny.html#fig:comRadioCheck">13.7</a>).</p>
+<ul>
+<li><strong><code>radioButtons()</code></strong> for choosing just one, and by default the first is chosen</li>
+</ul>
+<div class="sourceCode" id="cb1035"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1035-1"><a href="communication-with-shiny.html#cb1035-1" tabindex="-1"></a><span class="fu">radioButtons</span>(<span class="at">inputId=</span><span class="st">&quot;which_one&quot;</span>, <span class="at">label=</span><span class="st">&quot;Select:&quot;</span>, </span>
+<span id="cb1035-2"><a href="communication-with-shiny.html#cb1035-2" tabindex="-1"></a>    <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;Choice 1&quot;</span><span class="ot">=</span><span class="st">&quot;Choice1&quot;</span>,<span class="st">&quot;Choice 2&quot;</span><span class="ot">=</span><span class="st">&quot;Choice2&quot;</span>,<span class="st">&quot;Choice 3&quot;</span><span class="ot">=</span><span class="st">&quot;Choice3&quot;</span>))</span>
+<span id="cb1035-3"><a href="communication-with-shiny.html#cb1035-3" tabindex="-1"></a><span class="fu">renderPrint</span>(<span class="fu">print</span>(input<span class="sc">$</span>which_one))</span></code></pre></div>
+<ul>
+<li><strong><code>checkboxGroupInput()</code></strong> for choosing multiples</li>
+</ul>
+<div class="sourceCode" id="cb1036"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1036-1"><a href="communication-with-shiny.html#cb1036-1" tabindex="-1"></a><span class="fu">checkboxGroupInput</span>(<span class="at">inputId=</span><span class="st">&quot;which&quot;</span>, <span class="at">label=</span><span class="st">&quot;Select:&quot;</span>, </span>
+<span id="cb1036-2"><a href="communication-with-shiny.html#cb1036-2" tabindex="-1"></a>    <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;Choice 1&quot;</span><span class="ot">=</span><span class="st">&quot;Choice1&quot;</span>,<span class="st">&quot;Choice 2&quot;</span><span class="ot">=</span><span class="st">&quot;Choice2&quot;</span>,<span class="st">&quot;Choice 3&quot;</span><span class="ot">=</span><span class="st">&quot;Choice3&quot;</span>))</span>
+<span id="cb1036-3"><a href="communication-with-shiny.html#cb1036-3" tabindex="-1"></a><span class="fu">renderPrint</span>(<span class="fu">print</span>(input<span class="sc">$</span>which))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comRadioCheck"></span>
+<img src="img/Shiny/Shiny1.04.radioButtonsCheckBox.png" alt="Radio buttons and check boxes" width="60%" />
+<p class="caption">
+FIGURE 13.7: Radio buttons and check boxes
+</p>
+</div>
+<ul>
+<li><strong><code>dateInput()</code></strong></li>
+</ul>
+<div class="sourceCode" id="cb1037"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1037-1"><a href="communication-with-shiny.html#cb1037-1" tabindex="-1"></a><span class="fu">dateInput</span>(<span class="at">inputId=</span><span class="st">&quot;date&quot;</span>, <span class="at">label=</span><span class="st">&quot;Select date:&quot;</span>)</span>
+<span id="cb1037-2"><a href="communication-with-shiny.html#cb1037-2" tabindex="-1"></a><span class="fu">renderPrint</span>(<span class="fu">print</span>(input<span class="sc">$</span>date))</span></code></pre></div>
+<ul>
+<li><strong><code>textInput()</code></strong></li>
+</ul>
+<div class="sourceCode" id="cb1038"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1038-1"><a href="communication-with-shiny.html#cb1038-1" tabindex="-1"></a><span class="fu">textInput</span>(<span class="at">inputId=</span><span class="st">&quot;text&quot;</span>, <span class="at">label=</span><span class="st">&quot;Enter text:&quot;</span>)</span>
+<span id="cb1038-2"><a href="communication-with-shiny.html#cb1038-2" tabindex="-1"></a><span class="fu">renderPrint</span>(<span class="fu">print</span>(input<span class="sc">$</span>text))</span></code></pre></div>
+</div>
+</div>
+<div id="a-shiny-app" class="section level2 hasAnchor" number="13.2">
+<h2><span class="header-section-number">13.2</span> A Shiny App<a href="communication-with-shiny.html#a-shiny-app" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The above input widgets and output objects we looked at in a Shiny document can also be built into a Shiny app, which has a place for inputs and outputs. The following simple Shiny inline app illustrates the basic elements (Figure <a href="communication-with-shiny.html#fig:comShinyInlineApp">13.8</a>).</p>
+<ul>
+<li>Optionally some code at the top to set things up, such as loading packages and setting up data.</li>
+<li>The <strong>ui</strong> section, which determines what the user will see, such as input widgets (like <code>numericInput</code>) and an area to plot things in, in this case <code>plotOutput</code>. In order to fit well on the page, the <code>fluidPage</code> function is used to hold it in; we could have also used <code>inputPanel</code> as we did earlier, but the result is not as well laid out.</li>
+<li>The <strong>server</strong> section, which uses two parameters (input, output) created in the user interface to:
+<ul>
+<li>provide data from the input widget (in this case <code>numericInput</code> which creates <code>input$n</code>) such as parameter settings to functions (e.g. <code>rnorm()</code> here which needs a sample size provided by <code>input$n</code>) in the rendered output (of in this case <code>hist</code>)</li>
+<li>to render an output using a render___ method such as <code>renderPlot</code> which will run everything inside it (in this case a histogram)</li>
+</ul></li>
+<li>Providing that <code>ui</code> and <code>server</code> to the <code>shinyApp</code> function.</li>
+</ul>
+<div class="sourceCode" id="cb1039"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1039-1"><a href="communication-with-shiny.html#cb1039-1" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb1039-2"><a href="communication-with-shiny.html#cb1039-2" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb1039-3"><a href="communication-with-shiny.html#cb1039-3" tabindex="-1"></a>    <span class="fu">numericInput</span>(<span class="at">input=</span><span class="st">&quot;n&quot;</span>,</span>
+<span id="cb1039-4"><a href="communication-with-shiny.html#cb1039-4" tabindex="-1"></a>                 <span class="st">&quot;Sample size&quot;</span>, <span class="at">value=</span><span class="dv">25</span>),</span>
+<span id="cb1039-5"><a href="communication-with-shiny.html#cb1039-5" tabindex="-1"></a>    <span class="fu">plotOutput</span>(<span class="at">outputId =</span> <span class="st">&quot;hist&quot;</span>))</span>
+<span id="cb1039-6"><a href="communication-with-shiny.html#cb1039-6" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb1039-7"><a href="communication-with-shiny.html#cb1039-7" tabindex="-1"></a>    output<span class="sc">$</span>hist <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb1039-8"><a href="communication-with-shiny.html#cb1039-8" tabindex="-1"></a>        <span class="fu">hist</span>(<span class="fu">rnorm</span>(input<span class="sc">$</span>n))</span>
+<span id="cb1039-9"><a href="communication-with-shiny.html#cb1039-9" tabindex="-1"></a>    })</span>
+<span id="cb1039-10"><a href="communication-with-shiny.html#cb1039-10" tabindex="-1"></a>}   </span>
+<span id="cb1039-11"><a href="communication-with-shiny.html#cb1039-11" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui=</span>ui,<span class="at">server=</span>server)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comShinyInlineApp"></span>
+<img src="img/Shiny/Shiny2.01.simpleInline.png" alt="Simple Inline app" width="60%" />
+<p class="caption">
+FIGURE 13.8: Simple Inline app
+</p>
+</div>
+<p>This Shiny app is very short, which is useful in wrapping your head around these basic elements, which is important to understand. It can be run either as an inline app in R Markdown, in a standard R script (but all code has to be selected and then run), or as an app that can be published online.</p>
+<p>We’ll go ahead and create a new Shiny Web App to run locally (Figure <a href="communication-with-shiny.html#fig:comShinyInlineCoding">13.9</a>). You can either create a special type of RStudio project called Shiny Web Application, in a new or existing folder, or just create a Shiny Web App script as a file, as shown here. In either case, your app file should be named <code>app.R</code>.</p>
+<ul>
+<li>Use the file menu to create a new file, specifying Shiny Web App as the type, and it’ll end up being named <code>app.R</code>. (You can also name it something else, but this is the name you’ll need to use to create a fully functioning Shiny Web App.)</li>
+<li>Go with the defaults again, and you’ll end up with Shiny Web App version of the Old Faithful Eruptions document we created above, though a bit simpler, with only one input control and only a histogram.</li>
+<li>To run it, use the Run App button in the upper right of the code editor window.</li>
+<li>Have a look at what’s created in the <code>app.R</code> script.</li>
+</ul>
+<p>Then either create a new blank R script, or edit this one and replace the old faithful code with the above even simpler code in the figure above. Note that to get the <code>Run app</code> button in the RStudio script editor window, the code just needs to include <code>library(shiny)</code> and be a complete app, with a ui and server section, and the <code>shinyApp</code> function at the end.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comShinyInlineCoding"></span>
+<img src="img/Shiny/Shiny2.01.simpleInlineCode.png" alt="Simple inline coding" width="50%" />
+<p class="caption">
+FIGURE 13.9: Simple inline coding
+</p>
+</div>
+<div id="a-brief-note-on-reactivity" class="section level3 hasAnchor" number="13.2.1">
+<h3><span class="header-section-number">13.2.1</span> A brief note on reactivity<a href="communication-with-shiny.html#a-brief-note-on-reactivity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Since Shiny is an interactive environment, user operations are sensed as events, putting in motion a <em>reaction</em> of the program to that event. You can see that happening every time we adjust things in an input widget and the output changes in response. <em>There’s a lot to reactivity</em>, so please review the tutorial at <a href="https://shiny.rstudio.com/tutorial" class="uri">https://shiny.rstudio.com/tutorial</a> to gain a better understanding than we’ll be able to do here. We’ll look at some examples in the longer apps described below.</p>
+</div>
+</div>
+<div id="shiny-app-io-methods" class="section level2 hasAnchor" number="13.3">
+<h2><span class="header-section-number">13.3</span> Shiny App I/O Methods<a href="communication-with-shiny.html#shiny-app-io-methods" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>One thing to note about how the Shiny web app works as opposed to just using the interactive methods in the Shiny Document we looked at earlier is the way the ui and server communicate about the plot creation: We didn’t use <code>plotOutput</code> in the I/O methods; we just used the input widgets to set parameters in the <code>renderPlot</code>.</p>
+<p>Instead, this Shiny web app has the <code>renderPlot</code> in the <strong>server</strong> section, and a new function <code>plotOutput</code> is used to both specify the location of the plot and set <code>outputId</code> to be used as a variable to append to <code>output$</code> in the <strong>server</strong> section. <em>This can be a little confusing</em>, so spend some time seeing how this works in the simple apps we just looked at, then start exploring other ones. The layout of the ui can make this even more confusing, as they’re set up in various ways. This isn’t surprising if you’ve spent much time in software development – the user interface is often the biggest challenge.</p>
+<p>Referring to the <strong>Outputs</strong> section of the cheat sheet, we can see that various render*() functions work with corresponding *Output() functions:</p>
+<ul>
+<li><code>renderDataTable()</code> works with <code>dataTableOutput()</code></li>
+<li><code>renderImage(    )</code> works with <code>imageOutput()</code></li>
+<li><code>renderPlot(     )</code> works with <code>plotOutput()</code></li>
+<li><code>renderPrint(    )</code> works with <code>verbatimTextOutput()</code></li>
+<li><code>renderTable(    )</code> works with <code>tableOutput()</code></li>
+<li><code>renderText(     )</code> works with <code>textOutput()</code></li>
+<li><code>renderUI(       )</code> works with <code>uiOutput()</code> and <code>htmlOutput()</code></li>
+</ul>
+<p>And there are others. For instance, as we’ll see in the next document:</p>
+<ul>
+<li><code>renderLeaflet(  )</code> works with <code>leafletOutput()</code></li>
+</ul>
+<div id="data-tables" class="section level3 hasAnchor" number="13.3.1">
+<h3><span class="header-section-number">13.3.1</span> Data tables<a href="communication-with-shiny.html#data-tables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Use <code>renderDataTable()</code> and <code>dataTableOutput()</code> (Figure <a href="communication-with-shiny.html#fig:comShinyDatatable">13.10</a>)</p>
+<div class="sourceCode" id="cb1040"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1040-1"><a href="communication-with-shiny.html#cb1040-1" tabindex="-1"></a><span class="fu">library</span>(shiny); <span class="fu">library</span>(tidyverse)</span>
+<span id="cb1040-2"><a href="communication-with-shiny.html#cb1040-2" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb1040-3"><a href="communication-with-shiny.html#cb1040-3" tabindex="-1"></a>    <span class="fu">numericInput</span>(<span class="at">input=</span><span class="st">&quot;n&quot;</span>,</span>
+<span id="cb1040-4"><a href="communication-with-shiny.html#cb1040-4" tabindex="-1"></a>                 <span class="st">&quot;Sample size&quot;</span>, <span class="at">value=</span><span class="dv">25</span>),</span>
+<span id="cb1040-5"><a href="communication-with-shiny.html#cb1040-5" tabindex="-1"></a>    <span class="fu">dataTableOutput</span>(<span class="at">outputId =</span> <span class="st">&quot;varTable&quot;</span>))</span>
+<span id="cb1040-6"><a href="communication-with-shiny.html#cb1040-6" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb1040-7"><a href="communication-with-shiny.html#cb1040-7" tabindex="-1"></a>    output<span class="sc">$</span>varTable <span class="ot">&lt;-</span> <span class="fu">renderDataTable</span>(<span class="fu">tibble</span>(<span class="at">a=</span><span class="fu">rnorm</span>(input<span class="sc">$</span>n), <span class="at">b=</span><span class="fu">rnorm</span>(input<span class="sc">$</span>n)))}</span>
+<span id="cb1040-8"><a href="communication-with-shiny.html#cb1040-8" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui=</span>ui,<span class="at">server=</span>server)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comShinyDatatable"></span>
+<img src="img/Shiny/Shiny2.02.DataTable.png" alt="Rendered data table" width="60%" />
+<p class="caption">
+FIGURE 13.10: Rendered data table
+</p>
+</div>
+</div>
+<div id="text-as-character-renderprint-and-verbatimtextoutput" class="section level3 hasAnchor" number="13.3.2">
+<h3><span class="header-section-number">13.3.2</span> Text as character: <code>renderPrint()</code> and <code>verbatimTextOutput()</code><a href="communication-with-shiny.html#text-as-character-renderprint-and-verbatimtextoutput" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>These functions produce a mono-spaced-font output like a character variable.</p>
+<div class="sourceCode" id="cb1041"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1041-1"><a href="communication-with-shiny.html#cb1041-1" tabindex="-1"></a><span class="fu">library</span>(shiny); <span class="fu">library</span>(tidyverse)</span>
+<span id="cb1041-2"><a href="communication-with-shiny.html#cb1041-2" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb1041-3"><a href="communication-with-shiny.html#cb1041-3" tabindex="-1"></a>    <span class="fu">textInput</span>(<span class="at">inputId=</span><span class="st">&quot;monotxt&quot;</span>, <span class="at">label=</span><span class="st">&quot;Enter text:&quot;</span>, <span class="at">value=</span><span class="st">&quot;Some text&quot;</span>),</span>
+<span id="cb1041-4"><a href="communication-with-shiny.html#cb1041-4" tabindex="-1"></a>    <span class="fu">verbatimTextOutput</span>(<span class="at">outputId =</span> <span class="st">&quot;txt&quot;</span>))</span>
+<span id="cb1041-5"><a href="communication-with-shiny.html#cb1041-5" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb1041-6"><a href="communication-with-shiny.html#cb1041-6" tabindex="-1"></a>    output<span class="sc">$</span>txt <span class="ot">&lt;-</span> <span class="fu">renderPrint</span>(<span class="fu">print</span>(input<span class="sc">$</span>monotxt))}</span>
+<span id="cb1041-7"><a href="communication-with-shiny.html#cb1041-7" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui=</span>ui,<span class="at">server=</span>server)</span></code></pre></div>
+</div>
+<div id="formatted-text" class="section level3 hasAnchor" number="13.3.3">
+<h3><span class="header-section-number">13.3.3</span> Formatted text<a href="communication-with-shiny.html#formatted-text" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Use <code>renderText()</code> and <code>textOutput()</code> (Figure <a href="communication-with-shiny.html#fig:comShinyTextEntry">13.11</a>)</p>
+<div class="sourceCode" id="cb1042"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1042-1"><a href="communication-with-shiny.html#cb1042-1" tabindex="-1"></a><span class="fu">library</span>(shiny); <span class="fu">library</span>(tidyverse)</span>
+<span id="cb1042-2"><a href="communication-with-shiny.html#cb1042-2" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb1042-3"><a href="communication-with-shiny.html#cb1042-3" tabindex="-1"></a>    <span class="fu">textInput</span>(<span class="at">inputId=</span><span class="st">&quot;text&quot;</span>, <span class="at">label=</span><span class="st">&quot;Enter text:&quot;</span>, <span class="at">value=</span><span class="st">&quot;Some text&quot;</span>),</span>
+<span id="cb1042-4"><a href="communication-with-shiny.html#cb1042-4" tabindex="-1"></a>    <span class="fu">textOutput</span>(<span class="at">outputId =</span> <span class="st">&quot;prn&quot;</span>))</span>
+<span id="cb1042-5"><a href="communication-with-shiny.html#cb1042-5" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb1042-6"><a href="communication-with-shiny.html#cb1042-6" tabindex="-1"></a>    output<span class="sc">$</span>prn <span class="ot">&lt;-</span> <span class="fu">renderText</span>(<span class="fu">print</span>(input<span class="sc">$</span>text))}</span>
+<span id="cb1042-7"><a href="communication-with-shiny.html#cb1042-7" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui=</span>ui,<span class="at">server=</span>server)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comShinyTextEntry"></span>
+<img src="img/Shiny/Shiny2.04.TextOut.png" alt="Text entry and rendered text" width="50%" />
+<p class="caption">
+FIGURE 13.11: Text entry and rendered text
+</p>
+</div>
+</div>
+<div id="plots" class="section level3 hasAnchor" number="13.3.4">
+<h3><span class="header-section-number">13.3.4</span> Plots<a href="communication-with-shiny.html#plots" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Use <code>renderPlot()</code> and <code>plotOutput()</code> (Figure <a href="communication-with-shiny.html#fig:comShinyBoxPlot">13.12</a>)</p>
+<div class="sourceCode" id="cb1043"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1043-1"><a href="communication-with-shiny.html#cb1043-1" tabindex="-1"></a><span class="fu">library</span>(shiny); <span class="fu">library</span>(tidyverse)</span>
+<span id="cb1043-2"><a href="communication-with-shiny.html#cb1043-2" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb1043-3"><a href="communication-with-shiny.html#cb1043-3" tabindex="-1"></a>    <span class="fu">sliderInput</span>(<span class="at">inputId=</span><span class="st">&quot;i&quot;</span>, <span class="st">&quot;input&quot;</span>, <span class="at">min=</span><span class="dv">1</span>, <span class="at">max=</span><span class="dv">30</span>, <span class="at">value =</span> <span class="dv">15</span>),</span>
+<span id="cb1043-4"><a href="communication-with-shiny.html#cb1043-4" tabindex="-1"></a>    <span class="fu">textInput</span>(<span class="at">inputId=</span><span class="st">&quot;title&quot;</span>, <span class="at">label=</span><span class="st">&quot;Enter title:&quot;</span>, <span class="at">value=</span><span class="st">&quot;Tukey boxplot&quot;</span>),</span>
+<span id="cb1043-5"><a href="communication-with-shiny.html#cb1043-5" tabindex="-1"></a>    <span class="fu">plotOutput</span>(<span class="at">outputId =</span> <span class="st">&quot;Tukey&quot;</span>))</span>
+<span id="cb1043-6"><a href="communication-with-shiny.html#cb1043-6" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb1043-7"><a href="communication-with-shiny.html#cb1043-7" tabindex="-1"></a>    output<span class="sc">$</span>Tukey <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>(<span class="fu">boxplot</span>(<span class="fu">rnorm</span>(input<span class="sc">$</span>i),<span class="at">main=</span>input<span class="sc">$</span>title))}</span>
+<span id="cb1043-8"><a href="communication-with-shiny.html#cb1043-8" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui=</span>ui,<span class="at">server=</span>server)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comShinyBoxPlot"></span>
+<img src="img/Shiny/Shiny2.05.PlotOut.png" alt="Rendered box plot" width="60%" />
+<p class="caption">
+FIGURE 13.12: Rendered box plot
+</p>
+</div>
+</div>
+</div>
+<div id="shiny-app-in-a-package" class="section level2 hasAnchor" number="13.4">
+<h2><span class="header-section-number">13.4</span> Shiny App in a Package<a href="communication-with-shiny.html#shiny-app-in-a-package" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A Shiny app project folder can also be stored in the <code>extdata</code> folder of a data package. Here’s a <code>sierra</code> app accessed this way, which you can run from RStudio, either pasted into the console or saved in a script and run by marking the text and running. The <code>Run app</code> button won’t appear even from a saved script, because what you’re editing is not a full Shiny app script; it just calls one.</p>
+<pre><code>shiny::shinyAppDir(ex(&quot;sierra&quot;))</code></pre>
+<p>Note the use of <code>system.file</code> to provide the app folder location to <code>shinyAppDir</code>. You can find this <code>sierra</code> folder in the igisci extdata folder, so as long as you have the data package installed, it should run. And the <code>igisci</code> package has a function <code>sierra()</code> that simply runs the above so that’s all you have to enter if you have the library in effect with <code>library(igisci)</code>, and you’ll see it appear in a new window (Figure <a href="communication-with-shiny.html#fig:comSierraShiny">13.13</a>).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comSierraShiny"></span>
+<img src="img/Shiny/Shiny4.01.sierra.png" alt="Shiny app of Sierra climate data, with multiple tabs available" width="100%" />
+<p class="caption">
+FIGURE 13.13: Shiny app of Sierra climate data, with multiple tabs available
+</p>
+</div>
+<p><em>We’ll look at this app in detail next, so you should have it open in another window, using the above method, or simply by running:</em></p>
+<p><strong><code>igisc::sierra()</code></strong></p>
+</div>
+<div id="components-of-a-shiny-app-sierra" class="section level2 hasAnchor" number="13.5">
+<h2><span class="header-section-number">13.5</span> Components of a Shiny App (sierra)<a href="communication-with-shiny.html#components-of-a-shiny-app-sierra" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Lets break down the components of the sierra Shiny app to see how a tabsetPanel Shiny app works. A review of the cheat sheet will show you that this is just one of a variety of Shiny app ui structures. We’ll also see how reactive elements work in the server section.</p>
+<div id="initial-data-setup" class="section level3 hasAnchor" number="13.5.1">
+<h3><span class="header-section-number">13.5.1</span> Initial data setup<a href="communication-with-shiny.html#initial-data-setup" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Most Shiny apps are going to need some initial code that sets up the data. I sometimes use the source method to call this code. We won’t look at this now, but it’s provided here to be able to identify where data in the main Shiny app code goes.</p>
+<div class="sourceCode" id="cb1045"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1045-1"><a href="communication-with-shiny.html#cb1045-1" tabindex="-1"></a><span class="fu">library</span>(shiny); <span class="fu">library</span>(sf); <span class="fu">library</span>(leaflet); <span class="fu">library</span>(rgdal)</span>
+<span id="cb1045-2"><a href="communication-with-shiny.html#cb1045-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(terra)</span>
+<span id="cb1045-3"><a href="communication-with-shiny.html#cb1045-3" tabindex="-1"></a><span class="fu">library</span>(igisci)</span>
+<span id="cb1045-4"><a href="communication-with-shiny.html#cb1045-4" tabindex="-1"></a></span>
+<span id="cb1045-5"><a href="communication-with-shiny.html#cb1045-5" tabindex="-1"></a>sierraAllMonths <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;sierra/Sierra2LassenData.csv&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1045-6"><a href="communication-with-shiny.html#cb1045-6" tabindex="-1"></a>  <span class="fu">filter</span>(MLY_PRCP_N <span class="sc">&gt;=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1045-7"><a href="communication-with-shiny.html#cb1045-7" tabindex="-1"></a>  <span class="fu">filter</span>(MLY_TAVG_N <span class="sc">&gt;=</span> <span class="sc">-</span><span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1045-8"><a href="communication-with-shiny.html#cb1045-8" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">PRECIPITATION =</span> MLY_PRCP_N, <span class="at">TEMPERATURE =</span> MLY_TAVG_N) <span class="sc">%&gt;%</span></span>
+<span id="cb1045-9"><a href="communication-with-shiny.html#cb1045-9" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">STATION =</span> <span class="fu">str_sub</span>(STATION_NA, <span class="at">end=</span><span class="fu">str_length</span>(STATION_NA)<span class="sc">-</span><span class="dv">6</span>))</span>
+<span id="cb1045-10"><a href="communication-with-shiny.html#cb1045-10" tabindex="-1"></a>sierraJan <span class="ot">&lt;-</span> sierraAllMonths <span class="sc">%&gt;%</span> <span class="co"># to create an initial model and var name symbols</span></span>
+<span id="cb1045-11"><a href="communication-with-shiny.html#cb1045-11" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">0</span>) <span class="sc">%&gt;%</span>                <span class="co"># just gets variable names</span></span>
+<span id="cb1045-12"><a href="communication-with-shiny.html#cb1045-12" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(LATITUDE, LONGITUDE, ELEVATION, TEMPERATURE, PRECIPITATION)</span>
+<span id="cb1045-13"><a href="communication-with-shiny.html#cb1045-13" tabindex="-1"></a>sierraVars <span class="ot">&lt;-</span> sierraJan <span class="sc">%&gt;%</span>        <span class="co"># Builds list of variables for map</span></span>
+<span id="cb1045-14"><a href="communication-with-shiny.html#cb1045-14" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">RESIDUAL =</span> <span class="fu">numeric</span>(), <span class="at">PREDICTION =</span> <span class="fu">numeric</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb1045-15"><a href="communication-with-shiny.html#cb1045-15" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(ELEVATION, TEMPERATURE, PRECIPITATION, RESIDUAL, PREDICTION)</span>
+<span id="cb1045-16"><a href="communication-with-shiny.html#cb1045-16" tabindex="-1"></a></span>
+<span id="cb1045-17"><a href="communication-with-shiny.html#cb1045-17" tabindex="-1"></a><span class="co"># Create basemap, using the weather station points to set the bounding dimensions</span></span>
+<span id="cb1045-18"><a href="communication-with-shiny.html#cb1045-18" tabindex="-1"></a></span>
+<span id="cb1045-19"><a href="communication-with-shiny.html#cb1045-19" tabindex="-1"></a>co <span class="ot">&lt;-</span> CA_counties</span>
+<span id="cb1045-20"><a href="communication-with-shiny.html#cb1045-20" tabindex="-1"></a>ct <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">ex</span>(<span class="st">&quot;sierra/CA_places.shp&quot;</span>))</span>
+<span id="cb1045-21"><a href="communication-with-shiny.html#cb1045-21" tabindex="-1"></a>ct<span class="sc">$</span>AREANAME_pad <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">str_replace_all</span>(ct<span class="sc">$</span>AREANAME, <span class="st">&#39;[A-Za-z]&#39;</span>,<span class="st">&#39; &#39;</span>), ct<span class="sc">$</span>AREANAME)</span>
+<span id="cb1045-22"><a href="communication-with-shiny.html#cb1045-22" tabindex="-1"></a>hillsh <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="fu">ex</span>(<span class="st">&quot;CA/ca_hillsh_WGS84.tif&quot;</span>))</span>
+<span id="cb1045-23"><a href="communication-with-shiny.html#cb1045-23" tabindex="-1"></a>hillshptsT <span class="ot">&lt;-</span> <span class="fu">as.points</span>(hillsh)</span>
+<span id="cb1045-24"><a href="communication-with-shiny.html#cb1045-24" tabindex="-1"></a>hillshpts <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(hillshptsT)</span>
+<span id="cb1045-25"><a href="communication-with-shiny.html#cb1045-25" tabindex="-1"></a>CAbasemap <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1045-26"><a href="communication-with-shiny.html#cb1045-26" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> hillshpts, <span class="fu">aes</span>(<span class="at">col=</span>ca_hillsh_WGS84)) <span class="sc">+</span> <span class="fu">guides</span>(<span class="at">color =</span> F) <span class="sc">+</span></span>
+<span id="cb1045-27"><a href="communication-with-shiny.html#cb1045-27" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> co, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb1045-28"><a href="communication-with-shiny.html#cb1045-28" tabindex="-1"></a>  <span class="fu">scale_color_gradient</span>(<span class="at">low =</span> <span class="st">&quot;#606060&quot;</span>, <span class="at">high =</span> <span class="st">&quot;#FFFFFF&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1045-29"><a href="communication-with-shiny.html#cb1045-29" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&#39;&#39;</span>,<span class="at">y=</span><span class="st">&#39;&#39;</span>)</span>
+<span id="cb1045-30"><a href="communication-with-shiny.html#cb1045-30" tabindex="-1"></a>spdftemp <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(sierraAllMonths, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;LONGITUDE&quot;</span>,<span class="st">&quot;LATITUDE&quot;</span>), <span class="at">crs=</span><span class="dv">4326</span>)</span>
+<span id="cb1045-31"><a href="communication-with-shiny.html#cb1045-31" tabindex="-1"></a>bounds <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(spdftemp)</span>
+<span id="cb1045-32"><a href="communication-with-shiny.html#cb1045-32" tabindex="-1"></a>sierrabasemap <span class="ot">&lt;-</span> CAbasemap <span class="sc">+</span></span>
+<span id="cb1045-33"><a href="communication-with-shiny.html#cb1045-33" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>ct) <span class="sc">+</span></span>
+<span id="cb1045-34"><a href="communication-with-shiny.html#cb1045-34" tabindex="-1"></a>  <span class="fu">geom_sf_text</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">label=</span>AREANAME_pad), <span class="at">data=</span>ct, <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb1045-35"><a href="communication-with-shiny.html#cb1045-35" tabindex="-1"></a>               <span class="at">nudge_x =</span> <span class="fl">0.1</span>, <span class="at">nudge_y =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb1045-36"><a href="communication-with-shiny.html#cb1045-36" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(bounds[<span class="dv">1</span>], bounds[<span class="dv">3</span>]), <span class="at">ylim =</span> <span class="fu">c</span>(bounds[<span class="dv">2</span>],bounds[<span class="dv">4</span>]))</span>
+<span id="cb1045-37"><a href="communication-with-shiny.html#cb1045-37" tabindex="-1"></a></span>
+<span id="cb1045-38"><a href="communication-with-shiny.html#cb1045-38" tabindex="-1"></a><span class="co"># Function used by pairs plot:</span></span>
+<span id="cb1045-39"><a href="communication-with-shiny.html#cb1045-39" tabindex="-1"></a>panel.cor <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">prefix =</span> <span class="st">&quot;&quot;</span>, cex.cor, ...)</span>
+<span id="cb1045-40"><a href="communication-with-shiny.html#cb1045-40" tabindex="-1"></a>{</span>
+<span id="cb1045-41"><a href="communication-with-shiny.html#cb1045-41" tabindex="-1"></a>  usr <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="st">&quot;usr&quot;</span>); <span class="fu">on.exit</span>(<span class="fu">par</span>(usr))</span>
+<span id="cb1045-42"><a href="communication-with-shiny.html#cb1045-42" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">usr =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb1045-43"><a href="communication-with-shiny.html#cb1045-43" tabindex="-1"></a>  r <span class="ot">&lt;-</span> <span class="fu">abs</span>(<span class="fu">cor</span>(x, y))</span>
+<span id="cb1045-44"><a href="communication-with-shiny.html#cb1045-44" tabindex="-1"></a>  txt <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">c</span>(r, <span class="fl">0.123456789</span>), <span class="at">digits =</span> digits)[<span class="dv">1</span>]</span>
+<span id="cb1045-45"><a href="communication-with-shiny.html#cb1045-45" tabindex="-1"></a>  txt <span class="ot">&lt;-</span> <span class="fu">paste0</span>(prefix, txt)</span>
+<span id="cb1045-46"><a href="communication-with-shiny.html#cb1045-46" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">missing</span>(cex.cor)) cex.cor <span class="ot">&lt;-</span> <span class="fl">0.8</span><span class="sc">/</span><span class="fu">strwidth</span>(txt)</span>
+<span id="cb1045-47"><a href="communication-with-shiny.html#cb1045-47" tabindex="-1"></a>  <span class="fu">text</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, txt, <span class="at">cex =</span> cex.cor <span class="sc">*</span> r)</span>
+<span id="cb1045-48"><a href="communication-with-shiny.html#cb1045-48" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="the-ui-section-with-a-tabsetpanel-structure" class="section level3 hasAnchor" number="13.5.2">
+<h3><span class="header-section-number">13.5.2</span> The ui section, with a tabsetPanel structure<a href="communication-with-shiny.html#the-ui-section-with-a-tabsetpanel-structure" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In this section, we’re setting up the <code>tabsetPanel</code> structure, allowing the user to select whether to look at the various outputs:</p>
+<ul>
+<li><strong>View</strong>: A leaflet map of the Sierra stations, and an ability to choose which month to process, and radio buttons to choose a basemap. The month choice structure took a bit to figure out; note the named indices.</li>
+<li><strong>Model</strong>: Scatter plot and trend line of a linear model, with the ability to change the x and y variables.</li>
+<li><strong>Map</strong>: Map of the variables in the data, or the regression or residuals. Input to choose which to display.</li>
+<li><strong>Table</strong>: Table of the data for the chosen month. No inputs.</li>
+<li><strong>Pairs</strong>: A pairs plot of the data, for the chosen month. No inputs.</li>
+</ul>
+<div class="sourceCode" id="cb1046"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1046-1"><a href="communication-with-shiny.html#cb1046-1" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(<span class="at">title =</span> <span class="st">&quot;Sierra Climate&quot;</span>,</span>
+<span id="cb1046-2"><a href="communication-with-shiny.html#cb1046-2" tabindex="-1"></a>          <span class="fu">tabsetPanel</span>(</span>
+<span id="cb1046-3"><a href="communication-with-shiny.html#cb1046-3" tabindex="-1"></a>            <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">&quot;View&quot;</span>,</span>
+<span id="cb1046-4"><a href="communication-with-shiny.html#cb1046-4" tabindex="-1"></a>                     <span class="fu">selectInput</span>(<span class="st">&quot;month&quot;</span>, <span class="st">&quot;Month:&quot;</span>,</span>
+<span id="cb1046-5"><a href="communication-with-shiny.html#cb1046-5" tabindex="-1"></a>                                 <span class="fu">c</span>(<span class="st">&quot;January&quot;</span><span class="ot">=</span><span class="dv">1</span>, <span class="st">&quot;February&quot;</span><span class="ot">=</span><span class="dv">2</span>, <span class="st">&quot;March&quot;</span><span class="ot">=</span><span class="dv">3</span>,</span>
+<span id="cb1046-6"><a href="communication-with-shiny.html#cb1046-6" tabindex="-1"></a>                                   <span class="st">&quot;April&quot;</span><span class="ot">=</span><span class="dv">4</span>,   <span class="st">&quot;May&quot;</span><span class="ot">=</span><span class="dv">5</span>,      <span class="st">&quot;June&quot;</span><span class="ot">=</span><span class="dv">6</span>,</span>
+<span id="cb1046-7"><a href="communication-with-shiny.html#cb1046-7" tabindex="-1"></a>                                   <span class="st">&quot;July&quot;</span><span class="ot">=</span><span class="dv">7</span>,    <span class="st">&quot;August&quot;</span><span class="ot">=</span><span class="dv">8</span>,   <span class="st">&quot;September&quot;</span><span class="ot">=</span><span class="dv">9</span>,</span>
+<span id="cb1046-8"><a href="communication-with-shiny.html#cb1046-8" tabindex="-1"></a>                                   <span class="st">&quot;October&quot;</span><span class="ot">=</span><span class="dv">10</span>,<span class="st">&quot;November&quot;</span><span class="ot">=</span><span class="dv">11</span>,<span class="st">&quot;December&quot;</span><span class="ot">=</span><span class="dv">12</span>)),</span>
+<span id="cb1046-9"><a href="communication-with-shiny.html#cb1046-9" tabindex="-1"></a>                     <span class="fu">leafletOutput</span>(<span class="st">&quot;view&quot;</span>),</span>
+<span id="cb1046-10"><a href="communication-with-shiny.html#cb1046-10" tabindex="-1"></a>                     <span class="fu">radioButtons</span>(<span class="at">inputId =</span> <span class="st">&quot;LeafletBasemap&quot;</span>, <span class="at">label =</span> <span class="st">&quot;Basemap&quot;</span>,</span>
+<span id="cb1046-11"><a href="communication-with-shiny.html#cb1046-11" tabindex="-1"></a>                                  <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;OpenStreetMap&quot;</span> <span class="ot">=</span> <span class="st">&quot;open&quot;</span>,</span>
+<span id="cb1046-12"><a href="communication-with-shiny.html#cb1046-12" tabindex="-1"></a>                                              <span class="st">&quot;Esri.WorldImagery&quot;</span> <span class="ot">=</span> <span class="st">&quot;imagery&quot;</span>,</span>
+<span id="cb1046-13"><a href="communication-with-shiny.html#cb1046-13" tabindex="-1"></a>                                              <span class="st">&quot;Esri.NatGeoWorldMap&quot;</span> <span class="ot">=</span> <span class="st">&quot;natgeo&quot;</span>),</span>
+<span id="cb1046-14"><a href="communication-with-shiny.html#cb1046-14" tabindex="-1"></a>                                  <span class="at">selected =</span> <span class="st">&quot;open&quot;</span>)),</span>
+<span id="cb1046-15"><a href="communication-with-shiny.html#cb1046-15" tabindex="-1"></a>            <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">&quot;Model&quot;</span>,</span>
+<span id="cb1046-16"><a href="communication-with-shiny.html#cb1046-16" tabindex="-1"></a>                     <span class="fu">plotOutput</span>(<span class="st">&quot;scatterplot&quot;</span>),</span>
+<span id="cb1046-17"><a href="communication-with-shiny.html#cb1046-17" tabindex="-1"></a>                     <span class="fu">varSelectInput</span>(<span class="st">&quot;xvar&quot;</span>, <span class="st">&quot;X Variable:&quot;</span>, <span class="at">data=</span>sierraJan,</span>
+<span id="cb1046-18"><a href="communication-with-shiny.html#cb1046-18" tabindex="-1"></a>                                    <span class="at">selected=</span><span class="st">&quot;ELEVATION&quot;</span>),</span>
+<span id="cb1046-19"><a href="communication-with-shiny.html#cb1046-19" tabindex="-1"></a>                     <span class="fu">varSelectInput</span>(<span class="st">&quot;yvar&quot;</span>, <span class="st">&quot;Y Variable:&quot;</span>, <span class="at">data=</span>sierraJan,</span>
+<span id="cb1046-20"><a href="communication-with-shiny.html#cb1046-20" tabindex="-1"></a>                                    <span class="at">selected=</span><span class="st">&quot;TEMPERATURE&quot;</span>),</span>
+<span id="cb1046-21"><a href="communication-with-shiny.html#cb1046-21" tabindex="-1"></a>                     <span class="fu">verbatimTextOutput</span>(<span class="st">&quot;model&quot;</span>)),</span>
+<span id="cb1046-22"><a href="communication-with-shiny.html#cb1046-22" tabindex="-1"></a>            <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">&quot;Map&quot;</span>,</span>
+<span id="cb1046-23"><a href="communication-with-shiny.html#cb1046-23" tabindex="-1"></a>                     <span class="fu">plotOutput</span>(<span class="st">&quot;map&quot;</span>),</span>
+<span id="cb1046-24"><a href="communication-with-shiny.html#cb1046-24" tabindex="-1"></a>                     <span class="fu">varSelectInput</span>(<span class="st">&quot;var&quot;</span>, <span class="st">&quot;Variable:&quot;</span>, <span class="at">data=</span>sierraVars,</span>
+<span id="cb1046-25"><a href="communication-with-shiny.html#cb1046-25" tabindex="-1"></a>                                    <span class="at">selected=</span><span class="st">&quot;TEMPERATURE&quot;</span>)),</span>
+<span id="cb1046-26"><a href="communication-with-shiny.html#cb1046-26" tabindex="-1"></a>            <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">&quot;Table&quot;</span>,</span>
+<span id="cb1046-27"><a href="communication-with-shiny.html#cb1046-27" tabindex="-1"></a>                     <span class="fu">textOutput</span>(<span class="st">&quot;eqntext&quot;</span>),</span>
+<span id="cb1046-28"><a href="communication-with-shiny.html#cb1046-28" tabindex="-1"></a>                     <span class="fu">tableOutput</span>(<span class="st">&quot;table&quot;</span>)),</span>
+<span id="cb1046-29"><a href="communication-with-shiny.html#cb1046-29" tabindex="-1"></a>            <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">&quot;Pairs&quot;</span>,</span>
+<span id="cb1046-30"><a href="communication-with-shiny.html#cb1046-30" tabindex="-1"></a>                     <span class="fu">textOutput</span>(<span class="st">&quot;monthTitle4Pairs&quot;</span>),</span>
+<span id="cb1046-31"><a href="communication-with-shiny.html#cb1046-31" tabindex="-1"></a>                     <span class="fu">plotOutput</span>(<span class="st">&quot;pairsplot&quot;</span>))</span>
+<span id="cb1046-32"><a href="communication-with-shiny.html#cb1046-32" tabindex="-1"></a>                  )</span>
+<span id="cb1046-33"><a href="communication-with-shiny.html#cb1046-33" tabindex="-1"></a>                )</span></code></pre></div>
+</div>
+<div id="the-server-section-including-reactive-elements" class="section level3 hasAnchor" number="13.5.3">
+<h3><span class="header-section-number">13.5.3</span> The server section, including reactive elements<a href="communication-with-shiny.html#the-server-section-including-reactive-elements" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This section starts with a series of specifically <em>reactive</em> functions using the <code>reactive</code> function. These are functions that are used in the main output (or in other <code>reactive</code> functions) that change the data. Here we see the following reactive functions:</p>
+<ul>
+<li><code>mod()</code> : reads the <code>input$xvar</code> and <code>input$yvar</code> and creates a linear model</li>
+<li><code>sierraMonth()</code>: reads the <code>input$month</code> and filters the month and selects all the relevant variables</li>
+<li><code>sierradf()</code>: runs <code>mod()</code> and assigns <code>RESIDUAL</code> and <code>PREDICTION</code> variables</li>
+<li><code>sierraSp()</code>: responds to <code>sierradf()</code> by then creating an sf</li>
+<li><code>eqn()</code>: responds to <code>mod()</code> by changing the model character string to put on a map</li>
+</ul>
+<div class="sourceCode" id="cb1047"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1047-1"><a href="communication-with-shiny.html#cb1047-1" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb1047-2"><a href="communication-with-shiny.html#cb1047-2" tabindex="-1"></a>  mod <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb1047-3"><a href="communication-with-shiny.html#cb1047-3" tabindex="-1"></a>    <span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(input<span class="sc">$</span>yvar, <span class="st">&#39;~&#39;</span>, input<span class="sc">$</span>xvar)), <span class="at">data=</span><span class="fu">sierraMonth</span>())</span>
+<span id="cb1047-4"><a href="communication-with-shiny.html#cb1047-4" tabindex="-1"></a>  })</span>
+<span id="cb1047-5"><a href="communication-with-shiny.html#cb1047-5" tabindex="-1"></a>  sierraMonth <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb1047-6"><a href="communication-with-shiny.html#cb1047-6" tabindex="-1"></a>    monthsel <span class="ot">&lt;-</span> <span class="dv">201000</span> <span class="sc">+</span> <span class="fu">as.numeric</span>(input<span class="sc">$</span>month)</span>
+<span id="cb1047-7"><a href="communication-with-shiny.html#cb1047-7" tabindex="-1"></a>    sierraAllMonths <span class="sc">%&gt;%</span></span>
+<span id="cb1047-8"><a href="communication-with-shiny.html#cb1047-8" tabindex="-1"></a>      <span class="fu">filter</span>(DATE <span class="sc">==</span> monthsel) <span class="sc">%&gt;%</span></span>
+<span id="cb1047-9"><a href="communication-with-shiny.html#cb1047-9" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">select</span>(STATION,ELEVATION,LATITUDE,LONGITUDE,TEMPERATURE,PRECIPITATION)</span>
+<span id="cb1047-10"><a href="communication-with-shiny.html#cb1047-10" tabindex="-1"></a>  })</span>
+<span id="cb1047-11"><a href="communication-with-shiny.html#cb1047-11" tabindex="-1"></a>  sierradf <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb1047-12"><a href="communication-with-shiny.html#cb1047-12" tabindex="-1"></a>    <span class="fu">sierraMonth</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1047-13"><a href="communication-with-shiny.html#cb1047-13" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">RESIDUAL =</span> <span class="fu">resid</span>(<span class="fu">mod</span>()), <span class="at">PREDICTION =</span> <span class="fu">predict</span>(<span class="fu">mod</span>()))</span>
+<span id="cb1047-14"><a href="communication-with-shiny.html#cb1047-14" tabindex="-1"></a>  })</span>
+<span id="cb1047-15"><a href="communication-with-shiny.html#cb1047-15" tabindex="-1"></a>  sierraSp <span class="ot">&lt;-</span> <span class="fu">reactive</span>(<span class="fu">st_as_sf</span>(<span class="fu">sierradf</span>(),</span>
+<span id="cb1047-16"><a href="communication-with-shiny.html#cb1047-16" tabindex="-1"></a>                                <span class="at">coords=</span><span class="fu">c</span>(<span class="st">&quot;LONGITUDE&quot;</span>,<span class="st">&quot;LATITUDE&quot;</span>),<span class="at">crs=</span><span class="dv">4326</span>))</span>
+<span id="cb1047-17"><a href="communication-with-shiny.html#cb1047-17" tabindex="-1"></a></span>
+<span id="cb1047-18"><a href="communication-with-shiny.html#cb1047-18" tabindex="-1"></a>  eqn <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb1047-19"><a href="communication-with-shiny.html#cb1047-19" tabindex="-1"></a>    cc <span class="ot">=</span> <span class="fu">mod</span>()<span class="sc">$</span>coefficient</span>
+<span id="cb1047-20"><a href="communication-with-shiny.html#cb1047-20" tabindex="-1"></a>    <span class="fu">paste</span>(input<span class="sc">$</span>yvar, <span class="st">&quot; =&quot;</span>, <span class="fu">paste</span>(<span class="fu">round</span>(cc[<span class="dv">1</span>],<span class="dv">2</span>), <span class="st">&quot;+&quot;</span>, </span>
+<span id="cb1047-21"><a href="communication-with-shiny.html#cb1047-21" tabindex="-1"></a>                                  <span class="fu">paste</span>(<span class="fu">round</span>(cc[<span class="sc">-</span><span class="dv">1</span>], <span class="at">digits=</span><span class="dv">3</span>),</span>
+<span id="cb1047-22"><a href="communication-with-shiny.html#cb1047-22" tabindex="-1"></a>                                  <span class="at">sep=</span><span class="st">&quot;*&quot;</span>, <span class="at">collapse=</span><span class="st">&quot; + &quot;</span>,</span>
+<span id="cb1047-23"><a href="communication-with-shiny.html#cb1047-23" tabindex="-1"></a>                                  <span class="fu">paste</span>(input<span class="sc">$</span>xvar))))</span>
+<span id="cb1047-24"><a href="communication-with-shiny.html#cb1047-24" tabindex="-1"></a>  })</span></code></pre></div>
+<p>Then the outputs, each with a <code>render____</code> function:</p>
+<ul>
+<li><code>output$view</code>: a Leaflet map for the View tab</li>
+<li><code>output$map</code>: a ggplot map for the Map tab</li>
+<li><code>output$scatterplot</code>: a scatter plot and trend line for the Model tab</li>
+<li><code>output$model</code>: a summary of the lm</li>
+<li><code>output$eqntext</code>: information on the model for the Table tab</li>
+<li><code>output$monthTitle4Model</code>: a title for the Model tab</li>
+<li><code>output$monthTitle4Pairs</code>: a title for the Pairs tab</li>
+<li><code>output$table</code>: the table for the Table tab</li>
+<li><code>output$pairsplot</code>: the pairs plot for the Pairs tab</li>
+</ul>
+<div class="sourceCode" id="cb1048"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1048-1"><a href="communication-with-shiny.html#cb1048-1" tabindex="-1"></a>  output<span class="sc">$</span>view <span class="ot">&lt;-</span> <span class="fu">renderLeaflet</span>({</span>
+<span id="cb1048-2"><a href="communication-with-shiny.html#cb1048-2" tabindex="-1"></a>    providerTiles <span class="ot">&lt;-</span> providers<span class="sc">$</span>OpenStreetMap</span>
+<span id="cb1048-3"><a href="communication-with-shiny.html#cb1048-3" tabindex="-1"></a>    <span class="cf">if</span>(input<span class="sc">$</span>LeafletBasemap<span class="sc">==</span><span class="st">&quot;imagery&quot;</span>) {</span>
+<span id="cb1048-4"><a href="communication-with-shiny.html#cb1048-4" tabindex="-1"></a>      providerTiles <span class="ot">&lt;-</span> providers<span class="sc">$</span>Esri.WorldImagery}</span>
+<span id="cb1048-5"><a href="communication-with-shiny.html#cb1048-5" tabindex="-1"></a>    <span class="cf">if</span>(input<span class="sc">$</span>LeafletBasemap<span class="sc">==</span><span class="st">&quot;natgeo&quot;</span>) {</span>
+<span id="cb1048-6"><a href="communication-with-shiny.html#cb1048-6" tabindex="-1"></a>      providerTiles <span class="ot">&lt;-</span> providers<span class="sc">$</span>Esri.NatGeoWorldMap}</span>
+<span id="cb1048-7"><a href="communication-with-shiny.html#cb1048-7" tabindex="-1"></a>    <span class="fu">leaflet</span>(<span class="at">data =</span> <span class="fu">sierradf</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb1048-8"><a href="communication-with-shiny.html#cb1048-8" tabindex="-1"></a>      <span class="fu">addTiles</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1048-9"><a href="communication-with-shiny.html#cb1048-9" tabindex="-1"></a>      <span class="fu">addProviderTiles</span>(providerTiles) <span class="sc">%&gt;%</span></span>
+<span id="cb1048-10"><a href="communication-with-shiny.html#cb1048-10" tabindex="-1"></a>      <span class="fu">addMarkers</span>(<span class="sc">~</span>LONGITUDE, <span class="sc">~</span>LATITUDE,</span>
+<span id="cb1048-11"><a href="communication-with-shiny.html#cb1048-11" tabindex="-1"></a>        <span class="at">popup =</span> <span class="sc">~</span><span class="fu">str_c</span>(ELEVATION,<span class="st">&quot;m &quot;</span>, month.name[<span class="fu">as.numeric</span>(input<span class="sc">$</span>month)], <span class="st">&quot;: &quot;</span>,</span>
+<span id="cb1048-12"><a href="communication-with-shiny.html#cb1048-12" tabindex="-1"></a>                       TEMPERATURE, <span class="st">&quot;°C &quot;</span>, PRECIPITATION, <span class="st">&quot;mm&quot;</span>),</span>
+<span id="cb1048-13"><a href="communication-with-shiny.html#cb1048-13" tabindex="-1"></a>        <span class="at">label =</span> <span class="sc">~</span>STATION)</span>
+<span id="cb1048-14"><a href="communication-with-shiny.html#cb1048-14" tabindex="-1"></a>  })</span>
+<span id="cb1048-15"><a href="communication-with-shiny.html#cb1048-15" tabindex="-1"></a>  output<span class="sc">$</span>map <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb1048-16"><a href="communication-with-shiny.html#cb1048-16" tabindex="-1"></a>    subTitle <span class="ot">&lt;-</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb1048-17"><a href="communication-with-shiny.html#cb1048-17" tabindex="-1"></a>    <span class="cf">if</span>((input<span class="sc">$</span>var <span class="sc">==</span> <span class="st">&quot;RESIDUAL&quot;</span>)<span class="sc">|</span>(input<span class="sc">$</span>var <span class="sc">==</span> <span class="st">&quot;PREDICTION&quot;</span>)){</span>
+<span id="cb1048-18"><a href="communication-with-shiny.html#cb1048-18" tabindex="-1"></a>      subTitle <span class="ot">&lt;-</span> <span class="fu">eqn</span>()}</span>
+<span id="cb1048-19"><a href="communication-with-shiny.html#cb1048-19" tabindex="-1"></a>    v <span class="ot">&lt;-</span> <span class="fu">get</span>(<span class="fu">paste</span>(input<span class="sc">$</span>var), <span class="at">pos=</span><span class="fu">sierradf</span>())  <span class="co"># just to be able to use the vector</span></span>
+<span id="cb1048-20"><a href="communication-with-shiny.html#cb1048-20" tabindex="-1"></a>    sierrabasemap <span class="sc">+</span></span>
+<span id="cb1048-21"><a href="communication-with-shiny.html#cb1048-21" tabindex="-1"></a>      <span class="fu">geom_sf</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">color =</span> <span class="sc">!!</span>input<span class="sc">$</span>var), <span class="at">data=</span><span class="fu">sierraSp</span>(), <span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb1048-22"><a href="communication-with-shiny.html#cb1048-22" tabindex="-1"></a>      <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(bounds[<span class="dv">1</span>], bounds[<span class="dv">3</span>]), <span class="at">ylim =</span> <span class="fu">c</span>(bounds[<span class="dv">2</span>],bounds[<span class="dv">4</span>]))  <span class="sc">+</span></span>
+<span id="cb1048-23"><a href="communication-with-shiny.html#cb1048-23" tabindex="-1"></a>      <span class="fu">scale_color_gradient2</span>(<span class="at">low=</span><span class="st">&quot;blue&quot;</span>, <span class="at">mid=</span><span class="st">&quot;ivory2&quot;</span>, <span class="at">high=</span><span class="st">&quot;darkred&quot;</span>, </span>
+<span id="cb1048-24"><a href="communication-with-shiny.html#cb1048-24" tabindex="-1"></a>                            <span class="at">midpoint=</span><span class="fu">mean</span>(v)) <span class="sc">+</span></span>
+<span id="cb1048-25"><a href="communication-with-shiny.html#cb1048-25" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">title=</span><span class="fu">paste</span>(month.name[<span class="fu">as.numeric</span>(input<span class="sc">$</span>month)], input<span class="sc">$</span>var),</span>
+<span id="cb1048-26"><a href="communication-with-shiny.html#cb1048-26" tabindex="-1"></a>           <span class="at">subtitle=</span>subTitle) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.85</span>))</span>
+<span id="cb1048-27"><a href="communication-with-shiny.html#cb1048-27" tabindex="-1"></a>  })</span>
+<span id="cb1048-28"><a href="communication-with-shiny.html#cb1048-28" tabindex="-1"></a>  output<span class="sc">$</span>scatterplot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb1048-29"><a href="communication-with-shiny.html#cb1048-29" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">sierradf</span>()) <span class="sc">+</span></span>
+<span id="cb1048-30"><a href="communication-with-shiny.html#cb1048-30" tabindex="-1"></a>      <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">!!</span>input<span class="sc">$</span>xvar, <span class="at">y =</span> <span class="sc">!!</span>input<span class="sc">$</span>yvar)) <span class="sc">+</span></span>
+<span id="cb1048-31"><a href="communication-with-shiny.html#cb1048-31" tabindex="-1"></a>      <span class="fu">geom_smooth</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">!!</span>input<span class="sc">$</span>xvar, <span class="at">y =</span> <span class="sc">!!</span>input<span class="sc">$</span>yvar), <span class="at">method=</span><span class="st">&quot;lm&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1048-32"><a href="communication-with-shiny.html#cb1048-32" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">title=</span>month.name[<span class="fu">as.numeric</span>(input<span class="sc">$</span>month)])</span>
+<span id="cb1048-33"><a href="communication-with-shiny.html#cb1048-33" tabindex="-1"></a>  })</span>
+<span id="cb1048-34"><a href="communication-with-shiny.html#cb1048-34" tabindex="-1"></a>  output<span class="sc">$</span>model <span class="ot">&lt;-</span> <span class="fu">renderPrint</span>({</span>
+<span id="cb1048-35"><a href="communication-with-shiny.html#cb1048-35" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">eqn</span>())</span>
+<span id="cb1048-36"><a href="communication-with-shiny.html#cb1048-36" tabindex="-1"></a>    <span class="fu">summary</span>(<span class="fu">mod</span>())</span>
+<span id="cb1048-37"><a href="communication-with-shiny.html#cb1048-37" tabindex="-1"></a>  })</span>
+<span id="cb1048-38"><a href="communication-with-shiny.html#cb1048-38" tabindex="-1"></a>  output<span class="sc">$</span>eqntext <span class="ot">&lt;-</span> <span class="fu">renderText</span>(<span class="fu">paste</span>(month.name[<span class="fu">as.numeric</span>(input<span class="sc">$</span>month)],</span>
+<span id="cb1048-39"><a href="communication-with-shiny.html#cb1048-39" tabindex="-1"></a>                <span class="st">&quot;data. Residual and Prediction based on linear model: &quot;</span>, <span class="fu">eqn</span>()))</span>
+<span id="cb1048-40"><a href="communication-with-shiny.html#cb1048-40" tabindex="-1"></a>  output<span class="sc">$</span>monthTitle4Model <span class="ot">&lt;-</span> <span class="fu">renderText</span>(month.name[<span class="fu">as.numeric</span>(input<span class="sc">$</span>month)])</span>
+<span id="cb1048-41"><a href="communication-with-shiny.html#cb1048-41" tabindex="-1"></a>  output<span class="sc">$</span>monthTitle4Pairs <span class="ot">&lt;-</span> <span class="fu">renderText</span>(month.name[<span class="fu">as.numeric</span>(input<span class="sc">$</span>month)])</span>
+<span id="cb1048-42"><a href="communication-with-shiny.html#cb1048-42" tabindex="-1"></a>  output<span class="sc">$</span>table <span class="ot">&lt;-</span> <span class="fu">renderTable</span>(<span class="fu">sierradf</span>())</span>
+<span id="cb1048-43"><a href="communication-with-shiny.html#cb1048-43" tabindex="-1"></a>  output<span class="sc">$</span>pairsplot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb1048-44"><a href="communication-with-shiny.html#cb1048-44" tabindex="-1"></a>    <span class="fu">sierradf</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1048-45"><a href="communication-with-shiny.html#cb1048-45" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">select</span>(LATITUDE,LATITUDE,LONGITUDE,</span>
+<span id="cb1048-46"><a href="communication-with-shiny.html#cb1048-46" tabindex="-1"></a>                    ELEVATION,TEMPERATURE,PRECIPITATION) <span class="sc">%&gt;%</span></span>
+<span id="cb1048-47"><a href="communication-with-shiny.html#cb1048-47" tabindex="-1"></a>      <span class="fu">pairs</span>(<span class="at">upper.panel =</span> panel.cor)</span>
+<span id="cb1048-48"><a href="communication-with-shiny.html#cb1048-48" tabindex="-1"></a>  })<span class="er">}</span></span></code></pre></div>
+</div>
+<div id="calling-shinyapp-with-the-ui-and-server-function-results" class="section level3 hasAnchor" number="13.5.4">
+<h3><span class="header-section-number">13.5.4</span> Calling shinyApp with the ui and server function results<a href="communication-with-shiny.html#calling-shinyapp-with-the-ui-and-server-function-results" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>And finally calling both ui and server functions with shinyApp:</p>
+<div class="sourceCode" id="cb1049"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1049-1"><a href="communication-with-shiny.html#cb1049-1" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui =</span> ui, <span class="at">server =</span> server)</span></code></pre></div>
+</div>
+</div>
+<div id="a-modis-fire-app-with-web-scraping-and-observe-with-leafletproxy" class="section level2 hasAnchor" number="13.6">
+<h2><span class="header-section-number">13.6</span> A MODIS Fire App with Web Scraping and <code>observe</code> with <code>leafletProxy</code><a href="communication-with-shiny.html#a-modis-fire-app-with-web-scraping-and-observe-with-leafletproxy" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We’ll now look at another app, one that uses web scraping and an <code>observe</code> function that together with <code>leafletProxy</code> allows the map to maintain its scaling when we change the data.</p>
+<p>The MODIS satellite sensor includes a fire detection layer that the USFS hosts in a way that can be accessed by (some pretty primitive) web scraping, which you can see in the code. This R Markdown document is made interactive using Shiny, and employs an Inline Application with the complete Shiny app code included (Figure <a href="communication-with-shiny.html#fig:comMODISshiny">13.14</a>). To learn more about the MODIS product from NASA, see <a href="https://modis.gsfc.nasa.gov/data/dataprod/mod14.php" class="uri">https://modis.gsfc.nasa.gov/data/dataprod/mod14.php</a></p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comMODISshiny"></span>
+<img src="img/Shiny/Shiny3.01.MODISfires.png" alt="MODIS fire detection Shiny app" width="100%" />
+<p class="caption">
+FIGURE 13.14: MODIS fire detection Shiny app
+</p>
+</div>
+<p>The MODISfire app.R script is also in the data package, in the <code>MODISfire</code> folder, and can be run with <code>shiny::shinyAppDir(ex("MODISfire"))</code>, which simply runs the following installed as a function with no input parameters, creating a separate app window.</p>
+<p><em>Note that it takes a while for the map to appear because the data is being downloaded and processed.</em>
+<em>Every time you change to a new year, there is also a delay as new data is downloaded and processed.</em></p>
+<p>The code shown can also be used to create a Shiny web app by saving it as <code>app.R</code> in an RStudio Shiny app project (or just copying the <code>app.R</code> file from the <code>MODISfire</code> folder in <code>extdata</code>). It will create a <code>"MODISdata"</code> folder to hold data it downloads, to keep the location with Shiny Rmd files uncluttered with the downloaded shapefile data.</p>
+<div id="setup-code" class="section level3 hasAnchor" number="13.6.1">
+<h3><span class="header-section-number">13.6.1</span> Setup code<a href="communication-with-shiny.html#setup-code" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Note that we’ll create a folder to hold data we download, and make it the working directory.</p>
+<div class="sourceCode" id="cb1050"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1050-1"><a href="communication-with-shiny.html#cb1050-1" tabindex="-1"></a><span class="fu">library</span>(sf); <span class="fu">library</span>(leaflet); <span class="fu">library</span>(tidyverse); <span class="fu">library</span>(lubridate)</span>
+<span id="cb1050-2"><a href="communication-with-shiny.html#cb1050-2" tabindex="-1"></a><span class="fu">library</span>(shiny); <span class="fu">library</span>(here)</span>
+<span id="cb1050-3"><a href="communication-with-shiny.html#cb1050-3" tabindex="-1"></a>dataPath <span class="ot">&lt;-</span> <span class="fu">paste</span>(here<span class="sc">::</span><span class="fu">here</span>(),<span class="st">&quot;/MODISdata&quot;</span>,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb1050-4"><a href="communication-with-shiny.html#cb1050-4" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(dataPath)){<span class="fu">dir.create</span>(dataPath)}</span>
+<span id="cb1050-5"><a href="communication-with-shiny.html#cb1050-5" tabindex="-1"></a><span class="fu">setwd</span>(dataPath)</span>
+<span id="cb1050-6"><a href="communication-with-shiny.html#cb1050-6" tabindex="-1"></a>pal <span class="ot">&lt;-</span> <span class="fu">colorNumeric</span>(<span class="fu">c</span>(<span class="st">&quot;orange&quot;</span>, <span class="st">&quot;firebrick4&quot;</span>),<span class="at">domain=</span><span class="dv">300</span><span class="sc">:</span><span class="dv">550</span>)</span></code></pre></div>
+</div>
+<div id="ui" class="section level3 hasAnchor" number="13.6.2">
+<h3><span class="header-section-number">13.6.2</span> ui<a href="communication-with-shiny.html#ui" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In terms of complexity of inputs, this app is pretty straightforward – the fluidPage is pretty standard for the ui section.</p>
+<div class="sourceCode" id="cb1051"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1051-1"><a href="communication-with-shiny.html#cb1051-1" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb1051-2"><a href="communication-with-shiny.html#cb1051-2" tabindex="-1"></a>    <span class="fu">titlePanel</span>(<span class="st">&quot;MODIS fire detections from temperature anomalies&quot;</span>), </span>
+<span id="cb1051-3"><a href="communication-with-shiny.html#cb1051-3" tabindex="-1"></a>    <span class="fu">leafletOutput</span>(<span class="st">&quot;view&quot;</span>),</span>
+<span id="cb1051-4"><a href="communication-with-shiny.html#cb1051-4" tabindex="-1"></a>    <span class="fu">sliderInput</span>(<span class="at">inputId =</span> <span class="st">&quot;end_jday&quot;</span>,</span>
+<span id="cb1051-5"><a href="communication-with-shiny.html#cb1051-5" tabindex="-1"></a>                <span class="at">label =</span> <span class="st">&quot;ending Julian day&quot;</span>,</span>
+<span id="cb1051-6"><a href="communication-with-shiny.html#cb1051-6" tabindex="-1"></a>                <span class="at">value =</span> <span class="fu">yday</span>(<span class="fu">now</span>()), <span class="at">min=</span><span class="dv">1</span>, <span class="at">max=</span><span class="dv">365</span>, <span class="at">step=</span><span class="dv">1</span>),</span>
+<span id="cb1051-7"><a href="communication-with-shiny.html#cb1051-7" tabindex="-1"></a>    <span class="fu">sliderInput</span>(<span class="at">inputId =</span> <span class="st">&quot;numdays&quot;</span>,</span>
+<span id="cb1051-8"><a href="communication-with-shiny.html#cb1051-8" tabindex="-1"></a>                <span class="at">label =</span> <span class="st">&quot;number of days&quot;</span>,</span>
+<span id="cb1051-9"><a href="communication-with-shiny.html#cb1051-9" tabindex="-1"></a>                <span class="at">value =</span> <span class="dv">1</span>, <span class="at">min=</span><span class="dv">1</span>, <span class="at">max=</span><span class="dv">14</span>, <span class="at">step=</span><span class="dv">1</span>),</span>
+<span id="cb1051-10"><a href="communication-with-shiny.html#cb1051-10" tabindex="-1"></a>    <span class="fu">sliderInput</span>(<span class="at">inputId =</span> <span class="st">&quot;year&quot;</span>,</span>
+<span id="cb1051-11"><a href="communication-with-shiny.html#cb1051-11" tabindex="-1"></a>                <span class="at">label =</span> <span class="st">&quot;year&quot;</span>,</span>
+<span id="cb1051-12"><a href="communication-with-shiny.html#cb1051-12" tabindex="-1"></a>                <span class="at">value =</span> <span class="fu">year</span>(<span class="fu">now</span>()),<span class="at">min=</span><span class="dv">2009</span>,<span class="at">max=</span><span class="fu">year</span>(<span class="fu">now</span>()),<span class="at">step=</span><span class="dv">1</span>,<span class="at">sep=</span><span class="st">&quot;&quot;</span>),</span>
+<span id="cb1051-13"><a href="communication-with-shiny.html#cb1051-13" tabindex="-1"></a>    <span class="fu">helpText</span>(<span class="fu">paste</span>(<span class="st">&quot;Jerry Davis, SFSU IGISc&quot;</span>,</span>
+<span id="cb1051-14"><a href="communication-with-shiny.html#cb1051-14" tabindex="-1"></a>    <span class="st">&quot;Data source: USDA Forest Service https://fsapps.nwcg.gov/afm/gisdata.php&quot;</span>))</span>
+<span id="cb1051-15"><a href="communication-with-shiny.html#cb1051-15" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="using-observe-and-leafletproxy-to-allow-changing-the-date-while-retaining-the-map-zoom" class="section level3 hasAnchor" number="13.6.3">
+<h3><span class="header-section-number">13.6.3</span> Using <code>observe</code> and <code>leafletProxy</code> to allow changing the date while retaining the map zoom<a href="communication-with-shiny.html#using-observe-and-leafletproxy-to-allow-changing-the-date-while-retaining-the-map-zoom" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In the server section, we mostly just have the leaflet map, but we need to build in code to do the web scraping and allow changing the date while retaining the zoom.</p>
+<p><strong>Web scraping</strong> was used to download data for a given year from the USFS. Hopefully their file naming convention stays the way it is; you can see how the shapefile name string is built with wildcard dots for characters.</p>
+<p><strong><code>observe</code> and <code>leafletProxy</code></strong>: Note that in the <code>renderLeaflet</code> section, only the year is reactive so this runs only initially or when the year changes. The <code>observe</code> function doesn’t read the data anew, but just changes some parameters about the map. The trick to getting this to work was then to use <code>leafletProxy</code> to make changes to the map without recreating it. Before I figured this out, the map would start over at its beginning point and you couldn’t then change the date for an area you just zoomed to. This took a while to figure out…</p>
+<div class="sourceCode" id="cb1052"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1052-1"><a href="communication-with-shiny.html#cb1052-1" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb1052-2"><a href="communication-with-shiny.html#cb1052-2" tabindex="-1"></a>  output<span class="sc">$</span>view <span class="ot">&lt;-</span> <span class="fu">renderLeaflet</span>({ <span class="co"># Only year is reactive, so runs w/year change</span></span>
+<span id="cb1052-3"><a href="communication-with-shiny.html#cb1052-3" tabindex="-1"></a>    yrst <span class="ot">&lt;-</span> <span class="fu">as.character</span>(input<span class="sc">$</span>year)</span>
+<span id="cb1052-4"><a href="communication-with-shiny.html#cb1052-4" tabindex="-1"></a>    txt <span class="ot">&lt;-</span> <span class="fu">read_file</span>(<span class="fu">str_c</span>(<span class="st">&quot;https://fsapps.nwcg.gov/afm/data/fireptdata/modisfire_&quot;</span>,</span>
+<span id="cb1052-5"><a href="communication-with-shiny.html#cb1052-5" tabindex="-1"></a>                           yrst,<span class="st">&quot;_conus.htm&quot;</span>))</span>
+<span id="cb1052-6"><a href="communication-with-shiny.html#cb1052-6" tabindex="-1"></a>    shpPath <span class="ot">&lt;-</span> <span class="fu">str_extract</span>(txt, </span>
+<span id="cb1052-7"><a href="communication-with-shiny.html#cb1052-7" tabindex="-1"></a>                           <span class="fu">paste0</span>(<span class="st">&quot;https://fsapps.nwcg.gov/afm/data/fireptdata/&quot;</span>,</span>
+<span id="cb1052-8"><a href="communication-with-shiny.html#cb1052-8" tabindex="-1"></a>                                  <span class="st">&quot;modis_fire_.........conus_shapefile.zip&quot;</span>))</span>
+<span id="cb1052-9"><a href="communication-with-shiny.html#cb1052-9" tabindex="-1"></a>    shpZip <span class="ot">&lt;-</span> <span class="fu">str_extract</span>(shpPath, <span class="st">&quot;modis_fire_.........conus_shapefile.zip&quot;</span>)</span>
+<span id="cb1052-10"><a href="communication-with-shiny.html#cb1052-10" tabindex="-1"></a>    MODISfile <span class="ot">&lt;-</span> <span class="fu">str_c</span>(dataPath,<span class="st">&quot;/&quot;</span>,<span class="fu">str_extract</span>(shpZip, </span>
+<span id="cb1052-11"><a href="communication-with-shiny.html#cb1052-11" tabindex="-1"></a>      <span class="st">&quot;modis_fire_.........conus&quot;</span>),<span class="st">&quot;.shp&quot;</span>)</span>
+<span id="cb1052-12"><a href="communication-with-shiny.html#cb1052-12" tabindex="-1"></a>    <span class="cf">if</span>(yrst <span class="sc">==</span> <span class="fu">as.character</span>(<span class="fu">year</span>(<span class="fu">now</span>())) <span class="sc">|</span> <span class="sc">!</span><span class="fu">file.exists</span>(MODISfile)) {</span>
+<span id="cb1052-13"><a href="communication-with-shiny.html#cb1052-13" tabindex="-1"></a>        shpZipPath <span class="ot">&lt;-</span> <span class="fu">str_c</span>(dataPath, <span class="st">&quot;/&quot;</span>,shpZip)</span>
+<span id="cb1052-14"><a href="communication-with-shiny.html#cb1052-14" tabindex="-1"></a>        <span class="fu">download.file</span>(shpPath, shpZipPath)</span>
+<span id="cb1052-15"><a href="communication-with-shiny.html#cb1052-15" tabindex="-1"></a>        <span class="fu">unzip</span>(shpZipPath, <span class="at">exdir=</span>dataPath) }</span>
+<span id="cb1052-16"><a href="communication-with-shiny.html#cb1052-16" tabindex="-1"></a>    fires <span class="ot">&lt;&lt;-</span> <span class="fu">st_read</span>(MODISfile)       </span>
+<span id="cb1052-17"><a href="communication-with-shiny.html#cb1052-17" tabindex="-1"></a>    <span class="fu">leaflet</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1052-18"><a href="communication-with-shiny.html#cb1052-18" tabindex="-1"></a>        <span class="fu">addProviderTiles</span>(providers<span class="sc">$</span>Esri.WorldTopoMap) <span class="sc">%&gt;%</span></span>
+<span id="cb1052-19"><a href="communication-with-shiny.html#cb1052-19" tabindex="-1"></a>        <span class="fu">fitBounds</span>(<span class="sc">-</span><span class="dv">123</span>,<span class="dv">37</span>,<span class="sc">-</span><span class="dv">120</span>,<span class="dv">39</span>)</span>
+<span id="cb1052-20"><a href="communication-with-shiny.html#cb1052-20" tabindex="-1"></a>    })</span>
+<span id="cb1052-21"><a href="communication-with-shiny.html#cb1052-21" tabindex="-1"></a>    <span class="fu">observe</span>({                   <span class="co"># Allows the map to retain its location and zoom</span></span>
+<span id="cb1052-22"><a href="communication-with-shiny.html#cb1052-22" tabindex="-1"></a>        numdays <span class="ot">&lt;-</span> input<span class="sc">$</span>numdays; end_jday <span class="ot">&lt;-</span> input<span class="sc">$</span>end_jday</span>
+<span id="cb1052-23"><a href="communication-with-shiny.html#cb1052-23" tabindex="-1"></a>        fireFilt <span class="ot">&lt;-</span> <span class="fu">filter</span>(fires,<span class="fu">between</span>(JULIAN, end_jday <span class="sc">-</span> numdays, end_jday))</span>
+<span id="cb1052-24"><a href="communication-with-shiny.html#cb1052-24" tabindex="-1"></a>        yrst <span class="ot">&lt;-</span> <span class="fu">as.character</span>(input<span class="sc">$</span>year)</span>
+<span id="cb1052-25"><a href="communication-with-shiny.html#cb1052-25" tabindex="-1"></a>        dat <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(end_jday<span class="dv">-1</span>, <span class="at">origin=</span><span class="fu">str_c</span>(yrst,<span class="st">&quot;-01-01&quot;</span>))  <span class="co"># Julian day fix</span></span>
+<span id="cb1052-26"><a href="communication-with-shiny.html#cb1052-26" tabindex="-1"></a>        <span class="fu">leafletProxy</span>(<span class="st">&quot;view&quot;</span>, <span class="at">data =</span> fireFilt) <span class="sc">%&gt;%</span></span>
+<span id="cb1052-27"><a href="communication-with-shiny.html#cb1052-27" tabindex="-1"></a>            <span class="fu">clearMarkers</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1052-28"><a href="communication-with-shiny.html#cb1052-28" tabindex="-1"></a>            <span class="fu">addCircleMarkers</span>(</span>
+<span id="cb1052-29"><a href="communication-with-shiny.html#cb1052-29" tabindex="-1"></a>                <span class="at">radius =</span> <span class="sc">~</span>(TEMP<span class="dv">-250</span>)<span class="sc">/</span><span class="dv">50</span>,  <span class="co"># scales 300-500 from 1:5 </span></span>
+<span id="cb1052-30"><a href="communication-with-shiny.html#cb1052-30" tabindex="-1"></a>                <span class="at">color =</span> <span class="sc">~</span><span class="fu">pal</span>(TEMP),</span>
+<span id="cb1052-31"><a href="communication-with-shiny.html#cb1052-31" tabindex="-1"></a>                <span class="at">stroke =</span> <span class="cn">FALSE</span>, <span class="at">fillOpacity =</span> <span class="fl">0.8</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1052-32"><a href="communication-with-shiny.html#cb1052-32" tabindex="-1"></a>            <span class="fu">clearControls</span>() <span class="sc">%&gt;%</span>   <span class="co"># clears the legend</span></span>
+<span id="cb1052-33"><a href="communication-with-shiny.html#cb1052-33" tabindex="-1"></a>            <span class="fu">addLegend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">pal=</span>pal, <span class="at">values=</span><span class="sc">~</span>TEMP, <span class="at">opacity=</span><span class="fl">0.6</span>,</span>
+<span id="cb1052-34"><a href="communication-with-shiny.html#cb1052-34" tabindex="-1"></a>                <span class="at">title=</span><span class="fu">str_c</span>(<span class="st">&quot;MODIS °K&lt;/br&gt;&quot;</span>,numdays, <span class="st">&quot; days: &quot;</span>, </span>
+<span id="cb1052-35"><a href="communication-with-shiny.html#cb1052-35" tabindex="-1"></a>                            dat,<span class="st">&quot;&lt;/br&gt;maxJulian: &quot;</span>,<span class="fu">as.character</span>(<span class="fu">max</span>(fires<span class="sc">$</span>JULIAN))))</span>
+<span id="cb1052-36"><a href="communication-with-shiny.html#cb1052-36" tabindex="-1"></a>    })</span>
+<span id="cb1052-37"><a href="communication-with-shiny.html#cb1052-37" tabindex="-1"></a>}</span>
+<span id="cb1052-38"><a href="communication-with-shiny.html#cb1052-38" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui =</span> ui, <span class="at">server =</span> server, <span class="at">options =</span> <span class="fu">list</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>, <span class="at">height =</span> <span class="dv">800</span>))</span></code></pre></div>
+</div>
+</div>
+<div id="learn-more-about-shiny-apps" class="section level2 hasAnchor" number="13.7">
+<h2><span class="header-section-number">13.7</span> Learn More about Shiny Apps<a href="communication-with-shiny.html#learn-more-about-shiny-apps" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>You should explore these resources to learn more about creating useful Shiny web apps:</p>
+<ul>
+<li><a href="https://shiny.rstudio.com/images/shiny-cheatsheet.pdf" class="uri">https://shiny.rstudio.com/images/shiny-cheatsheet.pdf</a></li>
+<li>The Shiny tutorial at <a href="https://shiny.rstudio.com/tutorial/" class="uri">https://shiny.rstudio.com/tutorial/</a>, worth spending some time on to learn more about getting Shiny apps working. There’s a lot to understand about reactivity for instance.</li>
+</ul>
+<p>To learn more about interactive documents in R Markdown, see <a href="http://rmarkdown.rstudio.com/authoring_shiny.html">Interactive Documents</a>.</p>
+</div>
+<div id="exercises-shiny" class="section level2 hasAnchor" number="13.8">
+<h2><span class="header-section-number">13.8</span> Exercises: Shiny<a href="communication-with-shiny.html#exercises-shiny" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-80" class="exercise"><strong>Exercise 13.1  </strong></span>Get either the sierra or MODIS fire Shiny app working, using the code provided.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-81" class="exercise"><strong>Exercise 13.2  </strong></span>Build a Shiny document or app using your own favorite code developed earlier in this book.</p>
+</div>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Bookdown" class="csl-entry">
+Xie, Yihui. 2021. <em>Bookdown: Authoring Books and Technical Documents with r Markdown</em>. Chapman; Hall/CRC. <a href="https://bookdown.org/yihui/bookdown/">https://bookdown.org/yihui/bookdown/</a>.
+</div>
+<div id="ref-RMarkdown" class="csl-entry">
+Xie, Yihui, JJ Allaire, and Garrett Grolemund. 2019. <em>R Markdown: The Definitive Guide</em>. 1st ed. Chapman; Hall/CRC. <a href="https://bookdown.org/yihui/rmarkdown/">https://bookdown.org/yihui/rmarkdown/</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ts.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section"
+  },
+  "book_filename": "envdatasci",
+  "toc_depth": 4
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

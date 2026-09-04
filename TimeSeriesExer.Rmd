@@ -1,0 +1,97 @@
+
+## Exercises: Time Series
+```{r echo=FALSE}
+knitr::opts_chunk$set(include=T, echo=F)
+```
+
+:::{.exercise}
+Create an half-hourly ensemble plot of Bugac, Hungary, similar to the one we created for Manaus, Brazil.
+:::
+
+```{r time_ex1}
+knitr::include_graphics(here::here("img","time_ex1.png"))
+```
+
+:::{.exercise}
+Create a ManausJan tibble for just the January data (hint: use a filter and consider that the `Day of Yr` has 31 for January 31, and 32 for February 1), then decompose a ts of `ManausJan$SolarRad`, and plot it. Consider carefully what frequency to use to get a daily period, realizing that values are every half hour. Also, remember that "seasonal" in this case means "diurnal". Code and plot.
+
+
+```{r time_ex2}
+knitr::include_graphics(here::here("img","time_ex2.png"))
+```
+
+:::{.exercise}
+Then do the same for air temperature (`Tair`) for Manaus in January, providing code and plot. What observations can you make from this on conditions in Manaus in January?
+:::
+```{r time_ex3}
+knitr::include_graphics(here::here("img","time_ex3.png"))
+```
+
+:::{.exercise}
+Now do both of the above for Bugac, Hungary, and reflect on what it tells you, and how these places are distinct (other than the obvious).
+:::
+```{r time_ex4}
+knitr::include_graphics(here::here("img","time_ex4a.png"))
+knitr::include_graphics(here::here("img","time_ex4b.png"))
+```
+
+:::{.exercise}
+Now do the same for June. You'll probably need to use the `yday` and `ymd` (or similar) functions from `lubridate` to find the date range for 2005 or 2006 (neither are leap years, so they should be the same). Hint: what does `yday(ymd("2005:06:01"))` give you?
+:::
+```{r time_ex5}
+knitr::include_graphics(here::here("img","time_ex5a.png"))
+knitr::include_graphics(here::here("img","time_ex5b.png"))
+knitr::include_graphics(here::here("img","time_ex5c.png"))
+knitr::include_graphics(here::here("img","time_ex5d.png"))
+```
+
+:::{.exercise}
+Do a lag regression over an 8-day period over the March equinox (about 3/21), when the sun's rays should be close to vertical since it's near the Equator, but it's very likely to be cloudy at the Intertropical Convergence Zone. As we did with the Bugac data, work out the best lag value using the minimum-RMSE model process we used for Bugac, and produce a summary of that model.
+:::
+```{r time_ex6}
+knitr::include_graphics(here::here("img","time_ex6a.png"))
+knitr::include_graphics(here::here("img","time_ex6b.png"))
+knitr::include_graphics(here::here("img","time_ex6c.png"))
+```
+
+:::{.exercise}
+Create an ensemble plot of monthly air and box temperature from the Marble Mountains Resurgence data. The air temperature was measured from a thermistor mounted near the ground but outside the box, and the box temperature was measured within the buried box (see the pictures to visualize this.)  You'll want to start with reading the dates and times -- which we didn't actually use when we built a time series from the data -- by building `date_time` and `month` variables:
+```{r time_ex7, echo=F}
+
+knitr::include_graphics(here::here("img","time_ex7.png"))
+```
+
+:::{.exercise}
+How about looking at daily cycles? The Marbles resurgence data were collected every two hours, so group by hour (created using `hour(time)`, which will return integers 0,2,...,22). Interpret what you get, and what the air vs box temperature patterns might show, considering where the sensors are installed. 
+:::
+
+
+```{r time_ex8}
+knitr::include_graphics(here::here("img","time_ex8.png"))
+```
+
+:::{.exercise}
+Using methods from 12.5, create a graph of *daily* air temperature (ATemp), water level (wlevelm), conductance (EC), and input voltage from the solar panel (InputV) from the Marble Mountains resurgence data (Figure \@ref(fig:tsFacetGoal)). Use the same type of y axis scaling as was used in figure 12.25.
+:::
+
+```{r time_ex9}
+knitr::include_graphics(here::here("img","time_ex9.png"))
+```
+
+:::{.exercise}
+(Optional) Tree-ring data: Using `forecast::ma` and the built-in `treering` time series, find a useful order value for a curve that communicates a pattern of tree rings over the last 8,000 years, with high values around -3,500 and 0 years. Note: the order may be pretty big, and you might want to loop through a sequence of values to see what works. I found that creating a sequence in a for loop with seq(from=100,to=1000,by100) useful, and any further created some odd effects.
+:::
+```{r tree-ring-decomp, echo=F}
+library(tidyverse); library(forecast)
+for(ord in seq(from=100,to=1000,by=100)){plot(ma(treering, order=ord))}
+```
+
+:::{.exercise}
+(Optional) Sunspot activity is known to fluctuate over about a 11-year cycle, and other than the well-known effects on radio transmission is also part of short-term climate fluctuations (so must be considered when looking at climate change). The built-in data set `sunspot.month` has monthly values of sunspot activity from 1749 to 2014. Use the frequency function to understand its period, then create an alternative ts with an 11-year cycle as frequency (how do you define its frequency?) and plot a decomposition and stl.
+:::
+```{r sunspot, echo=F}
+sunspotCycles <- ts(sunspot.month, frequency=11*12, start=c(1749,1))
+plot(decompose(sunspotCycles))
+plot(stl(sunspotCycles, s.window = "periodic"))
+```
+

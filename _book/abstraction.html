@@ -1,0 +1,2105 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Data Abstraction | Introduction to Environmental Data Science</title>
+  <meta name="description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Data Abstraction | Introduction to Environmental Data Science" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  <meta name="github-repo" content="iGISc/EnvDataSci" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Data Abstraction | Introduction to Environmental Data Science" />
+  
+  <meta name="twitter:description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  
+
+<meta name="author" content="Jerry Davis, SFSU Institute for Geographic Information Science" />
+
+
+<meta name="date" content="2026-09-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction.html"/>
+<link rel="next" href="visualization.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script>
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.2.3/leaflet.js"></script>
+<script src="libs/leaflet-providers-3.0.0/leaflet-providers.js"></script>
+<script src="libs/leaflet-providers-plugin-2.2.3/leaflet-providers-plugin.js"></script>
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<link href="libs/sierra___TEMPERATURE-CSS-0.0.1/sierra___TEMPERATURE_home-button.css" rel="stylesheet" />
+<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><img src="img/eaRth_anna296.png"></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background, Goals and Data</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#environmental-data-science"><i class="fa fa-check"></i><b>1.1</b> Environmental Data Science</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#environmental-data-and-methods"><i class="fa fa-check"></i><b>1.2</b> Environmental Data and Methods</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#goals"><i class="fa fa-check"></i><b>1.3</b> Goals</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#some-definitions"><i class="fa fa-check"></i><b>1.3.1</b> Some definitions:</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>1.4</b> Exploratory Data Analysis</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#software-and-data"><i class="fa fa-check"></i><b>1.5</b> Software and Data</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#data"><i class="fa fa-check"></i><b>1.5.1</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i><b>1.6</b> Acknowledgements</a></li>
+</ul></li>
+<li class="part"><span><b>I Exploratory Data Analysis</b></span></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction to R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#data-objects"><i class="fa fa-check"></i><b>2.1</b> Data Objects</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#scalars-and-assignment"><i class="fa fa-check"></i><b>2.1.1</b> Scalars and assignment</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#functions"><i class="fa fa-check"></i><b>2.2</b> Functions</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#expressions"><i class="fa fa-check"></i><b>2.3</b> Expressions and Statements</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#class"><i class="fa fa-check"></i><b>2.4</b> Data Classes</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introduction.html"><a href="introduction.html#integers"><i class="fa fa-check"></i><b>2.4.1</b> Integers</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#rectangular-data"><i class="fa fa-check"></i><b>2.5</b> Rectangular Data</a></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#data-structures-in-r"><i class="fa fa-check"></i><b>2.6</b> Data Structures in R</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="introduction.html"><a href="introduction.html#vector"><i class="fa fa-check"></i><b>2.6.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.6.2" data-path="introduction.html"><a href="introduction.html#list"><i class="fa fa-check"></i><b>2.6.2</b> Lists</a></li>
+<li class="chapter" data-level="2.6.3" data-path="introduction.html"><a href="introduction.html#matrix"><i class="fa fa-check"></i><b>2.6.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.6.4" data-path="introduction.html"><a href="introduction.html#dataframes"><i class="fa fa-check"></i><b>2.6.4</b> Data frames</a></li>
+<li class="chapter" data-level="2.6.5" data-path="introduction.html"><a href="introduction.html#factors"><i class="fa fa-check"></i><b>2.6.5</b> Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#accessors"><i class="fa fa-check"></i><b>2.7</b> Accessors and Subsetting</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="introduction.html"><a href="introduction.html#subsetting"><i class="fa fa-check"></i><b>2.7.1</b> <code>[]</code> Subsetting</a></li>
+<li class="chapter" data-level="2.7.2" data-path="introduction.html"><a href="introduction.html#the-mysterious-double-bracket"><i class="fa fa-check"></i><b>2.7.2</b> <code>[[]]</code> The mysterious double bracket</a></li>
+<li class="chapter" data-level="2.7.3" data-path="introduction.html"><a href="introduction.html#accessing-a-vector-from-a-data-frame"><i class="fa fa-check"></i><b>2.7.3</b> <code>$</code> Accessing a vector from a data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#programming"><i class="fa fa-check"></i><b>2.8</b> Programming scripts in RStudio</a>
+<ul>
+<li class="chapter" data-level="2.8.1" data-path="introduction.html"><a href="introduction.html#functions-writing"><i class="fa fa-check"></i><b>2.8.1</b> <code>function</code> : creating your own</a></li>
+<li class="chapter" data-level="2.8.2" data-path="introduction.html"><a href="introduction.html#if-conditional-operations"><i class="fa fa-check"></i><b>2.8.2</b> <code>if</code> : conditional operations</a></li>
+<li class="chapter" data-level="2.8.3" data-path="introduction.html"><a href="introduction.html#for"><i class="fa fa-check"></i><b>2.8.3</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="2.8.4" data-path="introduction.html"><a href="introduction.html#subsetting-with-logic"><i class="fa fa-check"></i><b>2.8.4</b> Subsetting with logic</a></li>
+<li class="chapter" data-level="2.8.5" data-path="introduction.html"><a href="introduction.html#apply"><i class="fa fa-check"></i><b>2.8.5</b> Apply functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.9" data-path="introduction.html"><a href="introduction.html#rstudio"><i class="fa fa-check"></i><b>2.9</b> RStudio projects</a>
+<ul>
+<li class="chapter" data-level="2.9.1" data-path="introduction.html"><a href="introduction.html#rmarkdown"><i class="fa fa-check"></i><b>2.9.1</b> R Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="2.10" data-path="introduction.html"><a href="introduction.html#exercises-introduction-to-r"><i class="fa fa-check"></i><b>2.10</b> Exercises: Introduction to R</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="abstraction.html"><a href="abstraction.html"><i class="fa fa-check"></i><b>3</b> Data Abstraction</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="abstraction.html"><a href="abstraction.html#tidyverse"><i class="fa fa-check"></i><b>3.1</b> The Tidyverse</a></li>
+<li class="chapter" data-level="3.2" data-path="abstraction.html"><a href="abstraction.html#tibbles"><i class="fa fa-check"></i><b>3.2</b> Tibbles</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="abstraction.html"><a href="abstraction.html#building-a-tibble-from-vectors"><i class="fa fa-check"></i><b>3.2.1</b> Building a tibble from vectors</a></li>
+<li class="chapter" data-level="3.2.2" data-path="abstraction.html"><a href="abstraction.html#tribble"><i class="fa fa-check"></i><b>3.2.2</b> tribble</a></li>
+<li class="chapter" data-level="3.2.3" data-path="abstraction.html"><a href="abstraction.html#csv"><i class="fa fa-check"></i><b>3.2.3</b> read_csv</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="abstraction.html"><a href="abstraction.html#summarizing-variable-distributions"><i class="fa fa-check"></i><b>3.3</b> Summarizing variable distributions</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="abstraction.html"><a href="abstraction.html#stratifying-variables-by-site-using-a-tukey-box-plot"><i class="fa fa-check"></i><b>3.3.1</b> Stratifying variables by site using a Tukey box plot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="abstraction.html"><a href="abstraction.html#dplyr"><i class="fa fa-check"></i><b>3.4</b> Database operations</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="abstraction.html"><a href="abstraction.html#pipe"><i class="fa fa-check"></i><b>3.4.1</b> Select, mutate, and the pipe</a></li>
+<li class="chapter" data-level="3.4.2" data-path="abstraction.html"><a href="abstraction.html#filter"><i class="fa fa-check"></i><b>3.4.2</b> Filtering observations</a></li>
+<li class="chapter" data-level="3.4.3" data-path="abstraction.html"><a href="abstraction.html#subsetting-data-with-base-rs-subset"><i class="fa fa-check"></i><b>3.4.3</b> Subsetting data with base R’s <code>subset</code></a></li>
+<li class="chapter" data-level="3.4.4" data-path="abstraction.html"><a href="abstraction.html#writing-a-data-frame-to-a-csv"><i class="fa fa-check"></i><b>3.4.4</b> Writing a data frame to a csv</a></li>
+<li class="chapter" data-level="3.4.5" data-path="abstraction.html"><a href="abstraction.html#group-summary"><i class="fa fa-check"></i><b>3.4.5</b> Summarize by group</a></li>
+<li class="chapter" data-level="3.4.6" data-path="abstraction.html"><a href="abstraction.html#count"><i class="fa fa-check"></i><b>3.4.6</b> Count</a></li>
+<li class="chapter" data-level="3.4.7" data-path="abstraction.html"><a href="abstraction.html#sorting-after-summarizing"><i class="fa fa-check"></i><b>3.4.7</b> Sorting after summarizing</a></li>
+<li class="chapter" data-level="3.4.8" data-path="abstraction.html"><a href="abstraction.html#the-dot-operator"><i class="fa fa-check"></i><b>3.4.8</b> The dot operator</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="abstraction.html"><a href="abstraction.html#stringr"><i class="fa fa-check"></i><b>3.5</b> String abstraction</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="abstraction.html"><a href="abstraction.html#detecting-matches"><i class="fa fa-check"></i><b>3.5.1</b> Detecting matches</a></li>
+<li class="chapter" data-level="3.5.2" data-path="abstraction.html"><a href="abstraction.html#subset-string"><i class="fa fa-check"></i><b>3.5.2</b> Subsetting strings</a></li>
+<li class="chapter" data-level="3.5.3" data-path="abstraction.html"><a href="abstraction.html#string-length"><i class="fa fa-check"></i><b>3.5.3</b> String length</a></li>
+<li class="chapter" data-level="3.5.4" data-path="abstraction.html"><a href="abstraction.html#replacing-substrings-with-other-text-mutating-strings"><i class="fa fa-check"></i><b>3.5.4</b> Replacing substrings with other text (“mutating” strings)</a></li>
+<li class="chapter" data-level="3.5.5" data-path="abstraction.html"><a href="abstraction.html#concatenating-and-splitting"><i class="fa fa-check"></i><b>3.5.5</b> Concatenating and splitting</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="abstraction.html"><a href="abstraction.html#lubridate"><i class="fa fa-check"></i><b>3.6</b> Dates and times with <code>lubridate</code></a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="abstraction.html"><a href="abstraction.html#dates-used-for-annual-time-series"><i class="fa fa-check"></i><b>3.6.1</b> Dates used for annual time series</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="abstraction.html"><a href="abstraction.html#extending-abstractions-with-functions"><i class="fa fa-check"></i><b>3.7</b> Extending abstractions with functions</a></li>
+<li class="chapter" data-level="3.8" data-path="abstraction.html"><a href="abstraction.html#exercises-data-abstraction"><i class="fa fa-check"></i><b>3.8</b> Exercises: Data Abstraction</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>4</b> Visualization</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="visualization.html"><a href="visualization.html#plot-in-base-r"><i class="fa fa-check"></i><b>4.1</b> plot in base R</a></li>
+<li class="chapter" data-level="4.2" data-path="visualization.html"><a href="visualization.html#ggplot2"><i class="fa fa-check"></i><b>4.2</b> ggplot2</a></li>
+<li class="chapter" data-level="4.3" data-path="visualization.html"><a href="visualization.html#plotting-one-variable"><i class="fa fa-check"></i><b>4.3</b> Plotting one variable</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="visualization.html"><a href="visualization.html#histogram"><i class="fa fa-check"></i><b>4.3.1</b> Histogram</a></li>
+<li class="chapter" data-level="4.3.2" data-path="visualization.html"><a href="visualization.html#density-plot"><i class="fa fa-check"></i><b>4.3.2</b> Density plot</a></li>
+<li class="chapter" data-level="4.3.3" data-path="visualization.html"><a href="visualization.html#boxplot"><i class="fa fa-check"></i><b>4.3.3</b> Boxplot</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="visualization.html"><a href="visualization.html#plotting-two-variables"><i class="fa fa-check"></i><b>4.4</b> Plotting Two Variables</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="visualization.html"><a href="visualization.html#two-continuous-variables"><i class="fa fa-check"></i><b>4.4.1</b> Two continuous variables</a></li>
+<li class="chapter" data-level="4.4.2" data-path="visualization.html"><a href="visualization.html#two-variables-one-discrete"><i class="fa fa-check"></i><b>4.4.2</b> Two variables, one discrete</a></li>
+<li class="chapter" data-level="4.4.3" data-path="visualization.html"><a href="visualization.html#color-systems"><i class="fa fa-check"></i><b>4.4.3</b> Color systems</a></li>
+<li class="chapter" data-level="4.4.4" data-path="visualization.html"><a href="visualization.html#trend-line"><i class="fa fa-check"></i><b>4.4.4</b> Trend line</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="visualization.html"><a href="visualization.html#general-symbology"><i class="fa fa-check"></i><b>4.5</b> General Symbology</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="visualization.html"><a href="visualization.html#categorical-symbology"><i class="fa fa-check"></i><b>4.5.1</b> Categorical symbology</a></li>
+<li class="chapter" data-level="4.5.2" data-path="visualization.html"><a href="visualization.html#log-scales-instead-of-transform"><i class="fa fa-check"></i><b>4.5.2</b> Log scales instead of transform</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="visualization.html"><a href="visualization.html#graphs-from-grouped-data"><i class="fa fa-check"></i><b>4.6</b> Graphs from Grouped Data</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="visualization.html"><a href="visualization.html#faceted-graphs"><i class="fa fa-check"></i><b>4.6.1</b> Faceted graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="visualization.html"><a href="visualization.html#titles-subtitles-axis-labels-and-legend-position"><i class="fa fa-check"></i><b>4.7</b> Titles, Subtitles, Axis Labels, and Legend Position</a></li>
+<li class="chapter" data-level="4.8" data-path="visualization.html"><a href="visualization.html#pairs-plot"><i class="fa fa-check"></i><b>4.8</b> Pairs Plot</a></li>
+<li class="chapter" data-level="4.9" data-path="visualization.html"><a href="visualization.html#exercises-visualization"><i class="fa fa-check"></i><b>4.9</b> Exercises: Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="transformation.html"><a href="transformation.html"><i class="fa fa-check"></i><b>5</b> Data Transformation</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="transformation.html"><a href="transformation.html#joins"><i class="fa fa-check"></i><b>5.1</b> Data joins</a></li>
+<li class="chapter" data-level="5.2" data-path="transformation.html"><a href="transformation.html#set"><i class="fa fa-check"></i><b>5.2</b> Set operations</a></li>
+<li class="chapter" data-level="5.3" data-path="transformation.html"><a href="transformation.html#binding"><i class="fa fa-check"></i><b>5.3</b> Binding rows and columns</a></li>
+<li class="chapter" data-level="5.4" data-path="transformation.html"><a href="transformation.html#pivots"><i class="fa fa-check"></i><b>5.4</b> Pivoting data frames</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="transformation.html"><a href="transformation.html#pivot_longer"><i class="fa fa-check"></i><b>5.4.1</b> <code>pivot_longer</code></a></li>
+<li class="chapter" data-level="5.4.2" data-path="transformation.html"><a href="transformation.html#pivot_wider"><i class="fa fa-check"></i><b>5.4.2</b> <code>pivot_wider</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="transformation.html"><a href="transformation.html#combining-transformation-methods-to-create-a-free_y-faceted-graph"><i class="fa fa-check"></i><b>5.5</b> Combining transformation methods to create a <code>free_y</code> faceted graph</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="transformation.html"><a href="transformation.html#air-pollutant-emissions-trends-epa"><i class="fa fa-check"></i><b>5.5.1</b> Air pollutant emissions trends (EPA)</a></li>
+<li class="chapter" data-level="5.5.2" data-path="transformation.html"><a href="transformation.html#flux-tower-data"><i class="fa fa-check"></i><b>5.5.2</b> Flux tower data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="transformation.html"><a href="transformation.html#exercise-transformation"><i class="fa fa-check"></i><b>5.6</b> Exercise: Transformation</a></li>
+</ul></li>
+<li class="part"><span><b>II Spatial</b></span></li>
+<li class="chapter" data-level="6" data-path="spatial.html"><a href="spatial.html"><i class="fa fa-check"></i><b>6</b> Spatial Data and Maps</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="spatial.html"><a href="spatial.html#spatial-data"><i class="fa fa-check"></i><b>6.1</b> Spatial Data</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="spatial.html"><a href="spatial.html#simple-geometry-building-in-sf"><i class="fa fa-check"></i><b>6.1.1</b> Simple geometry building in sf</a></li>
+<li class="chapter" data-level="6.1.2" data-path="spatial.html"><a href="spatial.html#building-points-from-a-data-frame"><i class="fa fa-check"></i><b>6.1.2</b> Building points from a data frame</a></li>
+<li class="chapter" data-level="6.1.3" data-path="spatial.html"><a href="spatial.html#spatvectors-in-terra"><i class="fa fa-check"></i><b>6.1.3</b> SpatVectors in <code>terra</code></a></li>
+<li class="chapter" data-level="6.1.4" data-path="spatial.html"><a href="spatial.html#creating-features-from-shapefiles"><i class="fa fa-check"></i><b>6.1.4</b> Creating features from shapefiles</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="spatial.html"><a href="spatial.html#coordinate-referencing-systems"><i class="fa fa-check"></i><b>6.2</b> Coordinate Referencing Systems</a></li>
+<li class="chapter" data-level="6.3" data-path="spatial.html"><a href="spatial.html#creating-sf-data-from-data-frames"><i class="fa fa-check"></i><b>6.3</b> Creating sf Data from Data Frames</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="spatial.html"><a href="spatial.html#removing-geometry"><i class="fa fa-check"></i><b>6.3.1</b> <em>Removing</em> geometry</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="spatial.html"><a href="spatial.html#base-rs-plot-with-terra"><i class="fa fa-check"></i><b>6.4</b> Base R’s <code>plot()</code> with <code>terra</code></a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="spatial.html"><a href="spatial.html#using-maptiles-to-create-a-basemap"><i class="fa fa-check"></i><b>6.4.1</b> Using maptiles to create a basemap</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="spatial.html"><a href="spatial.html#raster-data"><i class="fa fa-check"></i><b>6.5</b> Raster data</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="spatial.html"><a href="spatial.html#building-rasters"><i class="fa fa-check"></i><b>6.5.1</b> Building rasters</a></li>
+<li class="chapter" data-level="6.5.2" data-path="spatial.html"><a href="spatial.html#vector-to-raster-conversion"><i class="fa fa-check"></i><b>6.5.2</b> Vector to raster conversion</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="spatial.html"><a href="spatial.html#ggplot2-for-maps"><i class="fa fa-check"></i><b>6.6</b> ggplot2 for Maps</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="spatial.html"><a href="spatial.html#rasters-in-ggplot2"><i class="fa fa-check"></i><b>6.6.1</b> Rasters in ggplot2</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="spatial.html"><a href="spatial.html#using-bounding-boxes-to-zoom-to-the-extent-of-data-layers-in-any-mapping-package"><i class="fa fa-check"></i><b>6.7</b> Using bounding boxes to zoom to the extent of data layers (in any mapping package)</a></li>
+<li class="chapter" data-level="6.8" data-path="spatial.html"><a href="spatial.html#tmap"><i class="fa fa-check"></i><b>6.8</b> tmap</a>
+<ul>
+<li class="chapter" data-level="6.8.1" data-path="spatial.html"><a href="spatial.html#color"><i class="fa fa-check"></i><b>6.8.1</b> Color</a></li>
+<li class="chapter" data-level="6.8.2" data-path="spatial.html"><a href="spatial.html#basemap-with-tmap"><i class="fa fa-check"></i><b>6.8.2</b> Basemap with tmap</a></li>
+</ul></li>
+<li class="chapter" data-level="6.9" data-path="spatial.html"><a href="spatial.html#interactive-maps"><i class="fa fa-check"></i><b>6.9</b> Interactive Maps</a>
+<ul>
+<li class="chapter" data-level="6.9.1" data-path="spatial.html"><a href="spatial.html#leaflet"><i class="fa fa-check"></i><b>6.9.1</b> Leaflet</a></li>
+<li class="chapter" data-level="6.9.2" data-path="spatial.html"><a href="spatial.html#mapview"><i class="fa fa-check"></i><b>6.9.2</b> Mapview</a></li>
+<li class="chapter" data-level="6.9.3" data-path="spatial.html"><a href="spatial.html#tmap-view-mode"><i class="fa fa-check"></i><b>6.9.3</b> tmap (view mode)</a></li>
+<li class="chapter" data-level="6.9.4" data-path="spatial.html"><a href="spatial.html#interactive-mapping-of-individual-penguins-abstracted-from-a-big-dataset"><i class="fa fa-check"></i><b>6.9.4</b> Interactive mapping of individual penguins abstracted from a big dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="6.10" data-path="spatial.html"><a href="spatial.html#exercises-spatial-data-and-maps"><i class="fa fa-check"></i><b>6.10</b> Exercises: Spatial Data and Maps</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="spatial-analysis.html"><a href="spatial-analysis.html"><i class="fa fa-check"></i><b>7</b> Spatial Analysis</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#data-frame-operations"><i class="fa fa-check"></i><b>7.1</b> Data Frame Operations</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#GroupedSummaries"><i class="fa fa-check"></i><b>7.1.1</b> Using grouped summaries, and filtering by a selection</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-analysis-operations"><i class="fa fa-check"></i><b>7.2</b> Spatial Analysis Operations</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#using-topology-to-subset"><i class="fa fa-check"></i><b>7.2.1</b> Using topology to subset</a></li>
+<li class="chapter" data-level="7.2.2" data-path="spatial-analysis.html"><a href="spatial-analysis.html#centroid"><i class="fa fa-check"></i><b>7.2.2</b> Centroid</a></li>
+<li class="chapter" data-level="7.2.3" data-path="spatial-analysis.html"><a href="spatial-analysis.html#distance"><i class="fa fa-check"></i><b>7.2.3</b> Distance</a></li>
+<li class="chapter" data-level="7.2.4" data-path="spatial-analysis.html"><a href="spatial-analysis.html#buffers"><i class="fa fa-check"></i><b>7.2.4</b> Buffers</a></li>
+<li class="chapter" data-level="7.2.5" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-overlay-union-and-intersection"><i class="fa fa-check"></i><b>7.2.5</b> Spatial overlay: union and intersection</a></li>
+<li class="chapter" data-level="7.2.6" data-path="spatial-analysis.html"><a href="spatial-analysis.html#clip-with-st_crop"><i class="fa fa-check"></i><b>7.2.6</b> Clip with st_crop</a></li>
+<li class="chapter" data-level="7.2.7" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-join-with-st_join"><i class="fa fa-check"></i><b>7.2.7</b> Spatial join with <code>st_join</code></a></li>
+<li class="chapter" data-level="7.2.8" data-path="spatial-analysis.html"><a href="spatial-analysis.html#further-exploration-of-spatial-analysis"><i class="fa fa-check"></i><b>7.2.8</b> Further exploration of spatial analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="spatial-analysis.html"><a href="spatial-analysis.html#exercises-spatial-analysis"><i class="fa fa-check"></i><b>7.3</b> Exercises: Spatial Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="raster.html"><a href="raster.html"><i class="fa fa-check"></i><b>8</b> Raster Spatial Analysis</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="raster.html"><a href="raster.html#terrain"><i class="fa fa-check"></i><b>8.1</b> Terrain functions</a></li>
+<li class="chapter" data-level="8.2" data-path="raster.html"><a href="raster.html#map-algebra-in-terra"><i class="fa fa-check"></i><b>8.2</b> Map Algebra in terra</a></li>
+<li class="chapter" data-level="8.3" data-path="raster.html"><a href="raster.html#distance-1"><i class="fa fa-check"></i><b>8.3</b> Distance</a></li>
+<li class="chapter" data-level="8.4" data-path="raster.html"><a href="raster.html#extracting-values"><i class="fa fa-check"></i><b>8.4</b> Extracting Values</a></li>
+<li class="chapter" data-level="8.5" data-path="raster.html"><a href="raster.html#focal-statistics"><i class="fa fa-check"></i><b>8.5</b> Focal Statistics</a></li>
+<li class="chapter" data-level="8.6" data-path="raster.html"><a href="raster.html#zonal-statistics"><i class="fa fa-check"></i><b>8.6</b> Zonal Statistics</a></li>
+<li class="chapter" data-level="8.7" data-path="raster.html"><a href="raster.html#exercises-raster-spatial-analysis"><i class="fa fa-check"></i><b>8.7</b> Exercises: Raster Spatial Analysis</a></li>
+</ul></li>
+<li class="part"><span><b>III Statistics and Modeling</b></span></li>
+<li class="chapter" data-level="9" data-path="statistics.html"><a href="statistics.html"><i class="fa fa-check"></i><b>9</b> Statistical Summaries and Tests</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="statistics.html"><a href="statistics.html#goals-of-statistical-analysis"><i class="fa fa-check"></i><b>9.1</b> Goals of Statistical Analysis</a></li>
+<li class="chapter" data-level="9.2" data-path="statistics.html"><a href="statistics.html#summary-statistics"><i class="fa fa-check"></i><b>9.2</b> Summary Statistics</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="statistics.html"><a href="statistics.html#summarize-by-group-stratifying-a-summary"><i class="fa fa-check"></i><b>9.2.1</b> Summarize by group: <em>stratifying a summary</em></a></li>
+<li class="chapter" data-level="9.2.2" data-path="statistics.html"><a href="statistics.html#boxplot-for-visualizing-distributions-by-group"><i class="fa fa-check"></i><b>9.2.2</b> Boxplot for visualizing distributions by group</a></li>
+<li class="chapter" data-level="9.2.3" data-path="statistics.html"><a href="statistics.html#random"><i class="fa fa-check"></i><b>9.2.3</b> Generating pseudorandom numbers</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="statistics.html"><a href="statistics.html#correlation"><i class="fa fa-check"></i><b>9.3</b> Correlation r and Coefficient of Determination r<sup>2</sup></a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="statistics.html"><a href="statistics.html#displaying-correlation-in-a-pairs-plot"><i class="fa fa-check"></i><b>9.3.1</b> Displaying correlation in a pairs plot</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="statistics.html"><a href="statistics.html#statistical-tests"><i class="fa fa-check"></i><b>9.4</b> Statistical Tests</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="statistics.html"><a href="statistics.html#comparing-samples-and-groupings-with-a-t-test-and-a-non-parametric-kruskal-wallis-rank-sum-test"><i class="fa fa-check"></i><b>9.4.1</b> Comparing samples and groupings with a t test and a non-parametric Kruskal-Wallis Rank Sum test</a></li>
+<li class="chapter" data-level="9.4.2" data-path="statistics.html"><a href="statistics.html#analysis-of-variance"><i class="fa fa-check"></i><b>9.4.2</b> Analysis of variance</a></li>
+<li class="chapter" data-level="9.4.3" data-path="statistics.html"><a href="statistics.html#post-hoc-analysis-of-variance-with-tukeys-test"><i class="fa fa-check"></i><b>9.4.3</b> Post-Hoc Analysis of Variance with Tukey’s Test</a></li>
+<li class="chapter" data-level="9.4.4" data-path="statistics.html"><a href="statistics.html#testing-a-correlation"><i class="fa fa-check"></i><b>9.4.4</b> Testing a correlation</a></li>
+<li class="chapter" data-level="9.4.5" data-path="statistics.html"><a href="statistics.html#additional-resources"><i class="fa fa-check"></i><b>9.4.5</b> Additional resources</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="statistics.html"><a href="statistics.html#exercises-statistics"><i class="fa fa-check"></i><b>9.5</b> Exercises: Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="modeling.html"><a href="modeling.html"><i class="fa fa-check"></i><b>10</b> Modeling</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="modeling.html"><a href="modeling.html#some-common-statistical-models"><i class="fa fa-check"></i><b>10.1</b> Some Common Statistical Models</a></li>
+<li class="chapter" data-level="10.2" data-path="modeling.html"><a href="modeling.html#lm"><i class="fa fa-check"></i><b>10.2</b> Linear Model (<code>lm</code>)</a></li>
+<li class="chapter" data-level="10.3" data-path="modeling.html"><a href="modeling.html#spatial-influences-on-statistical-analysis"><i class="fa fa-check"></i><b>10.3</b> Spatial Influences on Statistical Analysis</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="modeling.html"><a href="modeling.html#mapping-residuals"><i class="fa fa-check"></i><b>10.3.1</b> Mapping residuals</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="modeling.html"><a href="modeling.html#analysis-of-covariance"><i class="fa fa-check"></i><b>10.4</b> Analysis of Covariance</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="modeling.html"><a href="modeling.html#tukey-test-for-the-ancova-model"><i class="fa fa-check"></i><b>10.4.1</b> Tukey test for the ANCOVA model</a></li>
+<li class="chapter" data-level="10.4.2" data-path="modeling.html"><a href="modeling.html#the-karst-water-chemistry-model"><i class="fa fa-check"></i><b>10.4.2</b> The karst water chemistry model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="modeling.html"><a href="modeling.html#generalized-linear-model-glm"><i class="fa fa-check"></i><b>10.5</b> Generalized linear model (GLM)</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="modeling.html"><a href="modeling.html#binomial-family-logistic-glm"><i class="fa fa-check"></i><b>10.5.1</b> Binomial family: Logistic GLM</a></li>
+<li class="chapter" data-level="10.5.2" data-path="modeling.html"><a href="modeling.html#logistic-landslide-model"><i class="fa fa-check"></i><b>10.5.2</b> Logistic landslide model</a></li>
+<li class="chapter" data-level="10.5.3" data-path="modeling.html"><a href="modeling.html#poisson-regression"><i class="fa fa-check"></i><b>10.5.3</b> Poisson regression</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="modeling.html"><a href="modeling.html#other-modeling-methods"><i class="fa fa-check"></i><b>10.6</b> Other modeling methods</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="modeling.html"><a href="modeling.html#curve-fitting"><i class="fa fa-check"></i><b>10.6.1</b> Curve fitting</a></li>
+<li class="chapter" data-level="10.6.2" data-path="modeling.html"><a href="modeling.html#models-employing-machine-learning"><i class="fa fa-check"></i><b>10.6.2</b> Models employing machine learning</a></li>
+</ul></li>
+<li class="chapter" data-level="10.7" data-path="modeling.html"><a href="modeling.html#exercises-modeling"><i class="fa fa-check"></i><b>10.7</b> Exercises: Modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="imagery.html"><a href="imagery.html"><i class="fa fa-check"></i><b>11</b> Imagery and Classification Models</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="imagery.html"><a href="imagery.html#reading-and-displaying-sentinel-2-imagery"><i class="fa fa-check"></i><b>11.1</b> Reading and Displaying Sentinel-2 Imagery</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="imagery.html"><a href="imagery.html#individual-bands"><i class="fa fa-check"></i><b>11.1.1</b> Individual bands</a></li>
+<li class="chapter" data-level="11.1.2" data-path="imagery.html"><a href="imagery.html#spectral-subsets-to-create-three-band-r-g-b-and-nir-r-g-for-visualization"><i class="fa fa-check"></i><b>11.1.2</b> Spectral subsets to create three-band R-G-B and NIR-R-G for visualization</a></li>
+<li class="chapter" data-level="11.1.3" data-path="imagery.html"><a href="imagery.html#crop-to-study-area-extent"><i class="fa fa-check"></i><b>11.1.3</b> Crop to study area extent</a></li>
+<li class="chapter" data-level="11.1.4" data-path="imagery.html"><a href="imagery.html#saving-results"><i class="fa fa-check"></i><b>11.1.4</b> Saving results</a></li>
+<li class="chapter" data-level="11.1.5" data-path="imagery.html"><a href="imagery.html#band-scatter-plots"><i class="fa fa-check"></i><b>11.1.5</b> Band scatter plots</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="imagery.html"><a href="imagery.html#spectral-profiles"><i class="fa fa-check"></i><b>11.2</b> Spectral Profiles</a></li>
+<li class="chapter" data-level="11.3" data-path="imagery.html"><a href="imagery.html#map-algebra-and-vegetation-indices"><i class="fa fa-check"></i><b>11.3</b> Map Algebra and Vegetation Indices</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="imagery.html"><a href="imagery.html#vegetation-indices"><i class="fa fa-check"></i><b>11.3.1</b> Vegetation indices</a></li>
+<li class="chapter" data-level="11.3.2" data-path="imagery.html"><a href="imagery.html#histogram-1"><i class="fa fa-check"></i><b>11.3.2</b> Histogram</a></li>
+<li class="chapter" data-level="11.3.3" data-path="imagery.html"><a href="imagery.html#other-vegetation-indices"><i class="fa fa-check"></i><b>11.3.3</b> Other vegetation indices</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="imagery.html"><a href="imagery.html#unsupervised-classification-with-k-means"><i class="fa fa-check"></i><b>11.4</b> Unsupervised Classification with k-means</a></li>
+<li class="chapter" data-level="11.5" data-path="imagery.html"><a href="imagery.html#machine-learning-classification-of-imagery"><i class="fa fa-check"></i><b>11.5</b> Machine Learning Classification of Imagery</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="imagery.html"><a href="imagery.html#read-imagery-and-training-data-and-extract-sample-values-for-training"><i class="fa fa-check"></i><b>11.5.1</b> Read imagery and training data and extract sample values for training</a></li>
+<li class="chapter" data-level="11.5.2" data-path="imagery.html"><a href="imagery.html#training-the-cart-model"><i class="fa fa-check"></i><b>11.5.2</b> Training the CART model</a></li>
+<li class="chapter" data-level="11.5.3" data-path="imagery.html"><a href="imagery.html#prediction-using-the-cart-model"><i class="fa fa-check"></i><b>11.5.3</b> Prediction using the CART model</a></li>
+<li class="chapter" data-level="11.5.4" data-path="imagery.html"><a href="imagery.html#validating-the-model"><i class="fa fa-check"></i><b>11.5.4</b> Validating the model</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="imagery.html"><a href="imagery.html#classifying-with-10-m-sentinel-2-imagery"><i class="fa fa-check"></i><b>11.6</b> Classifying with 10 m Sentinel-2 Imagery</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="imagery.html"><a href="imagery.html#subset-bands-10-m"><i class="fa fa-check"></i><b>11.6.1</b> Subset bands (10 m)</a></li>
+<li class="chapter" data-level="11.6.2" data-path="imagery.html"><a href="imagery.html#crop-to-rcv-extent-and-extract-pixel-values"><i class="fa fa-check"></i><b>11.6.2</b> Crop to RCV extent and extract pixel values</a></li>
+<li class="chapter" data-level="11.6.3" data-path="imagery.html"><a href="imagery.html#training-the-cart-model-10-m-and-plot-the-tree"><i class="fa fa-check"></i><b>11.6.3</b> Training the CART model (10 m) and plot the tree</a></li>
+<li class="chapter" data-level="11.6.4" data-path="imagery.html"><a href="imagery.html#prediction-using-the-cart-model-10-m"><i class="fa fa-check"></i><b>11.6.4</b> Prediction using the CART model (10 m)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="imagery.html"><a href="imagery.html#classification-using-multiple-images-capturing-phenology"><i class="fa fa-check"></i><b>11.7</b> Classification Using Multiple Images Capturing Phenology</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="imagery.html"><a href="imagery.html#create-a-10-band-stack-from-both-images"><i class="fa fa-check"></i><b>11.7.1</b> Create a 10-band stack from both images</a></li>
+<li class="chapter" data-level="11.7.2" data-path="imagery.html"><a href="imagery.html#extract-the-training-data-10-m-spring-summer"><i class="fa fa-check"></i><b>11.7.2</b> Extract the training data (10 m spring + summer)</a></li>
+<li class="chapter" data-level="11.7.3" data-path="imagery.html"><a href="imagery.html#cart-model-and-prediction-10-m-spring-summer"><i class="fa fa-check"></i><b>11.7.3</b> CART model and prediction (10 m spring + summer)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.8" data-path="imagery.html"><a href="imagery.html#classification-using-multiple-images-capturing-phenology-20m"><i class="fa fa-check"></i><b>11.8</b> Classification Using Multiple Images Capturing Phenology : 20m</a>
+<ul>
+<li class="chapter" data-level="11.8.1" data-path="imagery.html"><a href="imagery.html#create-a-18-band-stack-from-both-images"><i class="fa fa-check"></i><b>11.8.1</b> Create a 18-band stack from both images</a></li>
+<li class="chapter" data-level="11.8.2" data-path="imagery.html"><a href="imagery.html#extract-the-training-data-20-m-spring-summer"><i class="fa fa-check"></i><b>11.8.2</b> Extract the training data (20 m spring + summer)</a></li>
+<li class="chapter" data-level="11.8.3" data-path="imagery.html"><a href="imagery.html#cart-model-and-prediction-20-m-spring-summer"><i class="fa fa-check"></i><b>11.8.3</b> CART model and prediction (20 m spring + summer)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.9" data-path="imagery.html"><a href="imagery.html#conclusions-and-next-steps-for-imagery-classification"><i class="fa fa-check"></i><b>11.9</b> Conclusions and Next Steps for Imagery Classification</a></li>
+<li class="chapter" data-level="11.10" data-path="imagery.html"><a href="imagery.html#exercises-imagery-analysis-and-classification-models"><i class="fa fa-check"></i><b>11.10</b> Exercises: Imagery Analysis and Classification Models</a></li>
+</ul></li>
+<li class="part"><span><b>IV Time Series</b></span></li>
+<li class="chapter" data-level="12" data-path="ts.html"><a href="ts.html"><i class="fa fa-check"></i><b>12</b> Time Series Visualization and Analysis</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="ts.html"><a href="ts.html#structure-seasonality-and-decomposition-of-time-series"><i class="fa fa-check"></i><b>12.1</b> Structure, Seasonality, and Decomposition of Time Series</a></li>
+<li class="chapter" data-level="12.2" data-path="ts.html"><a href="ts.html#creation-of-time-series-ts-data"><i class="fa fa-check"></i><b>12.2</b> Creation of Time Series (ts) Data</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="ts.html"><a href="ts.html#frequency-start-and-end-parameters-for-ts"><i class="fa fa-check"></i><b>12.2.1</b> Frequency, start, and end parameters for <code>ts()</code></a></li>
+<li class="chapter" data-level="12.2.2" data-path="ts.html"><a href="ts.html#associating-times-with-time-series"><i class="fa fa-check"></i><b>12.2.2</b> Associating times with time series</a></li>
+<li class="chapter" data-level="12.2.3" data-path="ts.html"><a href="ts.html#subsetting-time-series-by-times"><i class="fa fa-check"></i><b>12.2.3</b> Subsetting time series by times</a></li>
+<li class="chapter" data-level="12.2.4" data-path="ts.html"><a href="ts.html#changing-the-frequency-to-use-a-different-period"><i class="fa fa-check"></i><b>12.2.4</b> Changing the frequency to use a different period</a></li>
+<li class="chapter" data-level="12.2.5" data-path="ts.html"><a href="ts.html#time-stamps-and-extensible-time-series"><i class="fa fa-check"></i><b>12.2.5</b> Time stamps and extensible time series</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="ts.html"><a href="ts.html#data-smoothing-moving-average-ma"><i class="fa fa-check"></i><b>12.3</b> Data smoothing: moving average (<code>ma</code>)</a></li>
+<li class="chapter" data-level="12.4" data-path="ts.html"><a href="ts.html#decomposition-of-data-logger-data-marble-mountains"><i class="fa fa-check"></i><b>12.4</b> Decomposition of data logger data: Marble Mountains</a></li>
+<li class="chapter" data-level="12.5" data-path="ts.html"><a href="ts.html#facet-graphs-for-comparing-variables-over-time"><i class="fa fa-check"></i><b>12.5</b> Facet Graphs for Comparing Variables over Time</a></li>
+<li class="chapter" data-level="12.6" data-path="ts.html"><a href="ts.html#lag-regression"><i class="fa fa-check"></i><b>12.6</b> Lag Regression</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="ts.html"><a href="ts.html#the-lag-regression-using-a-lag-function-in-a-linear-model"><i class="fa fa-check"></i><b>12.6.1</b> The lag regression, using a lag function in a linear model</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="ts.html"><a href="ts.html#ensemble-summary-statistics"><i class="fa fa-check"></i><b>12.7</b> Ensemble Summary Statistics</a></li>
+<li class="chapter" data-level="12.8" data-path="ts.html"><a href="ts.html#learning-more-about-time-series-in-r"><i class="fa fa-check"></i><b>12.8</b> Learning more about Time Series in R</a></li>
+<li class="chapter" data-level="12.9" data-path="ts.html"><a href="ts.html#exercises-time-series"><i class="fa fa-check"></i><b>12.9</b> Exercises: Time Series</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction to Environmental Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="abstraction" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Data Abstraction<a href="abstraction.html#abstraction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Abstracting data from large data sets (or even small ones) is critical
+to data science. The most common first step to visualization is
+abstracting the data in a form that allows for the visualization goal in
+mind. If you’ve ever worked with data in spreadsheets, you commonly will
+be faced with some kind of data manipulation to create meaningful
+graphs, unless that spreadsheet is specifically designed for it, but
+then doing something else with the data is going to require some work.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:Abstraction"></span>
+<img src="EnvDataScience_files/figure-html/Abstraction-1.png" alt="Visualization of some abstracted data from the EPA Toxic Release Inventory" width="75%" />
+<p class="caption">
+FIGURE 3.1: Visualization of some abstracted data from the EPA Toxic Release Inventory
+</p>
+</div>
+<p>Figure <a href="abstraction.html#fig:Abstraction">3.1</a> started with abstracting some data from
+EPA’s Toxic Release Inventory (TRI) program, which holds data reported
+from a large number of facilities that must report either “stack” or
+“fugitive” air. Some of the abstraction had already happened when I used
+the EPA website to download data for particular years and only in
+California. But there’s more we need to do, and we’ll want to use some
+<code>dplyr</code> functions to help with it.</p>
+<p>At this point, we’ve learned the basics of working with the R language.
+From here we’ll want to explore how to analyze data, statistically,
+spatially, and temporally. One part of this is abstracting information
+from existing data sets by selecting variables and observations and
+summarizing their statistics.</p>
+<p>In the previous chapter, we learned some abstraction methods in base R,
+such as selecting parts of data frames and applying some functions
+across the data frame. There’s a lot we can do with these methods, and
+they continue to be developed and improved. We’ll continue to use them,
+but they can employ some fairly arcane language. There are many packages
+that extend R’s functionality, but some of the most important for data
+science can be found in the various packages of “The Tidyverse”
+<span class="citation">(<a href="#ref-wickham2016r">Wickham and Grolemund 2016</a>)</span>, which has the philosophy of making data manipulation
+more intuitive.</p>
+<p>We’ll start with <strong><code>dplyr</code></strong>, which includes an array of
+data manipulation tools, including <strong><code>select</code></strong> for selecting variables,
+<strong><code>filter</code></strong> for subsetting observations, <strong><code>summarize</code></strong> for reducing
+variables to summary statistics, typically stratified by groups, and
+<strong><code>mutate</code></strong> for creating new variables from mathematical expressions
+from existing variables. Some <code>dplyr</code> tools such as data joins we’ll
+look at later in the data transformation chapter.</p>
+<div id="tidyverse" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> The Tidyverse<a href="abstraction.html#tidyverse" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The tidyverse refers to a suite of R packages developed
+at RStudio (now <em>posit</em>) (see <a href="https://posit.co" class="uri">https://posit.co</a> and
+<a href="https://r4ds.had.co.nz" class="uri">&lt;https://r4ds.had.co.nz&gt;</a>) for
+facilitating data processing and analysis. While R itself is designed
+around exploratory data analysis, the tidyverse takes it further. Some
+of the packages in the tidyverse that are widely used are:</p>
+<ul>
+<li><strong><code>dplyr</code></strong> : data manipulation like a database</li>
+<li><strong><code>readr</code></strong> : better methods for reading and writing
+rectangular data</li>
+<li><strong><code>tidyr</code></strong> : reorganization methods that extend
+dplyr’s database capabilities</li>
+<li><strong><code>purrr</code></strong> : expanded programming toolkit including
+enhanced “apply” methods</li>
+<li><strong><code>tibble</code></strong> : improved data frame</li>
+<li><strong><code>stringr</code></strong> : string manipulation library</li>
+<li><strong><code>ggplot2</code></strong> : graphing system based on <em>the grammar
+of graphics</em></li>
+</ul>
+<p>In this chapter, we’ll be mostly exploring <strong>dplyr</strong>, with a few other
+things thrown in like reading data frames with <strong>readr</strong>; and we’ll also
+introduce a few other base R methods. For simplicity, we can just
+include <code>library(tidyverse)</code> to get everything, and of course the base R
+methods are already there.</p>
+</div>
+<div id="tibbles" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Tibbles<a href="abstraction.html#tibbles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Tibbles are an improved type of data frame</p>
+<ul>
+<li>part of the tidyverse</li>
+<li>serve the same purpose as a data frame, and all data frame
+operations work</li>
+</ul>
+<p>Advantages</p>
+<ul>
+<li>display better</li>
+<li>can be composed of more complex objects like lists, etc.</li>
+<li>can be grouped</li>
+</ul>
+<p>There multiple ways to create a tibble:</p>
+<ul>
+<li>Reading from a CSV using <code>read_csv()</code>. <em>Note the underscore, a
+function naming convention in the tidyverse.</em></li>
+<li>Using <code>tibble()</code> to either build from vectors or from scratch, or
+convert from a different type of data frame.</li>
+<li>Using <code>tribble()</code> to build in code from scratch.</li>
+<li>Using various tidyverse functions that return tibbles.</li>
+</ul>
+<div id="building-a-tibble-from-vectors" class="section level3 hasAnchor" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> Building a tibble from vectors<a href="abstraction.html#building-a-tibble-from-vectors" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We’ll start by looking at a couple of built-in
+character vectors (there are lots of things
+like this in R):</p>
+<ul>
+<li><code>letters</code> : lowercase letters</li>
+<li><code>LETTERS</code> : uppercase letters</li>
+</ul>
+<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="abstraction.html#cb297-1" tabindex="-1"></a>letters</span></code></pre></div>
+<pre><code>##  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot; &quot;k&quot; &quot;l&quot; &quot;m&quot; &quot;n&quot; &quot;o&quot; &quot;p&quot; &quot;q&quot; &quot;r&quot; &quot;s&quot;
+## [20] &quot;t&quot; &quot;u&quot; &quot;v&quot; &quot;w&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;</code></pre>
+<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="abstraction.html#cb299-1" tabindex="-1"></a>LETTERS</span></code></pre></div>
+<pre><code>##  [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot; &quot;K&quot; &quot;L&quot; &quot;M&quot; &quot;N&quot; &quot;O&quot; &quot;P&quot; &quot;Q&quot; &quot;R&quot; &quot;S&quot;
+## [20] &quot;T&quot; &quot;U&quot; &quot;V&quot; &quot;W&quot; &quot;X&quot; &quot;Y&quot; &quot;Z&quot;</code></pre>
+<p>… then make a tibble of <code>letters</code>, <code>LETTERS</code>, and two random sets of
+26 values, one normally distributed, the other
+uniform:</p>
+<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="abstraction.html#cb301-1" tabindex="-1"></a>norm <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">26</span>)</span>
+<span id="cb301-2"><a href="abstraction.html#cb301-2" tabindex="-1"></a>unif <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">26</span>)</span>
+<span id="cb301-3"><a href="abstraction.html#cb301-3" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb301-4"><a href="abstraction.html#cb301-4" tabindex="-1"></a>tibble26 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(letters,LETTERS,norm,unif)</span>
+<span id="cb301-5"><a href="abstraction.html#cb301-5" tabindex="-1"></a>tibble26</span></code></pre></div>
+<pre><code>## # A tibble: 26 × 4
+##    letters LETTERS   norm   unif
+##    &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;
+##  1 a       A        0.197 0.620 
+##  2 b       B        0.867 0.0653
+##  3 c       C        1.23  0.308 
+##  4 d       D       -1.63  0.702 
+##  5 e       E       -0.601 0.0540
+##  6 f       F        0.253 0.717 
+##  7 g       G       -1.15  0.217 
+##  8 h       H       -1.79  0.722 
+##  9 i       I        0.420 0.612 
+## 10 j       J        0.412 0.755 
+## # ℹ 16 more rows</code></pre>
+<blockquote>
+<p>See section <a href="statistics.html#random">9.2.3</a> for more on creating random (or rather
+<em>pseudo-random</em>) numbers in R.</p>
+</blockquote>
+<div id="combining-built-in-data-of-various-types" class="section level4 hasAnchor" number="3.2.1.1">
+<h4><span class="header-section-number">3.2.1.1</span> Combining built-in data of various types<a href="abstraction.html#combining-built-in-data-of-various-types" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>As we’re starting to see, there are a lot of data sets that are built
+into base R. They tend to be fairly simple structures like vectors and
+time series, shown as “Values” in the Environment tab of RStudio. But we
+might want to combine them into tibbles to make them more useful.</p>
+<p>Have a look at the various data sets that together form data from the 50
+United States: character vectors <code>state.name</code> and <code>state.abb</code>, factors
+<code>state.region</code>, and a <code>state.x77</code> matrix.</p>
+<blockquote>
+<p>Use ?state to learn more about this data</p>
+</blockquote>
+<p>You’ll find that they each have a length of 50, and they happen to be in
+the same order by state. That will make it easy to combine them. Note in
+the following code that we provide better names for the vectors, but use
+<code>as_tibble</code> to get all of the variables, with their names, from the
+matrix <code>state.x77</code>.</p>
+<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb303-1"><a href="abstraction.html#cb303-1" tabindex="-1"></a>st <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(<span class="at">Name=</span>state.name, <span class="at">Abb=</span>state.abb, <span class="at">Region=</span>state.region, <span class="fu">as_tibble</span>(state.x77))</span>
+<span id="cb303-2"><a href="abstraction.html#cb303-2" tabindex="-1"></a><span class="fu">head</span>(st)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 11
+##   Name     Abb   Region Population Income Illiteracy `Life Exp` Murder `HS Grad`
+##   &lt;chr&gt;    &lt;chr&gt; &lt;fct&gt;       &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Alabama  AL    South        3615   3624        2.1       69.0   15.1      41.3
+## 2 Alaska   AK    West          365   6315        1.5       69.3   11.3      66.7
+## 3 Arizona  AZ    West         2212   4530        1.8       70.6    7.8      58.1
+## 4 Arkansas AR    South        2110   3378        1.9       70.7   10.1      39.9
+## 5 Califor… CA    West        21198   5114        1.1       71.7   10.3      62.6
+## 6 Colorado CO    West         2541   4884        0.7       72.1    6.8      63.9
+## # ℹ 2 more variables: Frost &lt;dbl&gt;, Area &lt;dbl&gt;</code></pre>
+<blockquote>
+<p>Use the methods you’ve learned in RStudio to see what this tibble
+contains, and note that not all variables are displayed in the simple
+<code>head()</code> output above. Can you find <code>Frost</code>, the “mean number of days
+with minimum temperature below freezing (1931-1960) in capital or
+large city”? Those would probably be fewer now.</p>
+</blockquote>
+</div>
+</div>
+<div id="tribble" class="section level3 hasAnchor" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> tribble<a href="abstraction.html#tribble" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><em>As long as you don’t let them multiply in your starship</em>,
+tribbles are handy for creating tibbles. (Or rather the
+<code>tribble</code> function is a handy way to create tibbles in code.) You simply
+create the variable names with a series of entries starting with a
+tilde, then the data is entered one row at a time. If you line them all
+up in your code one row at a time, it’s easy to enter the data
+accurately (Table <a href="abstraction.html#tab:tribble">3.1</a>).</p>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="abstraction.html#cb305-1" tabindex="-1"></a>peaks <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb305-2"><a href="abstraction.html#cb305-2" tabindex="-1"></a>  <span class="sc">~</span>peak, <span class="sc">~</span>elev, <span class="sc">~</span>longitude, <span class="sc">~</span>latitude,</span>
+<span id="cb305-3"><a href="abstraction.html#cb305-3" tabindex="-1"></a>  <span class="st">&quot;Mt. Whitney&quot;</span>, <span class="dv">4421</span>, <span class="sc">-</span><span class="fl">118.2</span>, <span class="fl">36.5</span>,</span>
+<span id="cb305-4"><a href="abstraction.html#cb305-4" tabindex="-1"></a>  <span class="st">&quot;Mt. Elbert&quot;</span>, <span class="dv">4401</span>, <span class="sc">-</span><span class="fl">106.4</span>, <span class="fl">39.1</span>,</span>
+<span id="cb305-5"><a href="abstraction.html#cb305-5" tabindex="-1"></a>  <span class="st">&quot;Mt. Hood&quot;</span>, <span class="dv">3428</span>, <span class="sc">-</span><span class="fl">121.7</span>, <span class="fl">45.4</span>,</span>
+<span id="cb305-6"><a href="abstraction.html#cb305-6" tabindex="-1"></a>  <span class="st">&quot;Mt. Rainier&quot;</span>, <span class="dv">4392</span>, <span class="sc">-</span><span class="fl">121.8</span>, <span class="fl">46.9</span>)</span>
+<span id="cb305-7"><a href="abstraction.html#cb305-7" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(peaks, <span class="at">caption =</span> <span class="st">&#39;Peaks tibble&#39;</span>)</span></code></pre></div>
+<table>
+<caption><span id="tab:tribble">TABLE 3.1: </span>Peaks tibble</caption>
+<thead>
+<tr class="header">
+<th align="left">peak</th>
+<th align="right">elev</th>
+<th align="right">longitude</th>
+<th align="right">latitude</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Mt. Whitney</td>
+<td align="right">4421</td>
+<td align="right">-118.2</td>
+<td align="right">36.5</td>
+</tr>
+<tr class="even">
+<td align="left">Mt. Elbert</td>
+<td align="right">4401</td>
+<td align="right">-106.4</td>
+<td align="right">39.1</td>
+</tr>
+<tr class="odd">
+<td align="left">Mt. Hood</td>
+<td align="right">3428</td>
+<td align="right">-121.7</td>
+<td align="right">45.4</td>
+</tr>
+<tr class="even">
+<td align="left">Mt. Rainier</td>
+<td align="right">4392</td>
+<td align="right">-121.8</td>
+<td align="right">46.9</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="csv" class="section level3 hasAnchor" number="3.2.3">
+<h3><span class="header-section-number">3.2.3</span> read_csv<a href="abstraction.html#csv" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <code>read_csv</code> function does somewhat the same thing as
+<code>read.csv</code> in base R, but creates a tibble instead of a data.frame, and
+has some other properties we’ll look at below.</p>
+<blockquote>
+<p>Note that the code below accesses data we’ll be using a lot, from EPA
+Toxic Release Inventory (TRI) data. If you want to keep this data
+organized in a separate project, you might consider creating a new
+<strong><code>air_quality</code></strong> project. This is optional, and you can get by with
+staying in one project since all of our data will be accessed from the
+<code>igisci</code> package. But in your own work, you will find it useful to
+create separate projects to keep things organized with your code and
+data together.</p>
+</blockquote>
+<div class="sourceCode" id="cb306"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb306-1"><a href="abstraction.html#cb306-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(igisci)</span>
+<span id="cb306-2"><a href="abstraction.html#cb306-2" tabindex="-1"></a>TRI87 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;TRI/TRI_1987_BaySites.csv&quot;</span>))</span>
+<span id="cb306-3"><a href="abstraction.html#cb306-3" tabindex="-1"></a>TRI87df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">ex</span>(<span class="st">&quot;TRI/TRI_1987_BaySites.csv&quot;</span>))</span>
+<span id="cb306-4"><a href="abstraction.html#cb306-4" tabindex="-1"></a>TRI87b <span class="ot">&lt;-</span> <span class="fu">tibble</span>(TRI87df)</span>
+<span id="cb306-5"><a href="abstraction.html#cb306-5" tabindex="-1"></a><span class="fu">identical</span>(TRI87, TRI87b)</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<p>Note that they’re not identical. <em>So what’s the difference between</em>
+<code>read_csv</code> and <code>read.csv</code>? Why would we
+use one over the other? Since their names are so similar, you may
+accidentally choose one or the other. Some things to consider:</p>
+<ul>
+<li>To use read_csv, you need to load the <code>readr</code> or <code>tidyverse</code>
+library, or use <code>readr::read_csv</code>.</li>
+<li>The <code>read.csv</code> function “fixes” some things and sometimes that might
+be desired: problematic variable names like <code>MLY-TAVG-NORMAL</code> become
+<code>MLY.TAVG.NORMAL</code> – but this may create problems if those original
+names are a standard designation.</li>
+<li>With <code>read.csv</code>, numbers stored as characters are converted to
+numbers: “01” becomes 1, “02” becomes 2, etc.</li>
+<li>There are other known problems that read_csv avoids.</li>
+</ul>
+<p><strong>Recommendation</strong>: Use <code>read_csv</code> and <code>write_csv</code>.</p>
+<blockquote>
+<p>You can still just call tibbles “data frames”, since they are still
+data frames, and in this book we’ll follow that practice.</p>
+</blockquote>
+</div>
+</div>
+<div id="summarizing-variable-distributions" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Summarizing variable distributions<a href="abstraction.html#summarizing-variable-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A simple statistical summary is very easy to
+do in R, and we’ll use <strong><code>eucoak</code></strong> data in the
+<code>igisci</code> package from a study of comparative runoff and erosion under
+eucalyptus and oak canopies <span class="citation">(<a href="#ref-eucoak">Thompson et al. 2016</a>)</span>. In this study (Figure
+<a href="abstraction.html#fig:absEucOakStudy">3.2</a>), we looked at the amount of runoff and
+erosion captured in Gerlach troughs on paired eucalyptus and oak sites
+in the San Francisco Bay Area. <em>You might consider creating a <code>eucoak</code>
+project, since we’ll be referencing this data set in several places.</em></p>
+
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:absEucOakStudy"></span>
+<img src="img/eucoak.png" alt="Euc-Oak paired plot runoff and erosion study (Thompson et al. (2016))" width="75%" />
+<p class="caption">
+FIGURE 3.2: Euc-Oak paired plot runoff and erosion study (<span class="citation">Thompson et al. (<a href="#ref-eucoak">2016</a>)</span>)
+</p>
+</div>
+<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb308-1"><a href="abstraction.html#cb308-1" tabindex="-1"></a><span class="fu">library</span>(igisci)</span>
+<span id="cb308-2"><a href="abstraction.html#cb308-2" tabindex="-1"></a><span class="fu">summary</span>(eucoakrainfallrunoffTDR)</span></code></pre></div>
+<pre><code>##         site        site #             date          month       rain_mm     
+##  Length   :90   Min.   :1.000   Length   :90   Length   :90   Min.   : 1.00  
+##  N.unique : 8   1st Qu.:2.000   N.unique :25   N.unique : 7   1st Qu.:16.00  
+##  N.blank  : 0   Median :4.000   N.blank  : 0   N.blank  : 0   Median :28.50  
+##  Min.nchar: 3   Mean   :4.422   Min.nchar: 8   Min.nchar: 8   Mean   :37.99  
+##  Max.nchar: 3   3rd Qu.:6.000   Max.nchar:10   Max.nchar: 9   3rd Qu.:63.25  
+##                 Max.   :8.000                                 Max.   :99.00  
+##                                                               NAs    :18     
+##     rain_oak        rain_euc      runoffL_oak      runoffL_euc   
+##  Min.   : 1.00   Min.   : 1.00   Min.   : 0.000   Min.   : 0.00  
+##  1st Qu.:16.00   1st Qu.:14.75   1st Qu.: 0.000   1st Qu.: 0.07  
+##  Median :30.50   Median :30.00   Median : 0.450   Median : 1.20  
+##  Mean   :35.08   Mean   :34.60   Mean   : 2.032   Mean   : 2.45  
+##  3rd Qu.:50.50   3rd Qu.:50.00   3rd Qu.: 2.800   3rd Qu.: 3.30  
+##  Max.   :98.00   Max.   :96.00   Max.   :14.000   Max.   :16.00  
+##  NAs    :2       NAs    :2       NAs    :5        NAs    :3      
+##    slope_oak       slope_euc       aspect_oak      aspect_euc   
+##  Min.   : 9.00   Min.   : 9.00   Min.   :100.0   Min.   :106.0  
+##  1st Qu.:12.00   1st Qu.:12.00   1st Qu.:143.0   1st Qu.:175.0  
+##  Median :24.50   Median :23.00   Median :189.0   Median :196.5  
+##  Mean   :21.62   Mean   :19.34   Mean   :181.9   Mean   :191.2  
+##  3rd Qu.:30.50   3rd Qu.:25.00   3rd Qu.:220.0   3rd Qu.:224.0  
+##  Max.   :32.00   Max.   :31.00   Max.   :264.0   Max.   :296.0  
+##                                                                 
+##  surface_tension_oak surface_tension_euc runoff_rainfall_ratio_oak
+##  Min.   :37.40       Min.   :28.51       Min.   :0.00000          
+##  1st Qu.:72.75       1st Qu.:32.79       1st Qu.:0.00000          
+##  Median :72.75       Median :37.40       Median :0.02045          
+##  Mean   :68.35       Mean   :43.11       Mean   :0.05358          
+##  3rd Qu.:72.75       3rd Qu.:56.41       3rd Qu.:0.08485          
+##  Max.   :72.75       Max.   :72.75       Max.   :0.42000          
+##  NAs    :22          NAs    :22          NAs    :5                
+##  runoff_rainfall_ratio_euc
+##  Min.   :0.000000         
+##  1st Qu.:0.003027         
+##  Median :0.047619         
+##  Mean   :0.065902         
+##  3rd Qu.:0.083603         
+##  Max.   :0.335652         
+##  NAs    :3</code></pre>
+<p>In the summary output, how are character variables handled differently
+from numeric ones?</p>
+<p>Remembering what we discussed in the previous chapter, consider the
+<code>site</code> variable (Figure <a href="#fig:absEucOakSites"><strong>??</strong></a>), and in particular
+its Length. Looking at the table, what does that length represent?</p>
+<p>There are a couple of ways of removing duplicates from a data frame,
+such as the <code>unique()</code> and the similar
+<code>dplyr::distinct()</code> functions. In the Transformation
+chapter, we’ll use this as one step in paring down big data from
+groundwater wells.</p>
+<p>We could also use <code>unique()</code> to simply have a quick look at our list of
+subcanopy runoff measurement sites, which helps us consider using <code>site</code>
+as a factor for statistical analysis. Consider what these return:</p>
+<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb310-1"><a href="abstraction.html#cb310-1" tabindex="-1"></a><span class="fu">unique</span>(eucoakrainfallrunoffTDR<span class="sc">$</span>site)</span></code></pre></div>
+<pre><code>## [1] &quot;AB1&quot; &quot;AB2&quot; &quot;KM1&quot; &quot;PR1&quot; &quot;TP1&quot; &quot;TP2&quot; &quot;TP3&quot; &quot;TP4&quot;</code></pre>
+<div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb312-1"><a href="abstraction.html#cb312-1" tabindex="-1"></a><span class="fu">factor</span>(eucoakrainfallrunoffTDR<span class="sc">$</span>site)</span></code></pre></div>
+<pre><code>##  [1] AB1 AB1 AB1 AB1 AB1 AB1 AB1 AB1 AB1 AB1 AB1 AB1 AB2 AB2 AB2 AB2 AB2 AB2 AB2
+## [20] AB2 AB2 AB2 AB2 AB2 KM1 KM1 KM1 KM1 KM1 KM1 KM1 KM1 KM1 KM1 KM1 KM1 PR1 PR1
+## [39] PR1 PR1 PR1 PR1 PR1 PR1 PR1 PR1 TP1 TP1 TP1 TP1 TP1 TP1 TP1 TP1 TP1 TP1 TP1
+## [58] TP2 TP2 TP2 TP2 TP2 TP2 TP2 TP2 TP2 TP2 TP2 TP3 TP3 TP3 TP3 TP3 TP3 TP3 TP3
+## [77] TP3 TP3 TP3 TP4 TP4 TP4 TP4 TP4 TP4 TP4 TP4 TP4 TP4 TP4
+## Levels: AB1 AB2 KM1 PR1 TP1 TP2 TP3 TP4</code></pre>
+<div id="stratifying-variables-by-site-using-a-tukey-box-plot" class="section level3 hasAnchor" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Stratifying variables by site using a Tukey box plot<a href="abstraction.html#stratifying-variables-by-site-using-a-tukey-box-plot" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A good way to look at variable distributions
+stratified by a sample site factor is the Tukey box
+plot (Figure <a href="abstraction.html#fig:absTukeyBoxplot">3.3</a>). We’ll be looking more at this
+and other visualization methods in the next chapter.</p>
+<div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb314-1"><a href="abstraction.html#cb314-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> eucoakrainfallrunoffTDR) <span class="sc">+</span> </span>
+<span id="cb314-2"><a href="abstraction.html#cb314-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>site, <span class="at">y=</span>runoffL_euc))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:absTukeyBoxplot"></span>
+<img src="EnvDataScience_files/figure-html/absTukeyBoxplot-1.png" alt="Tukey boxplot of runoff under eucalyptus canopy" width="75%" />
+<p class="caption">
+FIGURE 3.3: Tukey boxplot of runoff under eucalyptus canopy
+</p>
+</div>
+</div>
+</div>
+<div id="dplyr" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Database operations<a href="abstraction.html#dplyr" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>As part of exploring our data, we’ll typically simplify or
+reduce it for our purposes. The following methods are quickly discovered
+to be essential as part of exploring and analyzing data.</p>
+<ul>
+<li><strong>select variable columns</strong> you want to retain with <code>select</code></li>
+<li><strong>filter observations</strong> using logic, such as <code>population \&gt; 10000</code>,
+with <code>filter</code></li>
+<li><strong>subset</strong> data to do both filtering and variable selection, with
+base R’s <code>subset</code></li>
+<li><strong>add</strong> new variables and assign their values with <code>mutate</code></li>
+<li><strong>sort</strong> rows based on a field with <code>arrange</code></li>
+<li><strong>summarize</strong> by group</li>
+</ul>
+<div id="pipe" class="section level3 hasAnchor" number="3.4.1">
+<h3><span class="header-section-number">3.4.1</span> Select, mutate, and the pipe<a href="abstraction.html#pipe" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Read the pipe operator <strong><code>%&gt;%</code></strong> as “and
+then…” This is bigger than it sounds and opens up many possibilities.</p>
+<blockquote>
+<p>You can also use <strong><code>|&gt;</code></strong> as the pipe operator. Once you get used to where the <code>|</code> character is on your keyboard, you’ll find that it makes your code a bit easier to read. <em>Every character adds up when you’re interpreting code.</em></p>
+</blockquote>
+<p>See the example below, and observe how the expression becomes several
+lines long. In the process, we’ll see examples of new variables with
+mutate and selecting (and in the process
+<em>ordering</em>) variables (Table <a href="abstraction.html#tab:eucoak6table">3.2</a>).</p>
+<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="abstraction.html#cb315-1" tabindex="-1"></a>runoff <span class="ot">&lt;-</span> eucoakrainfallrunoffTDR <span class="sc">%&gt;%</span></span>
+<span id="cb315-2"><a href="abstraction.html#cb315-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Date =</span> <span class="fu">as.Date</span>(date,<span class="st">&quot;%m/%d/%Y&quot;</span>),</span>
+<span id="cb315-3"><a href="abstraction.html#cb315-3" tabindex="-1"></a>         <span class="at">rain_subcanopy =</span> (rain_oak <span class="sc">+</span> rain_euc)<span class="sc">/</span><span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb315-4"><a href="abstraction.html#cb315-4" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(site, Date, rain_mm, rain_subcanopy, </span>
+<span id="cb315-5"><a href="abstraction.html#cb315-5" tabindex="-1"></a>         runoffL_oak, runoffL_euc, slope_oak, slope_euc)</span></code></pre></div>
+<table>
+<caption><span id="tab:eucoak6table">TABLE 3.2: </span>EucOak data reorganized a bit, first 6</caption>
+<colgroup>
+<col width="6%" />
+<col width="13%" />
+<col width="9%" />
+<col width="18%" />
+<col width="14%" />
+<col width="14%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">site</th>
+<th align="left">Date</th>
+<th align="right">rain_mm</th>
+<th align="right">rain_subcanopy</th>
+<th align="right">runoffL_oak</th>
+<th align="right">runoffL_euc</th>
+<th align="right">slope_oak</th>
+<th align="right">slope_euc</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AB1</td>
+<td align="left">2006-11-08</td>
+<td align="right">29</td>
+<td align="right">29.0</td>
+<td align="right">4.7900</td>
+<td align="right">6.70000</td>
+<td align="right">32</td>
+<td align="right">31</td>
+</tr>
+<tr class="even">
+<td align="left">AB1</td>
+<td align="left">2006-11-12</td>
+<td align="right">22</td>
+<td align="right">18.5</td>
+<td align="right">3.2000</td>
+<td align="right">4.30000</td>
+<td align="right">32</td>
+<td align="right">31</td>
+</tr>
+<tr class="odd">
+<td align="left">AB1</td>
+<td align="left">2006-11-29</td>
+<td align="right">85</td>
+<td align="right">65.0</td>
+<td align="right">9.7000</td>
+<td align="right">16.00000</td>
+<td align="right">32</td>
+<td align="right">31</td>
+</tr>
+<tr class="even">
+<td align="left">AB1</td>
+<td align="left">2006-12-12</td>
+<td align="right">82</td>
+<td align="right">87.5</td>
+<td align="right">14.0000</td>
+<td align="right">14.20000</td>
+<td align="right">32</td>
+<td align="right">31</td>
+</tr>
+<tr class="odd">
+<td align="left">AB1</td>
+<td align="left">2006-12-28</td>
+<td align="right">43</td>
+<td align="right">54.0</td>
+<td align="right">9.7472</td>
+<td align="right">4.32532</td>
+<td align="right">32</td>
+<td align="right">31</td>
+</tr>
+<tr class="even">
+<td align="left">AB1</td>
+<td align="left">2007-01-29</td>
+<td align="right">7</td>
+<td align="right">54.0</td>
+<td align="right">1.4000</td>
+<td align="right">0.00000</td>
+<td align="right">32</td>
+<td align="right">31</td>
+</tr>
+</tbody>
+</table>
+<p>Another way of thinking of the pipe that is very useful is that whatever
+goes before it becomes the first parameter for any functions that
+follow. So in the example above:</p>
+<ol style="list-style-type: decimal">
+<li>The parameter <code>eucoakrainfallrunoffTDR</code> becomes the first for
+<code>mutate()</code>, then</li>
+<li>The result of the <code>mutate()</code> becomes the first parameter for
+<code>dplyr::select()</code></li>
+</ol>
+<blockquote>
+<p>To just rename a variable, use <code>rename</code> instead of <code>mutate</code>. It will
+stay in position.</p>
+</blockquote>
+<div id="review-creating-penguins-from-penguins_raw" class="section level4 hasAnchor" number="3.4.1.1">
+<h4><span class="header-section-number">3.4.1.1</span> Review: creating penguins from penguins_raw<a href="abstraction.html#review-creating-penguins-from-penguins_raw" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>To review some of these methods, it’s useful to consider how the
+penguins data frame was created from the more complex penguins_raw data
+frame, both of which are part of the
+palmerpenguins package (<span class="citation">Horst et al. (<a href="#ref-palmer">2020</a>)</span>). First
+let’s look at <code>palmerpenguins::penguins_raw</code>:</p>
+<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb316-1"><a href="abstraction.html#cb316-1" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb316-2"><a href="abstraction.html#cb316-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb316-3"><a href="abstraction.html#cb316-3" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb316-4"><a href="abstraction.html#cb316-4" tabindex="-1"></a><span class="fu">summary</span>(penguins_raw)</span></code></pre></div>
+<pre><code>##      studyName   Sample Number         Species          Region   
+##  Length   :344   Min.   :  1.00   Length   :344   Length   :344  
+##  N.unique :  3   1st Qu.: 29.00   N.unique :  3   N.unique :  1  
+##  N.blank  :  0   Median : 58.00   N.blank  :  0   N.blank  :  0  
+##  Min.nchar:  7   Mean   : 63.15   Min.nchar: 33   Min.nchar:  6  
+##  Max.nchar:  7   3rd Qu.: 95.25   Max.nchar: 41   Max.nchar:  6  
+##                  Max.   :152.00                                  
+##                                                                  
+##        Island          Stage       Individual ID Clutch Completion
+##  Length   :344   Length   :344   Length   :344   Length   :344    
+##  N.unique :  3   N.unique :  1   N.unique :190   N.unique :  2    
+##  N.blank  :  0   N.blank  :  0   N.blank  :  0   N.blank  :  0    
+##  Min.nchar:  5   Min.nchar: 18   Min.nchar:  4   Min.nchar:  2    
+##  Max.nchar:  9   Max.nchar: 18   Max.nchar:  6   Max.nchar:  3    
+##                                                                   
+##                                                                   
+##     Date Egg          Culmen Length (mm) Culmen Depth (mm) Flipper Length (mm)
+##  Min.   :2007-11-09   Min.   :32.10      Min.   :13.10     Min.   :172.0      
+##  1st Qu.:2007-11-28   1st Qu.:39.23      1st Qu.:15.60     1st Qu.:190.0      
+##  Median :2008-11-09   Median :44.45      Median :17.30     Median :197.0      
+##  Mean   :2008-11-27   Mean   :43.92      Mean   :17.15     Mean   :200.9      
+##  3rd Qu.:2009-11-16   3rd Qu.:48.50      3rd Qu.:18.70     3rd Qu.:213.0      
+##  Max.   :2009-12-01   Max.   :59.60      Max.   :21.50     Max.   :231.0      
+##                       NAs    :2          NAs    :2         NAs    :2          
+##  Body Mass (g)         Sex      Delta 15 N (o/oo) Delta 13 C (o/oo)
+##  Min.   :2700   Length   :344   Min.   : 7.632    Min.   :-27.02   
+##  1st Qu.:3550   N.unique :  2   1st Qu.: 8.300    1st Qu.:-26.32   
+##  Median :4050   N.blank  :  0   Median : 8.652    Median :-25.83   
+##  Mean   :4202   Min.nchar:  4   Mean   : 8.733    Mean   :-25.69   
+##  3rd Qu.:4750   Max.nchar:  6   3rd Qu.: 9.172    3rd Qu.:-25.06   
+##  Max.   :6300   NAs      : 11   Max.   :10.025    Max.   :-23.79   
+##  NAs    :2                      NAs    :14        NAs    :13       
+##       Comments  
+##  Length   :344  
+##  N.unique : 10  
+##  N.blank  :  0  
+##  Min.nchar: 18  
+##  Max.nchar: 68  
+##  NAs      :290  
+## </code></pre>
+<p>Now let’s create the simpler penguins data frame. We’ll use rename for a
+couple, but most variables require mutation to manipulate strings (we’ll
+get to that later), create factors, or convert to integers. And we’ll
+rename some variables to avoid using backticks (the backward single
+quotation mark accessed just to the left of the <code>1</code> key and below the
+<code>Esc</code> key, and what you can use in markdown to create a monospaced font
+as I just used for <code>1</code> and <code>Esc</code>).</p>
+<div class="sourceCode" id="cb318"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb318-1"><a href="abstraction.html#cb318-1" tabindex="-1"></a>penguins <span class="ot">&lt;-</span> penguins_raw <span class="sc">%&gt;%</span></span>
+<span id="cb318-2"><a href="abstraction.html#cb318-2" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">bill_length_mm =</span> <span class="st">`</span><span class="at">Culmen Length (mm)</span><span class="st">`</span>,</span>
+<span id="cb318-3"><a href="abstraction.html#cb318-3" tabindex="-1"></a>         <span class="at">bill_depth_mm =</span> <span class="st">`</span><span class="at">Culmen Depth (mm)</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb318-4"><a href="abstraction.html#cb318-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">species =</span> <span class="fu">factor</span>(<span class="fu">word</span>(Species)),</span>
+<span id="cb318-5"><a href="abstraction.html#cb318-5" tabindex="-1"></a>         <span class="at">island =</span> <span class="fu">factor</span>(Island),</span>
+<span id="cb318-6"><a href="abstraction.html#cb318-6" tabindex="-1"></a>         <span class="at">flipper_length_mm =</span> <span class="fu">as.integer</span>(<span class="st">`</span><span class="at">Flipper Length (mm)</span><span class="st">`</span>),</span>
+<span id="cb318-7"><a href="abstraction.html#cb318-7" tabindex="-1"></a>         <span class="at">body_mass_g =</span> <span class="fu">as.integer</span>(<span class="st">`</span><span class="at">Body Mass (g)</span><span class="st">`</span>),</span>
+<span id="cb318-8"><a href="abstraction.html#cb318-8" tabindex="-1"></a>         <span class="at">sex =</span> <span class="fu">factor</span>(<span class="fu">str_to_lower</span>(Sex)),</span>
+<span id="cb318-9"><a href="abstraction.html#cb318-9" tabindex="-1"></a>         <span class="at">year =</span> <span class="fu">as.integer</span>(<span class="fu">year</span>(<span class="fu">ymd</span>(<span class="st">`</span><span class="at">Date Egg</span><span class="st">`</span>)))) <span class="sc">%&gt;%</span></span>
+<span id="cb318-10"><a href="abstraction.html#cb318-10" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(species, island, bill_length_mm, bill_depth_mm, </span>
+<span id="cb318-11"><a href="abstraction.html#cb318-11" tabindex="-1"></a>                flipper_length_mm, body_mass_g, sex, year)</span>
+<span id="cb318-12"><a href="abstraction.html#cb318-12" tabindex="-1"></a><span class="fu">summary</span>(penguins)</span></code></pre></div>
+<pre><code>##       species          island    bill_length_mm  bill_depth_mm  
+##  Adelie   :152   Biscoe   :168   Min.   :32.10   Min.   :13.10  
+##  Chinstrap: 68   Dream    :124   1st Qu.:39.23   1st Qu.:15.60  
+##  Gentoo   :124   Torgersen: 52   Median :44.45   Median :17.30  
+##                                  Mean   :43.92   Mean   :17.15  
+##                                  3rd Qu.:48.50   3rd Qu.:18.70  
+##                                  Max.   :59.60   Max.   :21.50  
+##                                  NAs    :2       NAs    :2      
+##  flipper_length_mm  body_mass_g       sex           year     
+##  Min.   :172.0     Min.   :2700   female:165   Min.   :2007  
+##  1st Qu.:190.0     1st Qu.:3550   male  :168   1st Qu.:2007  
+##  Median :197.0     Median :4050   NAs   : 11   Median :2008  
+##  Mean   :200.9     Mean   :4202                Mean   :2008  
+##  3rd Qu.:213.0     3rd Qu.:4750                3rd Qu.:2009  
+##  Max.   :231.0     Max.   :6300                Max.   :2009  
+##  NAs    :2         NAs    :2</code></pre>
+<p>Unfortunately, they don’t end up as <em>exactly</em>
+identical, though all of the variables are identical as
+vectors:</p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb320-1"><a href="abstraction.html#cb320-1" tabindex="-1"></a><span class="fu">identical</span>(penguins, palmerpenguins<span class="sc">::</span>penguins)</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div id="helper-functions-for-dplyrselect" class="section level4 hasAnchor" number="3.4.1.2">
+<h4><span class="header-section-number">3.4.1.2</span> Helper functions for <code>dplyr::select()</code><a href="abstraction.html#helper-functions-for-dplyrselect" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>In the <code>select()</code> example above, we listed all of the
+variables, but there are a variety of helper functions for using logic
+to specify which variables to select:</p>
+<ul>
+<li><code>contains("_")</code> or any substring of interest in the variable name</li>
+<li><code>starts_with("runoff")</code></li>
+<li><code>ends_with("euc")</code></li>
+<li><code>everything()</code></li>
+<li><code>matches()</code> a regular expression</li>
+<li><code>num_range("x",1:5)</code> for the common situation where a series of
+variable names combine a string and a number</li>
+<li><code>one_of(myList)</code> for when you have a group of variable names</li>
+<li><em>range</em> of variables: e.g. <code>runoffL_oak:slope_euc</code> could have
+followed <code>rain_subcanopy</code> above</li>
+<li><em>all but</em>: preface a variable or a set of variable names with
+<strong><code>-</code></strong> to select all others</li>
+</ul>
+</div>
+</div>
+<div id="filter" class="section level3 hasAnchor" number="3.4.2">
+<h3><span class="header-section-number">3.4.2</span> Filtering observations<a href="abstraction.html#filter" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><code>filter</code> lets you select observations that meet criteria,
+similar to an SQL <code>WHERE</code> clause (Table
+<a href="abstraction.html#tab:absDateFilteredEucOak">3.3</a>).</p>
+<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="abstraction.html#cb322-1" tabindex="-1"></a>runoff2007 <span class="ot">&lt;-</span> runoff <span class="sc">%&gt;%</span></span>
+<span id="cb322-2"><a href="abstraction.html#cb322-2" tabindex="-1"></a>  <span class="fu">filter</span>(Date <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">&quot;04/01/2007&quot;</span>, <span class="st">&quot;%m/%d/%Y&quot;</span>))</span></code></pre></div>
+<table>
+<caption><span id="tab:absDateFilteredEucOak">TABLE 3.3: </span>Date-filtered EucOak data</caption>
+<colgroup>
+<col width="6%" />
+<col width="13%" />
+<col width="9%" />
+<col width="18%" />
+<col width="14%" />
+<col width="14%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">site</th>
+<th align="left">Date</th>
+<th align="right">rain_mm</th>
+<th align="right">rain_subcanopy</th>
+<th align="right">runoffL_oak</th>
+<th align="right">runoffL_euc</th>
+<th align="right">slope_oak</th>
+<th align="right">slope_euc</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AB1</td>
+<td align="left">2007-04-23</td>
+<td align="right">NA</td>
+<td align="right">33.5</td>
+<td align="right">6.94488</td>
+<td align="right">9.19892</td>
+<td align="right">32.0</td>
+<td align="right">31</td>
+</tr>
+<tr class="even">
+<td align="left">AB1</td>
+<td align="left">2007-05-05</td>
+<td align="right">NA</td>
+<td align="right">31.0</td>
+<td align="right">6.33568</td>
+<td align="right">7.43224</td>
+<td align="right">32.0</td>
+<td align="right">31</td>
+</tr>
+<tr class="odd">
+<td align="left">AB2</td>
+<td align="left">2007-04-23</td>
+<td align="right">23</td>
+<td align="right">35.5</td>
+<td align="right">4.32000</td>
+<td align="right">2.88000</td>
+<td align="right">24.0</td>
+<td align="right">25</td>
+</tr>
+<tr class="even">
+<td align="left">AB2</td>
+<td align="left">2007-05-05</td>
+<td align="right">11</td>
+<td align="right">25.5</td>
+<td align="right">4.98000</td>
+<td align="right">3.30000</td>
+<td align="right">24.0</td>
+<td align="right">25</td>
+</tr>
+<tr class="odd">
+<td align="left">KM1</td>
+<td align="left">2007-04-23</td>
+<td align="right">NA</td>
+<td align="right">37.0</td>
+<td align="right">1.56000</td>
+<td align="right">2.04000</td>
+<td align="right">30.5</td>
+<td align="right">25</td>
+</tr>
+<tr class="even">
+<td align="left">KM1</td>
+<td align="left">2007-05-05</td>
+<td align="right">28</td>
+<td align="right">22.0</td>
+<td align="right">1.32000</td>
+<td align="right">1.32000</td>
+<td align="right">30.5</td>
+<td align="right">25</td>
+</tr>
+</tbody>
+</table>
+<div id="filtering-out-na-with-is.na" class="section level4 hasAnchor" number="3.4.2.1">
+<h4><span class="header-section-number">3.4.2.1</span> Filtering out <code>NA</code> with <code>!is.na</code><a href="abstraction.html#filtering-out-na-with-is.na" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Here’s a really important one. There are many times you
+need to avoid <code>NA</code>s. We thus commonly see summary statistics using
+<code>na.rm = TRUE</code> in order to <em>ignore</em> <code>NA</code>s when calculating a statistic
+like <code>mean</code>.</p>
+<p>To simply filter out NAs from a vector or a variable use a filter:</p>
+<div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb323-1"><a href="abstraction.html#cb323-1" tabindex="-1"></a>feb_filt <span class="ot">&lt;-</span> sierraFeb <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(TEMPERATURE))</span></code></pre></div>
+</div>
+</div>
+<div id="subsetting-data-with-base-rs-subset" class="section level3 hasAnchor" number="3.4.3">
+<h3><span class="header-section-number">3.4.3</span> Subsetting data with base R’s <code>subset</code><a href="abstraction.html#subsetting-data-with-base-rs-subset" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We’ve looked at selecting variables and filtering observations, both
+examples of <em>subsetting</em> data. We also learned in the previous chapter
+on base R methods that there are lots of ways of subsetting data, such
+as using accessors like <code>[]</code> and <code>$</code>. We’ll look at another base R
+method that can do both variable selection and observation filtering in
+one step, which in some cases you might prefer.</p>
+<p>Let’s look at a problem where we’re subsetting the
+<code>palmerpenguins::pengins</code> data to just abstract the species and body
+mass of female penguins. We’d need to use both <code>filter</code> and <code>select</code> to
+accomplish this, but of course the pipe operator helps:</p>
+<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb324-1"><a href="abstraction.html#cb324-1" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins); <span class="fu">library</span>(dplyr)</span>
+<span id="cb324-2"><a href="abstraction.html#cb324-2" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> <span class="fu">filter</span>(sex<span class="sc">==</span><span class="st">&quot;female&quot;</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(species,body_mass_g)</span></code></pre></div>
+<p>The exact same result can be achieved with base R’s <code>subset</code> function,
+which if we use a pipe operator looks pretty similar:</p>
+<div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb325-1"><a href="abstraction.html#cb325-1" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb325-2"><a href="abstraction.html#cb325-2" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> <span class="fu">subset</span>(sex<span class="sc">==</span><span class="st">&quot;female&quot;</span>, <span class="at">select=</span><span class="fu">c</span>(species,body_mass_g))</span></code></pre></div>
+<pre><code>## # A tibble: 165 × 2
+##    species body_mass_g
+##    &lt;fct&gt;         &lt;int&gt;
+##  1 Adelie         3800
+##  2 Adelie         3250
+##  3 Adelie         3450
+##  4 Adelie         3625
+##  5 Adelie         3200
+##  6 Adelie         3700
+##  7 Adelie         3450
+##  8 Adelie         3325
+##  9 Adelie         3400
+## 10 Adelie         3800
+## # ℹ 155 more rows</code></pre>
+<blockquote>
+<p>As a review, how would you do this without the pipe?</p>
+</blockquote>
+<p>Given the option of either using <code>filter</code> and <code>select</code> or just <code>subset</code>
+in the above example, it’s just personal preference, which is often
+driven by the desire to make code readable, and that can go either way.
+Then there’s the desire to reduce the size of what functions you want to
+remember, which can also go either way; you still need to know what
+“select” means.</p>
+<p>Let’s take our example a bit further and use <code>subset</code> to pick the most
+massive individual female penguin in the dataset. You could also do this
+with <code>filter</code>, but the key is using the <code>max</code> function.</p>
+<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb327-1"><a href="abstraction.html#cb327-1" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb327-2"><a href="abstraction.html#cb327-2" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> <span class="fu">subset</span>(sex<span class="sc">==</span><span class="st">&quot;female&quot;</span>, <span class="at">select=</span><span class="fu">c</span>(species,body_mass_g)) <span class="sc">|&gt;</span></span>
+<span id="cb327-3"><a href="abstraction.html#cb327-3" tabindex="-1"></a>            <span class="fu">subset</span>(body_mass_g<span class="sc">==</span><span class="fu">max</span>(body_mass_g))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 2
+##   species body_mass_g
+##   &lt;fct&gt;         &lt;int&gt;
+## 1 Gentoo         5200
+## 2 Gentoo         5200</code></pre>
+<p>In this case, there was a tie between the two most massive individuals.</p>
+<blockquote>
+<p>It shouldn’t surprise us that there are lots of ways of subsetting
+data in R, since doing so helps us satisfy a key requirement of data
+science: being able to wrangle big data into something that is able to
+be visualized and understood.</p>
+</blockquote>
+</div>
+<div id="writing-a-data-frame-to-a-csv" class="section level3 hasAnchor" number="3.4.4">
+<h3><span class="header-section-number">3.4.4</span> Writing a data frame to a csv<a href="abstraction.html#writing-a-data-frame-to-a-csv" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let’s say you have created a data frame, maybe with
+read_csv</p>
+<p><code>runoff20062007 &lt;- read_csv(ex("eucoak/eucoakrainfallrunoffTDR.csv"))</code></p>
+<p>Then you do some processing to change it, maybe adding variables,
+reorganizing, etc., and you want to write out your new <code>eucoak</code>, so you
+just need to use <code>write_csv</code></p>
+<p><code>write_csv(eucoak, "data/tidy_eucoak.csv")</code></p>
+<blockquote>
+<p><strong>Note</strong> the use of a data folder <code>data</code>: Remember that your default
+workspace (<code>wd</code> for <em>working directory</em>) is where your project file
+resides (check what it is with <code>getwd()</code>), so by default you’re saving
+things in that wd. To keep things organized the above code is placing
+data in a data folder within the wd.</p>
+</blockquote>
+</div>
+<div id="group-summary" class="section level3 hasAnchor" number="3.4.5">
+<h3><span class="header-section-number">3.4.5</span> Summarize by group<a href="abstraction.html#group-summary" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><em>You’ll find that you need to
+use this all the time with real data.</em> Let’s say you have a bunch of
+data where some <em>categorical</em> variable is defining a grouping, like our
+site field in the <code>eucoak</code> data. This is a form of <em>stratifying</em> our
+data. We’d like to just create average slope, rainfall,
+and runoff for each site. Note that it involves two steps, first
+defining which field defines the group, then the various summary
+statistics we’d like to store. In this case, all of the slopes under
+<code>oak</code> remain the same for a given site – it’s a <em>site</em> characteristic
+– and the same applies to the <code>euc</code> site, so we can just grab the first
+value (mean would have also worked of course) (Table
+<a href="abstraction.html#tab:absEucOaksummary">3.4</a>).</p>
+<div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb329-1"><a href="abstraction.html#cb329-1" tabindex="-1"></a>eucoakSiteAvg <span class="ot">&lt;-</span> runoff <span class="sc">%&gt;%</span></span>
+<span id="cb329-2"><a href="abstraction.html#cb329-2" tabindex="-1"></a>  <span class="fu">group_by</span>(site) <span class="sc">%&gt;%</span></span>
+<span id="cb329-3"><a href="abstraction.html#cb329-3" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb329-4"><a href="abstraction.html#cb329-4" tabindex="-1"></a>    <span class="at">rain =</span> <span class="fu">mean</span>(rain_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb329-5"><a href="abstraction.html#cb329-5" tabindex="-1"></a>    <span class="at">rain_subcanopy =</span> <span class="fu">mean</span>(rain_subcanopy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb329-6"><a href="abstraction.html#cb329-6" tabindex="-1"></a>    <span class="at">runoffL_oak =</span> <span class="fu">mean</span>(runoffL_oak, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb329-7"><a href="abstraction.html#cb329-7" tabindex="-1"></a>    <span class="at">runoffL_euc =</span> <span class="fu">mean</span>(runoffL_euc, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb329-8"><a href="abstraction.html#cb329-8" tabindex="-1"></a>    <span class="at">slope_oak =</span> <span class="fu">first</span>(slope_oak),</span>
+<span id="cb329-9"><a href="abstraction.html#cb329-9" tabindex="-1"></a>    <span class="at">slope_euc =</span> <span class="fu">first</span>(slope_euc)</span>
+<span id="cb329-10"><a href="abstraction.html#cb329-10" tabindex="-1"></a>  )</span></code></pre></div>
+<table>
+<caption><span id="tab:absEucOaksummary">TABLE 3.4: </span>EucOak data summarized by site</caption>
+<colgroup>
+<col width="6%" />
+<col width="12%" />
+<col width="20%" />
+<col width="16%" />
+<col width="16%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">site</th>
+<th align="right">rain</th>
+<th align="right">rain_subcanopy</th>
+<th align="right">runoffL_oak</th>
+<th align="right">runoffL_euc</th>
+<th align="right">slope_oak</th>
+<th align="right">slope_euc</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AB1</td>
+<td align="right">48.37500</td>
+<td align="right">43.08333</td>
+<td align="right">6.8018364</td>
+<td align="right">6.026523</td>
+<td align="right">32.0</td>
+<td align="right">31</td>
+</tr>
+<tr class="even">
+<td align="left">AB2</td>
+<td align="right">34.08333</td>
+<td align="right">35.37500</td>
+<td align="right">4.9113636</td>
+<td align="right">3.654545</td>
+<td align="right">24.0</td>
+<td align="right">25</td>
+</tr>
+<tr class="odd">
+<td align="left">KM1</td>
+<td align="right">48.00000</td>
+<td align="right">36.12500</td>
+<td align="right">1.9362500</td>
+<td align="right">0.592500</td>
+<td align="right">30.5</td>
+<td align="right">25</td>
+</tr>
+<tr class="even">
+<td align="left">PR1</td>
+<td align="right">56.50000</td>
+<td align="right">37.56250</td>
+<td align="right">0.4585714</td>
+<td align="right">2.310000</td>
+<td align="right">27.0</td>
+<td align="right">23</td>
+</tr>
+<tr class="odd">
+<td align="left">TP1</td>
+<td align="right">38.36364</td>
+<td align="right">30.04545</td>
+<td align="right">0.8772727</td>
+<td align="right">1.657273</td>
+<td align="right">9.0</td>
+<td align="right">9</td>
+</tr>
+<tr class="even">
+<td align="left">TP2</td>
+<td align="right">34.33333</td>
+<td align="right">32.86364</td>
+<td align="right">0.0954545</td>
+<td align="right">1.525454</td>
+<td align="right">12.0</td>
+<td align="right">10</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Summarizing by group with TRI data</strong></p>
+<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb330-1"><a href="abstraction.html#cb330-1" tabindex="-1"></a><span class="fu">library</span>(igisci)</span>
+<span id="cb330-2"><a href="abstraction.html#cb330-2" tabindex="-1"></a>TRI_BySite <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;TRI/TRI_2017_CA.csv&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb330-3"><a href="abstraction.html#cb330-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">all_air =</span> <span class="st">`</span><span class="at">5.1_FUGITIVE_AIR</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">5.2_STACK_AIR</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb330-4"><a href="abstraction.html#cb330-4" tabindex="-1"></a>  <span class="fu">filter</span>(all_air <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb330-5"><a href="abstraction.html#cb330-5" tabindex="-1"></a>  <span class="fu">group_by</span>(FACILITY_NAME) <span class="sc">%&gt;%</span></span>
+<span id="cb330-6"><a href="abstraction.html#cb330-6" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb330-7"><a href="abstraction.html#cb330-7" tabindex="-1"></a>    <span class="at">FACILITY_NAME =</span> <span class="fu">first</span>(FACILITY_NAME),</span>
+<span id="cb330-8"><a href="abstraction.html#cb330-8" tabindex="-1"></a>    <span class="at">air_releases =</span> <span class="fu">sum</span>(all_air, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb330-9"><a href="abstraction.html#cb330-9" tabindex="-1"></a>    <span class="at">mean_fugitive =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">5.1_FUGITIVE_AIR</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb330-10"><a href="abstraction.html#cb330-10" tabindex="-1"></a>    <span class="at">LATITUDE =</span> <span class="fu">first</span>(LATITUDE), <span class="at">LONGITUDE =</span> <span class="fu">first</span>(LONGITUDE))</span></code></pre></div>
+<blockquote>
+<p><strong>Integer</strong> variables might be used to define categories or groups.
+Down the road, we’ll run into situations where numeric variables might
+be used to define groups, such as integer days of the year we’ll find
+useful in studying time series, but could also be zip codes, census
+tracts, or other spatial enumeration units. Note that these are
+<em>discrete</em>, not <em>continuous</em> values.</p>
+</blockquote>
+</div>
+<div id="count" class="section level3 hasAnchor" number="3.4.6">
+<h3><span class="header-section-number">3.4.6</span> Count<a href="abstraction.html#count" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <code>count</code> function is a simple variant on summarizing by
+group, since the only statistic is the count of events. The factor to
+group by is simply provided as a parameter: <code>count(</code><em>factor</em><code>)</code>.</p>
+<div class="sourceCode" id="cb331"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb331-1"><a href="abstraction.html#cb331-1" tabindex="-1"></a>tidy_eucoak <span class="sc">%&gt;%</span> <span class="fu">count</span>(tree)</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 2
+##   tree      n
+##   &lt;chr&gt; &lt;int&gt;
+## 1 euc      90
+## 2 oak      90</code></pre>
+<p>Another way to create a count is to use <code>n()</code>:</p>
+<div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb333-1"><a href="abstraction.html#cb333-1" tabindex="-1"></a>tidy_eucoak <span class="sc">%&gt;%</span></span>
+<span id="cb333-2"><a href="abstraction.html#cb333-2" tabindex="-1"></a>  <span class="fu">group_by</span>(tree) <span class="sc">%&gt;%</span></span>
+<span id="cb333-3"><a href="abstraction.html#cb333-3" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>())</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 2
+##   tree      n
+##   &lt;chr&gt; &lt;int&gt;
+## 1 euc      90
+## 2 oak      90</code></pre>
+</div>
+<div id="sorting-after-summarizing" class="section level3 hasAnchor" number="3.4.7">
+<h3><span class="header-section-number">3.4.7</span> Sorting after summarizing<a href="abstraction.html#sorting-after-summarizing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Using the marine debris data from the <em>Marine
+Debris Monitoring and Assessment Project</em> <span class="citation">(<a href="#ref-marineDebris"><em>Marine Debris Program</em>, n.d.</a>)</span>, we can use
+<code>arrange</code> to sort by latitude, so we can see the beaches from south to
+north along the Pacific coast.</p>
+<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb335-1"><a href="abstraction.html#cb335-1" tabindex="-1"></a>shorelineLatLong <span class="ot">&lt;-</span> ConcentrationReport <span class="sc">%&gt;%</span></span>
+<span id="cb335-2"><a href="abstraction.html#cb335-2" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Shoreline Name</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb335-3"><a href="abstraction.html#cb335-3" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb335-4"><a href="abstraction.html#cb335-4" tabindex="-1"></a>    <span class="at">latitude =</span> <span class="fu">mean</span>((<span class="st">`</span><span class="at">Latitude Start</span><span class="st">`</span><span class="sc">+</span><span class="st">`</span><span class="at">Latitude End</span><span class="st">`</span>)<span class="sc">/</span><span class="dv">2</span>),</span>
+<span id="cb335-5"><a href="abstraction.html#cb335-5" tabindex="-1"></a>    <span class="at">longitude =</span> <span class="fu">mean</span>((<span class="st">`</span><span class="at">Longitude Start</span><span class="st">`</span><span class="sc">+</span><span class="st">`</span><span class="at">Longitude End</span><span class="st">`</span>)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb335-6"><a href="abstraction.html#cb335-6" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb335-7"><a href="abstraction.html#cb335-7" tabindex="-1"></a>  <span class="fu">arrange</span>(latitude)</span>
+<span id="cb335-8"><a href="abstraction.html#cb335-8" tabindex="-1"></a>shorelineLatLong</span></code></pre></div>
+<pre><code>## # A tibble: 38 × 3
+##    `Shoreline Name`   latitude longitude
+##    &lt;chr&gt;                 &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Aimee Arvidson         33.6     -118.
+##  2 Balboa Pier #2         33.6     -118.
+##  3 Bolsa Chica            33.7     -118.
+##  4 Junipero Beach         33.8     -118.
+##  5 Malaga Cove            33.8     -118.
+##  6 Zuma Beach, Malibu     34.0     -119.
+##  7 Zuma Beach             34.0     -119.
+##  8 Will Rodgers           34.0     -119.
+##  9 Carbon Beach           34.0     -119.
+## 10 Nicholas Canyon        34.0     -119.
+## # ℹ 28 more rows</code></pre>
+</div>
+<div id="the-dot-operator" class="section level3 hasAnchor" number="3.4.8">
+<h3><span class="header-section-number">3.4.8</span> The dot operator<a href="abstraction.html#the-dot-operator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The dot (<strong><code>.</code></strong>) operator
+refers to <em>here</em>, similar to UNIX syntax for accessing files in the
+current folder where the path is <code>"./filename"</code>. In a piped sequence,
+you might need to reference the object (like the data frame) the pipe is
+using, as you can see in the following code.</p>
+<ul>
+<li>The advantage of the pipe is you don’t have to keep referencing the
+data frame.</li>
+<li>The dot is then used to connect to items inside the data frame</li>
+</ul>
+<div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb337-1"><a href="abstraction.html#cb337-1" tabindex="-1"></a>TRI87 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;TRI/TRI_1987_BaySites.csv&quot;</span>))</span>
+<span id="cb337-2"><a href="abstraction.html#cb337-2" tabindex="-1"></a>stackrate <span class="ot">&lt;-</span> TRI87 <span class="sc">%&gt;%</span></span>
+<span id="cb337-3"><a href="abstraction.html#cb337-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">stackrate =</span> stack_air<span class="sc">/</span>air_releases) <span class="sc">%&gt;%</span></span>
+<span id="cb337-4"><a href="abstraction.html#cb337-4" tabindex="-1"></a>  .<span class="sc">$</span>stackrate</span>
+<span id="cb337-5"><a href="abstraction.html#cb337-5" tabindex="-1"></a><span class="fu">head</span>(stackrate)</span></code></pre></div>
+<pre><code>## [1] 0.0000000 0.0000000 0.0000000 0.0000000 0.6666667 1.0000000</code></pre>
+</div>
+</div>
+<div id="stringr" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> String abstraction<a href="abstraction.html#stringr" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Character string manipulation is surprisingly
+critical to data analysis, and so the <strong><code>stringr</code></strong>
+package was developed to provide a wider array of string processing
+tools than what is in base R, including functions for detecting matches,
+subsetting strings, managing lengths, replacing substrings with other
+text, and joining, splitting, and sorting strings.</p>
+<p>We’ll look at some of the <code>stringr</code> functions, but a good way to learn
+about the wide array of functions is through the cheat sheet that can be
+downloaded from <a href="https://www.rstudio.com/resources/cheatsheets/" class="uri">https://www.rstudio.com/resources/cheatsheets/</a></p>
+<div id="detecting-matches" class="section level3 hasAnchor" number="3.5.1">
+<h3><span class="header-section-number">3.5.1</span> Detecting matches<a href="abstraction.html#detecting-matches" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>These functions look for patterns within existing
+strings, which can then be used subset observations based on those
+patterns.</p>
+<ul>
+<li><strong><code>str_detect</code></strong> detects patterns in a string, returns true or false
+if detected</li>
+<li><strong><code>str_locate</code></strong> detects patterns in a string, returns <strong>start</strong>
+<em>and</em> <strong>end</strong> position if detected, or NA if not</li>
+<li><strong><code>str_which</code></strong> returns the indices of strings that match a pattern</li>
+<li><strong><code>str_count</code></strong> counts the number of matches in each string</li>
+</ul>
+<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb339-1"><a href="abstraction.html#cb339-1" tabindex="-1"></a><span class="fu">str_detect</span>(fruit,<span class="st">&quot;qu&quot;</span>)</span>
+<span id="cb339-2"><a href="abstraction.html#cb339-2" tabindex="-1"></a><span class="fu">str_which</span>(fruit, <span class="st">&quot;qu&quot;</span>)</span>
+<span id="cb339-3"><a href="abstraction.html#cb339-3" tabindex="-1"></a>fruit[<span class="fu">str_which</span>(fruit,<span class="st">&quot;qu&quot;</span>)]</span></code></pre></div>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [13] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [25] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [37] FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE
+## [49] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [61] FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE
+## [73] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [1] 43 46 67
+## [1] &quot;kumquat&quot; &quot;loquat&quot;  &quot;quince&quot;</code></pre>
+<p>Note that <code>str_locate</code> returns a matrix with rows for each item where
+the substring is located with both <code>start</code> and <code>end</code> locations.</p>
+<div class="sourceCode" id="cb341"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb341-1"><a href="abstraction.html#cb341-1" tabindex="-1"></a>fruit_a <span class="ot">&lt;-</span> fruit[<span class="fu">str_count</span>(fruit,<span class="st">&quot;a&quot;</span>)<span class="sc">&gt;</span><span class="dv">1</span>]</span>
+<span id="cb341-2"><a href="abstraction.html#cb341-2" tabindex="-1"></a>fruit_a</span>
+<span id="cb341-3"><a href="abstraction.html#cb341-3" tabindex="-1"></a><span class="fu">str_locate</span>(fruit_a,<span class="st">&quot;a&quot;</span>)</span></code></pre></div>
+<pre><code>##  [1] &quot;avocado&quot;      &quot;banana&quot;       &quot;blackcurrant&quot; &quot;canary melon&quot; &quot;cantaloupe&quot;  
+##  [6] &quot;guava&quot;        &quot;mandarine&quot;    &quot;papaya&quot;       &quot;pomegranate&quot;  &quot;rambutan&quot;    
+## [11] &quot;salal berry&quot;  &quot;satsuma&quot;      &quot;tamarillo&quot;   
+##       start end
+##  [1,]     1   1
+##  [2,]     2   2
+##  [3,]     3   3
+##  [4,]     2   2
+##  [5,]     2   2
+##  [6,]     3   3
+##  [7,]     2   2
+##  [8,]     2   2
+##  [9,]     7   7
+## [10,]     2   2
+## [11,]     2   2
+## [12,]     2   2
+## [13,]     2   2</code></pre>
+<p>The <code>str_locate_all</code> function carries this further and finds all
+locations of the substrings within the string.</p>
+<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb343-1"><a href="abstraction.html#cb343-1" tabindex="-1"></a>fruit3a <span class="ot">&lt;-</span> fruit[<span class="fu">str_count</span>(fruit,<span class="st">&quot;a&quot;</span>)<span class="sc">==</span><span class="dv">3</span>]</span>
+<span id="cb343-2"><a href="abstraction.html#cb343-2" tabindex="-1"></a>fruit3a</span>
+<span id="cb343-3"><a href="abstraction.html#cb343-3" tabindex="-1"></a><span class="fu">str_locate_all</span>(fruit3a,<span class="st">&quot;a&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;banana&quot; &quot;papaya&quot;
+## [[1]]
+##      start end
+## [1,]     2   2
+## [2,]     4   4
+## [3,]     6   6
+## 
+## [[2]]
+##      start end
+## [1,]     2   2
+## [2,]     4   4
+## [3,]     6   6</code></pre>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="abstraction.html#cb345-1" tabindex="-1"></a>qufruit <span class="ot">&lt;-</span> fruit[<span class="fu">str_which</span>(fruit,<span class="st">&quot;qu&quot;</span>)]</span>
+<span id="cb345-2"><a href="abstraction.html#cb345-2" tabindex="-1"></a>qufruit</span>
+<span id="cb345-3"><a href="abstraction.html#cb345-3" tabindex="-1"></a><span class="fu">str_locate</span>(qufruit, <span class="st">&quot;qu&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;kumquat&quot; &quot;loquat&quot;  &quot;quince&quot; 
+##      start end
+## [1,]     4   5
+## [2,]     3   4
+## [3,]     1   2</code></pre>
+</div>
+<div id="subset-string" class="section level3 hasAnchor" number="3.5.2">
+<h3><span class="header-section-number">3.5.2</span> Subsetting strings<a href="abstraction.html#subset-string" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Subsetting in this case includes its normal use
+of abstracting the observations specified by a match (similar to a
+filter for data frames), or just a specified part of a string specified
+by start and end character positions, or the part of the string that
+matches an expression.</p>
+<ul>
+<li><strong><code>str_sub</code></strong> extracts a part of a string from a start to an end
+character position</li>
+<li><strong><code>str_subset</code></strong> returns the strings that contain a pattern match</li>
+<li><strong><code>str_extract</code></strong> returns the first (or if <code>str_extract_all</code> then
+all matches) pattern matches</li>
+<li><strong><code>str_match</code></strong> returns the first (or <code>_all</code>) pattern match as a
+matrix</li>
+<li><strong><code>str_remove</code></strong> removes a specific substring (not on the cheat
+sheet, but handy)</li>
+</ul>
+<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="abstraction.html#cb347-1" tabindex="-1"></a>qfruit <span class="ot">&lt;-</span> <span class="fu">str_subset</span>(fruit, <span class="st">&quot;q&quot;</span>)</span>
+<span id="cb347-2"><a href="abstraction.html#cb347-2" tabindex="-1"></a>qfruit</span>
+<span id="cb347-3"><a href="abstraction.html#cb347-3" tabindex="-1"></a><span class="fu">str_sub</span>(qfruit,<span class="dv">1</span>,<span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;kumquat&quot; &quot;loquat&quot;  &quot;quince&quot; 
+## [1] &quot;ku&quot; &quot;lo&quot; &quot;qu&quot;</code></pre>
+<div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb349-1"><a href="abstraction.html#cb349-1" tabindex="-1"></a><span class="fu">str_sub</span>(<span class="st">&quot;94132&quot;</span>,<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb349-2"><a href="abstraction.html#cb349-2" tabindex="-1"></a><span class="fu">str_extract</span>(qfruit,<span class="st">&quot;[aeiou]&quot;</span>)</span>
+<span id="cb349-3"><a href="abstraction.html#cb349-3" tabindex="-1"></a><span class="fu">str_remove</span>(<span class="fu">str_subset</span>(fruit,<span class="st">&quot;fruit&quot;</span>), <span class="st">&quot;fruit&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;94&quot;
+## [1] &quot;u&quot; &quot;o&quot; &quot;u&quot;
+## [1] &quot;bread&quot;   &quot;dragon&quot;  &quot;grape&quot;   &quot;jack&quot;    &quot;kiwi &quot;   &quot;passion&quot; &quot;star &quot;  
+## [8] &quot;ugli &quot;</code></pre>
+</div>
+<div id="string-length" class="section level3 hasAnchor" number="3.5.3">
+<h3><span class="header-section-number">3.5.3</span> String length<a href="abstraction.html#string-length" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The length of strings is often useful in an
+analysis process, either just knowing the length as an integer, or
+purposefully increasing or reducing it.</p>
+<ul>
+<li><strong><code>str_length</code></strong> simply returns the length of the
+string as an integer</li>
+</ul>
+<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="abstraction.html#cb351-1" tabindex="-1"></a>qfruit <span class="ot">&lt;-</span> <span class="fu">str_subset</span>(fruit,<span class="st">&quot;q&quot;</span>)</span>
+<span id="cb351-2"><a href="abstraction.html#cb351-2" tabindex="-1"></a>qfruit</span>
+<span id="cb351-3"><a href="abstraction.html#cb351-3" tabindex="-1"></a><span class="fu">str_length</span>(qfruit)</span></code></pre></div>
+<pre><code>## [1] &quot;kumquat&quot; &quot;loquat&quot;  &quot;quince&quot; 
+## [1] 7 6 6</code></pre>
+<p>Don’t confuse <code>str_length</code> with <code>length</code> (from base R), the length of an object like a vector. Both are highly useful.</p>
+<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb353-1"><a href="abstraction.html#cb353-1" tabindex="-1"></a><span class="fu">length</span>(fruit)</span></code></pre></div>
+<pre><code>## [1] 80</code></pre>
+<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb355-1"><a href="abstraction.html#cb355-1" tabindex="-1"></a><span class="fu">length</span>(qfruit)</span></code></pre></div>
+<pre><code>## [1] 3</code></pre>
+<p>Using <code>str_locate</code> with <code>str_length</code>:</p>
+<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="abstraction.html#cb357-1" tabindex="-1"></a>name <span class="ot">&lt;-</span> <span class="st">&quot;Inigo Montoya&quot;</span></span>
+<span id="cb357-2"><a href="abstraction.html#cb357-2" tabindex="-1"></a><span class="fu">str_length</span>(name)</span>
+<span id="cb357-3"><a href="abstraction.html#cb357-3" tabindex="-1"></a>firstname <span class="ot">&lt;-</span> <span class="fu">str_sub</span>(name,<span class="dv">1</span>,<span class="fu">str_locate</span>(name,<span class="st">&quot; &quot;</span>)[<span class="dv">1</span>]<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb357-4"><a href="abstraction.html#cb357-4" tabindex="-1"></a>firstname</span>
+<span id="cb357-5"><a href="abstraction.html#cb357-5" tabindex="-1"></a>lastname <span class="ot">&lt;-</span> <span class="fu">str_sub</span>(name,<span class="fu">str_locate</span>(name,<span class="st">&quot; &quot;</span>)[<span class="dv">1</span>]<span class="sc">+</span><span class="dv">1</span>,<span class="fu">str_length</span>(name))</span>
+<span id="cb357-6"><a href="abstraction.html#cb357-6" tabindex="-1"></a>lastname</span></code></pre></div>
+<pre><code>## [1] 13
+## [1] &quot;Inigo&quot;
+## [1] &quot;Montoya&quot;</code></pre>
+<p><strong>Padding and trimming lengths</strong>:</p>
+<ul>
+<li><strong><code>str_pad</code></strong> adds a specified character
+(typically a space <code>" "</code>) to either end of a string</li>
+<li><strong><code>str_trim</code></strong> removes white space from either
+end of a string</li>
+</ul>
+<p>Here’s an example <code>str_pad</code> and <code>str_trim</code> (in this case, reversing the
+former):</p>
+<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb359-1"><a href="abstraction.html#cb359-1" tabindex="-1"></a><span class="fu">str_pad</span>(qfruit,<span class="dv">10</span>,<span class="st">&quot;both&quot;</span>)</span>
+<span id="cb359-2"><a href="abstraction.html#cb359-2" tabindex="-1"></a><span class="fu">str_trim</span>(<span class="fu">str_pad</span>(qfruit,<span class="dv">10</span>,<span class="st">&quot;both&quot;</span>),<span class="st">&quot;both&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot; kumquat  &quot; &quot;  loquat  &quot; &quot;  quince  &quot;
+## [1] &quot;kumquat&quot; &quot;loquat&quot;  &quot;quince&quot;</code></pre>
+</div>
+<div id="replacing-substrings-with-other-text-mutating-strings" class="section level3 hasAnchor" number="3.5.4">
+<h3><span class="header-section-number">3.5.4</span> Replacing substrings with other text (“mutating” strings)<a href="abstraction.html#replacing-substrings-with-other-text-mutating-strings" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>These methods range from converting
+case to replacing substrings.</p>
+<ul>
+<li><strong><code>str_to_lower</code></strong> converts strings to lowercase</li>
+<li><strong><code>str_to_upper</code></strong> converts strings to uppercase</li>
+<li><strong><code>str_to_title</code></strong> capitalizes strings (makes the first character of
+each word uppercase)</li>
+</ul>
+<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="abstraction.html#cb361-1" tabindex="-1"></a><span class="fu">str_to_lower</span>(name)</span>
+<span id="cb361-2"><a href="abstraction.html#cb361-2" tabindex="-1"></a><span class="fu">str_to_upper</span>(name)</span>
+<span id="cb361-3"><a href="abstraction.html#cb361-3" tabindex="-1"></a><span class="fu">str_to_title</span>(<span class="st">&quot;for whom the bell tolls&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;inigo montoya&quot;
+## [1] &quot;INIGO MONTOYA&quot;
+## [1] &quot;For Whom The Bell Tolls&quot;</code></pre>
+<ul>
+<li><strong><code>str_replace</code></strong> replaces the first matched pattern (or all with
+<code>str_replace_all</code>) with a specified string</li>
+<li><strong><code>str_sub</code></strong> a special use of this function to replace substrings
+with a specified string</li>
+</ul>
+<div class="sourceCode" id="cb363"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb363-1"><a href="abstraction.html#cb363-1" tabindex="-1"></a><span class="fu">str_replace</span>(qfruit,<span class="st">&quot;q&quot;</span>,<span class="st">&quot;z&quot;</span>)</span>
+<span id="cb363-2"><a href="abstraction.html#cb363-2" tabindex="-1"></a><span class="fu">str_sub</span>(name,<span class="dv">1</span>,<span class="fu">str_locate</span>(name,<span class="st">&quot; &quot;</span>)[<span class="dv">1</span>]<span class="sc">-</span><span class="dv">1</span>) <span class="ot">&lt;-</span> <span class="st">&quot;Diego&quot;</span></span>
+<span id="cb363-3"><a href="abstraction.html#cb363-3" tabindex="-1"></a>name</span></code></pre></div>
+<pre><code>## [1] &quot;kumzuat&quot; &quot;lozuat&quot;  &quot;zuince&quot; 
+## [1] &quot;Diego Montoya&quot;</code></pre>
+<blockquote>
+<p>The replacement mode of <code>str_sub</code> used above may seem pretty tortuous
+and confusing. Why did we have to access <code>[1]</code> in
+<code>str_locate(name," ")[1]</code>? Experiment with what you get with
+<code>str_locate(name," ")</code> itself, and maybe consult the help system with
+<code>?str_locate</code> (and run the examples), but you’ll find this is one that
+returns a matrix, and even if there’s only one item located will still
+have a <code>start</code> and <code>end</code> location. See what happens when you use it
+<em>without</em> accessing <code>[1]</code>. You’re seeing one effect of vectorization
+– <strong>reuse</strong>. It can be very confusing, but reuse of inputs is one of
+the (very useful but still confusing) properties of vectorization. In
+this case it creates duplication, creating a vector of names.</p>
+</blockquote>
+</div>
+<div id="concatenating-and-splitting" class="section level3 hasAnchor" number="3.5.5">
+<h3><span class="header-section-number">3.5.5</span> Concatenating and splitting<a href="abstraction.html#concatenating-and-splitting" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>One very common string
+function is to concatenate strings, and somewhat less common is
+splitting them using a key separator like space, comma, or line end. One
+use of using str_c in the example below is to create a comparable join
+field based on a numeric character string that might need a zero or
+something at the left or right.</p>
+<ul>
+<li><strong><code>str_c</code></strong> The <code>paste()</code> function in base R will
+work, but you might want the default separator setting to be “” (as
+does <code>paste0()</code>) instead of <code>" "</code>, so <code>str_c</code> is just <code>paste</code> with a
+default “” separator, but you can also use <code>" "</code>.</li>
+<li><strong><code>str_split</code></strong> splits a string into parts based
+upon the detection of a specified separator like space, comma, or
+line end. However, this ends up creating a list, which can be
+confusing to use. If you’re wanting to access a particular member of
+a list of words, the <code>word</code> function is easier.</li>
+<li><strong><code>word</code></strong> lets you pick the first, second, or nth word
+in a string of words.</li>
+</ul>
+<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="abstraction.html#cb365-1" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb365-2"><a href="abstraction.html#cb365-2" tabindex="-1"></a>phrase <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">&quot;for&quot;</span>,<span class="st">&quot;whom&quot;</span>,<span class="st">&quot;the&quot;</span>,<span class="st">&quot;bell&quot;</span>,<span class="st">&quot;tolls&quot;</span>,<span class="at">sep=</span><span class="st">&quot; &quot;</span>)</span>
+<span id="cb365-3"><a href="abstraction.html#cb365-3" tabindex="-1"></a>phrase</span></code></pre></div>
+<pre><code>## [1] &quot;for whom the bell tolls&quot;</code></pre>
+<div class="sourceCode" id="cb367"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb367-1"><a href="abstraction.html#cb367-1" tabindex="-1"></a><span class="fu">str_split</span>(phrase, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] &quot;for&quot;   &quot;whom&quot;  &quot;the&quot;   &quot;bell&quot;  &quot;tolls&quot;</code></pre>
+<div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb369-1"><a href="abstraction.html#cb369-1" tabindex="-1"></a><span class="fu">word</span>(phrase,<span class="dv">4</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;bell&quot;</code></pre>
+<p>… and of course, these methods can all be
+vectorized:</p>
+<div class="sourceCode" id="cb371"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb371-1"><a href="abstraction.html#cb371-1" tabindex="-1"></a>sentences[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span></code></pre></div>
+<pre><code>## [1] &quot;The birch canoe slid on the smooth planks.&quot; 
+## [2] &quot;Glue the sheet to the dark blue background.&quot;
+## [3] &quot;It&#39;s easy to tell the depth of a well.&quot;     
+## [4] &quot;These days a chicken leg is a rare dish.&quot;</code></pre>
+<div class="sourceCode" id="cb373"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb373-1"><a href="abstraction.html#cb373-1" tabindex="-1"></a><span class="fu">word</span>(sentences[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>],<span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;birch&quot; &quot;the&quot;   &quot;easy&quot;  &quot;days&quot;</code></pre>
+<p>Example of <code>str_c</code> use to modify a variable needed for a join:</p>
+<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb375-1"><a href="abstraction.html#cb375-1" tabindex="-1"></a>csvPath <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>,<span class="st">&quot;CA/CA_MdInc.csv&quot;</span>,<span class="at">package=</span><span class="st">&quot;igisci&quot;</span>)</span>
+<span id="cb375-2"><a href="abstraction.html#cb375-2" tabindex="-1"></a>CA_MdInc <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(csvPath)</span>
+<span id="cb375-3"><a href="abstraction.html#cb375-3" tabindex="-1"></a>join_id <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">&quot;0&quot;</span>,CA_MdInc<span class="sc">$</span>NAME)</span>
+<span id="cb375-4"><a href="abstraction.html#cb375-4" tabindex="-1"></a><span class="co"># could also use str_pad(CA_MdInc$NAME,1,side=&quot;left&quot;,pad=&quot;0&quot;)</span></span>
+<span id="cb375-5"><a href="abstraction.html#cb375-5" tabindex="-1"></a><span class="fu">head</span>(CA_MdInc)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##         trID     NAME HHinc2016
+##        &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 6001400100 60014001    177417
+## 2 6001400200 60014002    153125
+## 3 6001400300 60014003     85313
+## 4 6001400400 60014004     99539
+## 5 6001400500 60014005     83650
+## 6 6001400600 60014006     61597</code></pre>
+<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb377-1"><a href="abstraction.html#cb377-1" tabindex="-1"></a><span class="fu">head</span>(join_id)</span></code></pre></div>
+<pre><code>## [1] &quot;060014001&quot; &quot;060014002&quot; &quot;060014003&quot; &quot;060014004&quot; &quot;060014005&quot; &quot;060014006&quot;</code></pre>
+</div>
+</div>
+<div id="lubridate" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> Dates and times with <code>lubridate</code><a href="abstraction.html#lubridate" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Simply stated, the <code>lubridate</code>
+package just makes it easier to work with dates and times. Dates and
+times are more difficult to work with than numbers and character
+strings, which is why <code>lubridate</code> was developed. The <code>lubridate</code> package
+is excellent at detecting and reading in dates and times – it can
+“parse” many forms. Spend some time to make sure you know how to use it.
+We’ll be using dates and times a lot, since many data sets include time
+stamps. See the cheat sheet for more information but the following
+examples may demonstrate that it’s pretty easy to use, and does a good
+job of making your job easier.</p>
+<div class="sourceCode" id="cb379"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb379-1"><a href="abstraction.html#cb379-1" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb379-2"><a href="abstraction.html#cb379-2" tabindex="-1"></a><span class="fu">dmy</span>(<span class="st">&quot;20 September 2020&quot;</span>)</span>
+<span id="cb379-3"><a href="abstraction.html#cb379-3" tabindex="-1"></a><span class="fu">dmy_hm</span>(<span class="st">&quot;20 September 2020 10:45&quot;</span>)</span>
+<span id="cb379-4"><a href="abstraction.html#cb379-4" tabindex="-1"></a><span class="fu">mdy_hms</span>(<span class="st">&quot;September 20, 2020 10:48&quot;</span>)</span>
+<span id="cb379-5"><a href="abstraction.html#cb379-5" tabindex="-1"></a><span class="fu">mdy_hm</span>(<span class="st">&quot;9/20/20 10:50&quot;</span>)</span>
+<span id="cb379-6"><a href="abstraction.html#cb379-6" tabindex="-1"></a><span class="fu">mdy</span>(<span class="st">&quot;9.20.20&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;2020-09-20&quot;
+## [1] &quot;2020-09-20 10:45:00 UTC&quot;
+## [1] &quot;2020-09-20 20:10:48 UTC&quot;
+## [1] &quot;2020-09-20 10:50:00 UTC&quot;
+## [1] &quot;2020-09-20&quot;</code></pre>
+<div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb381-1"><a href="abstraction.html#cb381-1" tabindex="-1"></a>start704 <span class="ot">&lt;-</span> <span class="fu">dmy_hm</span>(<span class="st">&quot;24 August 2020 16:00&quot;</span>)</span>
+<span id="cb381-2"><a href="abstraction.html#cb381-2" tabindex="-1"></a>end704 <span class="ot">&lt;-</span> <span class="fu">mdy_hm</span>(<span class="st">&quot;12/18/2020 4:45 pm&quot;</span>)</span>
+<span id="cb381-3"><a href="abstraction.html#cb381-3" tabindex="-1"></a><span class="fu">year</span>(start704)</span>
+<span id="cb381-4"><a href="abstraction.html#cb381-4" tabindex="-1"></a><span class="fu">month</span>(start704)</span>
+<span id="cb381-5"><a href="abstraction.html#cb381-5" tabindex="-1"></a><span class="fu">day</span>(end704)</span>
+<span id="cb381-6"><a href="abstraction.html#cb381-6" tabindex="-1"></a><span class="fu">hour</span>(end704)</span></code></pre></div>
+<pre><code>## [1] 2020
+## [1] 8
+## [1] 18
+## [1] 16</code></pre>
+<p>A bit of date math:</p>
+<div class="sourceCode" id="cb383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb383-1"><a href="abstraction.html#cb383-1" tabindex="-1"></a>end704<span class="sc">-</span>start704</span>
+<span id="cb383-2"><a href="abstraction.html#cb383-2" tabindex="-1"></a><span class="fu">as_date</span>(end704)</span>
+<span id="cb383-3"><a href="abstraction.html#cb383-3" tabindex="-1"></a>hms<span class="sc">::</span><span class="fu">as_hms</span>(end704)</span></code></pre></div>
+<pre><code>## Time difference of 116.0312 days
+## [1] &quot;2020-12-18&quot;
+## 16:45:00</code></pre>
+<p>You will find that dates are typically displayed as yyyy-mm-dd, e.g.
+“2020-09-20” above. You can display them other ways of course, but it’s
+useful to write dates this way since they sort better, with the highest
+order coming first.</p>
+<p></p>
+<blockquote>
+<p>Calling functions explicitly with <code>::</code>: Sometimes you need to specify
+the package and function name this way, for instance, if more than one
+package has a function of the same name. You can also use this method
+to call a function without having loaded its library. Due to multiple
+packages having certain common names (like <code>select</code>), it’s common to
+use this syntax, and you’ll find that we’ll use <code>dplyr::select(...)</code>
+throughout this book.</p>
+</blockquote>
+<div id="dates-used-for-annual-time-series" class="section level3 hasAnchor" number="3.6.1">
+<h3><span class="header-section-number">3.6.1</span> Dates used for annual time series<a href="abstraction.html#dates-used-for-annual-time-series" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For obvious reasons, we’ll use <code>lubridate</code> a lot when we get to time
+series. One date abstraction that will be particularly useful is day of
+the year, which can be abstracted from a date object as <code>yday</code>, which
+returns the day of the year starting with 1 for January 1 in any given
+year. Note that as with all of the date objects, you need to work with
+actual date objects, which we do in the following example, which creates
+a simple data frame table of month, day and day of year, then displays a
+subset that illustrates the utility:</p>
+<div class="sourceCode" id="cb385"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb385-1"><a href="abstraction.html#cb385-1" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb385-2"><a href="abstraction.html#cb385-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb385-3"><a href="abstraction.html#cb385-3" tabindex="-1"></a>Jan1 <span class="ot">&lt;-</span> <span class="fu">ymd</span>(<span class="st">&quot;2022-01-01&quot;</span>)</span>
+<span id="cb385-4"><a href="abstraction.html#cb385-4" tabindex="-1"></a>Dec31 <span class="ot">&lt;-</span> <span class="fu">ymd</span>(<span class="st">&quot;2022-12-31&quot;</span>)</span>
+<span id="cb385-5"><a href="abstraction.html#cb385-5" tabindex="-1"></a>year2022 <span class="ot">&lt;-</span> <span class="fu">as_date</span>(Jan1<span class="sc">:</span>Dec31)</span>
+<span id="cb385-6"><a href="abstraction.html#cb385-6" tabindex="-1"></a>ydayTable <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(<span class="at">month=</span><span class="fu">month</span>(year2022),<span class="at">day=</span><span class="fu">day</span>(year2022),<span class="at">doy=</span><span class="fu">yday</span>(year2022))</span>
+<span id="cb385-7"><a href="abstraction.html#cb385-7" tabindex="-1"></a>ydayTable[<span class="dv">27</span><span class="sc">:</span><span class="dv">35</span>,] </span></code></pre></div>
+<pre><code>## # A tibble: 9 × 3
+##   month   day   doy
+##   &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
+## 1     1    27    27
+## 2     1    28    28
+## 3     1    29    29
+## 4     1    30    30
+## 5     1    31    31
+## 6     2     1    32
+## 7     2     2    33
+## 8     2     3    34
+## 9     2     4    35</code></pre>
+</div>
+</div>
+<div id="extending-abstractions-with-functions" class="section level2 hasAnchor" number="3.7">
+<h2><span class="header-section-number">3.7</span> Extending abstractions with functions<a href="abstraction.html#extending-abstractions-with-functions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We’ve explored ways of extending base R to facilitate data abstraction,
+mostly focusing on the tidyverse in this chapter. There are many other
+packages that provide special capabilities, but we can also write our
+own, as we explored in the last chapter. Even simple functions of a few
+lines of code can make our main code more readable.</p>
+<p>We’ll look at a simple extension of the <code>readxl::read_excel</code> function. A
+common practice in data logger spreadsheets is to have the variable
+names in the first row and the units (like °C or mm in the second row.)
+There’s no good way to make use of those units in a data frame, so we
+typically will want to skip it. The <code>read_excel</code> function has a <code>skip</code>
+parameter that lets us skip the first row, and also the <code>col_names</code>
+parameter that allows us to either use the first row as variable names
+(the default, <code>TRUE</code>), get default names (<code>FALSE</code>), or provide a vector
+of variable names.</p>
+<p>We’ll write a function that creates variable names out of the first two
+rows, so includes the units with the original variable name by
+vectorizing a <code>paste0</code>.</p>
+<div class="sourceCode" id="cb387"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb387-1"><a href="abstraction.html#cb387-1" tabindex="-1"></a><span class="fu">library</span>(igisci); <span class="fu">library</span>(tidyverse); <span class="fu">library</span>(readxl)</span></code></pre></div>
+<div class="sourceCode" id="cb388"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb388-1"><a href="abstraction.html#cb388-1" tabindex="-1"></a>read_excel2 <span class="ot">&lt;-</span> <span class="cf">function</span>(xl){</span>
+<span id="cb388-2"><a href="abstraction.html#cb388-2" tabindex="-1"></a>  vnames <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(xl, <span class="at">n_max=</span><span class="dv">0</span>) <span class="sc">|&gt;</span> <span class="fu">names</span>()</span>
+<span id="cb388-3"><a href="abstraction.html#cb388-3" tabindex="-1"></a>  vunits <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(xl, <span class="at">n_max=</span><span class="dv">0</span>, <span class="at">skip=</span><span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="fu">names</span>()</span>
+<span id="cb388-4"><a href="abstraction.html#cb388-4" tabindex="-1"></a>  <span class="fu">read_excel</span>(xl, <span class="at">skip=</span><span class="dv">2</span>, <span class="at">col_names=</span><span class="fu">paste0</span>(vnames,<span class="st">&quot;_&quot;</span>,vunits))</span>
+<span id="cb388-5"><a href="abstraction.html#cb388-5" tabindex="-1"></a>}</span></code></pre></div>
+<p>Then this is a new function we can just use in our code later on. We’ll
+be reading this kind of data a lot, so even a short function can make
+our main code easier to read.</p>
+<div class="sourceCode" id="cb389"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb389-1"><a href="abstraction.html#cb389-1" tabindex="-1"></a><span class="fu">read_excel2</span>(<span class="fu">ex</span>(<span class="st">&quot;meadows/LoneyMeadow_30minCO2fluxes_Geog604.xls&quot;</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 5,397 × 14
+##    `Decimal time_mgC m-2 s-1` `Day of Year_mmols m-2 s-1` `Hour of Day_W m-2`
+##                         &lt;dbl&gt;                       &lt;dbl&gt;               &lt;dbl&gt;
+##  1                       138                          138                24  
+##  2                       138.                         138                 0.5
+##  3                       138.                         138                 1  
+##  4                       138.                         138                 1.5
+##  5                       138.                         138                 2  
+##  6                       138.                         138                 2.5
+##  7                       138.                         138                 3  
+##  8                       138.                         138                 3.5
+##  9                       138.                         138                 4  
+## 10                       138.                         138                 4.5
+## # ℹ 5,387 more rows
+## # ℹ 11 more variables: `CO2 Flux_degC` &lt;dbl&gt;, `PAR_%` &lt;dbl&gt;, Qnet_degC &lt;dbl&gt;,
+## #   Tair_degC &lt;dbl&gt;, RH_deg &lt;dbl&gt;, `Tsoil 2cm_m s-1` &lt;dbl&gt;,
+## #   `Tsoil 10cm_mm` &lt;dbl&gt;, `wdir_m3 m-3` &lt;dbl&gt;, `wspd_mgC m-2 s-1` &lt;dbl&gt;,
+## #   `Rain_mmols m-2 s-1` &lt;dbl&gt;, `VWC_W m-2` &lt;dbl&gt;</code></pre>
+<blockquote>
+<p>Note that this function accessed the <code>igisci::ex</code> function we’re using
+a lot. That function simply returns the path to the file, and that’s
+all we need as input to the <code>read_excel</code> function. It’s not always a
+good idea to write functions because we either need to make sure we
+run it, or include it in a package that we need to load. This example
+seemed worth it. There are many other functions you could build to do
+operations you need repeatedly, and some of them may get pretty
+complex, but you’ll want to decide which to build.</p>
+</blockquote>
+<div style="page-break-after: always;"></div>
+
+</div>
+<div id="exercises-data-abstraction" class="section level2 hasAnchor" number="3.8">
+<h2><span class="header-section-number">3.8</span> Exercises: Data Abstraction<a href="abstraction.html#exercises-data-abstraction" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Create an R Markdown document (.Rmd) to complete the exercise. For each question, start by copying in the question text below, then create two code chunks. The first will be used to set up libraries, read and produce data, and try methods. The code in the first chunk will probably have outputs in the form of data frame tables and graphics, but the final outputs are reserved for the second code chunk. When the .Rmd file is knitted, it should show the code for both chunks, but only the outputs from the second, which should produce a clean knitted result.</p>
+<p>To do this use the following options for the first chunk: <code>{r results="hide", warning=F, message=F, echo=T}</code>. You can run the first code chunk to learn from what it produces, but only the second chunk (without those options) will produce your final results when you knit the document.</p>
+<blockquote>
+<p>For a simple explanation of code chunk options, see <a href="https://yihui.org/knitr/options/" class="uri">https://yihui.org/knitr/options/</a>.</p>
+</blockquote>
+<p>There may also be questions to answer, which should go in the markdown section, just below the question.</p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-11" class="exercise"><strong>Exercise 3.1  </strong></span>Create a tibble with 20 rows of two variables <code>norm</code> and <code>unif</code> with <code>norm</code> created with <code>rnorm()</code> and <code>unif</code> created with <code>runif()</code>.</p>
+<blockquote>
+<p>Consider how you might use similar methods to 3.2.2, and explain whether this might (or might not) be a good approach.</p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>:</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>Code chunk output: your resulting tibble:</p>
+</blockquote>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-12" class="exercise"><strong>Exercise 3.2  </strong></span>Read in “TRI/TRI_2017_CA.csv” in two ways, as a normal data frame assigned to df and as a tibble assigned to tbl. Do not create an output from the code chunk; instead use the Environment tab to answer the question.</p>
+<blockquote>
+<p>What field names result in the data frame and in the tibble for what’s listed in the CSV as <code>5.1_FUGITIVE_AIR</code>?
+&gt; df: tibble:</p>
+</blockquote>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-13" class="exercise"><strong>Exercise 3.3  </strong></span>Use the summary function or other methods to investigate the variables in either the data.frame or tibble you just created. While you can temporarily create outputs from your code chunk to investigate, after you have your the information needed to answer the question, comment out the code producing output: don’t display any output; just answer the question below.</p>
+<blockquote>
+<p>What type of field and what values are assigned to <code>BIA_CODE</code>?
+&gt; :</p>
+</blockquote>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-14" class="exercise"><strong>Exercise 3.4  </strong></span>Create a boxplot of <code>body_mass_g</code> by <code>species</code> from the <code>penguins</code> data
+frame in the palmerpenguins package <span class="citation">(<a href="#ref-palmer">Horst et al. 2020</a>)</span>, using methods in 3.3.1.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-15" class="exercise"><strong>Exercise 3.5  </strong></span>Use select, mutate, and the pipe to create a <code>penguinMass</code> tibble where the only original variable retained is <code>species</code>, but with <code>body_mass_kg</code> created as <span class="math inline">\(\frac{1}{1000}\)</span> the <code>body_mass_g</code>. The statement should start with <code>penguinMass &lt;- penguins</code> and use a pipe plus the other functions after that.</p>
+<blockquote>
+<p>The output should be the tibble created.</p>
+</blockquote>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-16" class="exercise"><strong>Exercise 3.6  </strong></span>Now, also with <code>penguins</code>, create <code>FemaleChinstaps</code> to include only the female Chinstrap penguins. Start with <code>FemaleChinstraps &lt;- penguins %&gt;%.</code></p>
+<blockquote>
+<p>Similarly, the output should be the resulting <code>FemaleChinstaps.</code></p>
+</blockquote>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-17" class="exercise"><strong>Exercise 3.7  </strong></span>Now, summarize by <code>species</code> groups to create mean and standard deviation variables from <code>bill_length_mm</code>, <code>bill_depth_mm</code>, <code>flipper_length_mm</code>, and <code>body_mass_g</code>. Preface the variable names with either <code>avg.</code> or <code>sd.</code> Include <code>na.rm=T</code> with all statistics function calls.</p>
+<blockquote>
+<p>Similarly the output should be the resulting data frame.</p>
+</blockquote>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-18" class="exercise"><strong>Exercise 3.8  </strong></span>Sort the penguins by <code>body_mass_g</code>, and provide that output.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-19" class="exercise"><strong>Exercise 3.9  </strong></span>Using <code>stringr</code> methods, detect and print out a vector of sites in the<code>ConcentrationReport</code> that are parks (include the substring <code>"Park"</code> in the variable <code>Shoreline Name</code>), then detect and print out the longest shoreline name. See the method in 3.2 for identifying just a single result among duplicates.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-20" class="exercise"><strong>Exercise 3.10  </strong></span>The <code>sierraStations</code> data frame has weather stations only in California, but includes “<code>CA US</code>” at the end of the name. Use dplyr and stringr methods to create a new <code>STATION_NAME</code> that truncates the name, removing that part at the end, and provide the resulting data frame as the only output.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-21" class="exercise"><strong>Exercise 3.11  </strong></span>Use <code>dplyr</code> and <code>lubridate</code> methods to create a new date-type variable
+<code>sampleDate</code> from the existing <code>DATE</code> character variable in
+<code>soilCO2_97</code>, then use this to plot a graph of soil CO2 over time, with
+<code>sampleDate</code> as x, and <code>CO2pct</code> as y. Then use code to answer the
+question: What’s the length of time (time difference) from beginning to
+end for this data set [Hint: two approaches might use sorting or <code>max()</code>
+and <code>min()</code>]?</p>
+</div>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-palmer" class="csl-entry">
+Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data</em>. <a href="https://allisonhorst.github.io/palmerpenguins/">https://allisonhorst.github.io/palmerpenguins/</a>.
+</div>
+<div id="ref-marineDebris" class="csl-entry">
+<em>Marine Debris Program</em>. n.d. NOAA Office of Response; Restoration. <a href="https://marinedebris.noaa.gov/">https://marinedebris.noaa.gov/</a>.
+</div>
+<div id="ref-eucoak" class="csl-entry">
+Thompson, A, JD Davis, and AJ Oliphant. 2016. <span>“Surface Runoff and Soil Erosion Under Eucalyptus and Oak Canopy.”</span> <em>Earth Surface Processes and Landforms</em>, ahead of print. <a href="https://doi.org/10.1002/esp.3881">https://doi.org/10.1002/esp.3881</a>.
+</div>
+<div id="ref-wickham2016r" class="csl-entry">
+Wickham, Hadley, and Garrett Grolemund. 2016. <em>R for Data Science: Visualize, Model, Transform, Tidy, and Import Data</em>. O’Reilly Media, Inc. <a href="https://www.tidyverse.org/learn/">https://www.tidyverse.org/learn/</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="visualization.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section"
+  },
+  "book_filename": "envdatasci",
+  "toc_depth": 4
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

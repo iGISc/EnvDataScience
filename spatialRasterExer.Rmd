@@ -1,0 +1,49 @@
+
+## Exercises: Raster Spatial Analysis
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(include=T, echo=F)
+```
+
+:::{.exercise}
+See section 8.4 on deriving the extent of an elevation raster from the Marble Mountains as minimum and maximum x and y values, and of creating uniform random numbers between those limits. Modify this approach to stay away from the edges by about 5% of the range, and derive 100 points.  If you derive xrange and yrange scalars that represent the positive difference between the maximum and minimum values of each, you can work out what the min and max limits are of uniform random numbers that would be 5% higher than the minimums and 5% lower than the maximums. Use methods from 3.2.1 to create a data frame `pts` with x and y columns, and display that data frame.
+:::
+```{r ex8.1}
+
+```
+
+
+:::{.exercise}
+Create sf points from those coordinate pairs in `pts`, using methods from 6.3, and set their coordinate system to that of the elevation raster, using a method such st_crs as described in 6.2, which illustrates features but the same applies to rasters. Then use tmap to display them on a base of the elevation raster.
+:::
+```{r ex8.2}
+
+knitr::include_graphics(here::here("img","ras_ex2.png"))
+```
+
+:::{.exercise}
+**Geology and elevation by stream and trail distance**. Now use those points to extract values from stream distance, trail distance, geology, slope, aspect, and elevation, and display that sf data frame as a table, then plot trail distance (x) vs stream distance (y) colored by geology and sized by elevation (Figure \@ref(fig:rasGeolElevDistGoal)).
+:::
+```{r ex8.3, message=F, warning=F, results='hide'}
+
+```
+
+```{r rasGeolElevDistGoal, fig.cap="Geology and elevation by stream and trail distance (goal)"}
+knitr::include_graphics(here::here("img","ras_ex3.png"))
+```
+
+:::{.exercise}
+Create a slope raster from the dem TIFF in the SanPedro folder in igisci,  then a "steep" raster of all slopes > 26 degrees, determined by a study of landslides to be a common landslide threshold, then display them along with roads "SanPedro/roads.shp" in "black", streams "SanPedro/streams.shp" in "blue", and watershed borders "SanPedro/SPCWatershed.shp" in "darkgreen" with lwd=2, using methods from 8.2, figure 8.9.
+:::
+```{r ex8.4}
+
+knitr::include_graphics(here::here("img","ras_ex4.png"))
+```
+
+:::{.exercise}
+Add a hillshade to that map.
+:::
+```{r ex8.5}
+knitr::include_graphics(here::here("img","ras_ex5.png"))
+```
+

@@ -1,0 +1,1229 @@
+{
+    "sources": [
+        {
+            "DOI": "10.1080/10618600.2019.1695624",
+            "URL": "https://doi.org/10.1080/10618600.2019.1695624",
+            "author": [
+                {
+                    "family": "Wang",
+                    "given": "Earo"
+                },
+                {
+                    "family": "Cook",
+                    "given": "Dianne"
+                },
+                {
+                    "family": "Hyndman",
+                    "given": "Rob J"
+                }
+            ],
+            "container-title": "Journal of Computational and Graphical Statistics",
+            "id": "tsibble",
+            "issue": "3",
+            "issued": {
+                "date-parts": [
+                    [
+                        2020
+                    ]
+                ]
+            },
+            "page": "466-478",
+            "publisher": "Taylor & Francis",
+            "title": "A new tidy data structure to support exploration and modeling of temporal data",
+            "type": "article-journal",
+            "volume": "29"
+        },
+        {
+            "URL": "https://www.mdpi.com/2072-4292/12/11/1828",
+            "author": [
+                {
+                    "family": "Davis",
+                    "given": "JD"
+                },
+                {
+                    "family": "Blesius",
+                    "given": "L"
+                },
+                {
+                    "family": "Slocombe",
+                    "given": "M"
+                },
+                {
+                    "family": "Maher",
+                    "given": "S"
+                },
+                {
+                    "family": "Vasey",
+                    "given": "M"
+                },
+                {
+                    "family": "Christian",
+                    "given": "P"
+                },
+                {
+                    "family": "Lynch",
+                    "given": "P"
+                }
+            ],
+            "container-title": "Remote Sensing",
+            "id": "NDVI",
+            "issued": {
+                "date-parts": [
+                    [
+                        2020
+                    ]
+                ]
+            },
+            "title": "Unpiloted aerial system (UAS)-supported biogeomorphic analysis of restored sierra nevada montane meadows",
+            "type": "article-journal",
+            "volume": "12"
+        },
+        {
+            "DOI": "10.1177/001316446002000104",
+            "author": [
+                {
+                    "family": "Cohen",
+                    "given": "Jacob"
+                }
+            ],
+            "container-title": "Educational and Psychological Measurement",
+            "id": "CohenKappa",
+            "issued": {
+                "date-parts": [
+                    [
+                        1960
+                    ]
+                ]
+            },
+            "title": "A coefficient of agreement for nominal scales",
+            "type": "article-journal",
+            "volume": "20"
+        },
+        {
+            "DOI": "10.18637/jss.v066.i05",
+            "URL": "https://www.jstatsoft.org/index.php/jss/article/view/v066i05",
+            "abstract": "Nonlinear regression models are applied in a broad variety of scientific fields. Various R functions are already dedicated to fitting such models, among which the function nls() has a prominent position. Unlike linear regression fitting of nonlinear models relies on non-trivial assumptions and therefore users are required to carefully ensure and validate the entire modeling. Parameter estimation is carried out using some variant of the least- squares criterion involving an iterative process that ideally leads to the determination of the optimal parameter estimates. Therefore, users need to have a clear understanding of the model and its parameterization in the context of the application and data considered, an a priori idea about plausible values for parameter estimates, knowledge of model diagnostics procedures available for checking crucial assumptions, and, finally, an under- standing of the limitations in the validity of the underlying hypotheses of the fitted model and its implication for the precision of parameter estimates. Current nonlinear regression modules lack dedicated diagnostic functionality. So there is a need to provide users with an extended toolbox of functions enabling a careful evaluation of nonlinear regression fits. To this end, we introduce a unified diagnostic framework with the R package nlstools. In this paper, the various features of the package are presented and exemplified using a worked example from pulmonary medicine.",
+            "author": [
+                {
+                    "family": "Baty",
+                    "given": "Florent"
+                },
+                {
+                    "family": "Ritz",
+                    "given": "Christian"
+                },
+                {
+                    "family": "Charles",
+                    "given": "Sandrine"
+                },
+                {
+                    "family": "Brutsche",
+                    "given": "Martin"
+                },
+                {
+                    "family": "Flandrois",
+                    "given": "Jean-Pierre"
+                },
+                {
+                    "family": "Delignette-Muller",
+                    "given": "Marie-Laure"
+                }
+            ],
+            "container-title": "Journal of Statistical Software",
+            "id": "JSSv066i05",
+            "issue": "5",
+            "issued": {
+                "date-parts": [
+                    [
+                        2015
+                    ]
+                ]
+            },
+            "page": "1-21",
+            "title": "A toolbox for nonlinear regression in r: The package nlstools",
+            "title-short": "A toolbox for nonlinear regression in r",
+            "type": "article-journal",
+            "volume": "66"
+        },
+        {
+            "URL": "https://doi.org/10.1371/journal.pone.0169517",
+            "author": [
+                {
+                    "family": "Studwell",
+                    "given": "Anna"
+                },
+                {
+                    "family": "Hines",
+                    "given": "Ellen"
+                },
+                {
+                    "family": "Elliott",
+                    "given": "Meredith L"
+                },
+                {
+                    "family": "Howar",
+                    "given": "Julie"
+                },
+                {
+                    "family": "Holzman",
+                    "given": "Barbara"
+                },
+                {
+                    "family": "Nur",
+                    "given": "Nadav"
+                },
+                {
+                    "family": "Jahncke",
+                    "given": "Jaime"
+                }
+            ],
+            "container-title": "PLoS ONE",
+            "id": "Studwell2017",
+            "issued": {
+                "date-parts": [
+                    [
+                        2017
+                    ]
+                ]
+            },
+            "title": "Modeling nonresident seabird foraging distributions to inform ocean zoning in central california",
+            "type": "article-journal"
+        },
+        {
+            "URL": "https://doi.org/10.3354/meps12801",
+            "author": [
+                {
+                    "family": "Ballard",
+                    "given": "Grant"
+                },
+                {
+                    "family": "Schmidt",
+                    "given": "Annie E"
+                },
+                {
+                    "family": "Toniolo",
+                    "given": "Viola"
+                },
+                {
+                    "family": "Veloz",
+                    "given": "Sam"
+                },
+                {
+                    "family": "Jongsomjit",
+                    "given": "Dennis"
+                },
+                {
+                    "family": "Arrigo",
+                    "given": "Kevin R"
+                },
+                {
+                    "family": "Ainley",
+                    "given": "David G"
+                }
+            ],
+            "container-title": "Marine Ecology Progress Series",
+            "id": "Ballard2019",
+            "issued": {
+                "date-parts": [
+                    [
+                        2019
+                    ]
+                ]
+            },
+            "title": "Fine-scale oceanographic features characterizing successful adélie penguin foraging in the SW ross sea",
+            "type": "article-journal"
+        },
+        {
+            "URL": "https://doi.org/10.1007/s13157-021-01437-2",
+            "author": [
+                {
+                    "family": "Blackburn",
+                    "given": "Darren A"
+                },
+                {
+                    "family": "Oliphant",
+                    "given": "Andrew J"
+                },
+                {
+                    "family": "Davis",
+                    "given": "Jerry D"
+                }
+            ],
+            "container-title": "Wetlands",
+            "id": "blackburn2021carbon",
+            "issue": "3",
+            "issued": {
+                "date-parts": [
+                    [
+                        2021
+                    ]
+                ]
+            },
+            "page": "1-17",
+            "publisher": "Springer",
+            "title": "Carbon and water exchanges in a mountain meadow ecosystem, sierra nevada, california",
+            "type": "article-journal",
+            "volume": "41"
+        },
+        {
+            "DOI": "10.1002/esp.3881",
+            "URL": "https://www.researchgate.net/publication/286512299_Surface_Runoff_and_Soil_Erosion_under_Eucalyptus_and_Oak_Canopy",
+            "author": [
+                {
+                    "family": "Thompson",
+                    "given": "A"
+                },
+                {
+                    "family": "Davis",
+                    "given": "JD"
+                },
+                {
+                    "family": "Oliphant",
+                    "given": "AJ"
+                }
+            ],
+            "container-title": "Earth Surface Processes and Landforms",
+            "id": "eucoak",
+            "issued": {
+                "date-parts": [
+                    [
+                        2016
+                    ]
+                ]
+            },
+            "title": "Surface runoff and soil erosion under eucalyptus and oak canopy",
+            "type": "article-journal"
+        },
+        {
+            "DOI": "10.1007/s11368-013-0774-3",
+            "author": [
+                {
+                    "family": "Davis",
+                    "given": "Jerry D"
+                },
+                {
+                    "family": "Sims",
+                    "given": "Stephanie M"
+                }
+            ],
+            "container-title": "Journal of Soils and Sediments",
+            "id": "DavisSims2013",
+            "issue": "10",
+            "issued": {
+                "date-parts": [
+                    [
+                        2013
+                    ]
+                ]
+            },
+            "page": "1784-1801",
+            "publisher": "Springer",
+            "title": "Physical and maximum entropy models applied to inventories of hillslope sediment sources",
+            "type": "article-journal",
+            "volume": "13"
+        },
+        {
+            "URL": "https://www.mdpi.com/1099-4300/17/6/4271",
+            "author": [
+                {
+                    "family": "Davis",
+                    "given": "Jerry"
+                },
+                {
+                    "family": "Blesius",
+                    "given": "Leonhard"
+                }
+            ],
+            "container-title": "Entropy",
+            "id": "DavisBlesius2015",
+            "issue": "6",
+            "issued": {
+                "date-parts": [
+                    [
+                        2015
+                    ]
+                ]
+            },
+            "page": "4271-4292",
+            "publisher": "Multidisciplinary Digital Publishing Institute",
+            "title": "A hybrid physical and maximum-entropy landslide susceptibility model",
+            "type": "article-journal",
+            "volume": "17"
+        },
+        {
+            "DOI": "10.1016/j.rse.2019.03.028",
+            "author": [
+                {
+                    "family": "Yang",
+                    "given": "W"
+                },
+                {
+                    "family": "Kobayashi",
+                    "given": "H"
+                },
+                {
+                    "family": "Wang",
+                    "given": "C"
+                },
+                {
+                    "family": "Shen",
+                    "given": "J",
+                    "suffix": "M abd Chen"
+                },
+                {
+                    "family": "Matsushita",
+                    "given": "B"
+                },
+                {
+                    "family": "Tang",
+                    "given": "Y"
+                },
+                {
+                    "family": "Kim",
+                    "given": "Y"
+                },
+                {
+                    "family": "Bret-Harte",
+                    "given": "MS"
+                },
+                {
+                    "family": "Zona",
+                    "given": "D"
+                },
+                {
+                    "family": "Oechel",
+                    "given": "W"
+                },
+                {
+                    "family": "Kondoh",
+                    "given": "A"
+                }
+            ],
+            "container-title": "Remote Sensing of Environment",
+            "id": "Yang2019",
+            "issued": {
+                "date-parts": [
+                    [
+                        2019
+                    ]
+                ]
+            },
+            "page": "31-44",
+            "title": "A semi-analytical snow-free vegetation index for improving estimation of plant phenology in tundra and grassland ecosystems.",
+            "type": "article-journal",
+            "volume": "228"
+        },
+        {
+            "DOI": "10.1016/j.gloplacha.2011.03.005",
+            "author": [
+                {
+                    "family": "Powell",
+                    "given": "Cynthia"
+                },
+                {
+                    "family": "Blesius",
+                    "given": "Leonhard"
+                },
+                {
+                    "family": "Davis",
+                    "given": "Jerry"
+                },
+                {
+                    "family": "Schuetzenmeister",
+                    "given": "Falk"
+                }
+            ],
+            "container-title": "Global and Planetary Change",
+            "id": "Powell2011",
+            "issue": "1-2",
+            "issued": {
+                "date-parts": [
+                    [
+                        2011
+                    ]
+                ]
+            },
+            "page": "77-84",
+            "publisher": "Elsevier",
+            "title": "Using MODIS snow cover and precipitation data to model water runoff for the mokelumne river basin in the sierra nevada, california (2000–2009)",
+            "type": "article-journal",
+            "volume": "77"
+        },
+        {
+            "URL": "https://www.researchgate.net/publication/258333952_Soil_carbon_dioxide_in_a_summer-dry_subalpine_karst_Marble_Mountains_California_USA",
+            "author": [
+                {
+                    "family": "Davis",
+                    "given": "JD"
+                },
+                {
+                    "family": "Amato",
+                    "given": "P"
+                },
+                {
+                    "family": "Kiefer",
+                    "given": "R"
+                }
+            ],
+            "container-title": "Zeitschrift für Geomorphologie N.F.",
+            "id": "marblesCO2",
+            "issue": "3",
+            "issued": {
+                "date-parts": [
+                    [
+                        2001
+                    ]
+                ]
+            },
+            "page": "385-400",
+            "title": "Soil carbon dioxide in a summer-dry subalpine karst, marble mountains, california, USA",
+            "type": "article-journal",
+            "volume": "45"
+        },
+        {
+            "DOI": "10.1002/esp.262",
+            "author": [
+                {
+                    "family": "Davis",
+                    "given": "JD"
+                },
+                {
+                    "family": "Davis",
+                    "given": "GA"
+                }
+            ],
+            "container-title": "Earth Surface Processes and Landforms",
+            "id": "marbles",
+            "issue": "10",
+            "issued": {
+                "date-parts": [
+                    [
+                        2001
+                    ]
+                ]
+            },
+            "page": "1151-1159",
+            "title": "A microcontroller-based data-logger design for seasonal hydrochemical studies",
+            "type": "article-journal",
+            "volume": "26"
+        },
+        {
+            "author": [
+                {
+                    "family": "Tukey",
+                    "given": "John W"
+                }
+            ],
+            "container-title": "The annals of mathematical statistics",
+            "id": "tukey1962",
+            "issue": "1",
+            "issued": {
+                "date-parts": [
+                    [
+                        1962
+                    ]
+                ]
+            },
+            "page": "1-67",
+            "title": "The future of data analysis",
+            "type": "article-journal",
+            "volume": "33"
+        },
+        {
+            "DOI": "10.1002/esp.3290180404",
+            "author": [
+                {
+                    "family": "Davis",
+                    "given": "Jerry D"
+                },
+                {
+                    "family": "Brook",
+                    "given": "George A"
+                }
+            ],
+            "container-title": "Earth surface processes and landforms",
+            "id": "davis1993geomorphology",
+            "issue": "4",
+            "issued": {
+                "date-parts": [
+                    [
+                        1993
+                    ]
+                ]
+            },
+            "page": "339-362",
+            "publisher": "Wiley Online Library",
+            "title": "Geomorphology and hydrology of upper sinking cove, cumberland plateau, tennessee",
+            "type": "article-journal",
+            "volume": "18"
+        },
+        {
+            "URL": "https://tidyverse.org",
+            "author": [
+                {
+                    "family": "Wickham",
+                    "given": "Hadley"
+                }
+            ],
+            "container-title": "R package ver",
+            "id": "wickham2017tidyverse",
+            "issue": "1",
+            "issued": {
+                "date-parts": [
+                    [
+                        2017
+                    ]
+                ]
+            },
+            "page": "1",
+            "title": "The tidyverse",
+            "type": "article-journal",
+            "volume": "1"
+        },
+        {
+            "author": [
+                {
+                    "family": "Voronoi",
+                    "given": "G"
+                }
+            ],
+            "container-title": "Journal für die Reine und Angewandte Mathematik",
+            "id": "Voronoi",
+            "issued": {
+                "date-parts": [
+                    [
+                        1908
+                    ]
+                ]
+            },
+            "page": "198-287",
+            "title": "Nouvelles applications des paramètres continus à la théorie de formes quadratiques",
+            "type": "article-journal",
+            "volume": "134"
+        },
+        {
+            "author": [
+                {
+                    "family": "Thiessen",
+                    "given": "A"
+                }
+            ],
+            "container-title": "Monthly Weather Review",
+            "id": "Thiessen",
+            "issue": "7",
+            "issued": {
+                "date-parts": [
+                    [
+                        1911
+                    ]
+                ]
+            },
+            "page": "1082-1089",
+            "title": "Precipitation averages for large areas",
+            "type": "article-journal",
+            "volume": "39"
+        },
+        {
+            "author": [
+                {
+                    "family": "Berry",
+                    "given": "Brian"
+                },
+                {
+                    "family": "Marble",
+                    "given": "Duane"
+                }
+            ],
+            "id": "SpatialAnalysis",
+            "issued": {
+                "date-parts": [
+                    [
+                        1968
+                    ]
+                ]
+            },
+            "publisher": "Prentice-Hall",
+            "title": "Spatial analysis: A reader in statistical geography",
+            "title-short": "Spatial analysis",
+            "type": "book"
+        },
+        {
+            "URL": "https://bookdown-org.translate.goog/nowosad/geostatystyka/?_x_tr_sl=pl&_x_tr_tl=en&_x_tr_hl=pl",
+            "author": [
+                {
+                    "family": "Nowosad",
+                    "given": "Jakub"
+                }
+            ],
+            "id": "NowosadGeostatisticsR",
+            "title": "Geostatistics in r",
+            "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "Tukey",
+                    "given": "John W"
+                }
+            ],
+            "id": "tukey1977",
+            "issued": {
+                "date-parts": [
+                    [
+                        1977
+                    ]
+                ]
+            },
+            "publisher": "Addison-Wesley",
+            "publisher-place": "Reading, Mass",
+            "title": "Exploratory data analysis",
+            "type": "book"
+        },
+        {
+            "URL": "http://yihui.org/knitr/",
+            "author": [
+                {
+                    "family": "Xie",
+                    "given": "Yihui"
+                }
+            ],
+            "edition": "1st",
+            "id": "xie2015",
+            "issued": {
+                "date-parts": [
+                    [
+                        2015
+                    ]
+                ]
+            },
+            "note": "ISBN 978-1498716963",
+            "publisher": "Chapman; Hall/CRC",
+            "publisher-place": "Boca Raton, Florida",
+            "title": "Dynamic documents with R and knitr",
+            "type": "book"
+        },
+        {
+            "URL": "https://bookdown.org/yihui/rmarkdown/",
+            "author": [
+                {
+                    "family": "Xie",
+                    "given": "Yihui"
+                },
+                {
+                    "family": "Allaire",
+                    "given": "JJ"
+                },
+                {
+                    "family": "Grolemund",
+                    "given": "Garrett"
+                }
+            ],
+            "edition": "1st",
+            "id": "RMarkdown",
+            "issued": {
+                "date-parts": [
+                    [
+                        2019
+                    ]
+                ]
+            },
+            "note": "ISBN 9781138359338",
+            "publisher": "Chapman; Hall/CRC",
+            "publisher-place": "Boca Raton, Florida",
+            "title": "R markdown: The definitive guide",
+            "title-short": "R markdown",
+            "type": "book"
+        },
+        {
+            "URL": "https://bookdown.org/yihui/bookdown/",
+            "author": [
+                {
+                    "family": "Xie",
+                    "given": "Yihui"
+                }
+            ],
+            "id": "Bookdown",
+            "issued": {
+                "date-parts": [
+                    [
+                        2021
+                    ]
+                ]
+            },
+            "publisher": "Chapman; Hall/CRC",
+            "publisher-place": "Boca Raton, Florida",
+            "title": "Bookdown: Authoring books and technical documents with r markdown",
+            "title-short": "Bookdown",
+            "type": "book"
+        },
+        {
+            "URL": "https://cengel.github.io/R-data-wrangling/",
+            "author": [
+                {
+                    "family": "Engel",
+                    "given": "Claudia"
+                }
+            ],
+            "id": "Engel",
+            "issued": {
+                "date-parts": [
+                    [
+                        2020
+                    ]
+                ]
+            },
+            "publisher": "cengel.github.io",
+            "title": "Data wrangling with r",
+            "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "Tomlin",
+                    "given": "C Dana"
+                }
+            ],
+            "id": "Tomlin",
+            "issued": {
+                "date-parts": [
+                    [
+                        1990
+                    ]
+                ]
+            },
+            "publisher": "Englewood Cliffs, N.J: Prentice Hall",
+            "title": "Geographic information systems and cartographic modeling",
+            "type": "book"
+        },
+        {
+            "URL": "https://geog.sfsu.edu/theses/",
+            "author": [
+                {
+                    "family": "Sims",
+                    "given": "Stephanie"
+                }
+            ],
+            "id": "Sims2004",
+            "issued": {
+                "date-parts": [
+                    [
+                        2004
+                    ]
+                ]
+            },
+            "title": "Hillslope sediment source assessment of san pedro creek watershed, california",
+            "type": "book"
+        },
+        {
+            "URL": "https://www.tidyverse.org/learn/",
+            "author": [
+                {
+                    "family": "Wickham",
+                    "given": "Hadley"
+                },
+                {
+                    "family": "Grolemund",
+                    "given": "Garrett"
+                }
+            ],
+            "id": "wickham2016r",
+            "issued": {
+                "date-parts": [
+                    [
+                        2016
+                    ]
+                ]
+            },
+            "publisher": "O’Reilly Media, Inc.",
+            "title": "R for data science: Visualize, model, transform, tidy, and import data",
+            "title-short": "R for data science",
+            "type": "book"
+        },
+        {
+            "URL": "https://geocompr.robinlovelace.net/",
+            "author": [
+                {
+                    "family": "Lovelace",
+                    "given": "Robin"
+                },
+                {
+                    "family": "Nowosad",
+                    "given": "Jakuv"
+                },
+                {
+                    "family": "Muenchow",
+                    "given": "Jannes"
+                }
+            ],
+            "id": "Geocomputation",
+            "issued": {
+                "date-parts": [
+                    [
+                        2019
+                    ]
+                ]
+            },
+            "publisher": "CRC Press",
+            "title": "Geocomputation with r",
+            "type": "book"
+        },
+        {
+            "URL": "https://bookdown.org/roback/bookdown-BeyondMLR/",
+            "author": [
+                {
+                    "family": "Roback",
+                    "given": "Paul"
+                },
+                {
+                    "family": "Legler",
+                    "given": "Julie"
+                }
+            ],
+            "id": "RobackLegler",
+            "publisher": "\"CRC Press\"",
+            "title": "Beyond multiple linear regression: Applied generalized linear models and multilevel models in r",
+            "title-short": "Beyond multiple linear regression",
+            "type": "book"
+        },
+        {
+            "URL": "https://r-pkgs.org",
+            "author": [
+                {
+                    "family": "Wickham",
+                    "given": "Hadley"
+                },
+                {
+                    "family": "Bryan",
+                    "given": "Jenny"
+                }
+            ],
+            "id": "r-pkgs",
+            "publisher": "O’Reilly",
+            "title": "R packages",
+            "type": "book"
+        },
+        {
+            "URL": "https://happygitwithr.com/",
+            "author": [
+                {
+                    "family": "Bryan",
+                    "given": "Jenny"
+                }
+            ],
+            "id": "happygitwithr",
+            "title": "Happy git and GitHub for the useR",
+            "type": "book"
+        },
+        {
+            "URL": "https://rspatial.org",
+            "author": [
+                {
+                    "family": "Hijmans",
+                    "given": "Robert J"
+                }
+            ],
+            "id": "rspatial",
+            "title": "Spatial data science",
+            "type": "book"
+        },
+        {
+            "URL": "https://marinedebris.noaa.gov/",
+            "id": "marineDebris",
+            "publisher": "NOAA Office of Response; Restoration",
+            "title": "Marine debris program",
+            "type": "book"
+        },
+        {
+            "URL": "https://www.epa.gov/toxics-release-inventory-tri-program",
+            "id": "TRI",
+            "publisher": "US Environmental Protection Agency",
+            "title": "Toxic release inventory (TRI) program",
+            "type": "book"
+        },
+        {
+            "URL": "https://allisonhorst.github.io/palmerpenguins/",
+            "author": [
+                {
+                    "family": "Horst",
+                    "given": "Allison Marie"
+                },
+                {
+                    "family": "Hill",
+                    "given": "Alison Presmanes"
+                },
+                {
+                    "family": "Gorman",
+                    "given": "Kristen B"
+                }
+            ],
+            "id": "palmer",
+            "issued": {
+                "date-parts": [
+                    [
+                        2020
+                    ]
+                ]
+            },
+            "note": "R package version 0.1.0",
+            "title": "Palmerpenguins: Palmer archipelago (antarctica) penguin data",
+            "title-short": "Palmerpenguins",
+            "type": "book"
+        },
+        {
+            "URL": "http://www.icos-etc.eu/home",
+            "id": "icos",
+            "title": "European fluxes database",
+            "type": "book"
+        },
+        {
+            "URL": "https://cran.r-project.org/package=dslabs",
+            "author": [
+                {
+                    "family": "Irizarry",
+                    "given": "Rafael A"
+                }
+            ],
+            "id": "Irizarry",
+            "issued": {
+                "date-parts": [
+                    [
+                        2019
+                    ]
+                ]
+            },
+            "publisher": "CRC Press",
+            "title": "Introduction to data science: Data analysis and prediction algorithms with r",
+            "title-short": "Introduction to data science",
+            "type": "book"
+        },
+        {
+            "URL": "https://valentinitnelav.github.io/satellite-image-classification-r/",
+            "author": [
+                {
+                    "family": "Stefan",
+                    "given": "Valentin"
+                }
+            ],
+            "id": "Stefan",
+            "title": "R - using random forests, support vector machines and neural networks for a pixel based supervised classification of sentinel-2 multispectral images",
+            "type": "book"
+        },
+        {
+            "URL": "https://topepo.github.io/caret",
+            "author": [
+                {
+                    "family": "Kuhn",
+                    "given": "Max"
+                }
+            ],
+            "id": "caret",
+            "title": "The caret package",
+            "type": "book"
+        },
+        {
+            "URL": "https://machinelearningmastery.com/tune-machine-learning-algorithms-in-r/",
+            "author": [
+                {
+                    "family": "Brownlee",
+                    "given": "Jason"
+                }
+            ],
+            "id": "MLtuning",
+            "title": "Tuning machine learning algorithms in r",
+            "type": "book"
+        },
+        {
+            "URL": "https://scihub.copernicus.eu/",
+            "id": "Copernicus",
+            "publisher": "European Space Agency - ESA",
+            "title": "Copernicus open access hub",
+            "type": "book"
+        },
+        {
+            "URL": "https://geog.sfsu.edu/",
+            "id": "SFSU",
+            "publisher": "San Francisco State University",
+            "title": "Department of geography & environment, san francisco state university",
+            "type": "book"
+        },
+        {
+            "URL": "https://vegetation.cnps.org/",
+            "author": [
+                {
+                    "family": "Sawyer",
+                    "given": "John"
+                },
+                {
+                    "family": "Keeler-Wolf",
+                    "given": "Todd"
+                },
+                {
+                    "family": "Evens",
+                    "given": "Julie"
+                }
+            ],
+            "id": "CNPS",
+            "publisher": "California Native Plant Society",
+            "title": "A manual of california vegetation online",
+            "type": "book"
+        },
+        {
+            "URL": "https://sierrafund.org/clover-valley-ranch/",
+            "id": "TSF_CV",
+            "title": "Clover valley ranch restoration, the sierra fund",
+            "type": "book"
+        },
+        {
+            "URL": "https://fishsciences.github.io/post/visualizing-fish-encounter-histories/",
+            "author": [
+                {
+                    "family": "Johnston",
+                    "given": "Myfanwy"
+                },
+                {
+                    "family": "Rudis",
+                    "given": "Bob"
+                }
+            ],
+            "id": "JohnstonRudis",
+            "title": "Visualizing fish encounter histories",
+            "type": "book"
+        },
+        {
+            "URL": "https://www.r-bloggers.com/2009/10/r-accessors-explained/",
+            "author": [
+                {
+                    "family": "Brown",
+                    "given": "Christopher"
+                }
+            ],
+            "id": "Brown_R_accessors",
+            "title": "\"R accessors explained\"",
+            "type": "book"
+        },
+        {
+            "URL": "https://en.wikipedia.org/wiki/EPSG_Geodetic_Parameter_Dataset",
+            "id": "epsg",
+            "title": "EPSG geodetic parameter dataset",
+            "type": "book"
+        },
+        {
+            "URL": "https://r-spatial.github.io/sf/",
+            "id": "sf",
+            "title": "Simple features for r",
+            "type": "book"
+        },
+        {
+            "URL": "https://pointblue.org",
+            "id": "ACCESS",
+            "title": "Applied california current ecosystem studies",
+            "type": "book"
+        },
+        {
+            "URL": "https://en.wikipedia.org/wiki/Hysteresis",
+            "id": "hysteresis",
+            "title": "Hysteresis",
+            "type": "article-journal"
+        },
+        {
+            "URL": "https://pubs.usgs.gov/pp/1988/1434/",
+            "author": [
+                {
+                    "family": "Ellen",
+                    "given": "Stephen D"
+                },
+                {
+                    "family": "Wieczorek",
+                    "given": "Gerald F"
+                }
+            ],
+            "id": "LandslidesBayArea1982",
+            "issued": {
+                "date-parts": [
+                    [
+                        1988
+                    ]
+                ]
+            },
+            "publisher": "USGS",
+            "title": "Landslides, floods, and marine effects of the storm of january 3-5, 1982, in the san francisco bay region, california",
+            "type": "book",
+            "volume": "1434"
+        },
+        {
+            "URL": "https://storymaps.arcgis.com/stories/62705877a9f64ac5956a64230430c248",
+            "author": [
+                {
+                    "family": "Davis",
+                    "given": "Jerry"
+                }
+            ],
+            "id": "SanPedroCreekWatershedVirtualFieldtrip",
+            "title": "San pedro creek watershed virtual fieldtrip: Story map",
+            "title-short": "San pedro creek watershed virtual fieldtrip",
+            "type": "book"
+        },
+        {
+            "URL": "https://cran.r-project.org/web/packages/gstat/index.html",
+            "author": [
+                {
+                    "family": "Pebesma",
+                    "given": "Edzer"
+                }
+            ],
+            "id": "gstat",
+            "title": "Gstat: Spatial and spatio-temporal geostatistical modelling, prediction and simulation",
+            "title-short": "Gstat",
+            "type": "book"
+        },
+        {
+            "URL": "https://www.movable-type.co.uk/scripts/latlong.html",
+            "id": "haversine",
+            "publisher": "Movable Type Ltd",
+            "title": "Calculate distance, bearing and more between latitutde/longitude points\"",
+            "type": "book"
+        },
+        {
+            "URL": "https://pubs.usgs.gov/tm/04/a03/tm4a3.pdf",
+            "author": [
+                {
+                    "family": "Helsel",
+                    "given": "Dennis R."
+                },
+                {
+                    "family": "Hirsch",
+                    "given": "Robert M."
+                },
+                {
+                    "family": "Ryberg",
+                    "given": "Karen R."
+                },
+                {
+                    "family": "Archfield",
+                    "given": "Stacey A."
+                },
+                {
+                    "family": "Gilroy",
+                    "given": "Edward J."
+                }
+            ],
+            "chapter-number": "A3",
+            "container-title": "Hydrologic analysis and interpretation",
+            "id": "StatisticalMethodsWaterResources",
+            "issued": {
+                "date-parts": [
+                    [
+                        2020
+                    ]
+                ]
+            },
+            "publisher": "U.S. Geological Survey",
+            "publisher-place": "Reston, Virginia",
+            "title": "Statistical methods in water resources",
+            "type": "chapter"
+        }
+    ],
+    "project_biblios": [
+        "book.bib"
+    ]
+}

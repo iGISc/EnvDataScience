@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 12 Time Series Visualization and Analysis | Introduction to Environmental Data Science</title>
+  <meta name="description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 12 Time Series Visualization and Analysis | Introduction to Environmental Data Science" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  <meta name="github-repo" content="iGISc/EnvDataSci" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 12 Time Series Visualization and Analysis | Introduction to Environmental Data Science" />
+  
+  <meta name="twitter:description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  
+
+<meta name="author" content="Jerry Davis, SFSU Institute for Geographic Information Science" />
+
+
+<meta name="date" content="2026-09-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="imagery.html"/>
+<link rel="next" href="communication-with-shiny.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script>
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.2.3/leaflet.js"></script>
+<script src="libs/leaflet-providers-3.0.0/leaflet-providers.js"></script>
+<script src="libs/leaflet-providers-plugin-2.2.3/leaflet-providers-plugin.js"></script>
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<link href="libs/sierra___TEMPERATURE-CSS-0.0.1/sierra___TEMPERATURE_home-button.css" rel="stylesheet" />
+<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><img src="img/eaRth_anna296.png"></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background, Goals and Data</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#environmental-data-science"><i class="fa fa-check"></i><b>1.1</b> Environmental Data Science</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#environmental-data-and-methods"><i class="fa fa-check"></i><b>1.2</b> Environmental Data and Methods</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#goals"><i class="fa fa-check"></i><b>1.3</b> Goals</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#some-definitions"><i class="fa fa-check"></i><b>1.3.1</b> Some definitions:</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>1.4</b> Exploratory Data Analysis</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#software-and-data"><i class="fa fa-check"></i><b>1.5</b> Software and Data</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#data"><i class="fa fa-check"></i><b>1.5.1</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i><b>1.6</b> Acknowledgements</a></li>
+</ul></li>
+<li class="part"><span><b>I Exploratory Data Analysis</b></span></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction to R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#data-objects"><i class="fa fa-check"></i><b>2.1</b> Data Objects</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#scalars-and-assignment"><i class="fa fa-check"></i><b>2.1.1</b> Scalars and assignment</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#functions"><i class="fa fa-check"></i><b>2.2</b> Functions</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#expressions"><i class="fa fa-check"></i><b>2.3</b> Expressions and Statements</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#class"><i class="fa fa-check"></i><b>2.4</b> Data Classes</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introduction.html"><a href="introduction.html#integers"><i class="fa fa-check"></i><b>2.4.1</b> Integers</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#rectangular-data"><i class="fa fa-check"></i><b>2.5</b> Rectangular Data</a></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#data-structures-in-r"><i class="fa fa-check"></i><b>2.6</b> Data Structures in R</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="introduction.html"><a href="introduction.html#vector"><i class="fa fa-check"></i><b>2.6.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.6.2" data-path="introduction.html"><a href="introduction.html#list"><i class="fa fa-check"></i><b>2.6.2</b> Lists</a></li>
+<li class="chapter" data-level="2.6.3" data-path="introduction.html"><a href="introduction.html#matrix"><i class="fa fa-check"></i><b>2.6.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.6.4" data-path="introduction.html"><a href="introduction.html#dataframes"><i class="fa fa-check"></i><b>2.6.4</b> Data frames</a></li>
+<li class="chapter" data-level="2.6.5" data-path="introduction.html"><a href="introduction.html#factors"><i class="fa fa-check"></i><b>2.6.5</b> Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#accessors"><i class="fa fa-check"></i><b>2.7</b> Accessors and Subsetting</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="introduction.html"><a href="introduction.html#subsetting"><i class="fa fa-check"></i><b>2.7.1</b> <code>[]</code> Subsetting</a></li>
+<li class="chapter" data-level="2.7.2" data-path="introduction.html"><a href="introduction.html#the-mysterious-double-bracket"><i class="fa fa-check"></i><b>2.7.2</b> <code>[[]]</code> The mysterious double bracket</a></li>
+<li class="chapter" data-level="2.7.3" data-path="introduction.html"><a href="introduction.html#accessing-a-vector-from-a-data-frame"><i class="fa fa-check"></i><b>2.7.3</b> <code>$</code> Accessing a vector from a data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#programming"><i class="fa fa-check"></i><b>2.8</b> Programming scripts in RStudio</a>
+<ul>
+<li class="chapter" data-level="2.8.1" data-path="introduction.html"><a href="introduction.html#functions-writing"><i class="fa fa-check"></i><b>2.8.1</b> <code>function</code> : creating your own</a></li>
+<li class="chapter" data-level="2.8.2" data-path="introduction.html"><a href="introduction.html#if-conditional-operations"><i class="fa fa-check"></i><b>2.8.2</b> <code>if</code> : conditional operations</a></li>
+<li class="chapter" data-level="2.8.3" data-path="introduction.html"><a href="introduction.html#for"><i class="fa fa-check"></i><b>2.8.3</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="2.8.4" data-path="introduction.html"><a href="introduction.html#subsetting-with-logic"><i class="fa fa-check"></i><b>2.8.4</b> Subsetting with logic</a></li>
+<li class="chapter" data-level="2.8.5" data-path="introduction.html"><a href="introduction.html#apply"><i class="fa fa-check"></i><b>2.8.5</b> Apply functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.9" data-path="introduction.html"><a href="introduction.html#rstudio"><i class="fa fa-check"></i><b>2.9</b> RStudio projects</a>
+<ul>
+<li class="chapter" data-level="2.9.1" data-path="introduction.html"><a href="introduction.html#rmarkdown"><i class="fa fa-check"></i><b>2.9.1</b> R Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="2.10" data-path="introduction.html"><a href="introduction.html#exercises-introduction-to-r"><i class="fa fa-check"></i><b>2.10</b> Exercises: Introduction to R</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="abstraction.html"><a href="abstraction.html"><i class="fa fa-check"></i><b>3</b> Data Abstraction</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="abstraction.html"><a href="abstraction.html#tidyverse"><i class="fa fa-check"></i><b>3.1</b> The Tidyverse</a></li>
+<li class="chapter" data-level="3.2" data-path="abstraction.html"><a href="abstraction.html#tibbles"><i class="fa fa-check"></i><b>3.2</b> Tibbles</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="abstraction.html"><a href="abstraction.html#building-a-tibble-from-vectors"><i class="fa fa-check"></i><b>3.2.1</b> Building a tibble from vectors</a></li>
+<li class="chapter" data-level="3.2.2" data-path="abstraction.html"><a href="abstraction.html#tribble"><i class="fa fa-check"></i><b>3.2.2</b> tribble</a></li>
+<li class="chapter" data-level="3.2.3" data-path="abstraction.html"><a href="abstraction.html#csv"><i class="fa fa-check"></i><b>3.2.3</b> read_csv</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="abstraction.html"><a href="abstraction.html#summarizing-variable-distributions"><i class="fa fa-check"></i><b>3.3</b> Summarizing variable distributions</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="abstraction.html"><a href="abstraction.html#stratifying-variables-by-site-using-a-tukey-box-plot"><i class="fa fa-check"></i><b>3.3.1</b> Stratifying variables by site using a Tukey box plot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="abstraction.html"><a href="abstraction.html#dplyr"><i class="fa fa-check"></i><b>3.4</b> Database operations</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="abstraction.html"><a href="abstraction.html#pipe"><i class="fa fa-check"></i><b>3.4.1</b> Select, mutate, and the pipe</a></li>
+<li class="chapter" data-level="3.4.2" data-path="abstraction.html"><a href="abstraction.html#filter"><i class="fa fa-check"></i><b>3.4.2</b> Filtering observations</a></li>
+<li class="chapter" data-level="3.4.3" data-path="abstraction.html"><a href="abstraction.html#subsetting-data-with-base-rs-subset"><i class="fa fa-check"></i><b>3.4.3</b> Subsetting data with base R’s <code>subset</code></a></li>
+<li class="chapter" data-level="3.4.4" data-path="abstraction.html"><a href="abstraction.html#writing-a-data-frame-to-a-csv"><i class="fa fa-check"></i><b>3.4.4</b> Writing a data frame to a csv</a></li>
+<li class="chapter" data-level="3.4.5" data-path="abstraction.html"><a href="abstraction.html#group-summary"><i class="fa fa-check"></i><b>3.4.5</b> Summarize by group</a></li>
+<li class="chapter" data-level="3.4.6" data-path="abstraction.html"><a href="abstraction.html#count"><i class="fa fa-check"></i><b>3.4.6</b> Count</a></li>
+<li class="chapter" data-level="3.4.7" data-path="abstraction.html"><a href="abstraction.html#sorting-after-summarizing"><i class="fa fa-check"></i><b>3.4.7</b> Sorting after summarizing</a></li>
+<li class="chapter" data-level="3.4.8" data-path="abstraction.html"><a href="abstraction.html#the-dot-operator"><i class="fa fa-check"></i><b>3.4.8</b> The dot operator</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="abstraction.html"><a href="abstraction.html#stringr"><i class="fa fa-check"></i><b>3.5</b> String abstraction</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="abstraction.html"><a href="abstraction.html#detecting-matches"><i class="fa fa-check"></i><b>3.5.1</b> Detecting matches</a></li>
+<li class="chapter" data-level="3.5.2" data-path="abstraction.html"><a href="abstraction.html#subset-string"><i class="fa fa-check"></i><b>3.5.2</b> Subsetting strings</a></li>
+<li class="chapter" data-level="3.5.3" data-path="abstraction.html"><a href="abstraction.html#string-length"><i class="fa fa-check"></i><b>3.5.3</b> String length</a></li>
+<li class="chapter" data-level="3.5.4" data-path="abstraction.html"><a href="abstraction.html#replacing-substrings-with-other-text-mutating-strings"><i class="fa fa-check"></i><b>3.5.4</b> Replacing substrings with other text (“mutating” strings)</a></li>
+<li class="chapter" data-level="3.5.5" data-path="abstraction.html"><a href="abstraction.html#concatenating-and-splitting"><i class="fa fa-check"></i><b>3.5.5</b> Concatenating and splitting</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="abstraction.html"><a href="abstraction.html#lubridate"><i class="fa fa-check"></i><b>3.6</b> Dates and times with <code>lubridate</code></a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="abstraction.html"><a href="abstraction.html#dates-used-for-annual-time-series"><i class="fa fa-check"></i><b>3.6.1</b> Dates used for annual time series</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="abstraction.html"><a href="abstraction.html#extending-abstractions-with-functions"><i class="fa fa-check"></i><b>3.7</b> Extending abstractions with functions</a></li>
+<li class="chapter" data-level="3.8" data-path="abstraction.html"><a href="abstraction.html#exercises-data-abstraction"><i class="fa fa-check"></i><b>3.8</b> Exercises: Data Abstraction</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>4</b> Visualization</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="visualization.html"><a href="visualization.html#plot-in-base-r"><i class="fa fa-check"></i><b>4.1</b> plot in base R</a></li>
+<li class="chapter" data-level="4.2" data-path="visualization.html"><a href="visualization.html#ggplot2"><i class="fa fa-check"></i><b>4.2</b> ggplot2</a></li>
+<li class="chapter" data-level="4.3" data-path="visualization.html"><a href="visualization.html#plotting-one-variable"><i class="fa fa-check"></i><b>4.3</b> Plotting one variable</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="visualization.html"><a href="visualization.html#histogram"><i class="fa fa-check"></i><b>4.3.1</b> Histogram</a></li>
+<li class="chapter" data-level="4.3.2" data-path="visualization.html"><a href="visualization.html#density-plot"><i class="fa fa-check"></i><b>4.3.2</b> Density plot</a></li>
+<li class="chapter" data-level="4.3.3" data-path="visualization.html"><a href="visualization.html#boxplot"><i class="fa fa-check"></i><b>4.3.3</b> Boxplot</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="visualization.html"><a href="visualization.html#plotting-two-variables"><i class="fa fa-check"></i><b>4.4</b> Plotting Two Variables</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="visualization.html"><a href="visualization.html#two-continuous-variables"><i class="fa fa-check"></i><b>4.4.1</b> Two continuous variables</a></li>
+<li class="chapter" data-level="4.4.2" data-path="visualization.html"><a href="visualization.html#two-variables-one-discrete"><i class="fa fa-check"></i><b>4.4.2</b> Two variables, one discrete</a></li>
+<li class="chapter" data-level="4.4.3" data-path="visualization.html"><a href="visualization.html#color-systems"><i class="fa fa-check"></i><b>4.4.3</b> Color systems</a></li>
+<li class="chapter" data-level="4.4.4" data-path="visualization.html"><a href="visualization.html#trend-line"><i class="fa fa-check"></i><b>4.4.4</b> Trend line</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="visualization.html"><a href="visualization.html#general-symbology"><i class="fa fa-check"></i><b>4.5</b> General Symbology</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="visualization.html"><a href="visualization.html#categorical-symbology"><i class="fa fa-check"></i><b>4.5.1</b> Categorical symbology</a></li>
+<li class="chapter" data-level="4.5.2" data-path="visualization.html"><a href="visualization.html#log-scales-instead-of-transform"><i class="fa fa-check"></i><b>4.5.2</b> Log scales instead of transform</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="visualization.html"><a href="visualization.html#graphs-from-grouped-data"><i class="fa fa-check"></i><b>4.6</b> Graphs from Grouped Data</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="visualization.html"><a href="visualization.html#faceted-graphs"><i class="fa fa-check"></i><b>4.6.1</b> Faceted graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="visualization.html"><a href="visualization.html#titles-subtitles-axis-labels-and-legend-position"><i class="fa fa-check"></i><b>4.7</b> Titles, Subtitles, Axis Labels, and Legend Position</a></li>
+<li class="chapter" data-level="4.8" data-path="visualization.html"><a href="visualization.html#pairs-plot"><i class="fa fa-check"></i><b>4.8</b> Pairs Plot</a></li>
+<li class="chapter" data-level="4.9" data-path="visualization.html"><a href="visualization.html#exercises-visualization"><i class="fa fa-check"></i><b>4.9</b> Exercises: Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="transformation.html"><a href="transformation.html"><i class="fa fa-check"></i><b>5</b> Data Transformation</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="transformation.html"><a href="transformation.html#joins"><i class="fa fa-check"></i><b>5.1</b> Data joins</a></li>
+<li class="chapter" data-level="5.2" data-path="transformation.html"><a href="transformation.html#set"><i class="fa fa-check"></i><b>5.2</b> Set operations</a></li>
+<li class="chapter" data-level="5.3" data-path="transformation.html"><a href="transformation.html#binding"><i class="fa fa-check"></i><b>5.3</b> Binding rows and columns</a></li>
+<li class="chapter" data-level="5.4" data-path="transformation.html"><a href="transformation.html#pivots"><i class="fa fa-check"></i><b>5.4</b> Pivoting data frames</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="transformation.html"><a href="transformation.html#pivot_longer"><i class="fa fa-check"></i><b>5.4.1</b> <code>pivot_longer</code></a></li>
+<li class="chapter" data-level="5.4.2" data-path="transformation.html"><a href="transformation.html#pivot_wider"><i class="fa fa-check"></i><b>5.4.2</b> <code>pivot_wider</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="transformation.html"><a href="transformation.html#combining-transformation-methods-to-create-a-free_y-faceted-graph"><i class="fa fa-check"></i><b>5.5</b> Combining transformation methods to create a <code>free_y</code> faceted graph</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="transformation.html"><a href="transformation.html#air-pollutant-emissions-trends-epa"><i class="fa fa-check"></i><b>5.5.1</b> Air pollutant emissions trends (EPA)</a></li>
+<li class="chapter" data-level="5.5.2" data-path="transformation.html"><a href="transformation.html#flux-tower-data"><i class="fa fa-check"></i><b>5.5.2</b> Flux tower data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="transformation.html"><a href="transformation.html#exercise-transformation"><i class="fa fa-check"></i><b>5.6</b> Exercise: Transformation</a></li>
+</ul></li>
+<li class="part"><span><b>II Spatial</b></span></li>
+<li class="chapter" data-level="6" data-path="spatial.html"><a href="spatial.html"><i class="fa fa-check"></i><b>6</b> Spatial Data and Maps</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="spatial.html"><a href="spatial.html#spatial-data"><i class="fa fa-check"></i><b>6.1</b> Spatial Data</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="spatial.html"><a href="spatial.html#simple-geometry-building-in-sf"><i class="fa fa-check"></i><b>6.1.1</b> Simple geometry building in sf</a></li>
+<li class="chapter" data-level="6.1.2" data-path="spatial.html"><a href="spatial.html#building-points-from-a-data-frame"><i class="fa fa-check"></i><b>6.1.2</b> Building points from a data frame</a></li>
+<li class="chapter" data-level="6.1.3" data-path="spatial.html"><a href="spatial.html#spatvectors-in-terra"><i class="fa fa-check"></i><b>6.1.3</b> SpatVectors in <code>terra</code></a></li>
+<li class="chapter" data-level="6.1.4" data-path="spatial.html"><a href="spatial.html#creating-features-from-shapefiles"><i class="fa fa-check"></i><b>6.1.4</b> Creating features from shapefiles</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="spatial.html"><a href="spatial.html#coordinate-referencing-systems"><i class="fa fa-check"></i><b>6.2</b> Coordinate Referencing Systems</a></li>
+<li class="chapter" data-level="6.3" data-path="spatial.html"><a href="spatial.html#creating-sf-data-from-data-frames"><i class="fa fa-check"></i><b>6.3</b> Creating sf Data from Data Frames</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="spatial.html"><a href="spatial.html#removing-geometry"><i class="fa fa-check"></i><b>6.3.1</b> <em>Removing</em> geometry</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="spatial.html"><a href="spatial.html#base-rs-plot-with-terra"><i class="fa fa-check"></i><b>6.4</b> Base R’s <code>plot()</code> with <code>terra</code></a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="spatial.html"><a href="spatial.html#using-maptiles-to-create-a-basemap"><i class="fa fa-check"></i><b>6.4.1</b> Using maptiles to create a basemap</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="spatial.html"><a href="spatial.html#raster-data"><i class="fa fa-check"></i><b>6.5</b> Raster data</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="spatial.html"><a href="spatial.html#building-rasters"><i class="fa fa-check"></i><b>6.5.1</b> Building rasters</a></li>
+<li class="chapter" data-level="6.5.2" data-path="spatial.html"><a href="spatial.html#vector-to-raster-conversion"><i class="fa fa-check"></i><b>6.5.2</b> Vector to raster conversion</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="spatial.html"><a href="spatial.html#ggplot2-for-maps"><i class="fa fa-check"></i><b>6.6</b> ggplot2 for Maps</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="spatial.html"><a href="spatial.html#rasters-in-ggplot2"><i class="fa fa-check"></i><b>6.6.1</b> Rasters in ggplot2</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="spatial.html"><a href="spatial.html#using-bounding-boxes-to-zoom-to-the-extent-of-data-layers-in-any-mapping-package"><i class="fa fa-check"></i><b>6.7</b> Using bounding boxes to zoom to the extent of data layers (in any mapping package)</a></li>
+<li class="chapter" data-level="6.8" data-path="spatial.html"><a href="spatial.html#tmap"><i class="fa fa-check"></i><b>6.8</b> tmap</a>
+<ul>
+<li class="chapter" data-level="6.8.1" data-path="spatial.html"><a href="spatial.html#color"><i class="fa fa-check"></i><b>6.8.1</b> Color</a></li>
+<li class="chapter" data-level="6.8.2" data-path="spatial.html"><a href="spatial.html#basemap-with-tmap"><i class="fa fa-check"></i><b>6.8.2</b> Basemap with tmap</a></li>
+</ul></li>
+<li class="chapter" data-level="6.9" data-path="spatial.html"><a href="spatial.html#interactive-maps"><i class="fa fa-check"></i><b>6.9</b> Interactive Maps</a>
+<ul>
+<li class="chapter" data-level="6.9.1" data-path="spatial.html"><a href="spatial.html#leaflet"><i class="fa fa-check"></i><b>6.9.1</b> Leaflet</a></li>
+<li class="chapter" data-level="6.9.2" data-path="spatial.html"><a href="spatial.html#mapview"><i class="fa fa-check"></i><b>6.9.2</b> Mapview</a></li>
+<li class="chapter" data-level="6.9.3" data-path="spatial.html"><a href="spatial.html#tmap-view-mode"><i class="fa fa-check"></i><b>6.9.3</b> tmap (view mode)</a></li>
+<li class="chapter" data-level="6.9.4" data-path="spatial.html"><a href="spatial.html#interactive-mapping-of-individual-penguins-abstracted-from-a-big-dataset"><i class="fa fa-check"></i><b>6.9.4</b> Interactive mapping of individual penguins abstracted from a big dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="6.10" data-path="spatial.html"><a href="spatial.html#exercises-spatial-data-and-maps"><i class="fa fa-check"></i><b>6.10</b> Exercises: Spatial Data and Maps</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="spatial-analysis.html"><a href="spatial-analysis.html"><i class="fa fa-check"></i><b>7</b> Spatial Analysis</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#data-frame-operations"><i class="fa fa-check"></i><b>7.1</b> Data Frame Operations</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#GroupedSummaries"><i class="fa fa-check"></i><b>7.1.1</b> Using grouped summaries, and filtering by a selection</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-analysis-operations"><i class="fa fa-check"></i><b>7.2</b> Spatial Analysis Operations</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#using-topology-to-subset"><i class="fa fa-check"></i><b>7.2.1</b> Using topology to subset</a></li>
+<li class="chapter" data-level="7.2.2" data-path="spatial-analysis.html"><a href="spatial-analysis.html#centroid"><i class="fa fa-check"></i><b>7.2.2</b> Centroid</a></li>
+<li class="chapter" data-level="7.2.3" data-path="spatial-analysis.html"><a href="spatial-analysis.html#distance"><i class="fa fa-check"></i><b>7.2.3</b> Distance</a></li>
+<li class="chapter" data-level="7.2.4" data-path="spatial-analysis.html"><a href="spatial-analysis.html#buffers"><i class="fa fa-check"></i><b>7.2.4</b> Buffers</a></li>
+<li class="chapter" data-level="7.2.5" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-overlay-union-and-intersection"><i class="fa fa-check"></i><b>7.2.5</b> Spatial overlay: union and intersection</a></li>
+<li class="chapter" data-level="7.2.6" data-path="spatial-analysis.html"><a href="spatial-analysis.html#clip-with-st_crop"><i class="fa fa-check"></i><b>7.2.6</b> Clip with st_crop</a></li>
+<li class="chapter" data-level="7.2.7" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-join-with-st_join"><i class="fa fa-check"></i><b>7.2.7</b> Spatial join with <code>st_join</code></a></li>
+<li class="chapter" data-level="7.2.8" data-path="spatial-analysis.html"><a href="spatial-analysis.html#further-exploration-of-spatial-analysis"><i class="fa fa-check"></i><b>7.2.8</b> Further exploration of spatial analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="spatial-analysis.html"><a href="spatial-analysis.html#exercises-spatial-analysis"><i class="fa fa-check"></i><b>7.3</b> Exercises: Spatial Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="raster.html"><a href="raster.html"><i class="fa fa-check"></i><b>8</b> Raster Spatial Analysis</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="raster.html"><a href="raster.html#terrain"><i class="fa fa-check"></i><b>8.1</b> Terrain functions</a></li>
+<li class="chapter" data-level="8.2" data-path="raster.html"><a href="raster.html#map-algebra-in-terra"><i class="fa fa-check"></i><b>8.2</b> Map Algebra in terra</a></li>
+<li class="chapter" data-level="8.3" data-path="raster.html"><a href="raster.html#distance-1"><i class="fa fa-check"></i><b>8.3</b> Distance</a></li>
+<li class="chapter" data-level="8.4" data-path="raster.html"><a href="raster.html#extracting-values"><i class="fa fa-check"></i><b>8.4</b> Extracting Values</a></li>
+<li class="chapter" data-level="8.5" data-path="raster.html"><a href="raster.html#focal-statistics"><i class="fa fa-check"></i><b>8.5</b> Focal Statistics</a></li>
+<li class="chapter" data-level="8.6" data-path="raster.html"><a href="raster.html#zonal-statistics"><i class="fa fa-check"></i><b>8.6</b> Zonal Statistics</a></li>
+<li class="chapter" data-level="8.7" data-path="raster.html"><a href="raster.html#exercises-raster-spatial-analysis"><i class="fa fa-check"></i><b>8.7</b> Exercises: Raster Spatial Analysis</a></li>
+</ul></li>
+<li class="part"><span><b>III Statistics and Modeling</b></span></li>
+<li class="chapter" data-level="9" data-path="statistics.html"><a href="statistics.html"><i class="fa fa-check"></i><b>9</b> Statistical Summaries and Tests</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="statistics.html"><a href="statistics.html#goals-of-statistical-analysis"><i class="fa fa-check"></i><b>9.1</b> Goals of Statistical Analysis</a></li>
+<li class="chapter" data-level="9.2" data-path="statistics.html"><a href="statistics.html#summary-statistics"><i class="fa fa-check"></i><b>9.2</b> Summary Statistics</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="statistics.html"><a href="statistics.html#summarize-by-group-stratifying-a-summary"><i class="fa fa-check"></i><b>9.2.1</b> Summarize by group: <em>stratifying a summary</em></a></li>
+<li class="chapter" data-level="9.2.2" data-path="statistics.html"><a href="statistics.html#boxplot-for-visualizing-distributions-by-group"><i class="fa fa-check"></i><b>9.2.2</b> Boxplot for visualizing distributions by group</a></li>
+<li class="chapter" data-level="9.2.3" data-path="statistics.html"><a href="statistics.html#random"><i class="fa fa-check"></i><b>9.2.3</b> Generating pseudorandom numbers</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="statistics.html"><a href="statistics.html#correlation"><i class="fa fa-check"></i><b>9.3</b> Correlation r and Coefficient of Determination r<sup>2</sup></a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="statistics.html"><a href="statistics.html#displaying-correlation-in-a-pairs-plot"><i class="fa fa-check"></i><b>9.3.1</b> Displaying correlation in a pairs plot</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="statistics.html"><a href="statistics.html#statistical-tests"><i class="fa fa-check"></i><b>9.4</b> Statistical Tests</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="statistics.html"><a href="statistics.html#comparing-samples-and-groupings-with-a-t-test-and-a-non-parametric-kruskal-wallis-rank-sum-test"><i class="fa fa-check"></i><b>9.4.1</b> Comparing samples and groupings with a t test and a non-parametric Kruskal-Wallis Rank Sum test</a></li>
+<li class="chapter" data-level="9.4.2" data-path="statistics.html"><a href="statistics.html#analysis-of-variance"><i class="fa fa-check"></i><b>9.4.2</b> Analysis of variance</a></li>
+<li class="chapter" data-level="9.4.3" data-path="statistics.html"><a href="statistics.html#post-hoc-analysis-of-variance-with-tukeys-test"><i class="fa fa-check"></i><b>9.4.3</b> Post-Hoc Analysis of Variance with Tukey’s Test</a></li>
+<li class="chapter" data-level="9.4.4" data-path="statistics.html"><a href="statistics.html#testing-a-correlation"><i class="fa fa-check"></i><b>9.4.4</b> Testing a correlation</a></li>
+<li class="chapter" data-level="9.4.5" data-path="statistics.html"><a href="statistics.html#additional-resources"><i class="fa fa-check"></i><b>9.4.5</b> Additional resources</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="statistics.html"><a href="statistics.html#exercises-statistics"><i class="fa fa-check"></i><b>9.5</b> Exercises: Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="modeling.html"><a href="modeling.html"><i class="fa fa-check"></i><b>10</b> Modeling</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="modeling.html"><a href="modeling.html#some-common-statistical-models"><i class="fa fa-check"></i><b>10.1</b> Some Common Statistical Models</a></li>
+<li class="chapter" data-level="10.2" data-path="modeling.html"><a href="modeling.html#lm"><i class="fa fa-check"></i><b>10.2</b> Linear Model (<code>lm</code>)</a></li>
+<li class="chapter" data-level="10.3" data-path="modeling.html"><a href="modeling.html#spatial-influences-on-statistical-analysis"><i class="fa fa-check"></i><b>10.3</b> Spatial Influences on Statistical Analysis</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="modeling.html"><a href="modeling.html#mapping-residuals"><i class="fa fa-check"></i><b>10.3.1</b> Mapping residuals</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="modeling.html"><a href="modeling.html#analysis-of-covariance"><i class="fa fa-check"></i><b>10.4</b> Analysis of Covariance</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="modeling.html"><a href="modeling.html#tukey-test-for-the-ancova-model"><i class="fa fa-check"></i><b>10.4.1</b> Tukey test for the ANCOVA model</a></li>
+<li class="chapter" data-level="10.4.2" data-path="modeling.html"><a href="modeling.html#the-karst-water-chemistry-model"><i class="fa fa-check"></i><b>10.4.2</b> The karst water chemistry model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="modeling.html"><a href="modeling.html#generalized-linear-model-glm"><i class="fa fa-check"></i><b>10.5</b> Generalized linear model (GLM)</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="modeling.html"><a href="modeling.html#binomial-family-logistic-glm"><i class="fa fa-check"></i><b>10.5.1</b> Binomial family: Logistic GLM</a></li>
+<li class="chapter" data-level="10.5.2" data-path="modeling.html"><a href="modeling.html#logistic-landslide-model"><i class="fa fa-check"></i><b>10.5.2</b> Logistic landslide model</a></li>
+<li class="chapter" data-level="10.5.3" data-path="modeling.html"><a href="modeling.html#poisson-regression"><i class="fa fa-check"></i><b>10.5.3</b> Poisson regression</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="modeling.html"><a href="modeling.html#other-modeling-methods"><i class="fa fa-check"></i><b>10.6</b> Other modeling methods</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="modeling.html"><a href="modeling.html#curve-fitting"><i class="fa fa-check"></i><b>10.6.1</b> Curve fitting</a></li>
+<li class="chapter" data-level="10.6.2" data-path="modeling.html"><a href="modeling.html#models-employing-machine-learning"><i class="fa fa-check"></i><b>10.6.2</b> Models employing machine learning</a></li>
+</ul></li>
+<li class="chapter" data-level="10.7" data-path="modeling.html"><a href="modeling.html#exercises-modeling"><i class="fa fa-check"></i><b>10.7</b> Exercises: Modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="imagery.html"><a href="imagery.html"><i class="fa fa-check"></i><b>11</b> Imagery and Classification Models</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="imagery.html"><a href="imagery.html#reading-and-displaying-sentinel-2-imagery"><i class="fa fa-check"></i><b>11.1</b> Reading and Displaying Sentinel-2 Imagery</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="imagery.html"><a href="imagery.html#individual-bands"><i class="fa fa-check"></i><b>11.1.1</b> Individual bands</a></li>
+<li class="chapter" data-level="11.1.2" data-path="imagery.html"><a href="imagery.html#spectral-subsets-to-create-three-band-r-g-b-and-nir-r-g-for-visualization"><i class="fa fa-check"></i><b>11.1.2</b> Spectral subsets to create three-band R-G-B and NIR-R-G for visualization</a></li>
+<li class="chapter" data-level="11.1.3" data-path="imagery.html"><a href="imagery.html#crop-to-study-area-extent"><i class="fa fa-check"></i><b>11.1.3</b> Crop to study area extent</a></li>
+<li class="chapter" data-level="11.1.4" data-path="imagery.html"><a href="imagery.html#saving-results"><i class="fa fa-check"></i><b>11.1.4</b> Saving results</a></li>
+<li class="chapter" data-level="11.1.5" data-path="imagery.html"><a href="imagery.html#band-scatter-plots"><i class="fa fa-check"></i><b>11.1.5</b> Band scatter plots</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="imagery.html"><a href="imagery.html#spectral-profiles"><i class="fa fa-check"></i><b>11.2</b> Spectral Profiles</a></li>
+<li class="chapter" data-level="11.3" data-path="imagery.html"><a href="imagery.html#map-algebra-and-vegetation-indices"><i class="fa fa-check"></i><b>11.3</b> Map Algebra and Vegetation Indices</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="imagery.html"><a href="imagery.html#vegetation-indices"><i class="fa fa-check"></i><b>11.3.1</b> Vegetation indices</a></li>
+<li class="chapter" data-level="11.3.2" data-path="imagery.html"><a href="imagery.html#histogram-1"><i class="fa fa-check"></i><b>11.3.2</b> Histogram</a></li>
+<li class="chapter" data-level="11.3.3" data-path="imagery.html"><a href="imagery.html#other-vegetation-indices"><i class="fa fa-check"></i><b>11.3.3</b> Other vegetation indices</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="imagery.html"><a href="imagery.html#unsupervised-classification-with-k-means"><i class="fa fa-check"></i><b>11.4</b> Unsupervised Classification with k-means</a></li>
+<li class="chapter" data-level="11.5" data-path="imagery.html"><a href="imagery.html#machine-learning-classification-of-imagery"><i class="fa fa-check"></i><b>11.5</b> Machine Learning Classification of Imagery</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="imagery.html"><a href="imagery.html#read-imagery-and-training-data-and-extract-sample-values-for-training"><i class="fa fa-check"></i><b>11.5.1</b> Read imagery and training data and extract sample values for training</a></li>
+<li class="chapter" data-level="11.5.2" data-path="imagery.html"><a href="imagery.html#training-the-cart-model"><i class="fa fa-check"></i><b>11.5.2</b> Training the CART model</a></li>
+<li class="chapter" data-level="11.5.3" data-path="imagery.html"><a href="imagery.html#prediction-using-the-cart-model"><i class="fa fa-check"></i><b>11.5.3</b> Prediction using the CART model</a></li>
+<li class="chapter" data-level="11.5.4" data-path="imagery.html"><a href="imagery.html#validating-the-model"><i class="fa fa-check"></i><b>11.5.4</b> Validating the model</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="imagery.html"><a href="imagery.html#classifying-with-10-m-sentinel-2-imagery"><i class="fa fa-check"></i><b>11.6</b> Classifying with 10 m Sentinel-2 Imagery</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="imagery.html"><a href="imagery.html#subset-bands-10-m"><i class="fa fa-check"></i><b>11.6.1</b> Subset bands (10 m)</a></li>
+<li class="chapter" data-level="11.6.2" data-path="imagery.html"><a href="imagery.html#crop-to-rcv-extent-and-extract-pixel-values"><i class="fa fa-check"></i><b>11.6.2</b> Crop to RCV extent and extract pixel values</a></li>
+<li class="chapter" data-level="11.6.3" data-path="imagery.html"><a href="imagery.html#training-the-cart-model-10-m-and-plot-the-tree"><i class="fa fa-check"></i><b>11.6.3</b> Training the CART model (10 m) and plot the tree</a></li>
+<li class="chapter" data-level="11.6.4" data-path="imagery.html"><a href="imagery.html#prediction-using-the-cart-model-10-m"><i class="fa fa-check"></i><b>11.6.4</b> Prediction using the CART model (10 m)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="imagery.html"><a href="imagery.html#classification-using-multiple-images-capturing-phenology"><i class="fa fa-check"></i><b>11.7</b> Classification Using Multiple Images Capturing Phenology</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="imagery.html"><a href="imagery.html#create-a-10-band-stack-from-both-images"><i class="fa fa-check"></i><b>11.7.1</b> Create a 10-band stack from both images</a></li>
+<li class="chapter" data-level="11.7.2" data-path="imagery.html"><a href="imagery.html#extract-the-training-data-10-m-spring-summer"><i class="fa fa-check"></i><b>11.7.2</b> Extract the training data (10 m spring + summer)</a></li>
+<li class="chapter" data-level="11.7.3" data-path="imagery.html"><a href="imagery.html#cart-model-and-prediction-10-m-spring-summer"><i class="fa fa-check"></i><b>11.7.3</b> CART model and prediction (10 m spring + summer)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.8" data-path="imagery.html"><a href="imagery.html#classification-using-multiple-images-capturing-phenology-20m"><i class="fa fa-check"></i><b>11.8</b> Classification Using Multiple Images Capturing Phenology : 20m</a>
+<ul>
+<li class="chapter" data-level="11.8.1" data-path="imagery.html"><a href="imagery.html#create-a-18-band-stack-from-both-images"><i class="fa fa-check"></i><b>11.8.1</b> Create a 18-band stack from both images</a></li>
+<li class="chapter" data-level="11.8.2" data-path="imagery.html"><a href="imagery.html#extract-the-training-data-20-m-spring-summer"><i class="fa fa-check"></i><b>11.8.2</b> Extract the training data (20 m spring + summer)</a></li>
+<li class="chapter" data-level="11.8.3" data-path="imagery.html"><a href="imagery.html#cart-model-and-prediction-20-m-spring-summer"><i class="fa fa-check"></i><b>11.8.3</b> CART model and prediction (20 m spring + summer)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.9" data-path="imagery.html"><a href="imagery.html#conclusions-and-next-steps-for-imagery-classification"><i class="fa fa-check"></i><b>11.9</b> Conclusions and Next Steps for Imagery Classification</a></li>
+<li class="chapter" data-level="11.10" data-path="imagery.html"><a href="imagery.html#exercises-imagery-analysis-and-classification-models"><i class="fa fa-check"></i><b>11.10</b> Exercises: Imagery Analysis and Classification Models</a></li>
+</ul></li>
+<li class="part"><span><b>IV Time Series</b></span></li>
+<li class="chapter" data-level="12" data-path="ts.html"><a href="ts.html"><i class="fa fa-check"></i><b>12</b> Time Series Visualization and Analysis</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="ts.html"><a href="ts.html#structure-seasonality-and-decomposition-of-time-series"><i class="fa fa-check"></i><b>12.1</b> Structure, Seasonality, and Decomposition of Time Series</a></li>
+<li class="chapter" data-level="12.2" data-path="ts.html"><a href="ts.html#creation-of-time-series-ts-data"><i class="fa fa-check"></i><b>12.2</b> Creation of Time Series (ts) Data</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="ts.html"><a href="ts.html#frequency-start-and-end-parameters-for-ts"><i class="fa fa-check"></i><b>12.2.1</b> Frequency, start, and end parameters for <code>ts()</code></a></li>
+<li class="chapter" data-level="12.2.2" data-path="ts.html"><a href="ts.html#associating-times-with-time-series"><i class="fa fa-check"></i><b>12.2.2</b> Associating times with time series</a></li>
+<li class="chapter" data-level="12.2.3" data-path="ts.html"><a href="ts.html#subsetting-time-series-by-times"><i class="fa fa-check"></i><b>12.2.3</b> Subsetting time series by times</a></li>
+<li class="chapter" data-level="12.2.4" data-path="ts.html"><a href="ts.html#changing-the-frequency-to-use-a-different-period"><i class="fa fa-check"></i><b>12.2.4</b> Changing the frequency to use a different period</a></li>
+<li class="chapter" data-level="12.2.5" data-path="ts.html"><a href="ts.html#time-stamps-and-extensible-time-series"><i class="fa fa-check"></i><b>12.2.5</b> Time stamps and extensible time series</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="ts.html"><a href="ts.html#data-smoothing-moving-average-ma"><i class="fa fa-check"></i><b>12.3</b> Data smoothing: moving average (<code>ma</code>)</a></li>
+<li class="chapter" data-level="12.4" data-path="ts.html"><a href="ts.html#decomposition-of-data-logger-data-marble-mountains"><i class="fa fa-check"></i><b>12.4</b> Decomposition of data logger data: Marble Mountains</a></li>
+<li class="chapter" data-level="12.5" data-path="ts.html"><a href="ts.html#facet-graphs-for-comparing-variables-over-time"><i class="fa fa-check"></i><b>12.5</b> Facet Graphs for Comparing Variables over Time</a></li>
+<li class="chapter" data-level="12.6" data-path="ts.html"><a href="ts.html#lag-regression"><i class="fa fa-check"></i><b>12.6</b> Lag Regression</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="ts.html"><a href="ts.html#the-lag-regression-using-a-lag-function-in-a-linear-model"><i class="fa fa-check"></i><b>12.6.1</b> The lag regression, using a lag function in a linear model</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="ts.html"><a href="ts.html#ensemble-summary-statistics"><i class="fa fa-check"></i><b>12.7</b> Ensemble Summary Statistics</a></li>
+<li class="chapter" data-level="12.8" data-path="ts.html"><a href="ts.html#learning-more-about-time-series-in-r"><i class="fa fa-check"></i><b>12.8</b> Learning more about Time Series in R</a></li>
+<li class="chapter" data-level="12.9" data-path="ts.html"><a href="ts.html#exercises-time-series"><i class="fa fa-check"></i><b>12.9</b> Exercises: Time Series</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction to Environmental Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ts" class="section level1 hasAnchor" number="12">
+<h1><span class="header-section-number">Chapter 12</span> Time Series Visualization and Analysis<a href="ts.html#ts" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><img src="EnvDataScience_files/figure-html/timeMaunaLoaCO2-1.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<p>We’ve been spending a lot of time in the spatial domain in this book, but environmental data clearly also exists in the time domain, such as what’s been collected about CO<sub>2</sub> on Mauna Loa, Hawai’i, since the late 1950s (shown above). Environmental conditions change over time; and we can sample and measure air, water, soil, geology, and biotic systems to investigate explanatory and response variables that change over time. And just as we’ve looked at multiple geographic scales, we can look at multiple temporal scales, such as the long-term Mauna Loa CO<sub>2</sub> data above, or much finer-scale data from data loggers, such as eddy covariance flux towers (Figures <a href="ts.html#fig:timeRCVfluxtower">12.1</a> and <a href="ts.html#fig:timeLoneyGraph">12.2</a>).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeRCVfluxtower"></span>
+<img src="img/RCVfluxTower2.png" alt="Red Clover Valley eddy covariance flux tower installation" width="75%" />
+<p class="caption">
+FIGURE 12.1: Red Clover Valley eddy covariance flux tower installation
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeLoneyGraph"></span>
+<img src="img/LoneyGraph.png" alt="Loney Meadow net ecosystem exchange (NEE) results (Blackburn et al. 2021)" width="75%" />
+<p class="caption">
+FIGURE 12.2: Loney Meadow net ecosystem exchange (NEE) results (Blackburn et al. 2021)
+</p>
+</div>
+<p>In this chapter, we’ll look at a variety of methods for working with data over time. Many of these methods have been developed for economic modeling, but have many applications in environmental data science. The <em>time series</em> data type has been used in R for some time, and in fact a lot of the built-in data sets are time series, like the Mauna Loa CO<sub>2</sub> data or the flow of the Nile (Figure <a href="ts.html#fig:timeNileTS">12.3</a>).</p>
+<div class="sourceCode" id="cb963"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb963-1"><a href="ts.html#cb963-1" tabindex="-1"></a><span class="fu">plot</span>(Nile)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeNileTS"></span>
+<img src="EnvDataScience_files/figure-html/timeNileTS-1.png" alt="Time series of Nile River flows" width="75%" />
+<p class="caption">
+FIGURE 12.3: Time series of Nile River flows
+</p>
+</div>
+<p>So what’s the benefit of a time series data object? Why not just use a data frame with time stamps as a variable?</p>
+<p>You could just work with this data as data frames, and often this is all you need. In this chapter, for instance, we won’t work exclusively with time series data objects; our data may just include variation over time. However there are advantages in R understanding how to deal with actual time series in a temporal dimension, including knowing what time period we’re dealing with, especially if there are regular fluctuations over that period. This is similar to spatial data where it’s useful to maintain the geometry of our data and the associated coordinate system. So we should learn how time series objects work and how they’re built, just as we did with spatial data.</p>
+<div id="structure-seasonality-and-decomposition-of-time-series" class="section level2 hasAnchor" number="12.1">
+<h2><span class="header-section-number">12.1</span> Structure, Seasonality, and Decomposition of Time Series<a href="ts.html#structure-seasonality-and-decomposition-of-time-series" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A time series is comprised of a series of samples of a phenomenon at a specific time <strong>interval</strong>, such as 10 seconds, 4 hours, 1 day, or 20 years (the unit of time is important), where that interval might be the time spacing of observations such as temperature, precipitation, solar radiation, or water quality, to name a few of the many environmental parameters commonly measured in scientific studies or monitored by government agencies. These are organized into longer regular <strong>periods</strong> of time, such as days or years, by specifying the <strong>frequency</strong> of samples in each period. This is especially useful for data that have periodicity, such as diurnal or seasonal climatic variables.</p>
+<p>We’ll thus create the time series with a period in mind by defining its sampling frequency, and considering the time unit. For example, if your data is in <em>monthly</em> samples and you specify a frequency of 12, your period is one year; similarly a frequency of 365 with <em>daily</em> observations will also create a yearly period. But we don’t have to limit our intervals to single units of time: a frequency of 6 two-month samples will also create a yearly period, just as a frequency of 12 two-hour interval samples will create a daily period.</p>
+<p>There are many time series built into R, such as <code>co2</code> and <code>Nile</code>, and we can get a sense of what they contain by plotting them (as above), or just entering them in a line of code, if they’re not long:</p>
+<div class="sourceCode" id="cb964"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb964-1"><a href="ts.html#cb964-1" tabindex="-1"></a>Nile</span></code></pre></div>
+<pre><code>## Time Series:
+## Start = 1871 
+## End = 1970 
+## Frequency = 1 
+##   [1] 1120 1160  963 1210 1160 1160  813 1230 1370 1140  995  935 1110  994 1020
+##  [16]  960 1180  799  958 1140 1100 1210 1150 1250 1260 1220 1030 1100  774  840
+##  [31]  874  694  940  833  701  916  692 1020 1050  969  831  726  456  824  702
+##  [46] 1120 1100  832  764  821  768  845  864  862  698  845  744  796 1040  759
+##  [61]  781  865  845  944  984  897  822 1010  771  676  649  846  812  742  801
+##  [76] 1040  860  874  848  890  744  749  838 1050  918  986  797  923  975  815
+##  [91] 1020  906  901 1170  912  746  919  718  714  740</code></pre>
+<p>With periodic data, we have the concept of <em>seasonality</em> where we want to consider values changing as a cycle over a regular time period, whether it’s seasons of the year or “seasons” of the day or week or other time period. There may also be a <strong>trend</strong> over time. <em>Decomposing</em> the time series will display all of these things.</p>
+<p>A good data set to observe seasonality and trends is the Mauna Loa CO<sub>2</sub> time series, with regular annual cycles, yet with a regularly increasing trend over the years, as shown above in the graphic at the start of the chapter. One time-series graphic, a <strong>decomposition</strong>, shows the original observations, followed by a trend line that removes the seasonal and local (short-term) random irregularities, a detrended <em>seasonal</em> picture which removes that trend to just show the seasonal cycles, followed by the random irregularities (Figure <a href="ts.html#fig:timeMaunaLoaDecomp">12.4</a>).</p>
+<div class="sourceCode" id="cb966"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb966-1"><a href="ts.html#cb966-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">decompose</span>(co2))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeMaunaLoaDecomp"></span>
+<img src="EnvDataScience_files/figure-html/timeMaunaLoaDecomp-1.png" alt="Decomposition of Mauna Loa CO2 data" width="75%" />
+<p class="caption">
+FIGURE 12.4: Decomposition of Mauna Loa CO2 data
+</p>
+</div>
+<p>In reading this graph, note the vertical scale: the units are all the same – parts per million – so the actual amplitude of the seasonal cycle should be the same as the annual amplitude of the observations. It’s just scaled to the chart height, which tends to exaggerate the seasonal cycles and random irregularities.</p>
+<p>So we’ll look at a more advanced decomposition called <em>Seasonal Decomposition of Time Series with Loess</em> in the <code>stl</code> package that also provides a scale bar, allowing us to compare their amplitudes; we might, for instance, see where random variation is greater than the seasonal amplitude. If <code>s.window = "periodic"</code>, the mean is used for smoothing: the seasonal values are removed and the remainder smoothed to find the trend, as we’ll see in the Mauna Loa CO<sub>2</sub> data (Figure <a href="ts.html#fig:timeCO2stl">12.5</a>).</p>
+<div class="sourceCode" id="cb967"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb967-1"><a href="ts.html#cb967-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">stl</span>(co2, <span class="at">s.window=</span><span class="st">&quot;periodic&quot;</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeCO2stl"></span>
+<img src="EnvDataScience_files/figure-html/timeCO2stl-1.png" alt="Seasonal decomposition of time series using loess (stl) applied to CO2. Note that the vertical units for each panel is parts per million (ppm), and the bar on the right shows the size of ~2 ppm." width="75%" />
+<p class="caption">
+FIGURE 12.5: Seasonal decomposition of time series using loess (stl) applied to CO2. Note that the vertical units for each panel is parts per million (ppm), and the bar on the right shows the size of ~2 ppm.
+</p>
+</div>
+</div>
+<div id="creation-of-time-series-ts-data" class="section level2 hasAnchor" number="12.2">
+<h2><span class="header-section-number">12.2</span> Creation of Time Series (ts) Data<a href="ts.html#creation-of-time-series-ts-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>So far, we’ve been using built-in time series data, and there are many such available data sets, but we will need to understand how to create them. A time series (ts) can be created with the <code>ts()</code> function:</p>
+<ul>
+<li>the period of time we’re organizing our data into (e.g. daily, yearly) can be anything</li>
+<li>observations must be a regularly spaced series</li>
+<li>time values are not normally included as a variable in the time series</li>
+</ul>
+<p>We’ll build a simple time series with monthly high and low temperatures in San Francisco I just pulled off a Google search. We’ll start with just building a data frame, first converting the temperatures from Fahrenheit to Celsius (Figure <a href="ts.html#fig:timeSFhiLo">12.6</a>).</p>
+<div class="sourceCode" id="cb968"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb968-1"><a href="ts.html#cb968-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb968-2"><a href="ts.html#cb968-2" tabindex="-1"></a>SFhighF <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">58</span>,<span class="dv">61</span>,<span class="dv">62</span>,<span class="dv">63</span>,<span class="dv">64</span>,<span class="dv">67</span>,<span class="dv">67</span>,<span class="dv">68</span>,<span class="dv">71</span>,<span class="dv">70</span>,<span class="dv">64</span>,<span class="dv">58</span>)</span>
+<span id="cb968-3"><a href="ts.html#cb968-3" tabindex="-1"></a>SFlowF  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">47</span>,<span class="dv">48</span>,<span class="dv">49</span>,<span class="dv">50</span>,<span class="dv">51</span>,<span class="dv">53</span>,<span class="dv">54</span>,<span class="dv">55</span>,<span class="dv">56</span>,<span class="dv">55</span>,<span class="dv">51</span>,<span class="dv">47</span>)</span>
+<span id="cb968-4"><a href="ts.html#cb968-4" tabindex="-1"></a>SFhighC <span class="ot">&lt;-</span> (SFhighF<span class="dv">-32</span>)<span class="sc">*</span><span class="dv">5</span><span class="sc">/</span><span class="dv">9</span></span>
+<span id="cb968-5"><a href="ts.html#cb968-5" tabindex="-1"></a>SFlowC  <span class="ot">&lt;-</span> (SFlowF<span class="dv">-32</span>)<span class="sc">*</span><span class="dv">5</span><span class="sc">/</span><span class="dv">9</span></span>
+<span id="cb968-6"><a href="ts.html#cb968-6" tabindex="-1"></a>SFtempC <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(<span class="at">high=</span>SFhighC,<span class="at">low=</span>SFlowC)</span>
+<span id="cb968-7"><a href="ts.html#cb968-7" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">ts</span>(SFtempC), <span class="at">main=</span><span class="st">&quot;SF temperature, monthly time unit&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeSFhiLo"></span>
+<img src="EnvDataScience_files/figure-html/timeSFhiLo-1.png" alt="San Francisco monthly highs and lows as time series" width="75%" />
+<p class="caption">
+FIGURE 12.6: San Francisco monthly highs and lows as time series
+</p>
+</div>
+<div id="frequency-start-and-end-parameters-for-ts" class="section level3 hasAnchor" number="12.2.1">
+<h3><span class="header-section-number">12.2.1</span> Frequency, start, and end parameters for <code>ts()</code><a href="ts.html#frequency-start-and-end-parameters-for-ts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To convert this data frame into a time series, we’ll need to provide at least a <code>frequency</code> setting (the default <code>frequency=1</code> was applied above), which sets how many observations per period. The <code>ts()</code> function doesn’t seem to care what the period is in reality, however some functions figure it out, at least for an annual period, e.g. that 1-12 means months when there’s a frequency of 12 (Figure <a href="ts.html#fig:timeSFyearly">12.7</a>).</p>
+<div class="sourceCode" id="cb969"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb969-1"><a href="ts.html#cb969-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">ts</span>(SFtempC, <span class="at">frequency=</span><span class="dv">12</span>), <span class="at">main=</span><span class="st">&quot;yearly period&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeSFyearly"></span>
+<img src="EnvDataScience_files/figure-html/timeSFyearly-1.png" alt="SF data with yearly period" width="75%" />
+<p class="caption">
+FIGURE 12.7: SF data with yearly period
+</p>
+</div>
+<p><strong>frequency &lt; 1</strong></p>
+<p>You can have a frequency less than 1. For instance, for greenhouse gases (CO<sub>2</sub>, CH<sub>4</sub>, N<sub>2</sub>O) captured from ice cores in Antarctica (Law Dome Ice Core, just south of Cape Poinsett, Antarctica (<span class="citation">Irizarry (<a href="#ref-Irizarry">2019</a>)</span>)), there are values for every 20 years, so if we want year to be the period, the frequency would need to be to be 1/20 years = 0.05 (Figure <a href="ts.html#fig:timeGG20year">12.8</a>). Note the use of a pivot to transform the data.</p>
+<div class="sourceCode" id="cb970"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb970-1"><a href="ts.html#cb970-1" tabindex="-1"></a><span class="fu">library</span>(dslabs)</span>
+<span id="cb970-2"><a href="ts.html#cb970-2" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;greenhouse_gases&quot;</span>)</span>
+<span id="cb970-3"><a href="ts.html#cb970-3" tabindex="-1"></a>GHGwide <span class="ot">&lt;-</span> <span class="fu">pivot_wider</span>(greenhouse_gases, <span class="at">names_from =</span> gas, </span>
+<span id="cb970-4"><a href="ts.html#cb970-4" tabindex="-1"></a>                       <span class="at">values_from =</span> concentration)</span>
+<span id="cb970-5"><a href="ts.html#cb970-5" tabindex="-1"></a>GHG <span class="ot">&lt;-</span> <span class="fu">ts</span>(GHGwide, <span class="at">frequency=</span><span class="fl">0.05</span>, <span class="at">start=</span><span class="dv">20</span>) </span>
+<span id="cb970-6"><a href="ts.html#cb970-6" tabindex="-1"></a><span class="fu">plot</span>(GHG)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeGG20year"></span>
+<img src="EnvDataScience_files/figure-html/timeGG20year-1.png" alt="Greenhouse gases with 20 year observations, so 0.05 annual frequency" width="75%" />
+<p class="caption">
+FIGURE 12.8: Greenhouse gases with 20 year observations, so 0.05 annual frequency
+</p>
+</div>
+</div>
+<div id="associating-times-with-time-series" class="section level3 hasAnchor" number="12.2.2">
+<h3><span class="header-section-number">12.2.2</span> Associating times with time series<a href="ts.html#associating-times-with-time-series" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In the greenhouse gas data above, we not only specified <code>frequency</code> to determine the period, we also provided a <code>start</code> value of 20 to provide an actual year to start the data with. Time series don’t normally include time stamps, so we need to specify <strong><code>start</code></strong> and <strong><code>end</code></strong> parameters. This can be either a single number (if it’s the first reading during the period) or a vector of two numbers (the second of which is an integer), which specify a natural period and a number of samples into that period (e.g. which month during the year, or which hour, minute or second during that day, etc.)</p>
+<p>Example with year as the period and monthly data, starting July 2019 and ending June 2020:</p>
+<p><code>frequency=12, start=c(2019,7), end=c(2020,6)</code></p>
+<div id="creating-a-time-series-from-web-scraped-mauna-loa-co2-data" class="section level4 hasAnchor" number="12.2.2.1">
+<h4><span class="header-section-number">12.2.2.1</span> Creating a time series from web-scraped Mauna Loa CO2 data<a href="ts.html#creating-a-time-series-from-web-scraped-mauna-loa-co2-data" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><strong>Goal</strong>: To download data from NOAA and the Scripps Institute containing monthly average atmospheric CO<sub>2</sub> concentration data measured at the Mauna Loa Observatory on Hawai’i. These record recent (since 1958) changes in atmospheric concentrations of the important greenhouse gas, CO<sub>2</sub> as measured at 3.3 km above the central Pacific Ocean. For further information on the observations see: <a href="http://www.cmdl.noaa.gov/ccgg/" class="uri">http://www.cmdl.noaa.gov/ccgg/</a></p>
+<p>We’ll use R code to download and prepare the data for plotting. The source file at NOAA <a href="https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.txt" class="uri">https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.txt</a> can be read directly into a data frame. We’ll start by using code to download the text file into the current working directory:</p>
+<p>There are various types of time series objects: base R’s <code>ts</code>, extensible time series in the <code>xts</code> package, tsibbles in the <code>tsibble</code> package, and probably others. We’ll use a <code>tsibble</code> and a <code>ts</code>, after starting the read process over and creating the <code>datetime</code> variable. The tsibble package uses an <strong>index</strong> to order records, one or more <strong>key</strong> variables that define observational units, with each observation uniquely identified by an index-key combination. In contrast to regular time series, tsibbles preserve the time index as a data variable. You can convert either regular time series or data frames with dates to tsibbles with the <code>as_tsibble</code> function, as long as things are set up right. We’ll stick with regular time series (and the use of <code>xts</code> to handle time stamps), but the reader might consider exploring the tsibble package, as described at <a href="https://tsibble.tidyverts.org/" class="uri">https://tsibble.tidyverts.org/</a>, to learn more.</p>
+<div class="sourceCode" id="cb971"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb971-1"><a href="ts.html#cb971-1" tabindex="-1"></a><span class="fu">library</span>(RCurl)</span>
+<span id="cb971-2"><a href="ts.html#cb971-2" tabindex="-1"></a>filepath <span class="ot">=</span> <span class="st">&quot;https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.txt&quot;</span></span>
+<span id="cb971-3"><a href="ts.html#cb971-3" tabindex="-1"></a>filename <span class="ot">&lt;-</span> <span class="st">&quot;co2_mm_mlo.txt&quot;</span></span>
+<span id="cb971-4"><a href="ts.html#cb971-4" tabindex="-1"></a><span class="fu">download.file</span>(filepath, <span class="fu">paste0</span>(<span class="fu">getwd</span>(),<span class="st">&quot;/&quot;</span>,filename))</span></code></pre></div>
+<div class="sourceCode" id="cb972"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb972-1"><a href="ts.html#cb972-1" tabindex="-1"></a>CO2_HI <span class="ot">&lt;-</span> <span class="fu">read_table</span>(<span class="fu">paste0</span>(<span class="fu">getwd</span>(),<span class="st">&quot;/&quot;</span>,filename),</span>
+<span id="cb972-2"><a href="ts.html#cb972-2" tabindex="-1"></a>                     <span class="at">comment=</span><span class="st">&quot;#&quot;</span>,</span>
+<span id="cb972-3"><a href="ts.html#cb972-3" tabindex="-1"></a>                     <span class="at">col_names =</span><span class="fu">c</span>(<span class="st">&quot;year&quot;</span>,<span class="st">&quot;month&quot;</span>,<span class="st">&quot;dec_date&quot;</span>,</span>
+<span id="cb972-4"><a href="ts.html#cb972-4" tabindex="-1"></a>                               <span class="st">&quot;monthly_CO2&quot;</span>,<span class="st">&quot;deseasonalized_CO2&quot;</span>,</span>
+<span id="cb972-5"><a href="ts.html#cb972-5" tabindex="-1"></a>                               <span class="st">&quot;#days&quot;</span>,<span class="st">&quot;sd_days&quot;</span>,<span class="st">&quot;unc.of_mon_mean&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb972-6"><a href="ts.html#cb972-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">datetime =</span> <span class="fu">date_decimal</span>(dec_date)) </span></code></pre></div>
+<p>Since the table has time stamps, we can use it directly to analyze change over time. Or we could create a tsibble, with the datetime detected as an index, and all other variables available to analyze.</p>
+<div class="sourceCode" id="cb973"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb973-1"><a href="ts.html#cb973-1" tabindex="-1"></a>co2tsibble <span class="ot">&lt;-</span> <span class="fu">as_tsibble</span>(CO2_HI)</span></code></pre></div>
+<div class="sourceCode" id="cb974"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb974-1"><a href="ts.html#cb974-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> co2tsibble, <span class="fu">aes</span>(<span class="at">x=</span>datetime, <span class="at">y=</span>monthly_CO2)) <span class="sc">+</span> <span class="fu">geom_line</span>()</span></code></pre></div>
+<p><img src="EnvDataScience_files/figure-html/unnamed-chunk-396-1.png" alt="" width="75%" style="display: block; margin: auto;" />
+Well, that’s nice, but it’s no different from what you get with just plotting from the original data frame.</p>
+<p>Let’s see if we can create a <code>ts</code> object, but we’ll need to specify the start month (after looking that up in the data) and the frequency of 12 months.</p>
+<div class="sourceCode" id="cb975"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb975-1"><a href="ts.html#cb975-1" tabindex="-1"></a>co2ts <span class="ot">&lt;-</span> <span class="fu">ts</span>(CO2_HI<span class="sc">$</span>monthly_CO2, <span class="at">start=</span><span class="fu">c</span>(<span class="dv">1958</span>,<span class="dv">3</span>), <span class="at">frequency=</span><span class="dv">12</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb976"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb976-1"><a href="ts.html#cb976-1" tabindex="-1"></a><span class="fu">plot</span>(co2ts)</span></code></pre></div>
+<p><img src="EnvDataScience_files/figure-html/unnamed-chunk-398-1.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<blockquote>
+<p>This web-scraped CO2 data method is explored more in <a href="https://bookdown.org/igisc/EnvDataSciAddenda/atmospheric-co2-record-from-mauna-loa-hawaii.html" class="uri">https://bookdown.org/igisc/EnvDataSciAddenda/atmospheric-co2-record-from-mauna-loa-hawaii.html</a>, along with some related curve-fitting methods, also explored in the addenda.</p>
+</blockquote>
+</div>
+</div>
+<div id="subsetting-time-series-by-times" class="section level3 hasAnchor" number="12.2.3">
+<h3><span class="header-section-number">12.2.3</span> Subsetting time series by times<a href="ts.html#subsetting-time-series-by-times" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Time series can be queried for their <code>frequency</code>, <code>start</code>, and <code>end</code> properties, and we’ll look at these for a built-in time series data set, <code>sunspot.month</code>, which has monthly values of sunspot activity from 1749 to 2013 (Figure <a href="ts.html#fig:timeSunspot">12.9</a>).</p>
+<div class="sourceCode" id="cb977"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb977-1"><a href="ts.html#cb977-1" tabindex="-1"></a><span class="fu">plot</span>(sunspot.month)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeSunspot"></span>
+<img src="EnvDataScience_files/figure-html/timeSunspot-1.png" alt="Monthly sunspot activity from 1749 to 2013" width="75%" />
+<p class="caption">
+FIGURE 12.9: Monthly sunspot activity from 1749 to 2013
+</p>
+</div>
+<div class="sourceCode" id="cb978"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb978-1"><a href="ts.html#cb978-1" tabindex="-1"></a><span class="fu">frequency</span>(sunspot.month)</span>
+<span id="cb978-2"><a href="ts.html#cb978-2" tabindex="-1"></a><span class="fu">start</span>(sunspot.month)</span>
+<span id="cb978-3"><a href="ts.html#cb978-3" tabindex="-1"></a><span class="fu">end</span>(sunspot.month)</span></code></pre></div>
+<pre><code>## [1] 12
+## [1] 1749    1
+## [1] 2024   10</code></pre>
+<p>To subset a section of a time series, we can use the <code>window</code> function (Figure <a href="ts.html#fig:timeSunspot19401970">12.10</a>).</p>
+<div class="sourceCode" id="cb980"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb980-1"><a href="ts.html#cb980-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">window</span>(sunspot.month, <span class="at">start =</span> <span class="dv">1940</span>, <span class="at">end =</span> <span class="dv">1970</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeSunspot19401970"></span>
+<img src="EnvDataScience_files/figure-html/timeSunspot19401970-1.png" alt="Monthly sunspot activity from 1940 to 1970" width="75%" />
+<p class="caption">
+FIGURE 12.10: Monthly sunspot activity from 1940 to 1970
+</p>
+</div>
+</div>
+<div id="changing-the-frequency-to-use-a-different-period" class="section level3 hasAnchor" number="12.2.4">
+<h3><span class="header-section-number">12.2.4</span> Changing the frequency to use a different period<a href="ts.html#changing-the-frequency-to-use-a-different-period" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We commonly use periods of days or years, but other options are possible. During the COVID-19 pandemic, weekly cycles of cases were commonly reported due to the weekly work cycle and weekend activities. Lunar tidal cycles are another.</p>
+<p>Sunspot activity is known to fluctuate over about a 11-year cycle, and other than the well-known effects on radio transmission is also part of short-term climate fluctuations (so must be considered when looking at climate change). We can see the 11-year cycle in the above graphs, and we can perhaps see it more clearly in a decomposition where we use an 11-year cycle as the period.</p>
+<p>To do this, we need to change the frequency. This is pretty easy to do, but to understand the process, first realize that we can take the original time series and create an identical copy to see how we can set the same parameters that already exist:</p>
+<div class="sourceCode" id="cb981"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb981-1"><a href="ts.html#cb981-1" tabindex="-1"></a>sunspot <span class="ot">&lt;-</span> <span class="fu">ts</span>(sunspot.month, <span class="at">frequency=</span><span class="dv">12</span>, <span class="at">start=</span><span class="fu">c</span>(<span class="dv">1749</span>,<span class="dv">1</span>))</span></code></pre></div>
+<p>To create one with an 11-year sunspot cycle would then require just setting an appropriate frequency:</p>
+<div class="sourceCode" id="cb982"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb982-1"><a href="ts.html#cb982-1" tabindex="-1"></a>sunspotCycles <span class="ot">&lt;-</span> <span class="fu">ts</span>(sunspot.month, <span class="at">frequency=</span><span class="dv">11</span><span class="sc">*</span><span class="dv">12</span>, <span class="at">start=</span><span class="fu">c</span>(<span class="dv">1749</span>,<span class="dv">1</span>))</span></code></pre></div>
+<p>But we might want to figure out when to start, so let’s window it for the first 20 years so we can visualize it (Figure <a href="ts.html#fig:timeSunspot20years">12.11</a>).</p>
+<div class="sourceCode" id="cb983"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb983-1"><a href="ts.html#cb983-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">window</span>(sunspot.month, <span class="at">end=</span><span class="fu">c</span>(<span class="dv">1769</span>,<span class="dv">12</span>)))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeSunspot20years"></span>
+<img src="EnvDataScience_files/figure-html/timeSunspot20years-1.png" alt="Sunspots of the first 20 years of data" width="75%" />
+<p class="caption">
+FIGURE 12.11: Sunspots of the first 20 years of data
+</p>
+</div>
+<p>Looks like a low point about 1755, so let’s start there:</p>
+<div class="sourceCode" id="cb984"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb984-1"><a href="ts.html#cb984-1" tabindex="-1"></a>sunspotCycles <span class="ot">&lt;-</span> <span class="fu">ts</span>(<span class="fu">window</span>(sunspot.month, <span class="at">start=</span><span class="dv">1755</span>), <span class="at">frequency=</span><span class="dv">11</span><span class="sc">*</span><span class="dv">12</span>, <span class="at">start=</span><span class="dv">1755</span>)</span></code></pre></div>
+<p>Now this is assuming that the sunspot cycle is <em>exactly</em> 11 years, which is probably not right, but a look at the decomposition might be useful (Figure <a href="ts.html#fig:timeSunspot11years">12.12</a>).</p>
+<div class="sourceCode" id="cb985"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb985-1"><a href="ts.html#cb985-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">stl</span>(sunspotCycles,<span class="at">s.window=</span><span class="st">&quot;periodic&quot;</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeSunspot11years"></span>
+<img src="EnvDataScience_files/figure-html/timeSunspot11years-1.png" alt="11-year sunspot cycle decomposition" width="75%" />
+<p class="caption">
+FIGURE 12.12: 11-year sunspot cycle decomposition
+</p>
+</div>
+<p>The seasonal picture makes things look simple, but it’s deceptive. The sunspot cycle varies significantly; and since we can see (using the scale bars) that the random variation is much greater than the seasonal, this suggests that we might not be able to use this periodicity reliably. But it was worth a try, and perhaps a good demonstration of an unconventional type of period.</p>
+</div>
+<div id="time-stamps-and-extensible-time-series" class="section level3 hasAnchor" number="12.2.5">
+<h3><span class="header-section-number">12.2.5</span> Time stamps and extensible time series<a href="ts.html#time-stamps-and-extensible-time-series" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>What we’ve been looking at so far are data in regularly spaced series where we just provide the date and time as when the series starts and ends. The data don’t include what we’d call <em>time stamps</em> as a variable, and these aren’t really needed if our data set is regularly spaced. However, there are situations where there may be missing data or imperfectly spaced data. Missing data for regularly spaced data can simply be entered as <code>NA</code>, but imperfectly spaced data may need a time stamp. One way is with <em>extensible time series</em>, which we’ll look at below, but first let’s look at a couple of <code>lubridate</code> functions for working with days of the year and Julian dates, which can help with time stamps.</p>
+<div id="lubridate-and-julian-dates" class="section level4 hasAnchor" number="12.2.5.1">
+<h4><span class="header-section-number">12.2.5.1</span> Lubridate and Julian dates<a href="ts.html#lubridate-and-julian-dates" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>As we saw earlier, the <code>lubridate</code> package makes dealing with dates a lot easier, with many routines for reading and manipulating dates in variables. <em>If you didn’t really get a good understanding of using dates and times with lubridate, you may want to review that section earlier in the book. Dates and times can be difficult to work with, so you’ll need to make sure you know the best tools, and lubridate has the best tools.</em></p>
+<p>One variation on dates it handles is the number of days since some start date, using either the year day <strong><code>yday()</code></strong> (for any given year, starting with <code>1</code> on the first of January) or the <strong><code>julian()</code></strong> date for any starting date. The default origin for <code>julian()</code> is <code>1970-01-01</code>, which surprisingly yields a Julian date of <strong><code>0</code></strong>, but the same date would be a year day of <strong><code>1</code></strong>.</p>
+<p>For climatological work where the year is very important, we usually want the year day, ranging from <code>1</code> on the first day of January to <code>365</code> or <code>366</code> on 31 December, of any given year. It’s the same thing as setting the origin for <code>julian()</code> as 12-31 of the previous year, and is useful in time series when the year is the period and observations are by days of the year.</p>
+<div class="sourceCode" id="cb986"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb986-1"><a href="ts.html#cb986-1" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb986-2"><a href="ts.html#cb986-2" tabindex="-1"></a>Jan1_1970 <span class="ot">&lt;-</span> <span class="fu">ymd</span>(<span class="st">&quot;1970-01-01&quot;</span>)</span>
+<span id="cb986-3"><a href="ts.html#cb986-3" tabindex="-1"></a>Jan1_1970</span>
+<span id="cb986-4"><a href="ts.html#cb986-4" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;Julian date:&quot;</span>,<span class="fu">julian</span>(Jan1_1970))</span>
+<span id="cb986-5"><a href="ts.html#cb986-5" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;Year day   :&quot;</span>,<span class="fu">yday</span>(Jan1_1970))</span></code></pre></div>
+<pre><code>## [1] &quot;1970-01-01&quot;
+## [1] &quot;Julian date: 0&quot;
+## [1] &quot;Year day   : 1&quot;</code></pre>
+<div class="sourceCode" id="cb988"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb988-1"><a href="ts.html#cb988-1" tabindex="-1"></a>Jan1_2020 <span class="ot">&lt;-</span> <span class="fu">ymd</span>(<span class="st">&quot;2020-01-01&quot;</span>)</span>
+<span id="cb988-2"><a href="ts.html#cb988-2" tabindex="-1"></a>Jan1_2020</span>
+<span id="cb988-3"><a href="ts.html#cb988-3" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;Year day         :&quot;</span>,<span class="fu">yday</span>(Jan1_2020))</span>
+<span id="cb988-4"><a href="ts.html#cb988-4" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;Julian date      :&quot;</span>,<span class="fu">julian</span>(Jan1_2020))</span>
+<span id="cb988-5"><a href="ts.html#cb988-5" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;  with origin set:&quot;</span>,<span class="fu">julian</span>(Jan1_2020, <span class="at">origin=</span><span class="fu">ymd</span>(<span class="st">&quot;2019-12-31&quot;</span>)))</span></code></pre></div>
+<pre><code>## [1] &quot;2020-01-01&quot;
+## [1] &quot;Year day         : 1&quot;
+## [1] &quot;Julian date      : 18262&quot;
+## [1] &quot;  with origin set: 1&quot;</code></pre>
+<p>To create a decimal <code>yday</code> including fractional days, you could use a function like the following, which simply uses the number of hours in a day, minutes in a day, and seconds in a day.</p>
+<div class="sourceCode" id="cb990"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb990-1"><a href="ts.html#cb990-1" tabindex="-1"></a>ydayDec <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
+<span id="cb990-2"><a href="ts.html#cb990-2" tabindex="-1"></a>           <span class="fu">yday</span>(d)<span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> <span class="fu">hour</span>(d)<span class="sc">/</span><span class="dv">24</span> <span class="sc">+</span> <span class="fu">minute</span>(d)<span class="sc">/</span><span class="dv">1440</span> <span class="sc">+</span> <span class="fu">second</span>(d)<span class="sc">/</span><span class="dv">86400</span>}</span>
+<span id="cb990-3"><a href="ts.html#cb990-3" tabindex="-1"></a>datetime <span class="ot">&lt;-</span> <span class="fu">now</span>()</span>
+<span id="cb990-4"><a href="ts.html#cb990-4" tabindex="-1"></a><span class="fu">print</span>(datetime)</span></code></pre></div>
+<pre><code>## [1] &quot;2026-09-04 09:14:12 PDT&quot;</code></pre>
+<div class="sourceCode" id="cb992"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb992-1"><a href="ts.html#cb992-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">ydayDec</span>(datetime), <span class="at">digits=</span><span class="dv">12</span>)</span></code></pre></div>
+<pre><code>## [1] 246.384861264</code></pre>
+</div>
+<div id="extensible-time-series-xts" class="section level4 hasAnchor" number="12.2.5.2">
+<h4><span class="header-section-number">12.2.5.2</span> Extensible time series (<code>xts</code>)<a href="ts.html#extensible-time-series-xts" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We’ll look at an example where we need to provide time stamps. Weekly water quality data (<em>E. coli</em>, total coliform, and <em>Enterococcus</em> bacterial counts) were downloaded from San Mateo County Health Department for San Pedro Creek, collected weekly since 2012, usually on Monday but sometimes on Tuesday, and occasionally with long gaps in the data, but with the date recorded in the variable <code>SAMPLE_DATE</code>.</p>
+<p>First, we’ll just look at this with the data frame, selecting date, total coliform, and <em>E. coli</em>:</p>
+<div class="sourceCode" id="cb994"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb994-1"><a href="ts.html#cb994-1" tabindex="-1"></a><span class="fu">library</span>(igisci)</span>
+<span id="cb994-2"><a href="ts.html#cb994-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb994-3"><a href="ts.html#cb994-3" tabindex="-1"></a>SanPedroCounts <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;SanPedro/SanPedroCreekBacterialCounts.csv&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb994-4"><a href="ts.html#cb994-4" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(<span class="st">`</span><span class="at">Total Coliform</span><span class="st">`</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb994-5"><a href="ts.html#cb994-5" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Total_Coliform =</span> <span class="st">`</span><span class="at">Total Coliform</span><span class="st">`</span>, <span class="at">Ecoli =</span> <span class="st">`</span><span class="at">E. Coli</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb994-6"><a href="ts.html#cb994-6" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(SAMPLE_DATE,Total_Coliform,Ecoli)</span></code></pre></div>
+<p>To create a time series from the San Pedro Creek <em>E. coli</em> data, we need to use the package <strong><code>xts</code></strong> (Extensible Time Series), using <code>SAMPLE_DATE</code> to order the data (Figure <a href="ts.html#fig:timeSanPedroEcoli">12.13</a>).</p>
+<div class="sourceCode" id="cb995"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb995-1"><a href="ts.html#cb995-1" tabindex="-1"></a><span class="fu">library</span>(xts); <span class="fu">library</span>(forecast)</span>
+<span id="cb995-2"><a href="ts.html#cb995-2" tabindex="-1"></a>Ecoli <span class="ot">&lt;-</span> <span class="fu">xts</span>(SanPedroCounts<span class="sc">$</span>Ecoli, <span class="at">order.by =</span> SanPedroCounts<span class="sc">$</span>SAMPLE_DATE)</span>
+<span id="cb995-3"><a href="ts.html#cb995-3" tabindex="-1"></a><span class="fu">attr</span>(Ecoli, <span class="st">&#39;frequency&#39;</span>) <span class="ot">&lt;-</span> <span class="dv">52</span></span>
+<span id="cb995-4"><a href="ts.html#cb995-4" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">as.ts</span>(Ecoli))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeSanPedroEcoli"></span>
+<img src="EnvDataScience_files/figure-html/timeSanPedroEcoli-1.png" alt="San Pedro Creek E. coli time series" width="75%" />
+<p class="caption">
+FIGURE 12.13: San Pedro Creek E. coli time series
+</p>
+</div>
+<p>Then a decomposition can be produced of the <em>E. coli</em> data (Figure <a href="ts.html#fig:timeSanPedroEcoliDecomp">12.14</a>). Note the use of <code>as.ts</code> to produce a normal time series.</p>
+<div class="sourceCode" id="cb996"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb996-1"><a href="ts.html#cb996-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">stl</span>(<span class="fu">as.ts</span>(Ecoli),<span class="at">s.window=</span><span class="st">&quot;periodic&quot;</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeSanPedroEcoliDecomp"></span>
+<img src="EnvDataScience_files/figure-html/timeSanPedroEcoliDecomp-1.png" alt="Decomposition of weekly E. coli data, annual period (frequency 52)" width="75%" />
+<p class="caption">
+FIGURE 12.14: Decomposition of weekly E. coli data, annual period (frequency 52)
+</p>
+</div>
+<p>What we can see from the above decomposition is no real signal from the annual cycle (52 weeks), since while there is some tendency for peak levels (“first-flush” events) happening late in the calendar year, the timing of those first heavy rains varies significantly from year to year.</p>
+<p>As we saw above with the decomposition, <em>E. coli</em> values don’t exhibit a clear annual cycle; the same is apparent with the <code>stl</code> result here. The trend may, however, be telling us something about the general trend of bacterial counts over time.</p>
+</div>
+</div>
+</div>
+<div id="data-smoothing-moving-average-ma" class="section level2 hasAnchor" number="12.3">
+<h2><span class="header-section-number">12.3</span> Data smoothing: moving average (<code>ma</code>)<a href="ts.html#data-smoothing-moving-average-ma" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The great amount of fluctuation in bacterial counts we see above makes it difficult to interpret the significant patterns. A moving average is a simple way to generalize data, using an order parameter to define the size of the moving window, which should be an odd number.</p>
+<p>To see how it works, let’s apply a <code>ma()</code> to the SF data we created a few steps back. This isn’t a data set we need to smooth, but we can see how the function works by comparing the original and averaged data.</p>
+<div class="sourceCode" id="cb997"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb997-1"><a href="ts.html#cb997-1" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb997-2"><a href="ts.html#cb997-2" tabindex="-1"></a><span class="fu">ts</span>(SFtempC, <span class="at">frequency=</span><span class="dv">12</span>)</span></code></pre></div>
+<pre><code>##           high       low
+## Jan 1 14.44444  8.333333
+## Feb 1 16.11111  8.888889
+## Mar 1 16.66667  9.444444
+## Apr 1 17.22222 10.000000
+## May 1 17.77778 10.555556
+## Jun 1 19.44444 11.666667
+## Jul 1 19.44444 12.222222
+## Aug 1 20.00000 12.777778
+## Sep 1 21.66667 13.333333
+## Oct 1 21.11111 12.777778
+## Nov 1 17.77778 10.555556
+## Dec 1 14.44444  8.333333</code></pre>
+<div class="sourceCode" id="cb999"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb999-1"><a href="ts.html#cb999-1" tabindex="-1"></a><span class="fu">ma</span>(<span class="fu">ts</span>(SFtempC,<span class="at">frequency=</span><span class="dv">12</span>),<span class="at">order=</span><span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##           [,1]      [,2]
+## Jan 1       NA        NA
+## Feb 1 15.74074  8.888889
+## Mar 1 16.66667  9.444444
+## Apr 1 17.22222 10.000000
+## May 1 18.14815 10.740741
+## Jun 1 18.88889 11.481481
+## Jul 1 19.62963 12.222222
+## Aug 1 20.37037 12.777778
+## Sep 1 20.92593 12.962963
+## Oct 1 20.18519 12.222222
+## Nov 1 17.77778 10.555556
+## Dec 1       NA        NA</code></pre>
+<p>A moving average can also be applied to a vector or a variable in a data frame – doesn’t have to be a time series. For the water quality data, we’ll use a large order (15) to best clarify the significant pattern of <em>E. coli</em> counts (Figure <a href="ts.html#fig:timeMovingAvgEcoli">12.15</a>).</p>
+<div class="sourceCode" id="cb1001"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1001-1"><a href="ts.html#cb1001-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>SanPedroCounts) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>SAMPLE_DATE, <span class="at">y=</span><span class="fu">ma</span>(Ecoli, <span class="at">order=</span><span class="dv">15</span>)))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeMovingAvgEcoli"></span>
+<img src="EnvDataScience_files/figure-html/timeMovingAvgEcoli-1.png" alt="Moving average (order=15) of E. coli data" width="75%" />
+<p class="caption">
+FIGURE 12.15: Moving average (order=15) of E. coli data
+</p>
+</div>
+<p><strong>Moving average of CO<sub>2</sub> data</strong></p>
+<p>We’ll look at another application of a moving average looking at CO<sub>2</sub> data from Antarctic ice cores (<span class="citation">Irizarry (<a href="#ref-Irizarry">2019</a>)</span>), first the time series itself (Figure <a href="ts.html#fig:timeCO2ggTS">12.16</a>)…</p>
+<div class="sourceCode" id="cb1002"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1002-1"><a href="ts.html#cb1002-1" tabindex="-1"></a><span class="fu">library</span>(dslabs)</span>
+<span id="cb1002-2"><a href="ts.html#cb1002-2" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;greenhouse_gases&quot;</span>)</span>
+<span id="cb1002-3"><a href="ts.html#cb1002-3" tabindex="-1"></a>GHGwide <span class="ot">&lt;-</span> <span class="fu">pivot_wider</span>(greenhouse_gases, </span>
+<span id="cb1002-4"><a href="ts.html#cb1002-4" tabindex="-1"></a>           <span class="at">names_from =</span> gas, </span>
+<span id="cb1002-5"><a href="ts.html#cb1002-5" tabindex="-1"></a>           <span class="at">values_from =</span> concentration)</span>
+<span id="cb1002-6"><a href="ts.html#cb1002-6" tabindex="-1"></a>CO2 <span class="ot">&lt;-</span> <span class="fu">ts</span>(GHGwide<span class="sc">$</span>CO2,</span>
+<span id="cb1002-7"><a href="ts.html#cb1002-7" tabindex="-1"></a>          <span class="at">frequency =</span> <span class="fl">0.05</span>)</span>
+<span id="cb1002-8"><a href="ts.html#cb1002-8" tabindex="-1"></a><span class="fu">plot</span>(CO2)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeCO2ggTS"></span>
+<img src="EnvDataScience_files/figure-html/timeCO2ggTS-1.png" alt="GHG CO2 time series" width="75%" />
+<p class="caption">
+FIGURE 12.16: GHG CO2 time series
+</p>
+</div>
+<p>… and then the moving average with an order of 7 (Figure <a href="ts.html#fig:timeMovingAvgCO2">12.17</a>).</p>
+<div class="sourceCode" id="cb1003"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1003-1"><a href="ts.html#cb1003-1" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb1003-2"><a href="ts.html#cb1003-2" tabindex="-1"></a>CO2ma <span class="ot">&lt;-</span> <span class="fu">ma</span>(CO2, <span class="at">order=</span><span class="dv">7</span>)</span>
+<span id="cb1003-3"><a href="ts.html#cb1003-3" tabindex="-1"></a><span class="fu">plot</span>(CO2ma)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeMovingAvgCO2"></span>
+<img src="EnvDataScience_files/figure-html/timeMovingAvgCO2-1.png" alt="Moving average (order=7) of CO2 time series" width="75%" />
+<p class="caption">
+FIGURE 12.17: Moving average (order=7) of CO2 time series
+</p>
+</div>
+<p>For periodic data we can decompose time series into seasonal and trend signals, with the remainder left as random variation. But even for non-periodic data, we can consider random variation by simply subtracting the major signal of the moving average from the original data (Figure <a href="ts.html#fig:timeRandomVar">12.18</a>).</p>
+<div class="sourceCode" id="cb1004"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1004-1"><a href="ts.html#cb1004-1" tabindex="-1"></a><span class="fu">plot</span>(CO2<span class="sc">-</span>CO2ma)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeRandomVar"></span>
+<img src="EnvDataScience_files/figure-html/timeRandomVar-1.png" alt="Random variation seen by subtracting moving average" width="75%" />
+<p class="caption">
+FIGURE 12.18: Random variation seen by subtracting moving average
+</p>
+</div>
+<p>We can also remove the seasonal fluctuation of the monthly Mauna Loa time series we created earlier…</p>
+<div class="sourceCode" id="cb1005"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1005-1"><a href="ts.html#cb1005-1" tabindex="-1"></a><span class="fu">library</span>(forecast); <span class="fu">library</span>(tsibble)</span>
+<span id="cb1005-2"><a href="ts.html#cb1005-2" tabindex="-1"></a>co2mo_ma <span class="ot">&lt;-</span> <span class="fu">ma</span>(co2ts, <span class="at">order=</span><span class="dv">12</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1006"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1006-1"><a href="ts.html#cb1006-1" tabindex="-1"></a><span class="fu">plot</span>(co2mo_ma)</span></code></pre></div>
+<p><img src="EnvDataScience_files/figure-html/unnamed-chunk-408-1.png" alt="" width="75%" style="display: block; margin: auto;" />
+… and the seasonal pattern by subtracting the moving average from the original data:</p>
+<div class="sourceCode" id="cb1007"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1007-1"><a href="ts.html#cb1007-1" tabindex="-1"></a><span class="fu">plot</span>(co2ts<span class="sc">-</span>co2mo_ma)</span></code></pre></div>
+<p><img src="EnvDataScience_files/figure-html/unnamed-chunk-409-1.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<p>For the <em>E. coli</em>, maybe we can use a moving average to try to see a clearer pattern? We’ll need to use <code>tseries::na.remove</code> to remove the <code>NA</code> at the beginning and end of the data, and I’d probably recommend making sure we’re not creating any time errors doing this (Figure <a href="ts.html#fig:timeEcoliSTL15">12.19</a>).</p>
+<div class="sourceCode" id="cb1008"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1008-1"><a href="ts.html#cb1008-1" tabindex="-1"></a>ecoli15 <span class="ot">&lt;-</span> tseries<span class="sc">::</span><span class="fu">na.remove</span>(<span class="fu">as.ts</span>(<span class="fu">ma</span>(Ecoli, <span class="at">order=</span><span class="dv">15</span>)))</span>
+<span id="cb1008-2"><a href="ts.html#cb1008-2" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">stl</span>(ecoli15, <span class="at">s.window=</span><span class="st">&quot;periodic&quot;</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeEcoliSTL15"></span>
+<img src="EnvDataScience_files/figure-html/timeEcoliSTL15-1.png" alt="Decomposition using stl of a 15th-order moving average of E. coli data" width="75%" />
+<p class="caption">
+FIGURE 12.19: Decomposition using stl of a 15th-order moving average of E. coli data
+</p>
+</div>
+</div>
+<div id="decomposition-of-data-logger-data-marble-mountains" class="section level2 hasAnchor" number="12.4">
+<h2><span class="header-section-number">12.4</span> Decomposition of data logger data: Marble Mountains<a href="ts.html#decomposition-of-data-logger-data-marble-mountains" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Data loggers can create a rich time series data set, with readings repeated at very short time frames (depending on the capabilities of the sensors and data logging system) and extending as far as the instrumentation allows. For a study of chemical water quality and hydrology of a karst system in the Marble Mountains of California, a spring <em>resurgence</em> was instrumented to measure water level, temperature, and specific conductance (a surrogate for total dissolved solids) over a four-year time frame <span class="citation">(<a href="#ref-marbles">Davis and Davis 2001</a>)</span> (Figures <a href="ts.html#fig:timeMblResurg">12.20</a> and <a href="ts.html#fig:timeMblResEquipment">12.21</a>). The frequency was quite coarse – one sample every two hours – but still provides a useful data set to consider some of the time series methods we’ve been exploring (Figure <a href="ts.html#fig:timeMblResurg">12.20</a>).</p>
+<p><img src="img/resurgenceStageRecorder.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeMblResurg"></span>
+<img src="img/ResurgenceDataLogger.png" alt="Marble Mountains resurgence data logger design" width="75%" />
+<p class="caption">
+FIGURE 12.20: Marble Mountains resurgence data logger design
+</p>
+</div>
+<img src="img/instrumentationPicture.png" alt="" width="50%" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeMblResEquipment"></span>
+<img src="img/instrumentationLower.png" alt="Marble Mountains resurgence data logger equipment" width="50%" />
+<p class="caption">
+FIGURE 12.21: Marble Mountains resurgence data logger equipment
+</p>
+</div>
+<p>As always, you might want to start by just exploring the data…</p>
+<div class="sourceCode" id="cb1009"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1009-1"><a href="ts.html#cb1009-1" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/resurgenceData.csv&quot;</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 17,537 × 9
+##    date      time   wlevelm WTemp ATemp    EC InputV BTemp precip_mm
+##    &lt;chr&gt;     &lt;time&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+##  1 9/23/1994 14:00    0.325  5.69  24.7  204.   12.5  24.8        NA
+##  2 9/23/1994 16:00    0.325  5.69  20.4  207.   12.5  18.7        NA
+##  3 9/23/1994 18:00    0.322  5.64  16.6  207.   12.5  16.3        NA
+##  4 9/23/1994 20:00    0.324  5.62  16.1  207.   12.5  14.9        NA
+##  5 9/23/1994 22:00    0.324  5.65  15.6  207.   12.5  14.0        NA
+##  6 9/24/1994 00:00    0.323  5.66  14.4  207.   12.5  13.3        NA
+##  7 9/24/1994 02:00    0.323  5.63  13.9  207.   12.5  12.8        NA
+##  8 9/24/1994 04:00    0.322  5.65  13.1  207.   12.5  12.3        NA
+##  9 9/24/1994 06:00    0.319  5.61  11.8  207.   12.5  11.9        NA
+## 10 9/24/1994 08:00    0.321  5.66  13.1  207.   12.4  11.6        NA
+## # ℹ 17,527 more rows</code></pre>
+<p>What we can see is that the date_time stamps show that measurements are every two hours. This will help us set the frequency for an annual period. The start time is <code>1994-09-23 14:00:00</code>, so we need to provide that information as well. Note the computations used to do this (I first worked out that the <code>yday</code> for 9/23 was 266) (Figure <a href="ts.html#fig:timeMblData">12.22</a>).</p>
+<div class="sourceCode" id="cb1011"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1011-1"><a href="ts.html#cb1011-1" tabindex="-1"></a>resurg <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/resurgenceData.csv&quot;</span>))</span>
+<span id="cb1011-2"><a href="ts.html#cb1011-2" tabindex="-1"></a>resurgVars <span class="ot">&lt;-</span> resurg <span class="sc">%&gt;%</span></span>
+<span id="cb1011-3"><a href="ts.html#cb1011-3" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(ATemp, BTemp, wlevelm, EC, InputV)<span class="co">#%&gt;% # removed date &amp; time </span></span>
+<span id="cb1011-4"><a href="ts.html#cb1011-4" tabindex="-1"></a>resurgTS <span class="ot">&lt;-</span> <span class="fu">ts</span>(resurgVars, <span class="at">frequency =</span> <span class="dv">12</span><span class="sc">*</span><span class="dv">365</span>, <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">1994</span>, <span class="dv">266</span><span class="sc">*</span><span class="dv">12</span><span class="sc">+</span><span class="dv">7</span>))</span>
+<span id="cb1011-5"><a href="ts.html#cb1011-5" tabindex="-1"></a><span class="fu">plot</span>(resurgTS)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeMblData"></span>
+<img src="EnvDataScience_files/figure-html/timeMblData-1.png" alt="Data logger data from the Marbles resurgence" width="75%" />
+<p class="caption">
+FIGURE 12.22: Data logger data from the Marbles resurgence
+</p>
+</div>
+<p>In this study, water level water level has an annual seasonality that might be best understood by decomposition (Figure <a href="ts.html#fig:timeMblh2oSTL">12.23</a>).</p>
+<div class="sourceCode" id="cb1012"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1012-1"><a href="ts.html#cb1012-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(lubridate)</span>
+<span id="cb1012-2"><a href="ts.html#cb1012-2" tabindex="-1"></a>resurg <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/resurgenceData.csv&quot;</span>))</span>
+<span id="cb1012-3"><a href="ts.html#cb1012-3" tabindex="-1"></a>wlevelTS <span class="ot">&lt;-</span> <span class="fu">ts</span>(resurg<span class="sc">$</span>wlevelm, <span class="at">frequency =</span> <span class="dv">12</span><span class="sc">*</span><span class="dv">365</span>, <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">1994</span>, <span class="dv">266</span><span class="sc">*</span><span class="dv">12</span><span class="sc">+</span><span class="dv">7</span>))</span>
+<span id="cb1012-4"><a href="ts.html#cb1012-4" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">stl</span>(wlevelTS, <span class="at">s.window=</span><span class="st">&quot;periodic&quot;</span>)</span>
+<span id="cb1012-5"><a href="ts.html#cb1012-5" tabindex="-1"></a><span class="fu">plot</span>(fit)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeMblh2oSTL"></span>
+<img src="EnvDataScience_files/figure-html/timeMblh2oSTL-1.png" alt="stl decomposition of Marbles water level time series" width="75%" />
+<p class="caption">
+FIGURE 12.23: stl decomposition of Marbles water level time series
+</p>
+</div>
+</div>
+<div id="facet-graphs-for-comparing-variables-over-time" class="section level2 hasAnchor" number="12.5">
+<h2><span class="header-section-number">12.5</span> Facet Graphs for Comparing Variables over Time<a href="ts.html#facet-graphs-for-comparing-variables-over-time" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We’ve just been looking at a data set with multiple variables, and often what we’re just needing to do is to create a combination of graphs of these variables over a common timeframe on the x axis. We’ll look at some flux data from Loney Meadow (Figure <a href="ts.html#fig:timeLoneyFluxTower">12.24</a>).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeLoneyFluxTower"></span>
+<img src="img/LoneyFluxTowerWide.png" alt="Flux tower installed at Loney Meadow, 2016. Photo credit: Darren Blackburn" width="75%" />
+<p class="caption">
+FIGURE 12.24: Flux tower installed at Loney Meadow, 2016. Photo credit: Darren Blackburn
+</p>
+</div>
+<p>The flux tower data was collected at a high frequency for eddy covariance processing where 3D wind speed data is used to model the movement of atmospheric gases, including CO<sub>2</sub> flux driven by photosynthesis and respiration processes. Note that the sign convention of CO<sub>2</sub> flux is that positive flux is released to the atmosphere, which might happen when less photosynthesis is happening but respiration and other CO<sub>2</sub> releases continue, while a negative flux might happen when more photosynthesis is capturing more CO<sub>2</sub>.</p>
+<p>A spreadsheet of 30-minute summaries from 17 May to 6 September can be found in the <code>igisci</code> extdata folder as <code>"meadows/LoneyMeadow_30minCO2fluxes_Geog604.xls"</code>, and includes data on photosynthetically active radiation (PAR), net radiation (Qnet), air temperature, relative humidity, soil temperature at 2 and 10 cm depth, wind direction, wind speed, rainfall, and soil volumetric water content (VWC). There’s clearly a lot more we can do with this data (see <span class="citation">Blackburn et al. (<a href="#ref-blackburn2021carbon">2021</a>)</span>), but for now we’ll just create a facet graph from the multiple variables collected. We’ll start with writing a function to deal with the 2 lines of header, the first of which has the variable names and the second the units which we won’t use.</p>
+<div class="sourceCode" id="cb1013"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1013-1"><a href="ts.html#cb1013-1" tabindex="-1"></a><span class="fu">library</span>(igisci)</span>
+<span id="cb1013-2"><a href="ts.html#cb1013-2" tabindex="-1"></a><span class="fu">library</span>(readxl); <span class="fu">library</span>(tidyverse); <span class="fu">library</span>(lubridate)</span>
+<span id="cb1013-3"><a href="ts.html#cb1013-3" tabindex="-1"></a>read_excel2 <span class="ot">&lt;-</span> <span class="cf">function</span>(xl){</span>
+<span id="cb1013-4"><a href="ts.html#cb1013-4" tabindex="-1"></a>  vnames <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(xl, <span class="at">n_max=</span><span class="dv">0</span>) <span class="sc">|&gt;</span> <span class="fu">names</span>()</span>
+<span id="cb1013-5"><a href="ts.html#cb1013-5" tabindex="-1"></a>  vunits <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(xl, <span class="at">n_max=</span><span class="dv">0</span>, <span class="at">skip=</span><span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="fu">names</span>()</span>
+<span id="cb1013-6"><a href="ts.html#cb1013-6" tabindex="-1"></a>  <span class="fu">read_excel</span>(xl, <span class="at">skip=</span><span class="dv">2</span>, <span class="at">col_names=</span>vnames)</span>
+<span id="cb1013-7"><a href="ts.html#cb1013-7" tabindex="-1"></a>}</span>
+<span id="cb1013-8"><a href="ts.html#cb1013-8" tabindex="-1"></a></span>
+<span id="cb1013-9"><a href="ts.html#cb1013-9" tabindex="-1"></a>Loney <span class="ot">&lt;-</span> <span class="fu">read_excel2</span>(<span class="fu">ex</span>(<span class="st">&quot;meadows/LoneyMeadow_30minCO2fluxes_Geog604.xls&quot;</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb1013-10"><a href="ts.html#cb1013-10" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">DecimalDay =</span> <span class="st">`</span><span class="at">Decimal time</span><span class="st">`</span>,</span>
+<span id="cb1013-11"><a href="ts.html#cb1013-11" tabindex="-1"></a>         <span class="at">YDay =</span> <span class="st">`</span><span class="at">Day of Year</span><span class="st">`</span>,</span>
+<span id="cb1013-12"><a href="ts.html#cb1013-12" tabindex="-1"></a>         <span class="at">Hour =</span> <span class="st">`</span><span class="at">Hour of Day</span><span class="st">`</span>,</span>
+<span id="cb1013-13"><a href="ts.html#cb1013-13" tabindex="-1"></a>         <span class="at">CO2flux =</span> <span class="st">`</span><span class="at">CO2 Flux</span><span class="st">`</span>,</span>
+<span id="cb1013-14"><a href="ts.html#cb1013-14" tabindex="-1"></a>         <span class="at">Tsoil2cm =</span> <span class="st">`</span><span class="at">Tsoil 2cm</span><span class="st">`</span>,</span>
+<span id="cb1013-15"><a href="ts.html#cb1013-15" tabindex="-1"></a>         <span class="at">Tsoil10cm =</span> <span class="st">`</span><span class="at">Tsoil 10cm</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1013-16"><a href="ts.html#cb1013-16" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">datetime =</span> <span class="fu">as_date</span>(DecimalDay, <span class="at">origin=</span><span class="st">&quot;2015-12-31&quot;</span>))</span></code></pre></div>
+<p>We’re going to want to analyze changes over a daily period, but we can also look at the data changes over the entire collection duration. A <code>group_by</code>-<code>summarize</code> process <em>by days</em> will give us a generalized picture of changes over that duration, with the diurnal fluctuations removed, reflecting phenological changes from first exposure after snowmelt through the maximum growth period and through the major senescence period of late summer. We’ll look at a faceted graph (with <code>free_y</code> scales setting) from a <code>pivot_longer</code> table (Figure <a href="ts.html#fig:timeLoneyFacet">12.25</a>).</p>
+<div class="sourceCode" id="cb1014"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1014-1"><a href="ts.html#cb1014-1" tabindex="-1"></a>LoneyDaily <span class="ot">&lt;-</span> Loney <span class="sc">%&gt;%</span></span>
+<span id="cb1014-2"><a href="ts.html#cb1014-2" tabindex="-1"></a>  <span class="fu">group_by</span>(YDay) <span class="sc">%&gt;%</span></span>
+<span id="cb1014-3"><a href="ts.html#cb1014-3" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">CO2flux =</span> <span class="fu">mean</span>(CO2flux),</span>
+<span id="cb1014-4"><a href="ts.html#cb1014-4" tabindex="-1"></a>            <span class="at">PAR =</span> <span class="fu">mean</span>(PAR),</span>
+<span id="cb1014-5"><a href="ts.html#cb1014-5" tabindex="-1"></a>            <span class="at">Qnet =</span> <span class="fu">mean</span>(Qnet),</span>
+<span id="cb1014-6"><a href="ts.html#cb1014-6" tabindex="-1"></a>            <span class="at">Tair =</span> <span class="fu">mean</span>(Tair),</span>
+<span id="cb1014-7"><a href="ts.html#cb1014-7" tabindex="-1"></a>            <span class="at">RH =</span> <span class="fu">mean</span>(RH),</span>
+<span id="cb1014-8"><a href="ts.html#cb1014-8" tabindex="-1"></a>            <span class="at">Tsoil2cm =</span> <span class="fu">mean</span>(Tsoil2cm),</span>
+<span id="cb1014-9"><a href="ts.html#cb1014-9" tabindex="-1"></a>            <span class="at">Tsoil10cm =</span> <span class="fu">mean</span>(Tsoil10cm),</span>
+<span id="cb1014-10"><a href="ts.html#cb1014-10" tabindex="-1"></a>            <span class="at">wdir =</span> <span class="fu">mean</span>(wdir),</span>
+<span id="cb1014-11"><a href="ts.html#cb1014-11" tabindex="-1"></a>            <span class="at">wspd =</span> <span class="fu">mean</span>(wspd),</span>
+<span id="cb1014-12"><a href="ts.html#cb1014-12" tabindex="-1"></a>            <span class="at">Rain =</span> <span class="fu">mean</span>(Rain),</span>
+<span id="cb1014-13"><a href="ts.html#cb1014-13" tabindex="-1"></a>            <span class="at">VWC =</span> <span class="fu">mean</span>(VWC))</span>
+<span id="cb1014-14"><a href="ts.html#cb1014-14" tabindex="-1"></a>LoneyDailyLong <span class="ot">&lt;-</span> LoneyDaily <span class="sc">%&gt;%</span></span>
+<span id="cb1014-15"><a href="ts.html#cb1014-15" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> CO2flux<span class="sc">:</span>VWC,</span>
+<span id="cb1014-16"><a href="ts.html#cb1014-16" tabindex="-1"></a>               <span class="at">names_to=</span><span class="st">&quot;parameter&quot;</span>,</span>
+<span id="cb1014-17"><a href="ts.html#cb1014-17" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">&quot;value&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1014-18"><a href="ts.html#cb1014-18" tabindex="-1"></a>  <span class="fu">filter</span>(parameter <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;CO2flux&quot;</span>, <span class="st">&quot;Qnet&quot;</span>, <span class="st">&quot;Tair&quot;</span>, <span class="st">&quot;RH&quot;</span>, <span class="st">&quot;Tsoil10cm&quot;</span>, <span class="st">&quot;VWC&quot;</span>))</span>
+<span id="cb1014-19"><a href="ts.html#cb1014-19" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> LoneyDailyLong, <span class="fu">aes</span>(<span class="at">x=</span>YDay, <span class="at">y=</span>value)) <span class="sc">+</span> </span>
+<span id="cb1014-20"><a href="ts.html#cb1014-20" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span>
+<span id="cb1014-21"><a href="ts.html#cb1014-21" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">facet_grid</span>(parameter <span class="sc">~</span> ., <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeLoneyFacet"></span>
+<img src="EnvDataScience_files/figure-html/timeLoneyFacet-1.png" alt="Facet plot with free y scale of Loney flux tower parameters" width="75%" />
+<p class="caption">
+FIGURE 12.25: Facet plot with free y scale of Loney flux tower parameters
+</p>
+</div>
+</div>
+<div id="lag-regression" class="section level2 hasAnchor" number="12.6">
+<h2><span class="header-section-number">12.6</span> Lag Regression<a href="ts.html#lag-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Lag regression is like a normal linear model, but there’s a timing difference, or lag, between the explanatory and response variables. We have used this method to compare changes in snow melt in a Sierra Nevada watershed and changes in reservoir inflows downstream (<span class="citation">Powell et al. (<a href="#ref-Powell2011">2011</a>)</span>).</p>
+<p>Another good application of lag regression is comparing solar radiation and temperature. We’ll explore solar radiation and temperature data over an 8-day period for Bugac, Hungary, and Manaus, Brazil, maintained by the European Fluxes Database <span class="citation">(<a href="#ref-icos"><em>European Fluxes Database</em>, n.d.</a>)</span>. This data is every half hour, but let’s have a look. You could navigate to the spreadsheet and open it in Excel, and I would recommend it – you should know where the extdata is stored on your computer – since this is the easiest way to see that there are two worksheets. With that worksheet naming knowledge, we can also have a quick look in R:</p>
+<div class="sourceCode" id="cb1015"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1015-1"><a href="ts.html#cb1015-1" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1015-2"><a href="ts.html#cb1015-2" tabindex="-1"></a><span class="fu">read_xls</span>(<span class="fu">ex</span>(<span class="st">&quot;ts/SolarRad_Temp.xls&quot;</span>), <span class="at">sheet=</span><span class="st">&quot;BugacHungary&quot;</span>)[<span class="sc">-</span><span class="dv">1</span>,]</span></code></pre></div>
+<pre><code>## # A tibble: 17,520 × 5
+##    Year  `Day of Yr` Hr    SolarRad Tair               
+##    &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;              
+##  1 2006  1           0.5   0        0.55000001192092896
+##  2 2006  1           1     0        0.56999999284744263
+##  3 2006  1           1.5   0        0.82999998331069946
+##  4 2006  1           2     0        1.0399999618530273 
+##  5 2006  1           2.5   0        1.1699999570846558 
+##  6 2006  1           3     0        1.2000000476837158 
+##  7 2006  1           3.5   0        1.2300000190734863 
+##  8 2006  1           4     0        1.2599999904632568 
+##  9 2006  1           4.5   0        1.2599999904632568 
+## 10 2006  1           5     0        1.2599999904632568 
+## # ℹ 17,510 more rows</code></pre>
+<p>Indeed the readings are every half hour, so for a daily period, we should use a frequency of <strong>48</strong>. We need to remove the second line of the input, which has the units of the measurements, by using the accessor <code>[-1,]</code>. We’ll filter for a year day range and select the solar radiation and air temperature variables (Figure <a href="ts.html#fig:timeBugacRadTemp">12.26</a>).</p>
+<div class="sourceCode" id="cb1017"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1017-1"><a href="ts.html#cb1017-1" tabindex="-1"></a><span class="fu">library</span>(readxl); <span class="fu">library</span>(tidyverse)</span>
+<span id="cb1017-2"><a href="ts.html#cb1017-2" tabindex="-1"></a>BugacSolstice <span class="ot">&lt;-</span> <span class="fu">read_xls</span>(<span class="fu">ex</span>(<span class="st">&quot;ts/SolarRad_Temp.xls&quot;</span>), </span>
+<span id="cb1017-3"><a href="ts.html#cb1017-3" tabindex="-1"></a>                          <span class="at">sheet=</span><span class="st">&quot;BugacHungary&quot;</span>, <span class="at">col_types =</span> <span class="st">&quot;numeric&quot;</span>)[<span class="sc">-</span><span class="dv">1</span>,] <span class="sc">%&gt;%</span></span>
+<span id="cb1017-4"><a href="ts.html#cb1017-4" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Day of Yr</span><span class="st">`</span> <span class="sc">&lt;</span> <span class="dv">177</span> <span class="sc">&amp;</span> <span class="st">`</span><span class="at">Day of Yr</span><span class="st">`</span> <span class="sc">&gt;</span> <span class="dv">168</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1017-5"><a href="ts.html#cb1017-5" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(SolarRad, Tair)</span>
+<span id="cb1017-6"><a href="ts.html#cb1017-6" tabindex="-1"></a>BugacSolsticeTS <span class="ot">&lt;-</span> <span class="fu">ts</span>(BugacSolstice, <span class="at">frequency =</span> <span class="dv">48</span>)</span>
+<span id="cb1017-7"><a href="ts.html#cb1017-7" tabindex="-1"></a><span class="fu">plot</span>(BugacSolstice, <span class="at">main=</span><span class="st">&quot;a simple scatter plot that illustrates hysteresis&quot;</span>) </span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeBugacRadTemp"></span>
+<img src="EnvDataScience_files/figure-html/timeBugacRadTemp-1.png" alt="Scatter plot of Bugac solar radiation and air temperature" width="75%" />
+<p class="caption">
+FIGURE 12.26: Scatter plot of Bugac solar radiation and air temperature
+</p>
+</div>
+<blockquote>
+<p><em>Hysteresis</em> is “the dependence of a state of a system on its history” (<span class="citation"><em>Hysteresis</em> (<a href="#ref-hysteresis">n.d.</a>)</span>), and one place this can be seen is in periodic data, when an explanatory variable’s effect on a response variable differs on an increasing limb from what it produces on a decreasing limb. Two classic situations where this occur are in (a) water quality, where the rising limb of the hydrograph will carry more sediment load than a falling limb; and in (b) the daily or seasonal pattern of temperature in response to solar radiation, which we can see in the graph above with two apparent groups of scatterpoints representing the varying impact of solar radiation in spring vs fall, where temperatures lag behind the increase in solar radiation (Figure <a href="ts.html#fig:timeBugacSolsticeTS">12.27</a>).</p>
+</blockquote>
+<div class="sourceCode" id="cb1018"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1018-1"><a href="ts.html#cb1018-1" tabindex="-1"></a><span class="fu">plot</span>(BugacSolsticeTS)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeBugacSolsticeTS"></span>
+<img src="EnvDataScience_files/figure-html/timeBugacSolsticeTS-1.png" alt="Solstice 8-day time series of solar radiation and temperature" width="75%" />
+<p class="caption">
+FIGURE 12.27: Solstice 8-day time series of solar radiation and temperature
+</p>
+</div>
+<div id="the-lag-regression-using-a-lag-function-in-a-linear-model" class="section level3 hasAnchor" number="12.6.1">
+<h3><span class="header-section-number">12.6.1</span> The lag regression, using a lag function in a linear model<a href="ts.html#the-lag-regression-using-a-lag-function-in-a-linear-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The lag function uses a lag number of sample intervals to determine which value in the response variable corresponds to a given value in the explanatory variable. So we compare air temperature <code>Tair</code> to a lagged solar radiation <code>SolarRad</code> as <code>lm(Tair~lag(SolarRad,i)</code>, where <code>i</code> is the number of units to lag. The following code loops through six values (0:5) for i, starting with assigning the <code>RMSE</code> (root mean squared error) for no lag (0), then appending to <code>RMSE</code> for <code>i</code> of <code>1:5</code> to hopefully hit the minimum value.</p>
+<div class="sourceCode" id="cb1019"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1019-1"><a href="ts.html#cb1019-1" tabindex="-1"></a>getRMSE <span class="ot">&lt;-</span> <span class="cf">function</span>(i) {<span class="fu">sqrt</span>(<span class="fu">sum</span>(<span class="fu">lm</span>(Tair<span class="sc">~</span><span class="fu">lag</span>(SolarRad,i), </span>
+<span id="cb1019-2"><a href="ts.html#cb1019-2" tabindex="-1"></a>                                    <span class="at">data=</span>BugacSolsticeTS)<span class="sc">$</span>resid<span class="sc">**</span><span class="dv">2</span>))}</span>
+<span id="cb1019-3"><a href="ts.html#cb1019-3" tabindex="-1"></a>RMSE <span class="ot">&lt;-</span> <span class="fu">getRMSE</span>(<span class="dv">0</span>)</span>
+<span id="cb1019-4"><a href="ts.html#cb1019-4" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>){RMSE <span class="ot">&lt;-</span> <span class="fu">append</span>(RMSE,<span class="fu">getRMSE</span>(i))}</span>
+<span id="cb1019-5"><a href="ts.html#cb1019-5" tabindex="-1"></a>lagTable <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(<span class="at">lags =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>,<span class="at">RMSE =</span> RMSE)</span>
+<span id="cb1019-6"><a href="ts.html#cb1019-6" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(lagTable)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">lags</th>
+<th align="right">RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">64.01352</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">55.89803</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="right">50.49347</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="right">48.13214</td>
+</tr>
+<tr class="odd">
+<td align="right">4</td>
+<td align="right">49.64892</td>
+</tr>
+<tr class="even">
+<td align="right">5</td>
+<td align="right">54.36344</td>
+</tr>
+</tbody>
+</table>
+<p>Minimum RMSE is for a lag of 3, so 1.5 hours. Let’s go ahead and use that minimum RMSE lag (using <code>which.min</code> with the RMSE to automate that selection), then look at the summarized model.</p>
+<div class="sourceCode" id="cb1020"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1020-1"><a href="ts.html#cb1020-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> lagTable<span class="sc">$</span>lags[<span class="fu">which.min</span>(lagTable<span class="sc">$</span>RMSE)]</span>
+<span id="cb1020-2"><a href="ts.html#cb1020-2" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;Lag: &quot;</span>,n)</span></code></pre></div>
+<pre><code>## [1] &quot;Lag:  3&quot;</code></pre>
+<div class="sourceCode" id="cb1022"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1022-1"><a href="ts.html#cb1022-1" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(Tair<span class="sc">~</span><span class="fu">lag</span>(SolarRad,n), <span class="at">data=</span>BugacSolsticeTS))</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Tair ~ lag(SolarRad, n), data = BugacSolsticeTS)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.5820 -1.7083 -0.2266  1.8972  7.9336 
+## 
+## Coefficients:
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)      18.352006   0.174998  104.87   &lt;2e-16 ***
+## lag(SolarRad, n)  0.016398   0.000386   42.48   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.472 on 379 degrees of freedom
+##   (3 observations deleted due to missingness)
+## Multiple R-squared:  0.8265, Adjusted R-squared:  0.826 
+## F-statistic:  1805 on 1 and 379 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>So, not surprisingly, air temperature has a significant relationship to solar radiation. Confirmatory statistics should never be surprising, but just give us confidence in our conclusions. What we didn’t know before was just what amount of lag produces the strongest relationship, with the least error (root mean squared error, or RMSE), which turns out to be 3 observations or 1.5 hours. Interestingly, the <em>peak</em> solar radiation and temperature are separated by 5 units, so 2.5 hours, which we can see by looking at the generalized seasonals from decomposition (Figure <a href="ts.html#fig:timeBugacSolarradTemp">12.28</a>). There’s a similar lag for Manaus, though the peak solar radiation and temperatures coincide.</p>
+<div class="sourceCode" id="cb1024"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1024-1"><a href="ts.html#cb1024-1" tabindex="-1"></a>SolarRad_comp <span class="ot">&lt;-</span> <span class="fu">decompose</span>(<span class="fu">ts</span>(BugacSolstice<span class="sc">$</span>SolarRad, <span class="at">frequency =</span> <span class="dv">48</span>))</span>
+<span id="cb1024-2"><a href="ts.html#cb1024-2" tabindex="-1"></a>Tair_comp <span class="ot">&lt;-</span> <span class="fu">decompose</span>(<span class="fu">ts</span>(BugacSolstice<span class="sc">$</span>Tair, <span class="at">frequency =</span> <span class="dv">48</span>))</span>
+<span id="cb1024-3"><a href="ts.html#cb1024-3" tabindex="-1"></a>seasonals <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(<span class="at">Rad =</span> SolarRad_comp<span class="sc">$</span>seasonal, <span class="at">Temp =</span> Tair_comp<span class="sc">$</span>seasonal)</span></code></pre></div>
+<div class="sourceCode" id="cb1025"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1025-1"><a href="ts.html#cb1025-1" tabindex="-1"></a><span class="fu">ggplot</span>(seasonals) <span class="sc">+</span> </span>
+<span id="cb1025-2"><a href="ts.html#cb1025-2" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">seq_along</span>(Temp), <span class="at">y=</span>Temp), <span class="at">col=</span><span class="st">&quot;black&quot;</span>,<span class="at">size=</span><span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb1025-3"><a href="ts.html#cb1025-3" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">seq_along</span>(Rad), <span class="at">y=</span>Rad<span class="sc">/</span><span class="dv">50</span>), <span class="at">col=</span><span class="st">&quot;gray&quot;</span>, <span class="at">size=</span><span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb1025-4"><a href="ts.html#cb1025-4" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">480</span>,<span class="dv">12</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeBugacSolarradTemp"></span>
+<img src="EnvDataScience_files/figure-html/timeBugacSolarradTemp-1.png" alt="Bugac solar radiation and temperature" width="75%" />
+<p class="caption">
+FIGURE 12.28: Bugac solar radiation and temperature
+</p>
+</div>
+<div class="sourceCode" id="cb1026"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1026-1"><a href="ts.html#cb1026-1" tabindex="-1"></a><span class="fu">paste</span>(<span class="fu">which.max</span>(seasonals<span class="sc">$</span>Rad), <span class="fu">which.max</span>(seasonals<span class="sc">$</span>Temp))</span></code></pre></div>
+<pre><code>## [1] &quot;23 28&quot;</code></pre>
+</div>
+</div>
+<div id="ensemble-summary-statistics" class="section level2 hasAnchor" number="12.7">
+<h2><span class="header-section-number">12.7</span> Ensemble Summary Statistics<a href="ts.html#ensemble-summary-statistics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>For any time series data with meaningful periods like days or years (or even weeks when the observations vary by days of the week – this has been the case with COVID-19 data), ensemble averages (along with other summary statistics) are a good way to visualize changes in a variable over that period.</p>
+<p>As you could see from the decomposition and sequential graphics we created for the Bugac and Manaus solar radiation and temperature data, looking at what happens over one day as an “ensemble” of all of the days – where the mean value is displayed along with error bars based on standard deviations of the distribution – might be a useful figure.</p>
+<p>We’ve used <code>group_by</code> - <code>summarize</code> elsewhere in this book (<a href="abstraction.html#group-summary">3.4.5</a>) and this is yet another use of that handy method. Note that the grouping variable <code>Hr</code> is not categorical, not a factor, but simply a numeric variable of the hour as a decimal number – so 0.0, 0.5, 1.0, etc. – representing half-hourly sampling times, so since these repeat each day they can be used as a grouping variable (Figure <a href="ts.html#fig:timeManausEnsemble">12.29</a>).</p>
+<div class="sourceCode" id="cb1028"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1028-1"><a href="ts.html#cb1028-1" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb1028-2"><a href="ts.html#cb1028-2" tabindex="-1"></a>Manaus <span class="ot">&lt;-</span> <span class="fu">read_xls</span>(<span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>,<span class="st">&quot;ts/SolarRad_Temp.xls&quot;</span>,<span class="at">package=</span><span class="st">&quot;igisci&quot;</span>), </span>
+<span id="cb1028-3"><a href="ts.html#cb1028-3" tabindex="-1"></a>                   <span class="at">sheet=</span><span class="st">&quot;ManausBrazil&quot;</span>, <span class="at">col_types =</span> <span class="st">&quot;numeric&quot;</span>)[<span class="sc">-</span><span class="dv">1</span>,] <span class="sc">%&gt;%</span></span>
+<span id="cb1028-4"><a href="ts.html#cb1028-4" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Year<span class="sc">:</span>Tair)</span>
+<span id="cb1028-5"><a href="ts.html#cb1028-5" tabindex="-1"></a>ManausSum <span class="ot">&lt;-</span> Manaus <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Hr) <span class="sc">%&gt;%</span> </span>
+<span id="cb1028-6"><a href="ts.html#cb1028-6" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">meanRad =</span> <span class="fu">mean</span>(SolarRad), <span class="at">meanTemp =</span> <span class="fu">mean</span>(Tair),</span>
+<span id="cb1028-7"><a href="ts.html#cb1028-7" tabindex="-1"></a>            <span class="at">sdRad =</span> <span class="fu">sd</span>(SolarRad), <span class="at">sdTemp =</span> <span class="fu">sd</span>(Tair))</span>
+<span id="cb1028-8"><a href="ts.html#cb1028-8" tabindex="-1"></a>px <span class="ot">&lt;-</span> ManausSum <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Hr)) <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">24</span>,<span class="dv">3</span>))</span>
+<span id="cb1028-9"><a href="ts.html#cb1028-9" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> px <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>meanRad), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb1028-10"><a href="ts.html#cb1028-10" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymax =</span> meanRad <span class="sc">+</span> sdRad, <span class="at">ymin =</span> meanRad <span class="sc">-</span> sdRad)) <span class="sc">+</span></span>
+<span id="cb1028-11"><a href="ts.html#cb1028-11" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Manaus 2005 ensemble solar radiation&quot;</span>)</span>
+<span id="cb1028-12"><a href="ts.html#cb1028-12" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> px <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>meanTemp),<span class="at">col=</span><span class="st">&quot;red&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb1028-13"><a href="ts.html#cb1028-13" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymax=</span>meanTemp<span class="sc">+</span>sdTemp, <span class="at">ymin=</span>meanTemp<span class="sc">-</span>sdTemp)) <span class="sc">+</span></span>
+<span id="cb1028-14"><a href="ts.html#cb1028-14" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Manaus 2005 ensemble air temperature&quot;</span>)</span>
+<span id="cb1028-15"><a href="ts.html#cb1028-15" tabindex="-1"></a><span class="fu">plot_grid</span>(<span class="at">plotlist=</span><span class="fu">list</span>(p1,p2), <span class="at">ncol=</span><span class="dv">1</span>, <span class="at">align=</span><span class="st">&#39;v&#39;</span>) <span class="co"># from cowplot</span></span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:timeManausEnsemble"></span>
+<img src="EnvDataScience_files/figure-html/timeManausEnsemble-1.png" alt="Manaus ensemble averages with error bars" width="75%" />
+<p class="caption">
+FIGURE 12.29: Manaus ensemble averages with error bars
+</p>
+</div>
+</div>
+<div id="learning-more-about-time-series-in-r" class="section level2 hasAnchor" number="12.8">
+<h2><span class="header-section-number">12.8</span> Learning more about Time Series in R<a href="ts.html#learning-more-about-time-series-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>There has been a lot of work on time series in R, especially in the financial sector where time series are important for forecasting models. Some of these methods should have applications in environmental research. Here are some resources for learning more:</p>
+<ul>
+<li>At CRAN: <a href="https://cran.r-project.org/web/views/TimeSeries.html" class="uri">https://cran.r-project.org/web/views/TimeSeries.html</a></li>
+<li>The time series data library: <a href="https://pkg.yangzhuoranyang.com/tsdl/" class="uri">https://pkg.yangzhuoranyang.com/tsdl/</a></li>
+<li><a href="https://a-little-book-of-r-for-time-series.readthedocs.io/" class="uri">https://a-little-book-of-r-for-time-series.readthedocs.io/</a></li>
+<li>The tsibble: <a href="https://tsibble.tidyverts.org/" class="uri">https://tsibble.tidyverts.org/</a></li>
+</ul>
+<div style="page-break-after: always;"></div>
+
+</div>
+<div id="exercises-time-series" class="section level2 hasAnchor" number="12.9">
+<h2><span class="header-section-number">12.9</span> Exercises: Time Series<a href="ts.html#exercises-time-series" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-71" class="exercise"><strong>Exercise 12.1  </strong></span>Create an half-hourly ensemble plot of Bugac, Hungary, similar to the one we created for Manaus, Brazil.</p>
+</div>
+<p><img src="img/time_ex1.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-83" class="exercise"><strong>Exercise 12.2  </strong></span>Create a ManausJan tibble for just the January data (hint: use a filter and consider that the <code>Day of Yr</code> has 31 for January 31, and 32 for February 1), then decompose a ts of <code>ManausJan$SolarRad</code>, and plot it. Consider carefully what frequency to use to get a daily period, realizing that values are every half hour. Also, remember that “seasonal” in this case means “diurnal”. Code and plot.</p>
+<p><img src="img/time_ex2.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-72" class="exercise"><strong>Exercise 12.3  </strong></span>Then do the same for air temperature (<code>Tair</code>) for Manaus in January, providing code and plot. What observations can you make from this on conditions in Manaus in January?</p>
+</div>
+<p><img src="img/time_ex3.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-73" class="exercise"><strong>Exercise 12.4  </strong></span>Now do both of the above for Bugac, Hungary, and reflect on what it tells you, and how these places are distinct (other than the obvious).</p>
+</div>
+<p><img src="img/time_ex4a.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="img/time_ex4b.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-74" class="exercise"><strong>Exercise 12.5  </strong></span>Now do the same for June. You’ll probably need to use the <code>yday</code> and <code>ymd</code> (or similar) functions from <code>lubridate</code> to find the date range for 2005 or 2006 (neither are leap years, so they should be the same). Hint: what does <code>yday(ymd("2005:06:01"))</code> give you?</p>
+</div>
+<p><img src="img/time_ex5a.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="img/time_ex5b.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="img/time_ex5c.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="img/time_ex5d.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-75" class="exercise"><strong>Exercise 12.6  </strong></span>Do a lag regression over an 8-day period over the March equinox (about 3/21), when the sun’s rays should be close to vertical since it’s near the Equator, but it’s very likely to be cloudy at the Intertropical Convergence Zone. As we did with the Bugac data, work out the best lag value using the minimum-RMSE model process we used for Bugac, and produce a summary of that model.</p>
+</div>
+<p><img src="img/time_ex6a.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="img/time_ex6b.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="img/time_ex6c.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-82" class="exercise"><strong>Exercise 12.7  </strong></span>Create an ensemble plot of monthly air and box temperature from the Marble Mountains Resurgence data. The air temperature was measured from a thermistor mounted near the ground but outside the box, and the box temperature was measured within the buried box (see the pictures to visualize this.) You’ll want to start with reading the dates and times – which we didn’t actually use when we built a time series from the data – by building <code>date_time</code> and <code>month</code> variables:
+<img src="img/time_ex7.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-76" class="exercise"><strong>Exercise 12.8  </strong></span>How about looking at daily cycles? The Marbles resurgence data were collected every two hours, so group by hour (created using <code>hour(time)</code>, which will return integers 0,2,…,22). Interpret what you get, and what the air vs box temperature patterns might show, considering where the sensors are installed.</p>
+</div>
+<p><img src="img/time_ex8.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-77" class="exercise"><strong>Exercise 12.9  </strong></span>Using methods from 12.5, create a graph of <em>daily</em> air temperature (ATemp), water level (wlevelm), conductance (EC), and input voltage from the solar panel (InputV) from the Marble Mountains resurgence data (Figure <a href="#fig:tsFacetGoal"><strong>??</strong></a>). Use the same type of y axis scaling as was used in figure 12.25.</p>
+</div>
+<p><img src="img/time_ex9.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-78" class="exercise"><strong>Exercise 12.10  </strong></span>(Optional) Tree-ring data: Using <code>forecast::ma</code> and the built-in <code>treering</code> time series, find a useful order value for a curve that communicates a pattern of tree rings over the last 8,000 years, with high values around -3,500 and 0 years. Note: the order may be pretty big, and you might want to loop through a sequence of values to see what works. I found that creating a sequence in a for loop with seq(from=100,to=1000,by100) useful, and any further created some odd effects.</p>
+</div>
+<p><img src="EnvDataScience_files/figure-html/tree-ring-decomp-1.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="EnvDataScience_files/figure-html/tree-ring-decomp-2.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="EnvDataScience_files/figure-html/tree-ring-decomp-3.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="EnvDataScience_files/figure-html/tree-ring-decomp-4.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="EnvDataScience_files/figure-html/tree-ring-decomp-5.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="EnvDataScience_files/figure-html/tree-ring-decomp-6.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="EnvDataScience_files/figure-html/tree-ring-decomp-7.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="EnvDataScience_files/figure-html/tree-ring-decomp-8.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="EnvDataScience_files/figure-html/tree-ring-decomp-9.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="EnvDataScience_files/figure-html/tree-ring-decomp-10.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-79" class="exercise"><strong>Exercise 12.11  </strong></span>(Optional) Sunspot activity is known to fluctuate over about a 11-year cycle, and other than the well-known effects on radio transmission is also part of short-term climate fluctuations (so must be considered when looking at climate change). The built-in data set <code>sunspot.month</code> has monthly values of sunspot activity from 1749 to 2014. Use the frequency function to understand its period, then create an alternative ts with an 11-year cycle as frequency (how do you define its frequency?) and plot a decomposition and stl.</p>
+</div>
+<p><img src="EnvDataScience_files/figure-html/sunspot-1.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="EnvDataScience_files/figure-html/sunspot-2.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+
+
+
+
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-blackburn2021carbon" class="csl-entry">
+Blackburn, Darren A, Andrew J Oliphant, and Jerry D Davis. 2021. <span>“Carbon and Water Exchanges in a Mountain Meadow Ecosystem, Sierra Nevada, California.”</span> <em>Wetlands</em> 41 (3): 1–17. <a href="https://doi.org/10.1007/s13157-021-01437-2">https://doi.org/10.1007/s13157-021-01437-2</a>.
+</div>
+<div id="ref-marbles" class="csl-entry">
+Davis, JD, and GA Davis. 2001. <span>“A Microcontroller-Based Data-Logger Design for Seasonal Hydrochemical Studies.”</span> <em>Earth Surface Processes and Landforms</em> 26 (10): 1151–59. <a href="https://doi.org/10.1002/esp.262">https://doi.org/10.1002/esp.262</a>.
+</div>
+<div id="ref-icos" class="csl-entry">
+<em>European Fluxes Database</em>. n.d. <a href="http://www.icos-etc.eu/home">http://www.icos-etc.eu/home</a>.
+</div>
+<div id="ref-hysteresis" class="csl-entry">
+<em>Hysteresis</em>. n.d. <a href="https://en.wikipedia.org/wiki/Hysteresis">https://en.wikipedia.org/wiki/Hysteresis</a>.
+</div>
+<div id="ref-Irizarry" class="csl-entry">
+Irizarry, Rafael A. 2019. <em>Introduction to Data Science: Data Analysis and Prediction Algorithms with r</em>. CRC Press. <a href="https://cran.r-project.org/package=dslabs">https://cran.r-project.org/package=dslabs</a>.
+</div>
+<div id="ref-Powell2011" class="csl-entry">
+Powell, Cynthia, Leonhard Blesius, Jerry Davis, and Falk Schuetzenmeister. 2011. <span>“Using MODIS Snow Cover and Precipitation Data to Model Water Runoff for the Mokelumne River Basin in the Sierra Nevada, California (2000–2009).”</span> <em>Global and Planetary Change</em> 77 (1-2): 77–84. <a href="https://doi.org/10.1016/j.gloplacha.2011.03.005">https://doi.org/10.1016/j.gloplacha.2011.03.005</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="imagery.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="communication-with-shiny.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section"
+  },
+  "book_filename": "envdatasci",
+  "toc_depth": 4
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

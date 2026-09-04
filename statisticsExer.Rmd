@@ -1,0 +1,95 @@
+
+## Exercises: Statistics
+```{r echo=FALSE}
+knitr::opts_chunk$set(include=T, echo=F)
+```
+
+:::{.exercise}
+Build a `soilvegJuly` data frame.
+
+-   Create a new RStudio project named Meadows.
+-   Create a soilveg tibble from "meadows/SoilVegSamples.csv" in the extdata.
+-   Have a look at this data frame and note that there is NA for SoilMoisture and NDVI for 8 of the records. These represent observations made in August, while the rest are all in July. While we have drone imagery and thus NDVI for these sites, as they are during the senescent period we don't want to compare these with the July samples.
+-   Filter the data frame to only include records that are not NA (see 3.4.2.1) for SoilMoisture, and assign that to a new data frame `soilvegJuly`.
+    
+:::
+```{r}
+
+```
+
+
+:::{.exercise}
+Visualizations:
+
+Using graphical methods you learned in Chapter 4:
+
+- Create a scatter plot of Soil Moisture vs NDVI, colored by veg (the three-character abbreviation of major vegetation types -- `CAR` for Carex/sedge, `JUN` for Juncus/rush, `GRA` for mesic grasses and forbs, and `UPL` for more elevated (maybe by a meter) areas of sagebrush), for `soilvegJuly`. What we can see is that this is a small sample. This study involved a lot of drone imagery, probably 100s of GB of imagery, which was the main focus of the study -- to detect channels -- but a low density of soil and vegetation ground samples.
+-   Create a histogram of soil moisture colored by veg, also for the July data. We see the same story, with not very many samples, though suggestive of a multimodal distribution overall.
+-   Create a density plot of the same, using alpha = 0.5 to see everything with transparency.
+
+> You can also use DominantVegetation, for this and the next question.  The results may be a bit different.
+:::
+
+```{r stats_ex2}
+knitr::include_graphics(here::here("img","stats_ex2a.png"))
+knitr::include_graphics(here::here("img","stats_ex2b.png"))
+knitr::include_graphics(here::here("img","stats_ex2c.png"))
+```
+
+
+
+
+
+:::{.exercise}
+Tests, July data
+
+Using methods from 9.4.2, run an analysis of variance test of soil moisture \~ veg. Remember to specify the data, which should be just the July data., then do the same test for NDVI \~ veg. Interpret the results in a markdown section.
+:::
+
+```{r}
+
+
+```
+
+
+:::{.exercise}
+Meadow differences
+
+-   Now compare the meadows based on soil moisture in July, using a boxplot
+-   Then run an ANOVA test on this meadow grouping
+:::
+
+```{r}
+knitr::include_graphics(here::here("img","stats_ex4.png"))
+```
+
+
+:::{.exercise}
+For the meadow data, create a pairs plot to find which variables are correlated along with their r values, and test the significance of that correlation and provide percentage of variation of one variable is explained by that of the other.
+:::
+
+```{r stats_ex5}
+
+knitr::include_graphics(here::here("img","stats_ex5.png"))
+```
+
+:::{.exercise}
+Bulk density test, all data
+
+We'll now look at bulk density for all samples (soilveg), including both July and August. Soil moisture and NDVI won't be a part of this analysis, only bulk density and vegetation. Look at the distribution of all bulk density values, using both a histogram with 20 bins and a density plot, then run an ANOVA test of bulk density predicted by (\~) veg. What does the Pr(\>F) value indicate?
+:::
+
+```{r}
+
+```
+
+:::{.exercise}
+Carex or not?
+
+Derive a bulkDensityCAR data frame by mutating a new variable CAR derived as a boolean result of `veg == "CAR"`. This will group the vegetation points as either Carex or not, then use that in another ANOVA test to predict bulk density. What does the Pr(\>F) value indicate?
+:::
+
+```{r}
+
+```
+

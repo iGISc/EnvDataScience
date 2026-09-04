@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 Spatial Analysis | Introduction to Environmental Data Science</title>
+  <meta name="description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 Spatial Analysis | Introduction to Environmental Data Science" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  <meta name="github-repo" content="iGISc/EnvDataSci" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 Spatial Analysis | Introduction to Environmental Data Science" />
+  
+  <meta name="twitter:description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  
+
+<meta name="author" content="Jerry Davis, SFSU Institute for Geographic Information Science" />
+
+
+<meta name="date" content="2026-09-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="spatial.html"/>
+<link rel="next" href="raster.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script>
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.2.3/leaflet.js"></script>
+<script src="libs/leaflet-providers-3.0.0/leaflet-providers.js"></script>
+<script src="libs/leaflet-providers-plugin-2.2.3/leaflet-providers-plugin.js"></script>
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<link href="libs/sierra___TEMPERATURE-CSS-0.0.1/sierra___TEMPERATURE_home-button.css" rel="stylesheet" />
+<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><img src="img/eaRth_anna296.png"></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background, Goals and Data</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#environmental-data-science"><i class="fa fa-check"></i><b>1.1</b> Environmental Data Science</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#environmental-data-and-methods"><i class="fa fa-check"></i><b>1.2</b> Environmental Data and Methods</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#goals"><i class="fa fa-check"></i><b>1.3</b> Goals</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#some-definitions"><i class="fa fa-check"></i><b>1.3.1</b> Some definitions:</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>1.4</b> Exploratory Data Analysis</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#software-and-data"><i class="fa fa-check"></i><b>1.5</b> Software and Data</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#data"><i class="fa fa-check"></i><b>1.5.1</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i><b>1.6</b> Acknowledgements</a></li>
+</ul></li>
+<li class="part"><span><b>I Exploratory Data Analysis</b></span></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction to R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#data-objects"><i class="fa fa-check"></i><b>2.1</b> Data Objects</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#scalars-and-assignment"><i class="fa fa-check"></i><b>2.1.1</b> Scalars and assignment</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#functions"><i class="fa fa-check"></i><b>2.2</b> Functions</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#expressions"><i class="fa fa-check"></i><b>2.3</b> Expressions and Statements</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#class"><i class="fa fa-check"></i><b>2.4</b> Data Classes</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introduction.html"><a href="introduction.html#integers"><i class="fa fa-check"></i><b>2.4.1</b> Integers</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#rectangular-data"><i class="fa fa-check"></i><b>2.5</b> Rectangular Data</a></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#data-structures-in-r"><i class="fa fa-check"></i><b>2.6</b> Data Structures in R</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="introduction.html"><a href="introduction.html#vector"><i class="fa fa-check"></i><b>2.6.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.6.2" data-path="introduction.html"><a href="introduction.html#list"><i class="fa fa-check"></i><b>2.6.2</b> Lists</a></li>
+<li class="chapter" data-level="2.6.3" data-path="introduction.html"><a href="introduction.html#matrix"><i class="fa fa-check"></i><b>2.6.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.6.4" data-path="introduction.html"><a href="introduction.html#dataframes"><i class="fa fa-check"></i><b>2.6.4</b> Data frames</a></li>
+<li class="chapter" data-level="2.6.5" data-path="introduction.html"><a href="introduction.html#factors"><i class="fa fa-check"></i><b>2.6.5</b> Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#accessors"><i class="fa fa-check"></i><b>2.7</b> Accessors and Subsetting</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="introduction.html"><a href="introduction.html#subsetting"><i class="fa fa-check"></i><b>2.7.1</b> <code>[]</code> Subsetting</a></li>
+<li class="chapter" data-level="2.7.2" data-path="introduction.html"><a href="introduction.html#the-mysterious-double-bracket"><i class="fa fa-check"></i><b>2.7.2</b> <code>[[]]</code> The mysterious double bracket</a></li>
+<li class="chapter" data-level="2.7.3" data-path="introduction.html"><a href="introduction.html#accessing-a-vector-from-a-data-frame"><i class="fa fa-check"></i><b>2.7.3</b> <code>$</code> Accessing a vector from a data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#programming"><i class="fa fa-check"></i><b>2.8</b> Programming scripts in RStudio</a>
+<ul>
+<li class="chapter" data-level="2.8.1" data-path="introduction.html"><a href="introduction.html#functions-writing"><i class="fa fa-check"></i><b>2.8.1</b> <code>function</code> : creating your own</a></li>
+<li class="chapter" data-level="2.8.2" data-path="introduction.html"><a href="introduction.html#if-conditional-operations"><i class="fa fa-check"></i><b>2.8.2</b> <code>if</code> : conditional operations</a></li>
+<li class="chapter" data-level="2.8.3" data-path="introduction.html"><a href="introduction.html#for"><i class="fa fa-check"></i><b>2.8.3</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="2.8.4" data-path="introduction.html"><a href="introduction.html#subsetting-with-logic"><i class="fa fa-check"></i><b>2.8.4</b> Subsetting with logic</a></li>
+<li class="chapter" data-level="2.8.5" data-path="introduction.html"><a href="introduction.html#apply"><i class="fa fa-check"></i><b>2.8.5</b> Apply functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.9" data-path="introduction.html"><a href="introduction.html#rstudio"><i class="fa fa-check"></i><b>2.9</b> RStudio projects</a>
+<ul>
+<li class="chapter" data-level="2.9.1" data-path="introduction.html"><a href="introduction.html#rmarkdown"><i class="fa fa-check"></i><b>2.9.1</b> R Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="2.10" data-path="introduction.html"><a href="introduction.html#exercises-introduction-to-r"><i class="fa fa-check"></i><b>2.10</b> Exercises: Introduction to R</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="abstraction.html"><a href="abstraction.html"><i class="fa fa-check"></i><b>3</b> Data Abstraction</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="abstraction.html"><a href="abstraction.html#tidyverse"><i class="fa fa-check"></i><b>3.1</b> The Tidyverse</a></li>
+<li class="chapter" data-level="3.2" data-path="abstraction.html"><a href="abstraction.html#tibbles"><i class="fa fa-check"></i><b>3.2</b> Tibbles</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="abstraction.html"><a href="abstraction.html#building-a-tibble-from-vectors"><i class="fa fa-check"></i><b>3.2.1</b> Building a tibble from vectors</a></li>
+<li class="chapter" data-level="3.2.2" data-path="abstraction.html"><a href="abstraction.html#tribble"><i class="fa fa-check"></i><b>3.2.2</b> tribble</a></li>
+<li class="chapter" data-level="3.2.3" data-path="abstraction.html"><a href="abstraction.html#csv"><i class="fa fa-check"></i><b>3.2.3</b> read_csv</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="abstraction.html"><a href="abstraction.html#summarizing-variable-distributions"><i class="fa fa-check"></i><b>3.3</b> Summarizing variable distributions</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="abstraction.html"><a href="abstraction.html#stratifying-variables-by-site-using-a-tukey-box-plot"><i class="fa fa-check"></i><b>3.3.1</b> Stratifying variables by site using a Tukey box plot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="abstraction.html"><a href="abstraction.html#dplyr"><i class="fa fa-check"></i><b>3.4</b> Database operations</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="abstraction.html"><a href="abstraction.html#pipe"><i class="fa fa-check"></i><b>3.4.1</b> Select, mutate, and the pipe</a></li>
+<li class="chapter" data-level="3.4.2" data-path="abstraction.html"><a href="abstraction.html#filter"><i class="fa fa-check"></i><b>3.4.2</b> Filtering observations</a></li>
+<li class="chapter" data-level="3.4.3" data-path="abstraction.html"><a href="abstraction.html#subsetting-data-with-base-rs-subset"><i class="fa fa-check"></i><b>3.4.3</b> Subsetting data with base R’s <code>subset</code></a></li>
+<li class="chapter" data-level="3.4.4" data-path="abstraction.html"><a href="abstraction.html#writing-a-data-frame-to-a-csv"><i class="fa fa-check"></i><b>3.4.4</b> Writing a data frame to a csv</a></li>
+<li class="chapter" data-level="3.4.5" data-path="abstraction.html"><a href="abstraction.html#group-summary"><i class="fa fa-check"></i><b>3.4.5</b> Summarize by group</a></li>
+<li class="chapter" data-level="3.4.6" data-path="abstraction.html"><a href="abstraction.html#count"><i class="fa fa-check"></i><b>3.4.6</b> Count</a></li>
+<li class="chapter" data-level="3.4.7" data-path="abstraction.html"><a href="abstraction.html#sorting-after-summarizing"><i class="fa fa-check"></i><b>3.4.7</b> Sorting after summarizing</a></li>
+<li class="chapter" data-level="3.4.8" data-path="abstraction.html"><a href="abstraction.html#the-dot-operator"><i class="fa fa-check"></i><b>3.4.8</b> The dot operator</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="abstraction.html"><a href="abstraction.html#stringr"><i class="fa fa-check"></i><b>3.5</b> String abstraction</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="abstraction.html"><a href="abstraction.html#detecting-matches"><i class="fa fa-check"></i><b>3.5.1</b> Detecting matches</a></li>
+<li class="chapter" data-level="3.5.2" data-path="abstraction.html"><a href="abstraction.html#subset-string"><i class="fa fa-check"></i><b>3.5.2</b> Subsetting strings</a></li>
+<li class="chapter" data-level="3.5.3" data-path="abstraction.html"><a href="abstraction.html#string-length"><i class="fa fa-check"></i><b>3.5.3</b> String length</a></li>
+<li class="chapter" data-level="3.5.4" data-path="abstraction.html"><a href="abstraction.html#replacing-substrings-with-other-text-mutating-strings"><i class="fa fa-check"></i><b>3.5.4</b> Replacing substrings with other text (“mutating” strings)</a></li>
+<li class="chapter" data-level="3.5.5" data-path="abstraction.html"><a href="abstraction.html#concatenating-and-splitting"><i class="fa fa-check"></i><b>3.5.5</b> Concatenating and splitting</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="abstraction.html"><a href="abstraction.html#lubridate"><i class="fa fa-check"></i><b>3.6</b> Dates and times with <code>lubridate</code></a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="abstraction.html"><a href="abstraction.html#dates-used-for-annual-time-series"><i class="fa fa-check"></i><b>3.6.1</b> Dates used for annual time series</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="abstraction.html"><a href="abstraction.html#extending-abstractions-with-functions"><i class="fa fa-check"></i><b>3.7</b> Extending abstractions with functions</a></li>
+<li class="chapter" data-level="3.8" data-path="abstraction.html"><a href="abstraction.html#exercises-data-abstraction"><i class="fa fa-check"></i><b>3.8</b> Exercises: Data Abstraction</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>4</b> Visualization</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="visualization.html"><a href="visualization.html#plot-in-base-r"><i class="fa fa-check"></i><b>4.1</b> plot in base R</a></li>
+<li class="chapter" data-level="4.2" data-path="visualization.html"><a href="visualization.html#ggplot2"><i class="fa fa-check"></i><b>4.2</b> ggplot2</a></li>
+<li class="chapter" data-level="4.3" data-path="visualization.html"><a href="visualization.html#plotting-one-variable"><i class="fa fa-check"></i><b>4.3</b> Plotting one variable</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="visualization.html"><a href="visualization.html#histogram"><i class="fa fa-check"></i><b>4.3.1</b> Histogram</a></li>
+<li class="chapter" data-level="4.3.2" data-path="visualization.html"><a href="visualization.html#density-plot"><i class="fa fa-check"></i><b>4.3.2</b> Density plot</a></li>
+<li class="chapter" data-level="4.3.3" data-path="visualization.html"><a href="visualization.html#boxplot"><i class="fa fa-check"></i><b>4.3.3</b> Boxplot</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="visualization.html"><a href="visualization.html#plotting-two-variables"><i class="fa fa-check"></i><b>4.4</b> Plotting Two Variables</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="visualization.html"><a href="visualization.html#two-continuous-variables"><i class="fa fa-check"></i><b>4.4.1</b> Two continuous variables</a></li>
+<li class="chapter" data-level="4.4.2" data-path="visualization.html"><a href="visualization.html#two-variables-one-discrete"><i class="fa fa-check"></i><b>4.4.2</b> Two variables, one discrete</a></li>
+<li class="chapter" data-level="4.4.3" data-path="visualization.html"><a href="visualization.html#color-systems"><i class="fa fa-check"></i><b>4.4.3</b> Color systems</a></li>
+<li class="chapter" data-level="4.4.4" data-path="visualization.html"><a href="visualization.html#trend-line"><i class="fa fa-check"></i><b>4.4.4</b> Trend line</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="visualization.html"><a href="visualization.html#general-symbology"><i class="fa fa-check"></i><b>4.5</b> General Symbology</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="visualization.html"><a href="visualization.html#categorical-symbology"><i class="fa fa-check"></i><b>4.5.1</b> Categorical symbology</a></li>
+<li class="chapter" data-level="4.5.2" data-path="visualization.html"><a href="visualization.html#log-scales-instead-of-transform"><i class="fa fa-check"></i><b>4.5.2</b> Log scales instead of transform</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="visualization.html"><a href="visualization.html#graphs-from-grouped-data"><i class="fa fa-check"></i><b>4.6</b> Graphs from Grouped Data</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="visualization.html"><a href="visualization.html#faceted-graphs"><i class="fa fa-check"></i><b>4.6.1</b> Faceted graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="visualization.html"><a href="visualization.html#titles-subtitles-axis-labels-and-legend-position"><i class="fa fa-check"></i><b>4.7</b> Titles, Subtitles, Axis Labels, and Legend Position</a></li>
+<li class="chapter" data-level="4.8" data-path="visualization.html"><a href="visualization.html#pairs-plot"><i class="fa fa-check"></i><b>4.8</b> Pairs Plot</a></li>
+<li class="chapter" data-level="4.9" data-path="visualization.html"><a href="visualization.html#exercises-visualization"><i class="fa fa-check"></i><b>4.9</b> Exercises: Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="transformation.html"><a href="transformation.html"><i class="fa fa-check"></i><b>5</b> Data Transformation</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="transformation.html"><a href="transformation.html#joins"><i class="fa fa-check"></i><b>5.1</b> Data joins</a></li>
+<li class="chapter" data-level="5.2" data-path="transformation.html"><a href="transformation.html#set"><i class="fa fa-check"></i><b>5.2</b> Set operations</a></li>
+<li class="chapter" data-level="5.3" data-path="transformation.html"><a href="transformation.html#binding"><i class="fa fa-check"></i><b>5.3</b> Binding rows and columns</a></li>
+<li class="chapter" data-level="5.4" data-path="transformation.html"><a href="transformation.html#pivots"><i class="fa fa-check"></i><b>5.4</b> Pivoting data frames</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="transformation.html"><a href="transformation.html#pivot_longer"><i class="fa fa-check"></i><b>5.4.1</b> <code>pivot_longer</code></a></li>
+<li class="chapter" data-level="5.4.2" data-path="transformation.html"><a href="transformation.html#pivot_wider"><i class="fa fa-check"></i><b>5.4.2</b> <code>pivot_wider</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="transformation.html"><a href="transformation.html#combining-transformation-methods-to-create-a-free_y-faceted-graph"><i class="fa fa-check"></i><b>5.5</b> Combining transformation methods to create a <code>free_y</code> faceted graph</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="transformation.html"><a href="transformation.html#air-pollutant-emissions-trends-epa"><i class="fa fa-check"></i><b>5.5.1</b> Air pollutant emissions trends (EPA)</a></li>
+<li class="chapter" data-level="5.5.2" data-path="transformation.html"><a href="transformation.html#flux-tower-data"><i class="fa fa-check"></i><b>5.5.2</b> Flux tower data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="transformation.html"><a href="transformation.html#exercise-transformation"><i class="fa fa-check"></i><b>5.6</b> Exercise: Transformation</a></li>
+</ul></li>
+<li class="part"><span><b>II Spatial</b></span></li>
+<li class="chapter" data-level="6" data-path="spatial.html"><a href="spatial.html"><i class="fa fa-check"></i><b>6</b> Spatial Data and Maps</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="spatial.html"><a href="spatial.html#spatial-data"><i class="fa fa-check"></i><b>6.1</b> Spatial Data</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="spatial.html"><a href="spatial.html#simple-geometry-building-in-sf"><i class="fa fa-check"></i><b>6.1.1</b> Simple geometry building in sf</a></li>
+<li class="chapter" data-level="6.1.2" data-path="spatial.html"><a href="spatial.html#building-points-from-a-data-frame"><i class="fa fa-check"></i><b>6.1.2</b> Building points from a data frame</a></li>
+<li class="chapter" data-level="6.1.3" data-path="spatial.html"><a href="spatial.html#spatvectors-in-terra"><i class="fa fa-check"></i><b>6.1.3</b> SpatVectors in <code>terra</code></a></li>
+<li class="chapter" data-level="6.1.4" data-path="spatial.html"><a href="spatial.html#creating-features-from-shapefiles"><i class="fa fa-check"></i><b>6.1.4</b> Creating features from shapefiles</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="spatial.html"><a href="spatial.html#coordinate-referencing-systems"><i class="fa fa-check"></i><b>6.2</b> Coordinate Referencing Systems</a></li>
+<li class="chapter" data-level="6.3" data-path="spatial.html"><a href="spatial.html#creating-sf-data-from-data-frames"><i class="fa fa-check"></i><b>6.3</b> Creating sf Data from Data Frames</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="spatial.html"><a href="spatial.html#removing-geometry"><i class="fa fa-check"></i><b>6.3.1</b> <em>Removing</em> geometry</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="spatial.html"><a href="spatial.html#base-rs-plot-with-terra"><i class="fa fa-check"></i><b>6.4</b> Base R’s <code>plot()</code> with <code>terra</code></a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="spatial.html"><a href="spatial.html#using-maptiles-to-create-a-basemap"><i class="fa fa-check"></i><b>6.4.1</b> Using maptiles to create a basemap</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="spatial.html"><a href="spatial.html#raster-data"><i class="fa fa-check"></i><b>6.5</b> Raster data</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="spatial.html"><a href="spatial.html#building-rasters"><i class="fa fa-check"></i><b>6.5.1</b> Building rasters</a></li>
+<li class="chapter" data-level="6.5.2" data-path="spatial.html"><a href="spatial.html#vector-to-raster-conversion"><i class="fa fa-check"></i><b>6.5.2</b> Vector to raster conversion</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="spatial.html"><a href="spatial.html#ggplot2-for-maps"><i class="fa fa-check"></i><b>6.6</b> ggplot2 for Maps</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="spatial.html"><a href="spatial.html#rasters-in-ggplot2"><i class="fa fa-check"></i><b>6.6.1</b> Rasters in ggplot2</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="spatial.html"><a href="spatial.html#using-bounding-boxes-to-zoom-to-the-extent-of-data-layers-in-any-mapping-package"><i class="fa fa-check"></i><b>6.7</b> Using bounding boxes to zoom to the extent of data layers (in any mapping package)</a></li>
+<li class="chapter" data-level="6.8" data-path="spatial.html"><a href="spatial.html#tmap"><i class="fa fa-check"></i><b>6.8</b> tmap</a>
+<ul>
+<li class="chapter" data-level="6.8.1" data-path="spatial.html"><a href="spatial.html#color"><i class="fa fa-check"></i><b>6.8.1</b> Color</a></li>
+<li class="chapter" data-level="6.8.2" data-path="spatial.html"><a href="spatial.html#basemap-with-tmap"><i class="fa fa-check"></i><b>6.8.2</b> Basemap with tmap</a></li>
+</ul></li>
+<li class="chapter" data-level="6.9" data-path="spatial.html"><a href="spatial.html#interactive-maps"><i class="fa fa-check"></i><b>6.9</b> Interactive Maps</a>
+<ul>
+<li class="chapter" data-level="6.9.1" data-path="spatial.html"><a href="spatial.html#leaflet"><i class="fa fa-check"></i><b>6.9.1</b> Leaflet</a></li>
+<li class="chapter" data-level="6.9.2" data-path="spatial.html"><a href="spatial.html#mapview"><i class="fa fa-check"></i><b>6.9.2</b> Mapview</a></li>
+<li class="chapter" data-level="6.9.3" data-path="spatial.html"><a href="spatial.html#tmap-view-mode"><i class="fa fa-check"></i><b>6.9.3</b> tmap (view mode)</a></li>
+<li class="chapter" data-level="6.9.4" data-path="spatial.html"><a href="spatial.html#interactive-mapping-of-individual-penguins-abstracted-from-a-big-dataset"><i class="fa fa-check"></i><b>6.9.4</b> Interactive mapping of individual penguins abstracted from a big dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="6.10" data-path="spatial.html"><a href="spatial.html#exercises-spatial-data-and-maps"><i class="fa fa-check"></i><b>6.10</b> Exercises: Spatial Data and Maps</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="spatial-analysis.html"><a href="spatial-analysis.html"><i class="fa fa-check"></i><b>7</b> Spatial Analysis</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#data-frame-operations"><i class="fa fa-check"></i><b>7.1</b> Data Frame Operations</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#GroupedSummaries"><i class="fa fa-check"></i><b>7.1.1</b> Using grouped summaries, and filtering by a selection</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-analysis-operations"><i class="fa fa-check"></i><b>7.2</b> Spatial Analysis Operations</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#using-topology-to-subset"><i class="fa fa-check"></i><b>7.2.1</b> Using topology to subset</a></li>
+<li class="chapter" data-level="7.2.2" data-path="spatial-analysis.html"><a href="spatial-analysis.html#centroid"><i class="fa fa-check"></i><b>7.2.2</b> Centroid</a></li>
+<li class="chapter" data-level="7.2.3" data-path="spatial-analysis.html"><a href="spatial-analysis.html#distance"><i class="fa fa-check"></i><b>7.2.3</b> Distance</a></li>
+<li class="chapter" data-level="7.2.4" data-path="spatial-analysis.html"><a href="spatial-analysis.html#buffers"><i class="fa fa-check"></i><b>7.2.4</b> Buffers</a></li>
+<li class="chapter" data-level="7.2.5" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-overlay-union-and-intersection"><i class="fa fa-check"></i><b>7.2.5</b> Spatial overlay: union and intersection</a></li>
+<li class="chapter" data-level="7.2.6" data-path="spatial-analysis.html"><a href="spatial-analysis.html#clip-with-st_crop"><i class="fa fa-check"></i><b>7.2.6</b> Clip with st_crop</a></li>
+<li class="chapter" data-level="7.2.7" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-join-with-st_join"><i class="fa fa-check"></i><b>7.2.7</b> Spatial join with <code>st_join</code></a></li>
+<li class="chapter" data-level="7.2.8" data-path="spatial-analysis.html"><a href="spatial-analysis.html#further-exploration-of-spatial-analysis"><i class="fa fa-check"></i><b>7.2.8</b> Further exploration of spatial analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="spatial-analysis.html"><a href="spatial-analysis.html#exercises-spatial-analysis"><i class="fa fa-check"></i><b>7.3</b> Exercises: Spatial Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="raster.html"><a href="raster.html"><i class="fa fa-check"></i><b>8</b> Raster Spatial Analysis</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="raster.html"><a href="raster.html#terrain"><i class="fa fa-check"></i><b>8.1</b> Terrain functions</a></li>
+<li class="chapter" data-level="8.2" data-path="raster.html"><a href="raster.html#map-algebra-in-terra"><i class="fa fa-check"></i><b>8.2</b> Map Algebra in terra</a></li>
+<li class="chapter" data-level="8.3" data-path="raster.html"><a href="raster.html#distance-1"><i class="fa fa-check"></i><b>8.3</b> Distance</a></li>
+<li class="chapter" data-level="8.4" data-path="raster.html"><a href="raster.html#extracting-values"><i class="fa fa-check"></i><b>8.4</b> Extracting Values</a></li>
+<li class="chapter" data-level="8.5" data-path="raster.html"><a href="raster.html#focal-statistics"><i class="fa fa-check"></i><b>8.5</b> Focal Statistics</a></li>
+<li class="chapter" data-level="8.6" data-path="raster.html"><a href="raster.html#zonal-statistics"><i class="fa fa-check"></i><b>8.6</b> Zonal Statistics</a></li>
+<li class="chapter" data-level="8.7" data-path="raster.html"><a href="raster.html#exercises-raster-spatial-analysis"><i class="fa fa-check"></i><b>8.7</b> Exercises: Raster Spatial Analysis</a></li>
+</ul></li>
+<li class="part"><span><b>III Statistics and Modeling</b></span></li>
+<li class="chapter" data-level="9" data-path="statistics.html"><a href="statistics.html"><i class="fa fa-check"></i><b>9</b> Statistical Summaries and Tests</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="statistics.html"><a href="statistics.html#goals-of-statistical-analysis"><i class="fa fa-check"></i><b>9.1</b> Goals of Statistical Analysis</a></li>
+<li class="chapter" data-level="9.2" data-path="statistics.html"><a href="statistics.html#summary-statistics"><i class="fa fa-check"></i><b>9.2</b> Summary Statistics</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="statistics.html"><a href="statistics.html#summarize-by-group-stratifying-a-summary"><i class="fa fa-check"></i><b>9.2.1</b> Summarize by group: <em>stratifying a summary</em></a></li>
+<li class="chapter" data-level="9.2.2" data-path="statistics.html"><a href="statistics.html#boxplot-for-visualizing-distributions-by-group"><i class="fa fa-check"></i><b>9.2.2</b> Boxplot for visualizing distributions by group</a></li>
+<li class="chapter" data-level="9.2.3" data-path="statistics.html"><a href="statistics.html#random"><i class="fa fa-check"></i><b>9.2.3</b> Generating pseudorandom numbers</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="statistics.html"><a href="statistics.html#correlation"><i class="fa fa-check"></i><b>9.3</b> Correlation r and Coefficient of Determination r<sup>2</sup></a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="statistics.html"><a href="statistics.html#displaying-correlation-in-a-pairs-plot"><i class="fa fa-check"></i><b>9.3.1</b> Displaying correlation in a pairs plot</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="statistics.html"><a href="statistics.html#statistical-tests"><i class="fa fa-check"></i><b>9.4</b> Statistical Tests</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="statistics.html"><a href="statistics.html#comparing-samples-and-groupings-with-a-t-test-and-a-non-parametric-kruskal-wallis-rank-sum-test"><i class="fa fa-check"></i><b>9.4.1</b> Comparing samples and groupings with a t test and a non-parametric Kruskal-Wallis Rank Sum test</a></li>
+<li class="chapter" data-level="9.4.2" data-path="statistics.html"><a href="statistics.html#analysis-of-variance"><i class="fa fa-check"></i><b>9.4.2</b> Analysis of variance</a></li>
+<li class="chapter" data-level="9.4.3" data-path="statistics.html"><a href="statistics.html#post-hoc-analysis-of-variance-with-tukeys-test"><i class="fa fa-check"></i><b>9.4.3</b> Post-Hoc Analysis of Variance with Tukey’s Test</a></li>
+<li class="chapter" data-level="9.4.4" data-path="statistics.html"><a href="statistics.html#testing-a-correlation"><i class="fa fa-check"></i><b>9.4.4</b> Testing a correlation</a></li>
+<li class="chapter" data-level="9.4.5" data-path="statistics.html"><a href="statistics.html#additional-resources"><i class="fa fa-check"></i><b>9.4.5</b> Additional resources</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="statistics.html"><a href="statistics.html#exercises-statistics"><i class="fa fa-check"></i><b>9.5</b> Exercises: Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="modeling.html"><a href="modeling.html"><i class="fa fa-check"></i><b>10</b> Modeling</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="modeling.html"><a href="modeling.html#some-common-statistical-models"><i class="fa fa-check"></i><b>10.1</b> Some Common Statistical Models</a></li>
+<li class="chapter" data-level="10.2" data-path="modeling.html"><a href="modeling.html#lm"><i class="fa fa-check"></i><b>10.2</b> Linear Model (<code>lm</code>)</a></li>
+<li class="chapter" data-level="10.3" data-path="modeling.html"><a href="modeling.html#spatial-influences-on-statistical-analysis"><i class="fa fa-check"></i><b>10.3</b> Spatial Influences on Statistical Analysis</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="modeling.html"><a href="modeling.html#mapping-residuals"><i class="fa fa-check"></i><b>10.3.1</b> Mapping residuals</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="modeling.html"><a href="modeling.html#analysis-of-covariance"><i class="fa fa-check"></i><b>10.4</b> Analysis of Covariance</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="modeling.html"><a href="modeling.html#tukey-test-for-the-ancova-model"><i class="fa fa-check"></i><b>10.4.1</b> Tukey test for the ANCOVA model</a></li>
+<li class="chapter" data-level="10.4.2" data-path="modeling.html"><a href="modeling.html#the-karst-water-chemistry-model"><i class="fa fa-check"></i><b>10.4.2</b> The karst water chemistry model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="modeling.html"><a href="modeling.html#generalized-linear-model-glm"><i class="fa fa-check"></i><b>10.5</b> Generalized linear model (GLM)</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="modeling.html"><a href="modeling.html#binomial-family-logistic-glm"><i class="fa fa-check"></i><b>10.5.1</b> Binomial family: Logistic GLM</a></li>
+<li class="chapter" data-level="10.5.2" data-path="modeling.html"><a href="modeling.html#logistic-landslide-model"><i class="fa fa-check"></i><b>10.5.2</b> Logistic landslide model</a></li>
+<li class="chapter" data-level="10.5.3" data-path="modeling.html"><a href="modeling.html#poisson-regression"><i class="fa fa-check"></i><b>10.5.3</b> Poisson regression</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="modeling.html"><a href="modeling.html#other-modeling-methods"><i class="fa fa-check"></i><b>10.6</b> Other modeling methods</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="modeling.html"><a href="modeling.html#curve-fitting"><i class="fa fa-check"></i><b>10.6.1</b> Curve fitting</a></li>
+<li class="chapter" data-level="10.6.2" data-path="modeling.html"><a href="modeling.html#models-employing-machine-learning"><i class="fa fa-check"></i><b>10.6.2</b> Models employing machine learning</a></li>
+</ul></li>
+<li class="chapter" data-level="10.7" data-path="modeling.html"><a href="modeling.html#exercises-modeling"><i class="fa fa-check"></i><b>10.7</b> Exercises: Modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="imagery.html"><a href="imagery.html"><i class="fa fa-check"></i><b>11</b> Imagery and Classification Models</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="imagery.html"><a href="imagery.html#reading-and-displaying-sentinel-2-imagery"><i class="fa fa-check"></i><b>11.1</b> Reading and Displaying Sentinel-2 Imagery</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="imagery.html"><a href="imagery.html#individual-bands"><i class="fa fa-check"></i><b>11.1.1</b> Individual bands</a></li>
+<li class="chapter" data-level="11.1.2" data-path="imagery.html"><a href="imagery.html#spectral-subsets-to-create-three-band-r-g-b-and-nir-r-g-for-visualization"><i class="fa fa-check"></i><b>11.1.2</b> Spectral subsets to create three-band R-G-B and NIR-R-G for visualization</a></li>
+<li class="chapter" data-level="11.1.3" data-path="imagery.html"><a href="imagery.html#crop-to-study-area-extent"><i class="fa fa-check"></i><b>11.1.3</b> Crop to study area extent</a></li>
+<li class="chapter" data-level="11.1.4" data-path="imagery.html"><a href="imagery.html#saving-results"><i class="fa fa-check"></i><b>11.1.4</b> Saving results</a></li>
+<li class="chapter" data-level="11.1.5" data-path="imagery.html"><a href="imagery.html#band-scatter-plots"><i class="fa fa-check"></i><b>11.1.5</b> Band scatter plots</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="imagery.html"><a href="imagery.html#spectral-profiles"><i class="fa fa-check"></i><b>11.2</b> Spectral Profiles</a></li>
+<li class="chapter" data-level="11.3" data-path="imagery.html"><a href="imagery.html#map-algebra-and-vegetation-indices"><i class="fa fa-check"></i><b>11.3</b> Map Algebra and Vegetation Indices</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="imagery.html"><a href="imagery.html#vegetation-indices"><i class="fa fa-check"></i><b>11.3.1</b> Vegetation indices</a></li>
+<li class="chapter" data-level="11.3.2" data-path="imagery.html"><a href="imagery.html#histogram-1"><i class="fa fa-check"></i><b>11.3.2</b> Histogram</a></li>
+<li class="chapter" data-level="11.3.3" data-path="imagery.html"><a href="imagery.html#other-vegetation-indices"><i class="fa fa-check"></i><b>11.3.3</b> Other vegetation indices</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="imagery.html"><a href="imagery.html#unsupervised-classification-with-k-means"><i class="fa fa-check"></i><b>11.4</b> Unsupervised Classification with k-means</a></li>
+<li class="chapter" data-level="11.5" data-path="imagery.html"><a href="imagery.html#machine-learning-classification-of-imagery"><i class="fa fa-check"></i><b>11.5</b> Machine Learning Classification of Imagery</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="imagery.html"><a href="imagery.html#read-imagery-and-training-data-and-extract-sample-values-for-training"><i class="fa fa-check"></i><b>11.5.1</b> Read imagery and training data and extract sample values for training</a></li>
+<li class="chapter" data-level="11.5.2" data-path="imagery.html"><a href="imagery.html#training-the-cart-model"><i class="fa fa-check"></i><b>11.5.2</b> Training the CART model</a></li>
+<li class="chapter" data-level="11.5.3" data-path="imagery.html"><a href="imagery.html#prediction-using-the-cart-model"><i class="fa fa-check"></i><b>11.5.3</b> Prediction using the CART model</a></li>
+<li class="chapter" data-level="11.5.4" data-path="imagery.html"><a href="imagery.html#validating-the-model"><i class="fa fa-check"></i><b>11.5.4</b> Validating the model</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="imagery.html"><a href="imagery.html#classifying-with-10-m-sentinel-2-imagery"><i class="fa fa-check"></i><b>11.6</b> Classifying with 10 m Sentinel-2 Imagery</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="imagery.html"><a href="imagery.html#subset-bands-10-m"><i class="fa fa-check"></i><b>11.6.1</b> Subset bands (10 m)</a></li>
+<li class="chapter" data-level="11.6.2" data-path="imagery.html"><a href="imagery.html#crop-to-rcv-extent-and-extract-pixel-values"><i class="fa fa-check"></i><b>11.6.2</b> Crop to RCV extent and extract pixel values</a></li>
+<li class="chapter" data-level="11.6.3" data-path="imagery.html"><a href="imagery.html#training-the-cart-model-10-m-and-plot-the-tree"><i class="fa fa-check"></i><b>11.6.3</b> Training the CART model (10 m) and plot the tree</a></li>
+<li class="chapter" data-level="11.6.4" data-path="imagery.html"><a href="imagery.html#prediction-using-the-cart-model-10-m"><i class="fa fa-check"></i><b>11.6.4</b> Prediction using the CART model (10 m)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="imagery.html"><a href="imagery.html#classification-using-multiple-images-capturing-phenology"><i class="fa fa-check"></i><b>11.7</b> Classification Using Multiple Images Capturing Phenology</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="imagery.html"><a href="imagery.html#create-a-10-band-stack-from-both-images"><i class="fa fa-check"></i><b>11.7.1</b> Create a 10-band stack from both images</a></li>
+<li class="chapter" data-level="11.7.2" data-path="imagery.html"><a href="imagery.html#extract-the-training-data-10-m-spring-summer"><i class="fa fa-check"></i><b>11.7.2</b> Extract the training data (10 m spring + summer)</a></li>
+<li class="chapter" data-level="11.7.3" data-path="imagery.html"><a href="imagery.html#cart-model-and-prediction-10-m-spring-summer"><i class="fa fa-check"></i><b>11.7.3</b> CART model and prediction (10 m spring + summer)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.8" data-path="imagery.html"><a href="imagery.html#classification-using-multiple-images-capturing-phenology-20m"><i class="fa fa-check"></i><b>11.8</b> Classification Using Multiple Images Capturing Phenology : 20m</a>
+<ul>
+<li class="chapter" data-level="11.8.1" data-path="imagery.html"><a href="imagery.html#create-a-18-band-stack-from-both-images"><i class="fa fa-check"></i><b>11.8.1</b> Create a 18-band stack from both images</a></li>
+<li class="chapter" data-level="11.8.2" data-path="imagery.html"><a href="imagery.html#extract-the-training-data-20-m-spring-summer"><i class="fa fa-check"></i><b>11.8.2</b> Extract the training data (20 m spring + summer)</a></li>
+<li class="chapter" data-level="11.8.3" data-path="imagery.html"><a href="imagery.html#cart-model-and-prediction-20-m-spring-summer"><i class="fa fa-check"></i><b>11.8.3</b> CART model and prediction (20 m spring + summer)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.9" data-path="imagery.html"><a href="imagery.html#conclusions-and-next-steps-for-imagery-classification"><i class="fa fa-check"></i><b>11.9</b> Conclusions and Next Steps for Imagery Classification</a></li>
+<li class="chapter" data-level="11.10" data-path="imagery.html"><a href="imagery.html#exercises-imagery-analysis-and-classification-models"><i class="fa fa-check"></i><b>11.10</b> Exercises: Imagery Analysis and Classification Models</a></li>
+</ul></li>
+<li class="part"><span><b>IV Time Series</b></span></li>
+<li class="chapter" data-level="12" data-path="ts.html"><a href="ts.html"><i class="fa fa-check"></i><b>12</b> Time Series Visualization and Analysis</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="ts.html"><a href="ts.html#structure-seasonality-and-decomposition-of-time-series"><i class="fa fa-check"></i><b>12.1</b> Structure, Seasonality, and Decomposition of Time Series</a></li>
+<li class="chapter" data-level="12.2" data-path="ts.html"><a href="ts.html#creation-of-time-series-ts-data"><i class="fa fa-check"></i><b>12.2</b> Creation of Time Series (ts) Data</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="ts.html"><a href="ts.html#frequency-start-and-end-parameters-for-ts"><i class="fa fa-check"></i><b>12.2.1</b> Frequency, start, and end parameters for <code>ts()</code></a></li>
+<li class="chapter" data-level="12.2.2" data-path="ts.html"><a href="ts.html#associating-times-with-time-series"><i class="fa fa-check"></i><b>12.2.2</b> Associating times with time series</a></li>
+<li class="chapter" data-level="12.2.3" data-path="ts.html"><a href="ts.html#subsetting-time-series-by-times"><i class="fa fa-check"></i><b>12.2.3</b> Subsetting time series by times</a></li>
+<li class="chapter" data-level="12.2.4" data-path="ts.html"><a href="ts.html#changing-the-frequency-to-use-a-different-period"><i class="fa fa-check"></i><b>12.2.4</b> Changing the frequency to use a different period</a></li>
+<li class="chapter" data-level="12.2.5" data-path="ts.html"><a href="ts.html#time-stamps-and-extensible-time-series"><i class="fa fa-check"></i><b>12.2.5</b> Time stamps and extensible time series</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="ts.html"><a href="ts.html#data-smoothing-moving-average-ma"><i class="fa fa-check"></i><b>12.3</b> Data smoothing: moving average (<code>ma</code>)</a></li>
+<li class="chapter" data-level="12.4" data-path="ts.html"><a href="ts.html#decomposition-of-data-logger-data-marble-mountains"><i class="fa fa-check"></i><b>12.4</b> Decomposition of data logger data: Marble Mountains</a></li>
+<li class="chapter" data-level="12.5" data-path="ts.html"><a href="ts.html#facet-graphs-for-comparing-variables-over-time"><i class="fa fa-check"></i><b>12.5</b> Facet Graphs for Comparing Variables over Time</a></li>
+<li class="chapter" data-level="12.6" data-path="ts.html"><a href="ts.html#lag-regression"><i class="fa fa-check"></i><b>12.6</b> Lag Regression</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="ts.html"><a href="ts.html#the-lag-regression-using-a-lag-function-in-a-linear-model"><i class="fa fa-check"></i><b>12.6.1</b> The lag regression, using a lag function in a linear model</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="ts.html"><a href="ts.html#ensemble-summary-statistics"><i class="fa fa-check"></i><b>12.7</b> Ensemble Summary Statistics</a></li>
+<li class="chapter" data-level="12.8" data-path="ts.html"><a href="ts.html#learning-more-about-time-series-in-r"><i class="fa fa-check"></i><b>12.8</b> Learning more about Time Series in R</a></li>
+<li class="chapter" data-level="12.9" data-path="ts.html"><a href="ts.html#exercises-time-series"><i class="fa fa-check"></i><b>12.9</b> Exercises: Time Series</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction to Environmental Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="spatial-analysis" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Spatial Analysis<a href="spatial-analysis.html#spatial-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><img src="EnvDataScience_files/figure-html/unnamed-chunk-198-1.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<p>Spatial analysis provides an expansive analytical landscape with theoretical underpinnings dating to at least the 1950s (<span class="citation">Berry and Marble (<a href="#ref-SpatialAnalysis">1968</a>)</span>), contributing to the development of geographic information systems as well as spatial tools in more statistically oriented programming environments like R. We won’t attempt to approach any thorough coverage of these methods, and we would refer the reader for more focused consideration using R-based methods to sources such as <span class="citation">Lovelace et al. (<a href="#ref-Geocomputation">2019</a>)</span> and <span class="citation">Hijmans (<a href="#ref-rspatial">n.d.</a>)</span>.</p>
+<p>In this chapter, we’ll continue working with spatial data, and explore spatial analysis methods. We’ll look at a selection of useful geospatial abstraction and analysis methods, what are also called <em>geoprocessing</em> tools in a GIS. The R Spatial world has grown in recent years to include an increasingly good array of tools. This chapter will focus on <em>vector</em> GIS methods, and here we don’t mean the same thing as the vector data objects in R nomenclature (Python’s pandas package, which uses a similar data structure, calls these “series” instead of vectors), but instead on feature geometries and their spatial relationships based on the coordinate referencing system.</p>
+<div id="data-frame-operations" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> Data Frame Operations<a href="spatial-analysis.html#data-frame-operations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>But before we get into those specifically spatial operations, it’s important to remember that feature data at least are also data frames, so we can use the methods we already know with them. For instance, we can look at properties of variables and then filter for features that meet a criterion, like all climate station points at greater than 2,000 m elevation, or all above 38°N latitude. To be able to work with latitude as a variable, we’ll need to use <code>remove=F</code> (the default is to remove them) to retain them when we use <code>st_as_sf</code>.</p>
+<p><strong>Adding a basemap with maptiles</strong>: We’d like to have a basemap, so we’ll create one with the <code>maptiles</code> package (install if you don’t have it.) <em>Warning: the <code>get_tiles</code> function goes online to get the basemap data, so if you don’t have a good internet connection or the site goes down, this may fail.</em> We can then display the basemap with <code>tm_rgb</code>.</p>
+<p>For temperature, we’ll use a continuous color scale of “hcl.blue_red” to go from cold (blue) to warm (red).</p>
+<div class="sourceCode" id="cb574"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb574-1"><a href="spatial-analysis.html#cb574-1" tabindex="-1"></a><span class="fu">library</span>(tmap); <span class="fu">library</span>(RColorBrewer); <span class="fu">library</span>(sf); <span class="fu">library</span>(tidyverse); </span>
+<span id="cb574-2"><a href="spatial-analysis.html#cb574-2" tabindex="-1"></a><span class="fu">library</span>(maptiles); <span class="fu">library</span>(igisci)</span>
+<span id="cb574-3"><a href="spatial-analysis.html#cb574-3" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&quot;plot&quot;</span>)</span>
+<span id="cb574-4"><a href="spatial-analysis.html#cb574-4" tabindex="-1"></a>newname <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">str_sub</span>(sierraFeb<span class="sc">$</span>STATION_NAME, <span class="dv">1</span>, </span>
+<span id="cb574-5"><a href="spatial-analysis.html#cb574-5" tabindex="-1"></a>                          <span class="fu">str_locate</span>(sierraFeb<span class="sc">$</span>STATION_NAME, <span class="st">&quot;,&quot;</span>)<span class="sc">-</span><span class="dv">1</span>))</span>
+<span id="cb574-6"><a href="spatial-analysis.html#cb574-6" tabindex="-1"></a>sierraFeb2000 <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">bind_cols</span>(sierraFeb,<span class="at">STATION=</span>newname) <span class="sc">%&gt;%</span> </span>
+<span id="cb574-7"><a href="spatial-analysis.html#cb574-7" tabindex="-1"></a>                          dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>STATION_NAME) <span class="sc">%&gt;%</span> </span>
+<span id="cb574-8"><a href="spatial-analysis.html#cb574-8" tabindex="-1"></a>                          <span class="fu">filter</span>(ELEVATION <span class="sc">&gt;=</span> <span class="dv">2000</span>, <span class="sc">!</span><span class="fu">is.na</span>(TEMPERATURE)), </span>
+<span id="cb574-9"><a href="spatial-analysis.html#cb574-9" tabindex="-1"></a>                 <span class="at">coords=</span><span class="fu">c</span>(<span class="st">&quot;LONGITUDE&quot;</span>,<span class="st">&quot;LATITUDE&quot;</span>), <span class="at">remove=</span>F, <span class="at">crs=</span><span class="dv">4326</span>)</span>
+<span id="cb574-10"><a href="spatial-analysis.html#cb574-10" tabindex="-1"></a>bounds<span class="ot">=</span>tmaptools<span class="sc">::</span><span class="fu">bb</span>(sierraFeb2000, <span class="at">ext=</span><span class="fl">1.2</span>)</span>
+<span id="cb574-11"><a href="spatial-analysis.html#cb574-11" tabindex="-1"></a>sierraBase <span class="ot">&lt;-</span> <span class="fu">get_tiles</span>(sierraFeb2000, <span class="at">provider=</span><span class="st">&quot;OpenStreetMap&quot;</span>)</span>
+<span id="cb574-12"><a href="spatial-analysis.html#cb574-12" tabindex="-1"></a><span class="fu">tm_shape</span>(sierraBase, <span class="at">bbox=</span>bounds) <span class="sc">+</span> </span>
+<span id="cb574-13"><a href="spatial-analysis.html#cb574-13" tabindex="-1"></a>  <span class="fu">tm_rgb</span>() <span class="sc">+</span> <span class="co"># tm_mv(&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;), col.scale = tm_scale_rgb(maxValue = 255)) +</span></span>
+<span id="cb574-14"><a href="spatial-analysis.html#cb574-14" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sierraFeb2000) <span class="sc">+</span> </span>
+<span id="cb574-15"><a href="spatial-analysis.html#cb574-15" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">fill =</span>  <span class="st">&quot;TEMPERATURE&quot;</span>, <span class="co">#midpoint=NA,</span></span>
+<span id="cb574-16"><a href="spatial-analysis.html#cb574-16" tabindex="-1"></a>          <span class="at">fill.scale=</span><span class="fu">tm_scale_continuous</span>(<span class="at">values=</span><span class="st">&quot;hcl.blue_red&quot;</span>),</span>
+<span id="cb574-17"><a href="spatial-analysis.html#cb574-17" tabindex="-1"></a>          <span class="at">size=</span><span class="dv">1</span>, <span class="at">fill.legend=</span><span class="fu">tm_legend</span>(<span class="at">frame=</span>F)) <span class="sc">+</span></span>
+<span id="cb574-18"><a href="spatial-analysis.html#cb574-18" tabindex="-1"></a>  <span class="fu">tm_text</span>(<span class="at">text =</span> <span class="st">&quot;STATION&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">auto.placement=</span>T, <span class="at">xmod=</span><span class="fl">0.5</span>, <span class="at">ymod=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb574-19"><a href="spatial-analysis.html#cb574-19" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">lines=</span>F)</span></code></pre></div>
+<p><img src="EnvDataScience_files/figure-html/unnamed-chunk-199-1.png" alt="" width="75%" style="display: block; margin: auto;" />
+&gt; Note that you could also use <code>tm_basemap</code> for this, but for some reason in this case the <code>maptiles::get_tiles</code> approach works better.</p>
+<div class="sourceCode" id="cb575"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb575-1"><a href="spatial-analysis.html#cb575-1" tabindex="-1"></a>basemap <span class="ot">&lt;-</span> <span class="fu">get_tiles</span>(CA_counties, <span class="at">provider=</span><span class="st">&quot;Esri.WorldTerrain&quot;</span>)</span>
+<span id="cb575-2"><a href="spatial-analysis.html#cb575-2" tabindex="-1"></a>cols <span class="ot">=</span> <span class="fu">names</span>(basemap)</span>
+<span id="cb575-3"><a href="spatial-analysis.html#cb575-3" tabindex="-1"></a>bounds<span class="ot">=</span>tmaptools<span class="sc">::</span><span class="fu">bb</span>(sierraFeb2000, <span class="at">ext=</span><span class="fl">1.2</span>)</span>
+<span id="cb575-4"><a href="spatial-analysis.html#cb575-4" tabindex="-1"></a>CA <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(basemap,<span class="at">bbox=</span>bounds) <span class="sc">+</span> <span class="fu">tm_rgb</span>() <span class="sc">+</span> <span class="co">#tm_mv(cols[1],cols[2],cols[3])) +</span></span>
+<span id="cb575-5"><a href="spatial-analysis.html#cb575-5" tabindex="-1"></a>      <span class="fu">tm_shape</span>(CA_counties) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="dv">1</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb575-6"><a href="spatial-analysis.html#cb575-6" tabindex="-1"></a>      <span class="fu">tm_graticules</span>(<span class="at">lines=</span>F,<span class="at">labels.rot=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">90</span>)) <span class="sc">+</span></span>
+<span id="cb575-7"><a href="spatial-analysis.html#cb575-7" tabindex="-1"></a>      <span class="fu">tm_title</span>(<span class="st">&quot;CA counties on basemap&quot;</span>)</span></code></pre></div>
+<p>Now let’s include LATITUDE. Let’s see what we get by filtering for both <code>ELEVATION &gt;= 2000</code> and <code>LATITUDE &gt;= 38</code>:</p>
+<div class="sourceCode" id="cb576"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb576-1"><a href="spatial-analysis.html#cb576-1" tabindex="-1"></a>sierraFeb2000 <span class="sc">%&gt;%</span></span>
+<span id="cb576-2"><a href="spatial-analysis.html#cb576-2" tabindex="-1"></a>  <span class="fu">filter</span>(ELEVATION <span class="sc">&gt;=</span> <span class="dv">2000</span> <span class="sc">&amp;</span> LATITUDE <span class="sc">&gt;=</span> <span class="dv">38</span>)</span></code></pre></div>
+<pre><code>## Simple feature collection with 1 feature and 7 fields
+## Geometry type: POINT
+## Dimension:     XY
+## Bounding box:  xmin: -119.0142 ymin: 38.2119 xmax: -119.0142 ymax: 38.2119
+## Geodetic CRS:  WGS 84
+## # A tibble: 1 × 8
+##   COUNTY ELEVATION LATITUDE LONGITUDE PRECIPITATION TEMPERATURE STATION         
+## * &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;           
+## 1 Mono       2551.     38.2     -119.          39.6        -4.4 BODIE CALIFORNI…
+## # ℹ 1 more variable: geometry &lt;POINT [°]&gt;</code></pre>
+<p>The only one left is Bodie (Figure <a href="spatial-analysis.html#fig:spanlBodie">7.1</a>). Maybe that’s why Bodie, a ghost town now, has such a reputation for being so friggin’ cold (at least for California). I’ve been snowed on there in summer.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlBodie"></span>
+<img src="img/BodieSHP_Gallery_11.jpg" alt="A Bodie scene, from Bodie State Historic Park (https://www.parks.ca.gov/)" width="75%" />
+<p class="caption">
+FIGURE 7.1: A Bodie scene, from Bodie State Historic Park (<a href="https://www.parks.ca.gov/" class="uri">https://www.parks.ca.gov/</a>)
+</p>
+</div>
+<div id="GroupedSummaries" class="section level3 hasAnchor" number="7.1.1">
+<h3><span class="header-section-number">7.1.1</span> Using grouped summaries, and filtering by a selection<a href="spatial-analysis.html#GroupedSummaries" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We’ve been using February Sierra climate data for demonstrating various things, but this wasn’t the original form of the data downloaded, so let’s look at the original data and use some dplyr methods to restructure it, in this case to derive annual summaries. We’ll use the monthly normals to derive annual values.</p>
+<p>We looked at the very useful <code>group_by ... summarize()</code> group-summary process earlier <a href="abstraction.html#group-summary">3.4.5</a>. We’ll use this and a selection process to create an annual Sierra climate dataframe we can map and analyze. The California monthly normals were downloaded from the National Centers for Environmental Information at NOAA, where you can select desired parameters, monthly normals as frequency, and limit to one state.</p>
+<ul>
+<li><a href="https://www.ncei.noaa.gov/" class="uri">https://www.ncei.noaa.gov/</a></li>
+<li><a href="https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals" class="uri">https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals</a></li>
+<li><a href="https://www.ncei.noaa.gov/access/search/data-search/normals-monthly-1991-2020" class="uri">https://www.ncei.noaa.gov/access/search/data-search/normals-monthly-1991-2020</a></li>
+</ul>
+<p>First we’ll have a quick look at the data to see how it’s structured. These were downloaded as monthly normals for the State of California, as of 2010, so there are 12 months coded <code>201001</code>:<code>201012</code>, with obviously the same <code>ELEVATION</code>, <code>LATITUDE</code>, and <code>LONGITUDE</code>, but monthly values for climate data like <code>MLY-PRCP-NORMAL</code>, etc.</p>
+<div class="sourceCode" id="cb578"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb578-1"><a href="spatial-analysis.html#cb578-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;sierra/908277.csv&quot;</span>)),<span class="at">n=</span><span class="dv">15</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 15 × 11
+##    STATION    STATION_NAME ELEVATION LATITUDE LONGITUDE   DATE `MLY-PRCP-NORMAL`
+##    &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;     &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt;             &lt;dbl&gt;
+##  1 GHCND:USC… TWENTYNINE … 602       34.12806 -116.036… 201001             13.2 
+##  2 GHCND:USC… TWENTYNINE … 602       34.12806 -116.036… 201002             15.0 
+##  3 GHCND:USC… TWENTYNINE … 602       34.12806 -116.036… 201003             11.4 
+##  4 GHCND:USC… TWENTYNINE … 602       34.12806 -116.036… 201004              3.3 
+##  5 GHCND:USC… TWENTYNINE … 602       34.12806 -116.036… 201005              2.29
+##  6 GHCND:USC… TWENTYNINE … 602       34.12806 -116.036… 201006              0.25
+##  7 GHCND:USC… TWENTYNINE … 602       34.12806 -116.036… 201007             12.2 
+##  8 GHCND:USC… TWENTYNINE … 602       34.12806 -116.036… 201008             20.6 
+##  9 GHCND:USC… TWENTYNINE … 602       34.12806 -116.036… 201009             10.2 
+## 10 GHCND:USC… TWENTYNINE … 602       34.12806 -116.036… 201010              5.08
+## 11 GHCND:USC… TWENTYNINE … 602       34.12806 -116.036… 201011              5.08
+## 12 GHCND:USC… TWENTYNINE … 602       34.12806 -116.036… 201012             14.7 
+## 13 GHCND:USC… BUTTONWILLO… 82        35.4047  -119.4731 201001             32.5 
+## 14 GHCND:USC… BUTTONWILLO… 82        35.4047  -119.4731 201002             30.0 
+## 15 GHCND:USC… BUTTONWILLO… 82        35.4047  -119.4731 201003             30.7 
+## # ℹ 4 more variables: `MLY-SNOW-NORMAL` &lt;dbl&gt;, `MLY-TAVG-NORMAL` &lt;dbl&gt;,
+## #   `MLY-TMAX-NORMAL` &lt;dbl&gt;, `MLY-TMIN-NORMAL` &lt;dbl&gt;</code></pre>
+<p>To get just the Sierra data, it seemed easiest to just provide a list of relevant county names to filter the counties, do a bit of field renaming, then read in a previously created selection of Sierra weather/climate stations.</p>
+<div class="sourceCode" id="cb580"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb580-1"><a href="spatial-analysis.html#cb580-1" tabindex="-1"></a>sierraCounties <span class="ot">&lt;-</span> <span class="fu">st_make_valid</span>(CA_counties) <span class="sc">%&gt;%</span></span>
+<span id="cb580-2"><a href="spatial-analysis.html#cb580-2" tabindex="-1"></a>  <span class="fu">filter</span>(NAME <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Alpine&quot;</span>,<span class="st">&quot;Amador&quot;</span>,<span class="st">&quot;Butte&quot;</span>,<span class="st">&quot;Calaveras&quot;</span>,<span class="st">&quot;El Dorado&quot;</span>,</span>
+<span id="cb580-3"><a href="spatial-analysis.html#cb580-3" tabindex="-1"></a>                     <span class="st">&quot;Fresno&quot;</span>,<span class="st">&quot;Inyo&quot;</span>,<span class="st">&quot;Kern&quot;</span>,<span class="st">&quot;Lassen&quot;</span>,<span class="st">&quot;Madera&quot;</span>,<span class="st">&quot;Mariposa&quot;</span>,</span>
+<span id="cb580-4"><a href="spatial-analysis.html#cb580-4" tabindex="-1"></a>                     <span class="st">&quot;Mono&quot;</span>,<span class="st">&quot;Nevada&quot;</span>,<span class="st">&quot;Placer&quot;</span>,<span class="st">&quot;Plumas&quot;</span>,<span class="st">&quot;Sacramento&quot;</span>,<span class="st">&quot;Shasta&quot;</span>,</span>
+<span id="cb580-5"><a href="spatial-analysis.html#cb580-5" tabindex="-1"></a>                     <span class="st">&quot;Sierra&quot;</span>,<span class="st">&quot;Tehama&quot;</span>,<span class="st">&quot;Tulare&quot;</span>,<span class="st">&quot;Tuolumne&quot;</span>,<span class="st">&quot;Yuba&quot;</span>))</span>
+<span id="cb580-6"><a href="spatial-analysis.html#cb580-6" tabindex="-1"></a>normals <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;sierra/908277.csv&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb580-7"><a href="spatial-analysis.html#cb580-7" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">STATION =</span> <span class="fu">str_sub</span>(STATION,<span class="dv">7</span>,<span class="fu">str_length</span>(STATION)))</span>
+<span id="cb580-8"><a href="spatial-analysis.html#cb580-8" tabindex="-1"></a>sierraStations <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;sierra/sierraStations.csv&quot;</span>))</span></code></pre></div>
+<p>To get annual values, we’ll want to use the stations as groups in a <code>group_by</code> <code>%&gt;%</code> <code>summarize</code> process. For values that stay the same for a station (<code>LONGITUDE</code>, <code>LATITUDE</code>, <code>ELEVATION</code>), we’ll use <code>first()</code> to get just one of the 12 identical monthly values. For values that vary monthly, we’ll <code>sum()</code> the monthly precipitations and get the <code>mean()</code> of monthly temperatures to get appropriate annual values. We’ll also use a <code>right_join</code> to keep only the stations that are in the Sierra. <em>Have a look at this script to make sure you understand what it’s doing; it’s got several elements you’ve been introduced to before, and that you should understand.</em> At the end, we’ll use <code>st_as_sf</code> to make sf data out of the data frame, and retain the <code>LONGITUDE</code> and <code>LATITUDE</code> variables in case we want to use them as separate variables (Figure <a href="spatial-analysis.html#fig:spanlSierraData">7.2</a>).</p>
+<div class="sourceCode" id="cb581"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb581-1"><a href="spatial-analysis.html#cb581-1" tabindex="-1"></a>sierraAnnual <span class="ot">&lt;-</span> <span class="fu">right_join</span>(sierraStations,normals,<span class="at">by=</span><span class="st">&quot;STATION&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb581-2"><a href="spatial-analysis.html#cb581-2" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(STATION_NA)) <span class="sc">%&gt;%</span> </span>
+<span id="cb581-3"><a href="spatial-analysis.html#cb581-3" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>STATION_NA) <span class="sc">%&gt;%</span></span>
+<span id="cb581-4"><a href="spatial-analysis.html#cb581-4" tabindex="-1"></a>    <span class="fu">group_by</span>(STATION_NAME) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">LONGITUDE =</span> <span class="fu">first</span>(LONGITUDE),</span>
+<span id="cb581-5"><a href="spatial-analysis.html#cb581-5" tabindex="-1"></a>                                         <span class="at">LATITUDE =</span> <span class="fu">first</span>(LATITUDE),</span>
+<span id="cb581-6"><a href="spatial-analysis.html#cb581-6" tabindex="-1"></a>                                         <span class="at">ELEVATION =</span> <span class="fu">first</span>(ELEVATION),</span>
+<span id="cb581-7"><a href="spatial-analysis.html#cb581-7" tabindex="-1"></a>                                         <span class="at">PRECIPITATION =</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">MLY-PRCP-NORMAL</span><span class="st">`</span>),</span>
+<span id="cb581-8"><a href="spatial-analysis.html#cb581-8" tabindex="-1"></a>                                         <span class="at">TEMPERATURE =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">MLY-TAVG-NORMAL</span><span class="st">`</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb581-9"><a href="spatial-analysis.html#cb581-9" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">STATION_NAME =</span> <span class="fu">str_sub</span>(STATION_NAME,<span class="dv">1</span>,<span class="fu">str_length</span>(STATION_NAME)<span class="sc">-</span><span class="dv">6</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb581-10"><a href="spatial-analysis.html#cb581-10" tabindex="-1"></a>  <span class="fu">filter</span>(PRECIPITATION <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(TEMPERATURE <span class="sc">&gt;</span> <span class="sc">-</span><span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb581-11"><a href="spatial-analysis.html#cb581-11" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;LONGITUDE&quot;</span>, <span class="st">&quot;LATITUDE&quot;</span>), <span class="at">crs=</span><span class="dv">4326</span>, <span class="at">remove=</span>F)</span>
+<span id="cb581-12"><a href="spatial-analysis.html#cb581-12" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb581-13"><a href="spatial-analysis.html#cb581-13" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>CA_counties, <span class="fu">aes</span>(), <span class="at">fill=</span><span class="st">&quot;gray&quot;</span>) <span class="sc">+</span></span>
+<span id="cb581-14"><a href="spatial-analysis.html#cb581-14" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>sierraCounties, <span class="fu">aes</span>(), <span class="at">fill=</span><span class="st">&quot;white&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb581-15"><a href="spatial-analysis.html#cb581-15" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>sierraAnnual, <span class="fu">aes</span>(<span class="at">col=</span>PRECIPITATION)) <span class="sc">+</span></span>
+<span id="cb581-16"><a href="spatial-analysis.html#cb581-16" tabindex="-1"></a>  <span class="fu">scale_color_gradient</span>(<span class="at">low=</span><span class="st">&quot;orange&quot;</span>, <span class="at">high=</span><span class="st">&quot;blue&quot;</span>) </span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlSierraData"></span>
+<img src="EnvDataScience_files/figure-html/spanlSierraData-1.png" alt="Sierra data" width="75%" />
+<p class="caption">
+FIGURE 7.2: Sierra data
+</p>
+</div>
+</div>
+</div>
+<div id="spatial-analysis-operations" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> Spatial Analysis Operations<a href="spatial-analysis.html#spatial-analysis-operations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Again, there is a lot more to spatial analysis than we have time to cover. But we’ll explore some particularly useful spatial analysis operations, especially those that contribute to statistical analysis methods we’ll be looking at soon. We’ll start by continuing to look at subsetting or filtering methods, but ones that use spatial relationships to identify what we want to retain or remove from consideration.</p>
+<div id="using-topology-to-subset" class="section level3 hasAnchor" number="7.2.1">
+<h3><span class="header-section-number">7.2.1</span> Using topology to subset<a href="spatial-analysis.html#using-topology-to-subset" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Using spatial relationships can be useful in filtering our data, and there are quite a few topological relationships that can be explored. See <span class="citation">Lovelace et al. (<a href="#ref-Geocomputation">2019</a>)</span> for a lot more about topological operations. We’ll look at a relatively simple one that identifies whether a feature is within another one, and apply this method to filter for features within a selection of five counties, which we’ll start by identifying by name.</p>
+<div class="sourceCode" id="cb582"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb582-1"><a href="spatial-analysis.html#cb582-1" tabindex="-1"></a>nSierraCo <span class="ot">&lt;-</span> CA_counties <span class="sc">%&gt;%</span></span>
+<span id="cb582-2"><a href="spatial-analysis.html#cb582-2" tabindex="-1"></a>  <span class="fu">filter</span>(NAME <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Plumas&quot;</span>,<span class="st">&quot;Butte&quot;</span>,<span class="st">&quot;Sierra&quot;</span>,<span class="st">&quot;Nevada&quot;</span>,<span class="st">&quot;Yuba&quot;</span>))</span></code></pre></div>
+<p>Then we’ll use those counties to select towns (places) that occur within them …</p>
+<div class="sourceCode" id="cb583"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb583-1"><a href="spatial-analysis.html#cb583-1" tabindex="-1"></a>CA_places <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">ex</span>(<span class="st">&quot;sierra/CA_places.shp&quot;</span>))</span>
+<span id="cb583-2"><a href="spatial-analysis.html#cb583-2" tabindex="-1"></a>nCAsel <span class="ot">&lt;-</span> <span class="fu">lengths</span>(<span class="fu">st_within</span>(CA_places, nSierraCo)) <span class="sc">&gt;</span> <span class="dv">0</span> <span class="co"># to get TRUE &amp; FALSE</span></span>
+<span id="cb583-3"><a href="spatial-analysis.html#cb583-3" tabindex="-1"></a>nSierraPlaces <span class="ot">&lt;-</span> CA_places[nCAsel,]</span></code></pre></div>
+<p>… and do the same for the <code>sierraFeb</code> weather stations (Figure <a href="spatial-analysis.html#fig:spanlNSierra">7.3</a>).</p>
+<div class="sourceCode" id="cb584"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb584-1"><a href="spatial-analysis.html#cb584-1" tabindex="-1"></a>sierra <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;sierra/sierraFeb.csv&quot;</span>)), </span>
+<span id="cb584-2"><a href="spatial-analysis.html#cb584-2" tabindex="-1"></a>                   <span class="at">coords=</span><span class="fu">c</span>(<span class="st">&quot;LONGITUDE&quot;</span>,<span class="st">&quot;LATITUDE&quot;</span>), <span class="at">crs=</span><span class="dv">4326</span>)</span>
+<span id="cb584-3"><a href="spatial-analysis.html#cb584-3" tabindex="-1"></a>nCAselSta <span class="ot">&lt;-</span> <span class="fu">lengths</span>(<span class="fu">st_within</span>(sierra, nSierraCo)) <span class="sc">&gt;</span> <span class="dv">0</span> <span class="co"># to get TRUE &amp; FALSE</span></span>
+<span id="cb584-4"><a href="spatial-analysis.html#cb584-4" tabindex="-1"></a>nSierraStations <span class="ot">&lt;-</span> sierra[nCAselSta,]</span></code></pre></div>
+<div class="sourceCode" id="cb585"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb585-1"><a href="spatial-analysis.html#cb585-1" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb585-2"><a href="spatial-analysis.html#cb585-2" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&quot;plot&quot;</span>)</span>
+<span id="cb585-3"><a href="spatial-analysis.html#cb585-3" tabindex="-1"></a></span>
+<span id="cb585-4"><a href="spatial-analysis.html#cb585-4" tabindex="-1"></a><span class="fu">tm_basemap</span>(<span class="st">&quot;Esri.WorldTopoMap&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb585-5"><a href="spatial-analysis.html#cb585-5" tabindex="-1"></a>  <span class="fu">tm_shape</span>(nSierraCo) <span class="sc">+</span> <span class="fu">tm_borders</span>() <span class="sc">+</span> <span class="fu">tm_text</span>(<span class="st">&quot;NAME&quot;</span>, <span class="at">size=</span><span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb585-6"><a href="spatial-analysis.html#cb585-6" tabindex="-1"></a><span class="co">#  tm_shape(nSierraStations) + tm_symbols(fill=&quot;blue&quot;) +</span></span>
+<span id="cb585-7"><a href="spatial-analysis.html#cb585-7" tabindex="-1"></a>  <span class="fu">tm_shape</span>(nSierraPlaces) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">alpha=</span><span class="fl">0.99</span>) <span class="sc">+</span> </span>
+<span id="cb585-8"><a href="spatial-analysis.html#cb585-8" tabindex="-1"></a>  <span class="fu">tm_text</span>(<span class="st">&quot;AREANAME&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlNSierra"></span>
+<img src="EnvDataScience_files/figure-html/spanlNSierra-1.png" alt="Northern Sierra stations and places" width="75%" />
+<p class="caption">
+FIGURE 7.3: Northern Sierra stations and places
+</p>
+</div>
+<p>So far, the above is just subsetting for a map, which may be all we’re wanting to do, but we’ll apply this selection to a distance function in the next section to explore a method using a reduced data set.</p>
+</div>
+<div id="centroid" class="section level3 hasAnchor" number="7.2.2">
+<h3><span class="header-section-number">7.2.2</span> Centroid<a href="spatial-analysis.html#centroid" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Related to the topological concept of relating features inside other features is creating a new feature in the middle of an existing one, specifically a point placed in the middle of a polygon: a <em>centroid</em>. Centroids are useful when you need point data for some kind of analysis, but that point needs to represent the polygon it’s contained within. The methods we’ll see in the code below include:</p>
+<ul>
+<li><code>st_centroid()</code> : to derive a single point for each tract that should be approximately in its middle. It must be topologically contained within it, not fooled by an annulus (“doughnut”) shape, for example.</li>
+<li><code>st_make_valid()</code> : to make an invalid geometry valid (or just check for it). This function has just become essential now that <code>sf</code> supports spherical instead of just planar data, which ends up containing “slivers” where boundaries slightly under- or overlap since they were originally built from a planar projection. The <code>st_make_valid()</code> appears to make minor (and typically invisible) corrections to these slivers.</li>
+<li><code>st_bbox</code> : reads the bounding box, or spatial extent, of any dataset, which we can then use to set the scale to focus on that area. In this case, we’ll focus on the census centroids instead of the statewide <code>CAfreeways</code> for instance.</li>
+</ul>
+<p>Let’s see the effect of the centroids and bbox. We’ll start with all county centroids (Figure <a href="spatial-analysis.html#fig:spanlCentroids">7.4</a>).</p>
+<div class="sourceCode" id="cb586"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb586-1"><a href="spatial-analysis.html#cb586-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(sf); <span class="fu">library</span>(igisci)</span>
+<span id="cb586-2"><a href="spatial-analysis.html#cb586-2" tabindex="-1"></a>CA_counties <span class="ot">&lt;-</span> <span class="fu">st_make_valid</span>(CA_counties) <span class="co"># needed fix for data</span></span></code></pre></div>
+<div class="sourceCode" id="cb587"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb587-1"><a href="spatial-analysis.html#cb587-1" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb587-2"><a href="spatial-analysis.html#cb587-2" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>CA_counties) <span class="sc">+</span></span>
+<span id="cb587-3"><a href="spatial-analysis.html#cb587-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span><span class="fu">st_centroid</span>(CA_counties))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlCentroids"></span>
+<img src="EnvDataScience_files/figure-html/spanlCentroids-1.png" alt="California county centroids" width="75%" />
+<p class="caption">
+FIGURE 7.4: California county centroids
+</p>
+</div>
+<p>Here’s an example that also applies the bounding box to establish a mapping scale that covers the Bay Area while some of the data (TRI locations and CAfreeways) are state-wide (Figure <a href="spatial-analysis.html#fig:spanlBayAreaTracts">7.5</a>).</p>
+<div class="sourceCode" id="cb588"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb588-1"><a href="spatial-analysis.html#cb588-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb588-2"><a href="spatial-analysis.html#cb588-2" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb588-3"><a href="spatial-analysis.html#cb588-3" tabindex="-1"></a><span class="fu">library</span>(igisci)</span>
+<span id="cb588-4"><a href="spatial-analysis.html#cb588-4" tabindex="-1"></a>BayAreaTracts <span class="ot">&lt;-</span> <span class="fu">st_make_valid</span>(BayAreaTracts)</span>
+<span id="cb588-5"><a href="spatial-analysis.html#cb588-5" tabindex="-1"></a>censusCentroids <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(BayAreaTracts)</span>
+<span id="cb588-6"><a href="spatial-analysis.html#cb588-6" tabindex="-1"></a>TRI_sp <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;TRI/TRI_2017_CA.csv&quot;</span>)), </span>
+<span id="cb588-7"><a href="spatial-analysis.html#cb588-7" tabindex="-1"></a>                   <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;LONGITUDE&quot;</span>, <span class="st">&quot;LATITUDE&quot;</span>), </span>
+<span id="cb588-8"><a href="spatial-analysis.html#cb588-8" tabindex="-1"></a>                   <span class="at">crs=</span><span class="dv">4326</span>) <span class="co"># simple way to specify coordinate reference</span></span>
+<span id="cb588-9"><a href="spatial-analysis.html#cb588-9" tabindex="-1"></a>bnd <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(censusCentroids)</span>
+<span id="cb588-10"><a href="spatial-analysis.html#cb588-10" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb588-11"><a href="spatial-analysis.html#cb588-11" tabindex="-1"></a> <span class="fu">geom_sf</span>(<span class="at">data =</span> BayAreaCounties, <span class="fu">aes</span>(<span class="at">fill =</span> NAME)) <span class="sc">+</span></span>
+<span id="cb588-12"><a href="spatial-analysis.html#cb588-12" tabindex="-1"></a> <span class="fu">geom_sf</span>(<span class="at">data =</span> censusCentroids) <span class="sc">+</span></span>
+<span id="cb588-13"><a href="spatial-analysis.html#cb588-13" tabindex="-1"></a> <span class="fu">geom_sf</span>(<span class="at">data =</span> CAfreeways, <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb588-14"><a href="spatial-analysis.html#cb588-14" tabindex="-1"></a> <span class="fu">geom_sf</span>(<span class="at">data =</span> TRI_sp, <span class="at">color =</span> <span class="st">&quot;yellow&quot;</span>) <span class="sc">+</span></span>
+<span id="cb588-15"><a href="spatial-analysis.html#cb588-15" tabindex="-1"></a> <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(bnd[<span class="dv">1</span>], bnd[<span class="dv">3</span>]), <span class="at">ylim =</span> <span class="fu">c</span>(bnd[<span class="dv">2</span>], bnd[<span class="dv">4</span>])) <span class="sc">+</span></span>
+<span id="cb588-16"><a href="spatial-analysis.html#cb588-16" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title=</span><span class="st">&quot;Bay Area Counties, Freeways and Census Tract Centroids&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlBayAreaTracts"></span>
+<img src="EnvDataScience_files/figure-html/spanlBayAreaTracts-1.png" alt="Map scaled to cover Bay Area tracts using a bbox" width="75%" />
+<p class="caption">
+FIGURE 7.5: Map scaled to cover Bay Area tracts using a bbox
+</p>
+</div>
+</div>
+<div id="distance" class="section level3 hasAnchor" number="7.2.3">
+<h3><span class="header-section-number">7.2.3</span> Distance<a href="spatial-analysis.html#distance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Distance is a fundamental spatial measure, used to not only create spatial data (distance between points in surveying or distance to GNSS satellites) but also to analyze it. Note that we can either be referring to planar (from projected coordinate systems) or spherical (from latitude and longitude) great-circle distances. Two common spatial operations involving distance in vector spatial analysis are (a) deriving distances among features, and (b) creating buffer polygons of a specific distance away from features. In raster spatial analysis, we’ll look at deriving distances from target features to each raster cell.</p>
+<p>But first, let’s take a brief excursion up the Nile River, using great circle distances to derive a longitudinal profile and channel slope…</p>
+<div id="great-circle-distances" class="section level4 hasAnchor" number="7.2.3.1">
+<h4><span class="header-section-number">7.2.3.1</span> Great circle distances<a href="spatial-analysis.html#great-circle-distances" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Earlier we created a simple river profile using Cartesian coordinates in metres for x, y, and z (elevation), but what if our xy locations are in geographic coordinates of latitude and longitude? Using the haversine method, we can derive great-circle (“as the crow flies”) distances between latitude and longitude pairs. The following function uses a haversine algorithm described at <a href="https://www.movable-type.co.uk/scripts/latlong.html" class="uri">https://www.movable-type.co.uk/scripts/latlong.html</a> (<span class="citation"><em>Calculate Distance, Bearing and More Between Latitutde/Longitude Points"</em> (<a href="#ref-haversine">n.d.</a>)</span>) to derive these distances in metres, provided lat/long pairs in degrees as <code>haversineD(lat1,lon1,lat2,lon2)</code>:</p>
+<div class="sourceCode" id="cb589"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb589-1"><a href="spatial-analysis.html#cb589-1" tabindex="-1"></a>haversineD <span class="ot">&lt;-</span> <span class="cf">function</span>(lat1deg,lon1deg,lat2deg,lon2deg){</span>
+<span id="cb589-2"><a href="spatial-analysis.html#cb589-2" tabindex="-1"></a>  lat1 <span class="ot">&lt;-</span> lat1deg<span class="sc">/</span><span class="dv">180</span><span class="sc">*</span>pi; lat2 <span class="ot">&lt;-</span> lat2deg<span class="sc">/</span><span class="dv">180</span><span class="sc">*</span>pi <span class="co"># convert to radians</span></span>
+<span id="cb589-3"><a href="spatial-analysis.html#cb589-3" tabindex="-1"></a>  lon1 <span class="ot">&lt;-</span> lon1deg<span class="sc">/</span><span class="dv">180</span><span class="sc">*</span>pi; lon2 <span class="ot">&lt;-</span> lon2deg<span class="sc">/</span><span class="dv">180</span><span class="sc">*</span>pi</span>
+<span id="cb589-4"><a href="spatial-analysis.html#cb589-4" tabindex="-1"></a>  a <span class="ot">&lt;-</span> <span class="fu">sin</span>((lat2<span class="sc">-</span>lat1)<span class="sc">/</span><span class="dv">2</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">cos</span>(lat1)<span class="sc">*</span><span class="fu">cos</span>(lat2)<span class="sc">*</span><span class="fu">sin</span>((lon2<span class="sc">-</span>lon1)<span class="sc">/</span><span class="dv">2</span>)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb589-5"><a href="spatial-analysis.html#cb589-5" tabindex="-1"></a>  c <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">atan2</span>(<span class="fu">sqrt</span>(a),<span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">-</span>a))</span>
+<span id="cb589-6"><a href="spatial-analysis.html#cb589-6" tabindex="-1"></a>  c <span class="sc">*</span> <span class="fl">6.371e6</span> <span class="co"># mean earth radius is ~ 6.371 million metres</span></span>
+<span id="cb589-7"><a href="spatial-analysis.html#cb589-7" tabindex="-1"></a>}</span></code></pre></div>
+<p>We’ll use these to help us derived channel slope where we need the longitudinal distance in metres along the Nile River, but we have locations in geographic coordinates (crs 4326). But first, here’s a few quick checks on the function since I remember that 1 minute (1/60 degree) of latitude is equal to 1 nautical mile (NM) or ~1.15 statute miles, and the same applies to longitude at the equator. Then longitude is half that at 60 degrees north or south.</p>
+<div class="sourceCode" id="cb590"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb590-1"><a href="spatial-analysis.html#cb590-1" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;1&#39;lat=&quot;</span>,<span class="fu">haversineD</span>(<span class="dv">30</span>,<span class="dv">120</span>,<span class="dv">30</span><span class="sc">+</span><span class="dv">1</span><span class="sc">/</span><span class="dv">60</span>,<span class="dv">120</span>)<span class="sc">/</span><span class="fl">0.3048</span><span class="sc">/</span><span class="dv">5280</span>,<span class="st">&quot;miles at 30°N&quot;</span>)</span>
+<span id="cb590-2"><a href="spatial-analysis.html#cb590-2" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;1&#39;lat=&quot;</span>,<span class="fu">haversineD</span>(<span class="dv">30</span>,<span class="dv">120</span>,<span class="dv">30</span><span class="sc">+</span><span class="dv">1</span><span class="sc">/</span><span class="dv">60</span>,<span class="dv">120</span>)<span class="sc">/</span><span class="fl">0.3048</span><span class="sc">/</span><span class="dv">6076</span>,<span class="st">&quot;NM at 30°N&quot;</span>)</span>
+<span id="cb590-3"><a href="spatial-analysis.html#cb590-3" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;1&#39;lon=&quot;</span>,<span class="fu">haversineD</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span><span class="sc">/</span><span class="dv">60</span>)<span class="sc">/</span><span class="fl">0.3048</span><span class="sc">/</span><span class="dv">6076</span>,<span class="st">&quot;NM at the equator&quot;</span>)</span>
+<span id="cb590-4"><a href="spatial-analysis.html#cb590-4" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;1&#39;lon=&quot;</span>,<span class="fu">haversineD</span>(<span class="dv">60</span>,<span class="dv">0</span>,<span class="dv">60</span>,<span class="dv">1</span><span class="sc">/</span><span class="dv">60</span>)<span class="sc">/</span><span class="fl">0.3048</span><span class="sc">/</span><span class="dv">6076</span>,<span class="st">&quot;NM at 60°N&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;1&#39;lat= 1.15155540233128 miles at 30°N&quot;
+## [1] &quot;1&#39;lat= 1.000693305515 NM at 30°N&quot;
+## [1] &quot;1&#39;lon= 1.00069330551494 NM at the equator&quot;
+## [1] &quot;1&#39;lon= 0.500346651434429 NM at 60°N&quot;</code></pre>
+<p>Thanks to Stephanie Kate in my Fall 2020 Environmental Data Science course at SFSU, we have geographic coordinates and elevations in metres for a series of points along the Nile River, including various tributaries. We’ll focus on the main to Blue Nile and generate a map (Figure <a href="spatial-analysis.html#fig:spanlNileMap">7.6</a>) and longitudinal profile (Figure <a href="spatial-analysis.html#fig:spanlNileLong">7.7</a>), using great circle distances along the channel.</p>
+<div class="sourceCode" id="cb592"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb592-1"><a href="spatial-analysis.html#cb592-1" tabindex="-1"></a><span class="fu">library</span>(igisci); <span class="fu">library</span>(tidyverse)</span>
+<span id="cb592-2"><a href="spatial-analysis.html#cb592-2" tabindex="-1"></a>bNile <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;Nile/NilePoints.csv&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb592-3"><a href="spatial-analysis.html#cb592-3" tabindex="-1"></a>  <span class="fu">filter</span>(nile <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;main&quot;</span>,<span class="st">&quot;blue&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb592-4"><a href="spatial-analysis.html#cb592-4" tabindex="-1"></a>  <span class="fu">arrange</span>(elev_meter) <span class="sc">%&gt;%</span></span>
+<span id="cb592-5"><a href="spatial-analysis.html#cb592-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">d=</span><span class="dv">0</span>, <span class="at">longd=</span><span class="dv">0</span>, <span class="at">s=</span><span class="fl">1e-6</span>) <span class="co"># initiate distance, longitudinal distance &amp; slope</span></span>
+<span id="cb592-6"><a href="spatial-analysis.html#cb592-6" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&quot;plot&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb593"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb593-1"><a href="spatial-analysis.html#cb593-1" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(bNile<span class="sc">$</span>x)){</span>
+<span id="cb593-2"><a href="spatial-analysis.html#cb593-2" tabindex="-1"></a>  bNile<span class="sc">$</span>d[i] <span class="ot">&lt;-</span> <span class="fu">haversineD</span>(bNile<span class="sc">$</span>y[i],bNile<span class="sc">$</span>x[i],bNile<span class="sc">$</span>y[i<span class="dv">-1</span>],bNile<span class="sc">$</span>x[i<span class="dv">-1</span>])</span>
+<span id="cb593-3"><a href="spatial-analysis.html#cb593-3" tabindex="-1"></a>  bNile<span class="sc">$</span>longd[i] <span class="ot">&lt;-</span> bNile<span class="sc">$</span>longd[i<span class="dv">-1</span>] <span class="sc">+</span> bNile<span class="sc">$</span>d[i]</span>
+<span id="cb593-4"><a href="spatial-analysis.html#cb593-4" tabindex="-1"></a>  bNile<span class="sc">$</span>s[i<span class="dv">-1</span>] <span class="ot">&lt;-</span> (bNile<span class="sc">$</span>elev_meter[i]<span class="sc">-</span>bNile<span class="sc">$</span>elev_meter[i<span class="dv">-1</span>])<span class="sc">/</span>bNile<span class="sc">$</span>d[i]</span>
+<span id="cb593-5"><a href="spatial-analysis.html#cb593-5" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb594"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb594-1"><a href="spatial-analysis.html#cb594-1" tabindex="-1"></a><span class="fu">library</span>(sf); <span class="fu">library</span>(tmap); <span class="fu">library</span>(maptiles); <span class="fu">library</span>(tmaptools)</span>
+<span id="cb594-2"><a href="spatial-analysis.html#cb594-2" tabindex="-1"></a>Nile_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(bNile,<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&quot;x&quot;</span>,<span class="st">&quot;y&quot;</span>),<span class="at">crs=</span><span class="dv">4326</span>) <span class="sc">|&gt;</span></span>
+<span id="cb594-3"><a href="spatial-analysis.html#cb594-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">s_pct =</span> s<span class="sc">*</span><span class="dv">100</span>)</span>
+<span id="cb594-4"><a href="spatial-analysis.html#cb594-4" tabindex="-1"></a><span class="fu">tm_basemap</span>(<span class="at">server =</span><span class="st">&quot;Esri.NatGeoWorldMap&quot;</span>) <span class="sc">+</span></span>
+<span id="cb594-5"><a href="spatial-analysis.html#cb594-5" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb594-6"><a href="spatial-analysis.html#cb594-6" tabindex="-1"></a>  <span class="fu">tm_shape</span>(Nile_sf) <span class="sc">+</span></span>
+<span id="cb594-7"><a href="spatial-analysis.html#cb594-7" tabindex="-1"></a>    <span class="fu">tm_dots</span>(<span class="at">size=</span><span class="fl">0.3</span>, <span class="at">fill=</span><span class="st">&quot;elev_meter&quot;</span>,</span>
+<span id="cb594-8"><a href="spatial-analysis.html#cb594-8" tabindex="-1"></a>            <span class="at">fill.scale=</span><span class="fu">tm_scale_continuous</span>(<span class="at">values=</span><span class="st">&quot;brewer.yl_or_rd&quot;</span>),</span>
+<span id="cb594-9"><a href="spatial-analysis.html#cb594-9" tabindex="-1"></a>            <span class="at">fill.legend=</span><span class="fu">tm_legend</span>(<span class="at">reverse=</span>T, <span class="at">frame=</span>F))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlNileMap"></span>
+<img src="EnvDataScience_files/figure-html/spanlNileMap-1.png" alt="Nile River points, colored by channel slope" width="75%" />
+<p class="caption">
+FIGURE 7.6: Nile River points, colored by channel slope
+</p>
+</div>
+<div class="sourceCode" id="cb595"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb595-1"><a href="spatial-analysis.html#cb595-1" tabindex="-1"></a><span class="fu">ggplot</span>(bNile, <span class="fu">aes</span>(longd,elev_meter)) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">col=</span>s), <span class="at">linewidth=</span><span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb595-2"><a href="spatial-analysis.html#cb595-2" tabindex="-1"></a>  <span class="fu">scale_color_gradient</span>(<span class="at">low=</span><span class="st">&quot;green&quot;</span>, <span class="at">high=</span><span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb595-3"><a href="spatial-analysis.html#cb595-3" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Nile River to Blue Nile longitudinal profile&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlNileLong"></span>
+<img src="EnvDataScience_files/figure-html/spanlNileLong-1.png" alt="Nile River channel slope as range of colors from green to red, with great circle channel distances derived using the haversine method" width="75%" />
+<p class="caption">
+FIGURE 7.7: Nile River channel slope as range of colors from green to red, with great circle channel distances derived using the haversine method
+</p>
+</div>
+</div>
+<div id="distances-among-features" class="section level4 hasAnchor" number="7.2.3.2">
+<h4><span class="header-section-number">7.2.3.2</span> Distances among features<a href="spatial-analysis.html#distances-among-features" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The sf <code>st_distance</code> and terra <code>distance</code> functions derive distances between features, either among features of one data set object or between all features in one and all features in another data set.</p>
+<p>To see how this works, we’ll look at a purposefully small dataset: a selection of Marble Mountains soil CO<sub>2</sub> sampling sites and in-cave water quality sampling sites. We’ll start by reading in the data, and filtering to just get cave water samples and a small set of nearby soil CO<sub>2</sub> sampling sites:</p>
+<div class="sourceCode" id="cb596"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb596-1"><a href="spatial-analysis.html#cb596-1" tabindex="-1"></a><span class="fu">library</span>(igisci); <span class="fu">library</span>(sf); <span class="fu">library</span>(tidyverse)</span>
+<span id="cb596-2"><a href="spatial-analysis.html#cb596-2" tabindex="-1"></a>soilCO2all <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/co2july95.shp&quot;</span>))</span>
+<span id="cb596-3"><a href="spatial-analysis.html#cb596-3" tabindex="-1"></a>cave_H2Osamples <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/samples.shp&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb596-4"><a href="spatial-analysis.html#cb596-4" tabindex="-1"></a>  <span class="fu">filter</span>((SAMPLES_ID <span class="sc">&gt;=</span> <span class="dv">50</span>) <span class="sc">&amp;</span> (SAMPLES_ID <span class="sc">&lt;</span> <span class="dv">60</span>)) <span class="co"># these are the cave samples</span></span>
+<span id="cb596-5"><a href="spatial-analysis.html#cb596-5" tabindex="-1"></a>soilCO2 <span class="ot">&lt;-</span> soilCO2all <span class="sc">%&gt;%</span> <span class="fu">filter</span>(LOC <span class="sc">&gt;</span> <span class="dv">20</span>) <span class="co"># soil CO2 samples in the area</span></span></code></pre></div>
+<p>Figure <a href="spatial-analysis.html#fig:spanlSelSoilCO2">7.8</a> shows the six selected soil CO<sub>2</sub> samples.</p>
+<div class="sourceCode" id="cb597"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb597-1"><a href="spatial-analysis.html#cb597-1" tabindex="-1"></a><span class="fu">library</span>(tmap); <span class="fu">library</span>(maptiles)</span>
+<span id="cb597-2"><a href="spatial-analysis.html#cb597-2" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&quot;plot&quot;</span>)</span>
+<span id="cb597-3"><a href="spatial-analysis.html#cb597-3" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> tmaptools<span class="sc">::</span><span class="fu">bb</span>(soilCO2, <span class="at">ext=</span><span class="fl">1.1</span>) <span class="co"># extends the map area a bit from the points</span></span>
+<span id="cb597-4"><a href="spatial-analysis.html#cb597-4" tabindex="-1"></a><span class="fu">tm_basemap</span>(<span class="at">server=</span><span class="st">&quot;OpenTopoMap&quot;</span>) <span class="sc">+</span> <span class="fu">tm_graticules</span>(<span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb597-5"><a href="spatial-analysis.html#cb597-5" tabindex="-1"></a>  <span class="fu">tm_shape</span>(soilCO2, <span class="at">bbox=</span>bbox) <span class="sc">+</span> </span>
+<span id="cb597-6"><a href="spatial-analysis.html#cb597-6" tabindex="-1"></a>    <span class="fu">tm_symbols</span>(<span class="at">fill=</span><span class="st">&quot;CO2_&quot;</span>, <span class="at">fill.scale=</span><span class="fu">tm_scale_continuous</span>(<span class="at">values=</span><span class="st">&quot;parks.denali&quot;</span>),</span>
+<span id="cb597-7"><a href="spatial-analysis.html#cb597-7" tabindex="-1"></a>               <span class="at">fill.legend=</span><span class="fu">tm_legend</span>(<span class="at">frame=</span>F)) <span class="sc">+</span></span>
+<span id="cb597-8"><a href="spatial-analysis.html#cb597-8" tabindex="-1"></a>  <span class="fu">tm_shape</span>(soilCO2) <span class="sc">+</span> <span class="fu">tm_text</span>(<span class="st">&quot;LOC&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">col=</span><span class="st">&quot;orange&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlSelSoilCO2"></span>
+<img src="EnvDataScience_files/figure-html/spanlSelSoilCO2-1.png" alt="Selection of soil CO2 sampling sites, July 1995" width="75%" />
+<p class="caption">
+FIGURE 7.8: Selection of soil CO2 sampling sites, July 1995
+</p>
+</div>
+<p>If you just provide the six soil CO<sub>2</sub> sample points as a single feature data set input to the st_distance function, it returns a matrix of distances between each, with a diagonal of zeros where the distance would be to itself:</p>
+<div class="sourceCode" id="cb598"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb598-1"><a href="spatial-analysis.html#cb598-1" tabindex="-1"></a><span class="fu">st_distance</span>(soilCO2)</span></code></pre></div>
+<pre><code>## Units: [m]
+##           1         2          3          4        5         6
+## 1    0.0000  370.5894 1155.64981 1207.62172 3333.529 1439.2366
+## 2  370.5894    0.0000  973.73559 1039.45041 3067.106 1248.9347
+## 3 1155.6498  973.7356    0.00000   75.14093 2207.019  283.6722
+## 4 1207.6217 1039.4504   75.14093    0.00000 2174.493  237.7024
+## 5 3333.5290 3067.1061 2207.01903 2174.49276    0.000 1938.2985
+## 6 1439.2366 1248.9347  283.67215  237.70236 1938.299    0.0000</code></pre>
+<p>Then we’ll look at distances between this same set of soil CO<sub>2</sub> samples with water samples collected in caves, where the effect of elevated soil CO<sub>2</sub> values might influence solution processes reflected in cave waters (Figure <a href="spatial-analysis.html#fig:spanlSoilH2O">7.9</a>).</p>
+<div class="sourceCode" id="cb600"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb600-1"><a href="spatial-analysis.html#cb600-1" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb600-2"><a href="spatial-analysis.html#cb600-2" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&quot;plot&quot;</span>)</span>
+<span id="cb600-3"><a href="spatial-analysis.html#cb600-3" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> tmaptools<span class="sc">::</span><span class="fu">bb</span>(<span class="fu">st_union</span>(cave_H2Osamples, soilCO2),<span class="at">ext=</span><span class="fl">1.1</span>)</span>
+<span id="cb600-4"><a href="spatial-analysis.html#cb600-4" tabindex="-1"></a><span class="fu">tm_basemap</span>(<span class="st">&quot;OpenTopoMap&quot;</span>) <span class="sc">+</span> <span class="co">#tm_graticules() +</span></span>
+<span id="cb600-5"><a href="spatial-analysis.html#cb600-5" tabindex="-1"></a>  <span class="fu">tm_shape</span>(cave_H2Osamples, <span class="at">bbox=</span>bbox) <span class="sc">+</span> </span>
+<span id="cb600-6"><a href="spatial-analysis.html#cb600-6" tabindex="-1"></a>    <span class="fu">tm_symbols</span>(<span class="at">fill=</span><span class="st">&quot;CATOT&quot;</span>, <span class="at">fill.scale=</span><span class="fu">tm_scale_continuous</span>(<span class="at">values=</span><span class="st">&quot;brewer.blues&quot;</span>),</span>
+<span id="cb600-7"><a href="spatial-analysis.html#cb600-7" tabindex="-1"></a>               <span class="at">fill.legend=</span><span class="fu">tm_legend</span>(<span class="at">frame=</span>F))<span class="sc">+</span> </span>
+<span id="cb600-8"><a href="spatial-analysis.html#cb600-8" tabindex="-1"></a>  <span class="fu">tm_shape</span>(soilCO2) <span class="sc">+</span></span>
+<span id="cb600-9"><a href="spatial-analysis.html#cb600-9" tabindex="-1"></a>    <span class="fu">tm_symbols</span>(<span class="at">fill=</span><span class="st">&quot;CO2_&quot;</span>,  <span class="at">fill.scale=</span><span class="fu">tm_scale_continuous</span>(<span class="at">values=</span><span class="st">&quot;brewer.reds&quot;</span>),</span>
+<span id="cb600-10"><a href="spatial-analysis.html#cb600-10" tabindex="-1"></a>                             <span class="at">fill.legend=</span><span class="fu">tm_legend</span>(<span class="at">frame=</span>F))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlSoilH2O"></span>
+<img src="EnvDataScience_files/figure-html/spanlSoilH2O-1.png" alt="Selection of soil CO2 and in-cave water samples" width="75%" />
+<p class="caption">
+FIGURE 7.9: Selection of soil CO2 and in-cave water samples
+</p>
+</div>
+<div class="sourceCode" id="cb601"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb601-1"><a href="spatial-analysis.html#cb601-1" tabindex="-1"></a>soilwater <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(soilCO2, cave_H2Osamples)</span>
+<span id="cb601-2"><a href="spatial-analysis.html#cb601-2" tabindex="-1"></a>soilwater</span></code></pre></div>
+<pre><code>## Units: [m]
+##          [,1]     [,2]     [,3]      [,4]      [,5]      [,6]      [,7]
+## [1,] 2384.210 2271.521 2169.301 1985.6093 1980.0314 2004.1697 1905.9543
+## [2,] 2029.748 1920.783 1826.579 1815.2653 1820.0496 1835.9465 1798.1216
+## [3,] 1611.381 1480.688 1334.287  842.8228  846.3210  863.1026  849.7313
+## [4,] 1637.998 1506.938 1357.582  781.9741  782.4215  801.6262  776.0732
+## [5,] 1590.469 1578.730 1532.465 1526.3315 1567.5677 1520.1399 1820.3651
+## [6,] 1506.358 1375.757 1220.000  567.8210  578.1919  589.1443  638.8615</code></pre>
+<p>In this case, the six soil CO<sub>2</sub> samples are the rows, and the seven cave water sample locations are the columns. We aren’t really relating the values but just looking at distances. An analysis of this data might not be very informative because the caves aren’t very near the soil samples, and conduit cave hydrology doesn’t lend itself to looking at euclidean distance, but the purpose of this example is just to comprehend the results of the <code>sf::st_distance</code> or similarly the <code>terra::distance</code> function.</p>
+</div>
+<div id="distance-to-the-nearest-feature-abstracted-from-distance-matrix" class="section level4 hasAnchor" number="7.2.3.3">
+<h4><span class="header-section-number">7.2.3.3</span> Distance to the nearest feature, abstracted from distance matrix<a href="spatial-analysis.html#distance-to-the-nearest-feature-abstracted-from-distance-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>However, let’s process the matrix a bit to find the distance from each soil CO<sub>2</sub> sample to the closest cave water sample:</p>
+<div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb603-1"><a href="spatial-analysis.html#cb603-1" tabindex="-1"></a>soilCO2d <span class="ot">&lt;-</span> soilCO2 <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">dist2cave =</span> <span class="fu">min</span>(soilwater[<span class="dv">1</span>,]))</span>
+<span id="cb603-2"><a href="spatial-analysis.html#cb603-2" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(soilwater[,<span class="dv">1</span>])) soilCO2d[i,<span class="st">&quot;dist2cave&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">min</span>(soilwater[i,])</span>
+<span id="cb603-3"><a href="spatial-analysis.html#cb603-3" tabindex="-1"></a>soilCO2d <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(DESCRIPTIO, dist2cave) <span class="sc">%&gt;%</span> <span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>)</span></code></pre></div>
+<pre><code>##                                              DESCRIPTIO     dist2cave
+## 1                Super Sink moraine, low point W of 241 1905.9543 [m]
+## 2      Small sink, first in string on hike to SuperSink 1798.1216 [m]
+## 3        meadow on bench above Mbl Valley, 25&#39; E of PCT  842.8228 [m]
+## 4        red fir forest S of upper meadow, 30&#39; W of PCT  776.0732 [m]
+## 5            saddle betw Lower Skyhigh (E) &amp; Frying Pan 1520.1399 [m]
+## 6 E end of wide soil-filled 10m fissure N of lower camp  567.8210 [m]</code></pre>
+<p>… or since we can also look at distances to lines or polygons, we can find the distance from CO<sub>2</sub> sampling locations to the closest stream (Figure <a href="spatial-analysis.html#fig:spanlDistCO2streams">7.10</a>),</p>
+<div class="sourceCode" id="cb605"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb605-1"><a href="spatial-analysis.html#cb605-1" tabindex="-1"></a><span class="fu">library</span>(igisci); <span class="fu">library</span>(sf); <span class="fu">library</span>(tidyverse)</span>
+<span id="cb605-2"><a href="spatial-analysis.html#cb605-2" tabindex="-1"></a>soilCO2all <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/co2july95.shp&quot;</span>))</span>
+<span id="cb605-3"><a href="spatial-analysis.html#cb605-3" tabindex="-1"></a>streams <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/streams.shp&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb606"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb606-1"><a href="spatial-analysis.html#cb606-1" tabindex="-1"></a>strCO2 <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(soilCO2all, streams)</span>
+<span id="cb606-2"><a href="spatial-analysis.html#cb606-2" tabindex="-1"></a>strCO2d <span class="ot">&lt;-</span> soilCO2all <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">dist2stream =</span> <span class="fu">min</span>(strCO2[<span class="dv">1</span>,]))</span>
+<span id="cb606-3"><a href="spatial-analysis.html#cb606-3" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(strCO2[,<span class="dv">1</span>])) strCO2d[i,<span class="st">&quot;dist2stream&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">min</span>(strCO2[i,])</span></code></pre></div>
+<div class="sourceCode" id="cb607"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb607-1"><a href="spatial-analysis.html#cb607-1" tabindex="-1"></a><span class="fu">tm_basemap</span>(<span class="st">&quot;OpenTopoMap&quot;</span>) <span class="sc">+</span> <span class="fu">tm_graticules</span>() <span class="sc">+</span> </span>
+<span id="cb607-2"><a href="spatial-analysis.html#cb607-2" tabindex="-1"></a>  <span class="fu">tm_shape</span>(streams) <span class="sc">+</span> <span class="fu">tm_lines</span>(<span class="at">col=</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb607-3"><a href="spatial-analysis.html#cb607-3" tabindex="-1"></a>  <span class="fu">tm_shape</span>(strCO2d) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill=</span><span class="st">&quot;dist2stream&quot;</span>,</span>
+<span id="cb607-4"><a href="spatial-analysis.html#cb607-4" tabindex="-1"></a>                                <span class="at">fill.legend=</span><span class="fu">tm_legend</span>(<span class="at">frame=</span>F)) </span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlDistCO2streams"></span>
+<img src="EnvDataScience_files/figure-html/spanlDistCO2streams-1.png" alt="Distance from CO2 samples to closest streams (not including lakes)" width="75%" />
+<p class="caption">
+FIGURE 7.10: Distance from CO2 samples to closest streams (not including lakes)
+</p>
+</div>
+</div>
+<div id="nearest-feature-detection" class="section level4 hasAnchor" number="7.2.3.4">
+<h4><span class="header-section-number">7.2.3.4</span> Nearest feature detection<a href="spatial-analysis.html#nearest-feature-detection" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>As we just saw, the matrix derived from <code>st_distance</code> when applied to feature data sets could be used for further analyses, such as this distance to the nearest place. But there’s another approach to this using a specific function that identifies the nearest feature: <code>st_nearest_feature</code>, so we’ll look at this with the previously filtered northern Sierra places and weather stations. We start by using <code>st_nearest_feature</code> to create an index vector of the nearest place to each station, and grab its location geometry:</p>
+<div class="sourceCode" id="cb608"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb608-1"><a href="spatial-analysis.html#cb608-1" tabindex="-1"></a>nearest_Place <span class="ot">&lt;-</span> <span class="fu">st_nearest_feature</span>(nSierraStations, nSierraPlaces)</span>
+<span id="cb608-2"><a href="spatial-analysis.html#cb608-2" tabindex="-1"></a>near_Place_loc <span class="ot">&lt;-</span> nSierraPlaces<span class="sc">$</span>geometry[nearest_Place]</span></code></pre></div>
+<p>Then add the distance to that nearest place to our <code>nSierraStations</code> <code>sf</code>. Note that we’re using <code>st_distance</code> with two vector inputs as before, but ending up with just one distance per feature (instead of a matrix) with the setting <code>by_element=TRUE</code>…</p>
+<div class="sourceCode" id="cb609"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb609-1"><a href="spatial-analysis.html#cb609-1" tabindex="-1"></a>nSierraStations <span class="ot">&lt;-</span> nSierraStations <span class="sc">%&gt;%</span></span>
+<span id="cb609-2"><a href="spatial-analysis.html#cb609-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">d2Place =</span> <span class="fu">st_distance</span>(nSierraStations, near_Place_loc, <span class="at">by_element=</span><span class="cn">TRUE</span>),</span>
+<span id="cb609-3"><a href="spatial-analysis.html#cb609-3" tabindex="-1"></a>         <span class="at">d2Place =</span> units<span class="sc">::</span><span class="fu">drop_units</span>(d2Place))</span></code></pre></div>
+<p>… and of course map the results (Figure <a href="spatial-analysis.html#fig:spanlDistStations">7.11</a>):</p>
+<div class="sourceCode" id="cb610"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb610-1"><a href="spatial-analysis.html#cb610-1" tabindex="-1"></a><span class="fu">tm_basemap</span>(<span class="st">&quot;OpenStreetMap&quot;</span>) <span class="sc">+</span> <span class="fu">tm_graticules</span>(<span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb610-2"><a href="spatial-analysis.html#cb610-2" tabindex="-1"></a>  <span class="fu">tm_shape</span>(nSierraCo) <span class="sc">+</span> <span class="fu">tm_borders</span>() <span class="sc">+</span> <span class="fu">tm_text</span>(<span class="st">&quot;NAME&quot;</span>) <span class="sc">+</span></span>
+<span id="cb610-3"><a href="spatial-analysis.html#cb610-3" tabindex="-1"></a>  <span class="fu">tm_shape</span>(nSierraStations) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill=</span><span class="st">&quot;d2Place&quot;</span>) <span class="sc">+</span></span>
+<span id="cb610-4"><a href="spatial-analysis.html#cb610-4" tabindex="-1"></a>  <span class="fu">tm_shape</span>(nSierraPlaces) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill=</span><span class="st">&quot;red&quot;</span>, <span class="at">fill_alpha=</span><span class="fl">0.5</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">shape=</span><span class="dv">24</span>,</span>
+<span id="cb610-5"><a href="spatial-analysis.html#cb610-5" tabindex="-1"></a>                                      <span class="at">fill.legend=</span><span class="fu">tm_legend</span>(<span class="at">frame=</span>F))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlDistStations"></span>
+<img src="EnvDataScience_files/figure-html/spanlDistStations-1.png" alt="Distance to towns (places) from weather stations" width="75%" />
+<p class="caption">
+FIGURE 7.11: Distance to towns (places) from weather stations
+</p>
+</div>
+<p>That’s probably enough examples of using distance to nearest feature so we can see how it works, but to see an example with a larger data set, an example in <strong>Appendix A7.2</strong> looks at the proximity of TRI sites to health data at census tracts.</p>
+</div>
+</div>
+<div id="buffers" class="section level3 hasAnchor" number="7.2.4">
+<h3><span class="header-section-number">7.2.4</span> Buffers<a href="spatial-analysis.html#buffers" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Creating buffers, or polygons defining the area within some distance of a feature, is commonly used in GIS. Since you need to specify that distance (or read it from a variable for each feature), you need to know what the horizontal distance units are for your data. If GCS, these will be decimal degrees and 1 degree is a long way, about 111 km (or 69 miles), though that differs for longitude where 1 degree of longitude is 111 km * cos(latitude). If in UTM, the horizontal distance will be in metres, but in the US, state plane coordinates are typically in feet. So let’s read the trails shapefile from the Marble Mountains and look for its units:</p>
+<div class="sourceCode" id="cb611"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb611-1"><a href="spatial-analysis.html#cb611-1" tabindex="-1"></a><span class="fu">library</span>(igisci)</span>
+<span id="cb611-2"><a href="spatial-analysis.html#cb611-2" tabindex="-1"></a><span class="fu">library</span>(sf); <span class="fu">library</span>(tidyverse)</span>
+<span id="cb611-3"><a href="spatial-analysis.html#cb611-3" tabindex="-1"></a>trails <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/trails.shp&quot;</span>))</span></code></pre></div>
+<p>Then we know we’re in metres, so we’ll create a 100 m buffer this way (Figure <a href="spatial-analysis.html#fig:spanlTrailBuffer">7.12</a>).</p>
+<div class="sourceCode" id="cb612"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb612-1"><a href="spatial-analysis.html#cb612-1" tabindex="-1"></a>trail_buff0 <span class="ot">&lt;-</span> <span class="fu">st_buffer</span>(trails,<span class="dv">100</span>)</span>
+<span id="cb612-2"><a href="spatial-analysis.html#cb612-2" tabindex="-1"></a><span class="fu">ggplot</span>(trail_buff0) <span class="sc">+</span> <span class="fu">geom_sf</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlTrailBuffer"></span>
+<img src="EnvDataScience_files/figure-html/spanlTrailBuffer-1.png" alt="100 m trail buffer, Marble Mountains" width="75%" />
+<p class="caption">
+FIGURE 7.12: 100 m trail buffer, Marble Mountains
+</p>
+</div>
+<div class="sourceCode" id="cb613"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb613-1"><a href="spatial-analysis.html#cb613-1" tabindex="-1"></a><span class="fu">library</span>(igisci); <span class="fu">library</span>(terra); <span class="fu">library</span>(tmap)</span>
+<span id="cb613-2"><a href="spatial-analysis.html#cb613-2" tabindex="-1"></a>trailsV <span class="ot">&lt;-</span> <span class="fu">vect</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/trails.shp&quot;</span>))</span>
+<span id="cb613-3"><a href="spatial-analysis.html#cb613-3" tabindex="-1"></a>trail_bufft <span class="ot">=</span> <span class="fu">aggregate</span>(<span class="fu">buffer</span>(trailsV,<span class="dv">100</span>))</span>
+<span id="cb613-4"><a href="spatial-analysis.html#cb613-4" tabindex="-1"></a><span class="fu">tm_graticules</span>(<span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span> <span class="fu">tm_shape</span>(trail_bufft) <span class="sc">+</span> <span class="fu">tm_polygons</span>()</span></code></pre></div>
+<p><img src="EnvDataScience_files/figure-html/spanlTrailBuffer_terra-1.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div id="the-units-package" class="section level4 hasAnchor" number="7.2.4.1">
+<h4><span class="header-section-number">7.2.4.1</span> The <code>units</code> package<a href="spatial-analysis.html#the-units-package" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Since the spatial data is in UTM, we can just specify the distance in metres. However if the data was in decimal degrees of latitude and longitude (GCS), we would need to let the function know that we’re providing it metres so it can transform that to work with the GCS, using <code>units::set_units(100, "m")</code> instead of just <code>100</code>, for the above example where we are creating a 100 m buffer.</p>
+</div>
+</div>
+<div id="spatial-overlay-union-and-intersection" class="section level3 hasAnchor" number="7.2.5">
+<h3><span class="header-section-number">7.2.5</span> Spatial overlay: union and intersection<a href="spatial-analysis.html#spatial-overlay-union-and-intersection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Overlay operations are described in the <code>sf</code> cheat sheet under “Geometry operations”. These are useful to explore, but a couple we’ll look at are union and intersection.</p>
+<p>Normally these methods have multiple inputs, but we’ll start with one that can also be used to dissolve boundaries, <strong><code>st_union</code></strong> – if only one input is provided it appears to do a dissolve (Figure <a href="spatial-analysis.html#fig:spanlUnionBuffer">7.13</a>):</p>
+<div class="sourceCode" id="cb614"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb614-1"><a href="spatial-analysis.html#cb614-1" tabindex="-1"></a>trail_buff <span class="ot">&lt;-</span> <span class="fu">st_union</span>(trail_buff0)</span>
+<span id="cb614-2"><a href="spatial-analysis.html#cb614-2" tabindex="-1"></a><span class="fu">ggplot</span>(trail_buff) <span class="sc">+</span> <span class="fu">geom_sf</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlUnionBuffer"></span>
+<img src="EnvDataScience_files/figure-html/spanlUnionBuffer-1.png" alt="Unioned trail buffer, dissolving boundaries" width="75%" />
+<p class="caption">
+FIGURE 7.13: Unioned trail buffer, dissolving boundaries
+</p>
+</div>
+<p>For a clearer example with the normal multiple input, we’ll <strong>intersect</strong> a 100 m buffer around streams and a 100 m buffer around trails …</p>
+<div class="sourceCode" id="cb615"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb615-1"><a href="spatial-analysis.html#cb615-1" tabindex="-1"></a>streams <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/streams.shp&quot;</span>))</span>
+<span id="cb615-2"><a href="spatial-analysis.html#cb615-2" tabindex="-1"></a>trail_buff <span class="ot">&lt;-</span> <span class="fu">st_buffer</span>(trails, <span class="dv">100</span>)</span>
+<span id="cb615-3"><a href="spatial-analysis.html#cb615-3" tabindex="-1"></a>str_buff <span class="ot">&lt;-</span> <span class="fu">st_buffer</span>(streams,<span class="dv">100</span>)</span>
+<span id="cb615-4"><a href="spatial-analysis.html#cb615-4" tabindex="-1"></a>strtrInt <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(trail_buff,str_buff)</span></code></pre></div>
+<p>…to show areas that are close to streams and trails (Figure <a href="spatial-analysis.html#fig:spanlIntTrailStrBuff">7.14</a>):</p>
+<div class="sourceCode" id="cb616"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb616-1"><a href="spatial-analysis.html#cb616-1" tabindex="-1"></a><span class="fu">ggplot</span>(strtrInt) <span class="sc">+</span> <span class="fu">geom_sf</span>(<span class="at">fill=</span><span class="st">&quot;green&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb616-2"><a href="spatial-analysis.html#cb616-2" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>trails, <span class="at">col=</span><span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb616-3"><a href="spatial-analysis.html#cb616-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>streams, <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlIntTrailStrBuff"></span>
+<img src="EnvDataScience_files/figure-html/spanlIntTrailStrBuff-1.png" alt="Intersection of trail and stream buffers" width="75%" />
+<p class="caption">
+FIGURE 7.14: Intersection of trail and stream buffers
+</p>
+</div>
+<p>Or how about a union of these two buffers? We’ll also dissolve the boundaries using union with a single input (the first union) to dissolve those internal overlays (Figure <a href="spatial-analysis.html#fig:spanlUnion2buffs">7.15</a>):</p>
+<div class="sourceCode" id="cb617"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb617-1"><a href="spatial-analysis.html#cb617-1" tabindex="-1"></a>strtrUnion <span class="ot">&lt;-</span> <span class="fu">st_union</span>(<span class="fu">st_union</span>(trail_buff,str_buff))</span>
+<span id="cb617-2"><a href="spatial-analysis.html#cb617-2" tabindex="-1"></a><span class="fu">ggplot</span>(strtrUnion) <span class="sc">+</span> <span class="fu">geom_sf</span>(<span class="at">fill=</span><span class="st">&quot;green&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb617-3"><a href="spatial-analysis.html#cb617-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>trails, <span class="at">col=</span><span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb617-4"><a href="spatial-analysis.html#cb617-4" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>streams, <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlUnion2buffs"></span>
+<img src="EnvDataScience_files/figure-html/spanlUnion2buffs-1.png" alt="Union of two sets of buffer polygons" width="75%" />
+<p class="caption">
+FIGURE 7.15: Union of two sets of buffer polygons
+</p>
+</div>
+<blockquote>
+<p>Note that it is common to need to use <code>st_make_valid()</code> to fix slivers in buffers, though this isn’t necessary here, and may occur more frequently with coarser scale data.</p>
+</blockquote>
+</div>
+<div id="clip-with-st_crop" class="section level3 hasAnchor" number="7.2.6">
+<h3><span class="header-section-number">7.2.6</span> Clip with st_crop<a href="spatial-analysis.html#clip-with-st_crop" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Clipping a GIS layer to a rectangle (or to a polygon) is often useful. We’ll clip to a rectangle based on latitude and longitude limits we’ll specify, however since our data is in UTM, we’ll need to use <strong><code>st_transform</code></strong> to get it to the right coordinates (Figure <a href="spatial-analysis.html#fig:spanlCrop">7.16</a>).</p>
+<div class="sourceCode" id="cb618"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb618-1"><a href="spatial-analysis.html#cb618-1" tabindex="-1"></a>xmin<span class="ot">=</span><span class="sc">-</span><span class="fl">123.21</span>; xmax<span class="ot">=</span><span class="sc">-</span><span class="fl">123.18</span>; ymin<span class="ot">=</span><span class="fl">41.55</span>; ymax<span class="ot">=</span><span class="fl">41.57</span></span>
+<span id="cb618-2"><a href="spatial-analysis.html#cb618-2" tabindex="-1"></a>clipMatrix <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">c</span>(xmin,ymin),<span class="fu">c</span>(xmin,ymax),<span class="fu">c</span>(xmax,ymax),</span>
+<span id="cb618-3"><a href="spatial-analysis.html#cb618-3" tabindex="-1"></a>                    <span class="fu">c</span>(xmax,ymin),<span class="fu">c</span>(xmin,ymin))</span>
+<span id="cb618-4"><a href="spatial-analysis.html#cb618-4" tabindex="-1"></a>clipGCS <span class="ot">&lt;-</span> <span class="fu">st_sfc</span>(<span class="fu">st_polygon</span>(<span class="fu">list</span>(clipMatrix)),<span class="at">crs=</span><span class="dv">4326</span>)</span>
+<span id="cb618-5"><a href="spatial-analysis.html#cb618-5" tabindex="-1"></a>bufferCrop <span class="ot">&lt;-</span> <span class="fu">st_crop</span>(strtrUnion,<span class="fu">st_transform</span>(clipGCS,<span class="at">crs=</span><span class="fu">st_crs</span>(strtrUnion)))</span>
+<span id="cb618-6"><a href="spatial-analysis.html#cb618-6" tabindex="-1"></a>bnd <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(bufferCrop)</span>
+<span id="cb618-7"><a href="spatial-analysis.html#cb618-7" tabindex="-1"></a><span class="fu">ggplot</span>(bufferCrop) <span class="sc">+</span> <span class="fu">geom_sf</span>(<span class="at">fill=</span><span class="st">&quot;green&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb618-8"><a href="spatial-analysis.html#cb618-8" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>trails, <span class="at">col=</span><span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb618-9"><a href="spatial-analysis.html#cb618-9" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>streams, <span class="at">col=</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb618-10"><a href="spatial-analysis.html#cb618-10" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(bnd[<span class="dv">1</span>], bnd[<span class="dv">3</span>]), <span class="at">ylim =</span> <span class="fu">c</span>(bnd[<span class="dv">2</span>], bnd[<span class="dv">4</span>]))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlCrop"></span>
+<img src="EnvDataScience_files/figure-html/spanlCrop-1.png" alt="Cropping with specified x and y limits" width="75%" />
+<p class="caption">
+FIGURE 7.16: Cropping with specified x and y limits
+</p>
+</div>
+<div id="sf-or-terra-for-vector-spatial-operations" class="section level4 hasAnchor" number="7.2.6.1">
+<h4><span class="header-section-number">7.2.6.1</span> sf or terra for vector spatial operations?<a href="spatial-analysis.html#sf-or-terra-for-vector-spatial-operations" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Note: there are other geometric operations in <code>sf</code> beyond what we’ve looked at. See the cheat sheet and other resources at <a href="https://r-spatial.github.io/sf" class="uri">https://r-spatial.github.io/sf</a> .</p>
+<p>The <code>terra</code> system also has many vector tools (such as <code>terra::union</code> and <code>terra::buffer</code>), that work with and create SpatVector spatial data objects. As noted earlier, these S4 spatial data can be created from (S3) sf data with <code>terra::vect</code> and vice versa with <code>sf::st_as_sf</code>. We’ll mostly focus on sf for vector and terra for raster, but to learn more about SpatVector data and operations in terra, see <a href="https://rspatial.org" class="uri">https://rspatial.org</a>.</p>
+<p>For instance, there’s a similar <code>terra</code> operation for one of the things we just did, but instead of using <code>union</code> to dissolve the internal boundaries like <code>st_union</code> did, uses <code>aggregate</code> to remove boundaries between polygons with the same codes:</p>
+<div class="sourceCode" id="cb619"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb619-1"><a href="spatial-analysis.html#cb619-1" tabindex="-1"></a>trails <span class="ot">&lt;-</span> <span class="fu">vect</span>(<span class="fu">ex</span>(<span class="st">&quot;marbles/trails.shp&quot;</span>))</span>
+<span id="cb619-2"><a href="spatial-analysis.html#cb619-2" tabindex="-1"></a>trailbuff <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="fu">buffer</span>(trails,<span class="dv">100</span>))</span>
+<span id="cb619-3"><a href="spatial-analysis.html#cb619-3" tabindex="-1"></a><span class="fu">plot</span>(trailbuff)</span></code></pre></div>
+</div>
+</div>
+<div id="spatial-join-with-st_join" class="section level3 hasAnchor" number="7.2.7">
+<h3><span class="header-section-number">7.2.7</span> Spatial join with <code>st_join</code><a href="spatial-analysis.html#spatial-join-with-st_join" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A spatial join can do many things, but we’ll just look at its simplest application – connecting a point with the polygon that it’s in. In this case, we want to join the attribute data in <code>BayAreaTracts</code> with EPA Toxic Release Inventory (TRI) point data (at factories and other point sources) and then display a few ethnicity variables from the census, associated spatially with the TRI point locations. We’ll be making better maps later; this is a quick <code>plot()</code> display to show that the spatial join worked (Figure <a href="spatial-analysis.html#fig:spanlTRIspatialJoin">7.17</a>).</p>
+<div class="sourceCode" id="cb620"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb620-1"><a href="spatial-analysis.html#cb620-1" tabindex="-1"></a><span class="fu">library</span>(igisci); <span class="fu">library</span>(tidyverse); <span class="fu">library</span>(sf)</span>
+<span id="cb620-2"><a href="spatial-analysis.html#cb620-2" tabindex="-1"></a>TRI_sp <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;TRI/TRI_2017_CA.csv&quot;</span>)), </span>
+<span id="cb620-3"><a href="spatial-analysis.html#cb620-3" tabindex="-1"></a>                   <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;LONGITUDE&quot;</span>, <span class="st">&quot;LATITUDE&quot;</span>), <span class="at">crs=</span><span class="dv">4326</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb620-4"><a href="spatial-analysis.html#cb620-4" tabindex="-1"></a>  <span class="fu">st_join</span>(<span class="fu">st_make_valid</span>(BayAreaTracts)) <span class="sc">%&gt;%</span></span>
+<span id="cb620-5"><a href="spatial-analysis.html#cb620-5" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(TRACT)) <span class="sc">%&gt;%</span>  <span class="co"># removes points not in BayAreaTracts</span></span>
+<span id="cb620-6"><a href="spatial-analysis.html#cb620-6" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(POP2012<span class="sc">:</span>HISPANIC)</span>
+<span id="cb620-7"><a href="spatial-analysis.html#cb620-7" tabindex="-1"></a><span class="fu">plot</span>(TRI_sp)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spanlTRIspatialJoin"></span>
+<img src="EnvDataScience_files/figure-html/spanlTRIspatialJoin-1.png" alt="TRI points with census variables added via a spatial join" width="75%" />
+<p class="caption">
+FIGURE 7.17: TRI points with census variables added via a spatial join
+</p>
+</div>
+</div>
+<div id="further-exploration-of-spatial-analysis" class="section level3 hasAnchor" number="7.2.8">
+<h3><span class="header-section-number">7.2.8</span> Further exploration of spatial analysis<a href="spatial-analysis.html#further-exploration-of-spatial-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We’ve looked at a small selection of spatial analysis functions; there’s a lot more we can do, and the R spatial world is rapidly growing. There are many other methods discussed in the “Spatial data operations” and “Geometry operations” chapters of <em>Geocomputation</em> (<a href="https://geocompr.robinlovelace.net/" class="uri">https://geocompr.robinlovelace.net/</a>, <span class="citation">Lovelace et al. (<a href="#ref-Geocomputation">2019</a>)</span>) that are worth exploring, and still others in the <code>terra</code> package described at <a href="https://rspatial.org" class="uri">https://rspatial.org</a>, <span class="citation">Hijmans (<a href="#ref-rspatial">n.d.</a>)</span>.</p>
+<p>For example, getting a good handle on coordinate systems is certainly an important area to learn more about, and you will find coverage of transformation and reprojection methods in the “Reprojecting geographic data” and data access methods in the “Geographic data I/O” chapter of <em>Geocomputation</em>, and in the “Coordinate Reference Systems” section of <a href="https://rspatial.org" class="uri">https://rspatial.org</a>. The Simple Features for R reference (<span class="citation"><em>Simple Features for r</em> (<a href="#ref-sf">n.d.</a>)</span>) site includes a complete reference for all of its functions, as does <a href="https://rspatial.org" class="uri">https://rspatial.org</a> for <code>terra</code>.</p>
+<p>And then there’s analysis of raster data, but we’ll leave that for the next chapter.</p>
+<div style="page-break-after: always;"></div>
+
+</div>
+</div>
+<div id="exercises-spatial-analysis" class="section level2 hasAnchor" number="7.3">
+<h2><span class="header-section-number">7.3</span> Exercises: Spatial Analysis<a href="spatial-analysis.html#exercises-spatial-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-42" class="exercise"><strong>Exercise 7.1  </strong></span><strong>Maximum Elevation</strong> Assuming you wrote them in the last chapter (exercise questions 5 and 6), read in your western states and peaks data (pay attention to what folder they are stored in), then use a spatial join to add the peak points to the states to provide a new attribute maximum elevation, and use methods from 6.6 to display those as point labels. Note that joining from the states to the peaks works because there’s a one-to-one correspondence between states and maximum peaks. (If you didn’t write them, you’ll need to repeat your code that built them from the previous chapter.)</p>
+</div>
+<p><img src="img/spanl_ex1.png" alt="" width="60%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-43" class="exercise"><strong>Exercise 7.2  </strong></span>Using two shape files of your own choice, not from <code>igisci</code>, read them in as simple features data, and perform a spatial join to join the polygons to the point data. Then display the point feature data frame, and using methods from 4.4, create a scatter plot or boxplot graph (depending on the nature of your variables) where the two variables are related, preferably with a separate factor to provide color. [If you do not have available shapefiles, you can use <code>co2july95.shp</code> and <code>geology.shp</code> from the <code>marbles</code> folder in <code>extdata</code>, but first copy these to your project folder; one point of this is to not solely depend on <code>igisci</code> and be comfortable bringing in your own data.]</p>
+</div>
+<p><img src="img/spanl_ex2.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-44" class="exercise"><strong>Exercise 7.3  </strong></span>From the above spatially joined data create a map where the points are colored by data brought in from the spatial join; can be either a categorical or continuous variable.</p>
+</div>
+<p><img src="img/spanl_ex3.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-45" class="exercise"><strong>Exercise 7.4  </strong></span><strong>Transect Buffers</strong>: Using data described in 10.5.3.1, create a map using cartographic methods 6.8 of transects, the mainland (for context, similar to a basemap), and a 1000 m buffer around the transect points, using methods from 7.2.4 and 7.2.5. Note that mainland.shp is in the SFmarine folder of the igisci extdata.</p>
+</div>
+<p><img src="img/spanl_ex4.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-46" class="exercise"><strong>Exercise 7.5  </strong></span>Create an sf that represents all areas within 50 km (see 7.2.4) of a TRI facility in California that has &gt;10,000 pounds of total stack air release for all gases, clipped (intersected) with the state of California as provided in the CA counties data set. Then use this to create a map of California showing the clipped buffered areas in red, with California counties and those selected large-release TRI facilities in black dots, as shown here. For the buffer distances, make sure to use the function described in 7.2.4.1 to get the units right despite the map being in GCS. Methods from 3.4.5 will be useful, and you’ll need to use <code>st_make_valid</code> with buffer results to avoid errors.</p>
+<p><img src="img/spanl_ex5.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+</div>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-SpatialAnalysis" class="csl-entry">
+Berry, Brian, and Duane Marble. 1968. <em>Spatial Analysis: A Reader in Statistical Geography</em>. Prentice-Hall.
+</div>
+<div id="ref-haversine" class="csl-entry">
+<em>Calculate Distance, Bearing and More Between Latitutde/Longitude Points"</em>. n.d. Movable Type Ltd. <a href="https://www.movable-type.co.uk/scripts/latlong.html">https://www.movable-type.co.uk/scripts/latlong.html</a>.
+</div>
+<div id="ref-rspatial" class="csl-entry">
+Hijmans, Robert J. n.d. <em>Spatial Data Science</em>. <a href="https://rspatial.org">https://rspatial.org</a>.
+</div>
+<div id="ref-Geocomputation" class="csl-entry">
+Lovelace, Robin, Jakuv Nowosad, and Jannes Muenchow. 2019. <em>Geocomputation with r</em>. CRC Press. <a href="https://geocompr.robinlovelace.net/">https://geocompr.robinlovelace.net/</a>.
+</div>
+<div id="ref-sf" class="csl-entry">
+<em>Simple Features for r</em>. n.d. <a href="https://r-spatial.github.io/sf/">https://r-spatial.github.io/sf/</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="spatial.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="raster.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section"
+  },
+  "book_filename": "envdatasci",
+  "toc_depth": 4
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

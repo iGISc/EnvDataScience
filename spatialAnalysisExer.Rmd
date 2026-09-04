@@ -1,0 +1,57 @@
+
+## Exercises: Spatial Analysis
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(include=T, echo=F)
+```
+
+::: {.exercise}
+**Maximum Elevation** Assuming you wrote them in the last chapter (exercise questions 5 and 6), read in your western states and peaks data (pay attention to what folder they are stored in), then use a spatial join to add the peak points to the states to provide a new attribute maximum elevation, and use methods from 6.6 to display those as point labels. Note that joining from the states to the peaks works because there's a one-to-one correspondence between states and maximum peaks. (If you didn't write them, you'll need to repeat your code that built them from the previous chapter.)
+:::
+
+```{r spanlex1, results='hide'}
+
+```
+
+```{r spanlex1_GoalMaxElev, out.width="60%"}
+knitr::include_graphics(here::here("img","spanl_ex1.png"))
+```
+
+::: {.exercise}
+Using two shape files of your own choice, not from `igisci`, read them in as simple features data, and perform a spatial join to join the polygons to the point data. Then display the point feature data frame, and using methods from 4.4, create a scatter plot or boxplot graph (depending on the nature of your variables) where the two variables are related, preferably with a separate factor to provide color. [If you do not have available shapefiles, you can use `co2july95.shp` and `geology.shp` from the `marbles` folder in `extdata`, but first copy these to your project folder; one point of this is to not solely depend on `igisci` and be comfortable bringing in your own data.]
+:::
+
+```{r results='hide'}
+
+```
+
+```{r spanl_ex2}
+knitr::include_graphics(here::here("img","spanl_ex2.png"))
+```
+
+::: {.exercise}
+From the above spatially joined data create a map where the points are colored by data brought in from the spatial join; can be either a categorical or continuous variable.
+:::
+
+```{r spanl_ex3}
+knitr::include_graphics(here::here("img","spanl_ex3.png"))
+```
+
+::: {.exercise}
+**Transect Buffers**: Using data described in 10.5.3.1, create a map using cartographic methods 6.8 of transects, the mainland (for context, similar to a basemap), and a 1000 m buffer around the transect points, using methods from 7.2.4 and 7.2.5. Note that mainland.shp is in the SFmarine folder of the igisci extdata.
+:::
+
+```{r spanlex4, message=F, warning=F}
+knitr::include_graphics(here::here("img","spanl_ex4.png"))
+```
+
+::: {.exercise}
+Create an sf that represents all areas within 50 km (see 7.2.4) of a TRI facility in California that has \>10,000 pounds of total stack air release for all gases, clipped (intersected) with the state of California as provided in the CA counties data set. Then use this to create a map of California showing the clipped buffered areas in red, with California counties and those selected large-release TRI facilities in black dots, as shown here. For the buffer distances, make sure to use the function described in 7.2.4.1 to get the units right despite the map being in GCS. Methods from 3.4.5 will be useful, and you'll need to use `st_make_valid` with buffer results to avoid errors.
+
+
+
+```{r}
+knitr::include_graphics(here::here("img","spanl_ex5.png"))
+```
+
+:::

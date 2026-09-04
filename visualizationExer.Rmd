@@ -1,0 +1,92 @@
+
+## Exercises: Visualization
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(include=T, echo=F)
+library(igisci)
+```
+
+::: exercise
+Using the methods in section 4.3, create a similar graph of the species data set we looked at in section 
+
+```{r vis.ex1, echo=F}
+knitr::include_graphics(here::here("img","vis.ex1.png"))
+```
+:::
+
+::: exercise
+Using similar methods as we just used, create the graph shown below. First, explore the built-in vectors `state.abb` and `state.region` to learn about how they are structured. Then, using methods described in 2.6.4.2, create a single data frame from those inputs. Once you've explored that result, create the graph.
+
+```{r vis.ex2}
+knitr::include_graphics(here::here("img","vis.ex2.png"))
+```
+:::
+
+::: exercise
+Create the graph below using methods described in 4.3.3.1, using the built-in data set you can see labeled on the x axis. You'll want to start by exploring the data set and learning about it by accessing the simple "?\_\_\_" help system; then convert it into a suitable data structure.
+
+```{r vis.ex3}
+knitr::include_graphics(here::here("img","vis.ex3.png"))
+```
+:::
+
+::: exercise
+Have a look at the `st` tibble created in 3.2.1.1, and then use it to create the graph shown here, using methods similar to 4.3.2. What is the approximate modal value?
+
+```{r vis.ex4, echo=F}
+knitr::include_graphics(here::here("img","vis.ex4.png"))
+```
+:::
+
+::: exercise
+From the same data, create the following graphs using methods learned in this chapter. What can you learn about the regions from the median values shown?
+
+```{r vis.ex5}
+knitr::include_graphics(here::here("img","vis.ex5a.png"))
+knitr::include_graphics(here::here("img","vis.ex5b.png"))
+```
+:::
+
+::: exercise
+From the same data, create the scatter plot shown below.
+
+```{r vis.ex6}
+knitr::include_graphics(here::here("img","vis.ex6.png"))
+```
+:::
+
+::: exercise
+Copying the above code to a new code chunk, add a trend line using methods in 3.4.4 to produce the graph shown here. What can you say about what this graph is showing you?
+
+```{r vis.ex7}
+knitr::include_graphics(here::here("img","vis.ex7.png"))
+```
+:::
+
+::: exercise
+Again, copying the code to a new code chunk, add an appropriate title, as shown here.
+
+```{r vis.ex8}
+knitr::include_graphics(here::here("img","vis.ex8.png"))
+```
+:::
+
+::: exercise
+Again copying to a new code chunk, change your plot to place labels with symbology shown here. Any observations about outliers?
+
+```{r vis.ex9}
+knitr::include_graphics(here::here("img","vis.ex9.png"))
+
+```
+:::
+
+::: exercise
+Using the `soilCO2` data from igisci, create a boxplot arranged by the SITE factor and using a log10 scaling on the y axis displaying soil CO2 values.
+
+
+```{r vis.ex10}
+knitr::include_graphics(here::here("img","vis.ex10.png"))
+
+```
+
+:::

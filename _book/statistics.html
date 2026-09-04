@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 9 Statistical Summaries and Tests | Introduction to Environmental Data Science</title>
+  <meta name="description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 9 Statistical Summaries and Tests | Introduction to Environmental Data Science" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  <meta name="github-repo" content="iGISc/EnvDataSci" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 9 Statistical Summaries and Tests | Introduction to Environmental Data Science" />
+  
+  <meta name="twitter:description" content="Background, methods and exercises for using R for environmental data science. The focus is on applying the R language and various libraries for data abstraction, transformation, data analysis, spatial data/mapping, statistical modeling, and time series, applied to environmental research. Applies exploratory data analysis methods and tidyverse approaches in R, and includes contributed chapters presenting research applications, with associated data and code packages." />
+  
+
+<meta name="author" content="Jerry Davis, SFSU Institute for Geographic Information Science" />
+
+
+<meta name="date" content="2026-09-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="raster.html"/>
+<link rel="next" href="modeling.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script>
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.2.3/leaflet.js"></script>
+<script src="libs/leaflet-providers-3.0.0/leaflet-providers.js"></script>
+<script src="libs/leaflet-providers-plugin-2.2.3/leaflet-providers-plugin.js"></script>
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<link href="libs/sierra___TEMPERATURE-CSS-0.0.1/sierra___TEMPERATURE_home-button.css" rel="stylesheet" />
+<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><img src="img/eaRth_anna296.png"></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background, Goals and Data</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#environmental-data-science"><i class="fa fa-check"></i><b>1.1</b> Environmental Data Science</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#environmental-data-and-methods"><i class="fa fa-check"></i><b>1.2</b> Environmental Data and Methods</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#goals"><i class="fa fa-check"></i><b>1.3</b> Goals</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#some-definitions"><i class="fa fa-check"></i><b>1.3.1</b> Some definitions:</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>1.4</b> Exploratory Data Analysis</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#software-and-data"><i class="fa fa-check"></i><b>1.5</b> Software and Data</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#data"><i class="fa fa-check"></i><b>1.5.1</b> Data</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i><b>1.6</b> Acknowledgements</a></li>
+</ul></li>
+<li class="part"><span><b>I Exploratory Data Analysis</b></span></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction to R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#data-objects"><i class="fa fa-check"></i><b>2.1</b> Data Objects</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#scalars-and-assignment"><i class="fa fa-check"></i><b>2.1.1</b> Scalars and assignment</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#functions"><i class="fa fa-check"></i><b>2.2</b> Functions</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#expressions"><i class="fa fa-check"></i><b>2.3</b> Expressions and Statements</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#class"><i class="fa fa-check"></i><b>2.4</b> Data Classes</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introduction.html"><a href="introduction.html#integers"><i class="fa fa-check"></i><b>2.4.1</b> Integers</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#rectangular-data"><i class="fa fa-check"></i><b>2.5</b> Rectangular Data</a></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#data-structures-in-r"><i class="fa fa-check"></i><b>2.6</b> Data Structures in R</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="introduction.html"><a href="introduction.html#vector"><i class="fa fa-check"></i><b>2.6.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.6.2" data-path="introduction.html"><a href="introduction.html#list"><i class="fa fa-check"></i><b>2.6.2</b> Lists</a></li>
+<li class="chapter" data-level="2.6.3" data-path="introduction.html"><a href="introduction.html#matrix"><i class="fa fa-check"></i><b>2.6.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.6.4" data-path="introduction.html"><a href="introduction.html#dataframes"><i class="fa fa-check"></i><b>2.6.4</b> Data frames</a></li>
+<li class="chapter" data-level="2.6.5" data-path="introduction.html"><a href="introduction.html#factors"><i class="fa fa-check"></i><b>2.6.5</b> Factors</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#accessors"><i class="fa fa-check"></i><b>2.7</b> Accessors and Subsetting</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="introduction.html"><a href="introduction.html#subsetting"><i class="fa fa-check"></i><b>2.7.1</b> <code>[]</code> Subsetting</a></li>
+<li class="chapter" data-level="2.7.2" data-path="introduction.html"><a href="introduction.html#the-mysterious-double-bracket"><i class="fa fa-check"></i><b>2.7.2</b> <code>[[]]</code> The mysterious double bracket</a></li>
+<li class="chapter" data-level="2.7.3" data-path="introduction.html"><a href="introduction.html#accessing-a-vector-from-a-data-frame"><i class="fa fa-check"></i><b>2.7.3</b> <code>$</code> Accessing a vector from a data frame</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#programming"><i class="fa fa-check"></i><b>2.8</b> Programming scripts in RStudio</a>
+<ul>
+<li class="chapter" data-level="2.8.1" data-path="introduction.html"><a href="introduction.html#functions-writing"><i class="fa fa-check"></i><b>2.8.1</b> <code>function</code> : creating your own</a></li>
+<li class="chapter" data-level="2.8.2" data-path="introduction.html"><a href="introduction.html#if-conditional-operations"><i class="fa fa-check"></i><b>2.8.2</b> <code>if</code> : conditional operations</a></li>
+<li class="chapter" data-level="2.8.3" data-path="introduction.html"><a href="introduction.html#for"><i class="fa fa-check"></i><b>2.8.3</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="2.8.4" data-path="introduction.html"><a href="introduction.html#subsetting-with-logic"><i class="fa fa-check"></i><b>2.8.4</b> Subsetting with logic</a></li>
+<li class="chapter" data-level="2.8.5" data-path="introduction.html"><a href="introduction.html#apply"><i class="fa fa-check"></i><b>2.8.5</b> Apply functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.9" data-path="introduction.html"><a href="introduction.html#rstudio"><i class="fa fa-check"></i><b>2.9</b> RStudio projects</a>
+<ul>
+<li class="chapter" data-level="2.9.1" data-path="introduction.html"><a href="introduction.html#rmarkdown"><i class="fa fa-check"></i><b>2.9.1</b> R Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="2.10" data-path="introduction.html"><a href="introduction.html#exercises-introduction-to-r"><i class="fa fa-check"></i><b>2.10</b> Exercises: Introduction to R</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="abstraction.html"><a href="abstraction.html"><i class="fa fa-check"></i><b>3</b> Data Abstraction</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="abstraction.html"><a href="abstraction.html#tidyverse"><i class="fa fa-check"></i><b>3.1</b> The Tidyverse</a></li>
+<li class="chapter" data-level="3.2" data-path="abstraction.html"><a href="abstraction.html#tibbles"><i class="fa fa-check"></i><b>3.2</b> Tibbles</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="abstraction.html"><a href="abstraction.html#building-a-tibble-from-vectors"><i class="fa fa-check"></i><b>3.2.1</b> Building a tibble from vectors</a></li>
+<li class="chapter" data-level="3.2.2" data-path="abstraction.html"><a href="abstraction.html#tribble"><i class="fa fa-check"></i><b>3.2.2</b> tribble</a></li>
+<li class="chapter" data-level="3.2.3" data-path="abstraction.html"><a href="abstraction.html#csv"><i class="fa fa-check"></i><b>3.2.3</b> read_csv</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="abstraction.html"><a href="abstraction.html#summarizing-variable-distributions"><i class="fa fa-check"></i><b>3.3</b> Summarizing variable distributions</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="abstraction.html"><a href="abstraction.html#stratifying-variables-by-site-using-a-tukey-box-plot"><i class="fa fa-check"></i><b>3.3.1</b> Stratifying variables by site using a Tukey box plot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="abstraction.html"><a href="abstraction.html#dplyr"><i class="fa fa-check"></i><b>3.4</b> Database operations</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="abstraction.html"><a href="abstraction.html#pipe"><i class="fa fa-check"></i><b>3.4.1</b> Select, mutate, and the pipe</a></li>
+<li class="chapter" data-level="3.4.2" data-path="abstraction.html"><a href="abstraction.html#filter"><i class="fa fa-check"></i><b>3.4.2</b> Filtering observations</a></li>
+<li class="chapter" data-level="3.4.3" data-path="abstraction.html"><a href="abstraction.html#subsetting-data-with-base-rs-subset"><i class="fa fa-check"></i><b>3.4.3</b> Subsetting data with base R’s <code>subset</code></a></li>
+<li class="chapter" data-level="3.4.4" data-path="abstraction.html"><a href="abstraction.html#writing-a-data-frame-to-a-csv"><i class="fa fa-check"></i><b>3.4.4</b> Writing a data frame to a csv</a></li>
+<li class="chapter" data-level="3.4.5" data-path="abstraction.html"><a href="abstraction.html#group-summary"><i class="fa fa-check"></i><b>3.4.5</b> Summarize by group</a></li>
+<li class="chapter" data-level="3.4.6" data-path="abstraction.html"><a href="abstraction.html#count"><i class="fa fa-check"></i><b>3.4.6</b> Count</a></li>
+<li class="chapter" data-level="3.4.7" data-path="abstraction.html"><a href="abstraction.html#sorting-after-summarizing"><i class="fa fa-check"></i><b>3.4.7</b> Sorting after summarizing</a></li>
+<li class="chapter" data-level="3.4.8" data-path="abstraction.html"><a href="abstraction.html#the-dot-operator"><i class="fa fa-check"></i><b>3.4.8</b> The dot operator</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="abstraction.html"><a href="abstraction.html#stringr"><i class="fa fa-check"></i><b>3.5</b> String abstraction</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="abstraction.html"><a href="abstraction.html#detecting-matches"><i class="fa fa-check"></i><b>3.5.1</b> Detecting matches</a></li>
+<li class="chapter" data-level="3.5.2" data-path="abstraction.html"><a href="abstraction.html#subset-string"><i class="fa fa-check"></i><b>3.5.2</b> Subsetting strings</a></li>
+<li class="chapter" data-level="3.5.3" data-path="abstraction.html"><a href="abstraction.html#string-length"><i class="fa fa-check"></i><b>3.5.3</b> String length</a></li>
+<li class="chapter" data-level="3.5.4" data-path="abstraction.html"><a href="abstraction.html#replacing-substrings-with-other-text-mutating-strings"><i class="fa fa-check"></i><b>3.5.4</b> Replacing substrings with other text (“mutating” strings)</a></li>
+<li class="chapter" data-level="3.5.5" data-path="abstraction.html"><a href="abstraction.html#concatenating-and-splitting"><i class="fa fa-check"></i><b>3.5.5</b> Concatenating and splitting</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="abstraction.html"><a href="abstraction.html#lubridate"><i class="fa fa-check"></i><b>3.6</b> Dates and times with <code>lubridate</code></a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="abstraction.html"><a href="abstraction.html#dates-used-for-annual-time-series"><i class="fa fa-check"></i><b>3.6.1</b> Dates used for annual time series</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="abstraction.html"><a href="abstraction.html#extending-abstractions-with-functions"><i class="fa fa-check"></i><b>3.7</b> Extending abstractions with functions</a></li>
+<li class="chapter" data-level="3.8" data-path="abstraction.html"><a href="abstraction.html#exercises-data-abstraction"><i class="fa fa-check"></i><b>3.8</b> Exercises: Data Abstraction</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>4</b> Visualization</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="visualization.html"><a href="visualization.html#plot-in-base-r"><i class="fa fa-check"></i><b>4.1</b> plot in base R</a></li>
+<li class="chapter" data-level="4.2" data-path="visualization.html"><a href="visualization.html#ggplot2"><i class="fa fa-check"></i><b>4.2</b> ggplot2</a></li>
+<li class="chapter" data-level="4.3" data-path="visualization.html"><a href="visualization.html#plotting-one-variable"><i class="fa fa-check"></i><b>4.3</b> Plotting one variable</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="visualization.html"><a href="visualization.html#histogram"><i class="fa fa-check"></i><b>4.3.1</b> Histogram</a></li>
+<li class="chapter" data-level="4.3.2" data-path="visualization.html"><a href="visualization.html#density-plot"><i class="fa fa-check"></i><b>4.3.2</b> Density plot</a></li>
+<li class="chapter" data-level="4.3.3" data-path="visualization.html"><a href="visualization.html#boxplot"><i class="fa fa-check"></i><b>4.3.3</b> Boxplot</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="visualization.html"><a href="visualization.html#plotting-two-variables"><i class="fa fa-check"></i><b>4.4</b> Plotting Two Variables</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="visualization.html"><a href="visualization.html#two-continuous-variables"><i class="fa fa-check"></i><b>4.4.1</b> Two continuous variables</a></li>
+<li class="chapter" data-level="4.4.2" data-path="visualization.html"><a href="visualization.html#two-variables-one-discrete"><i class="fa fa-check"></i><b>4.4.2</b> Two variables, one discrete</a></li>
+<li class="chapter" data-level="4.4.3" data-path="visualization.html"><a href="visualization.html#color-systems"><i class="fa fa-check"></i><b>4.4.3</b> Color systems</a></li>
+<li class="chapter" data-level="4.4.4" data-path="visualization.html"><a href="visualization.html#trend-line"><i class="fa fa-check"></i><b>4.4.4</b> Trend line</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="visualization.html"><a href="visualization.html#general-symbology"><i class="fa fa-check"></i><b>4.5</b> General Symbology</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="visualization.html"><a href="visualization.html#categorical-symbology"><i class="fa fa-check"></i><b>4.5.1</b> Categorical symbology</a></li>
+<li class="chapter" data-level="4.5.2" data-path="visualization.html"><a href="visualization.html#log-scales-instead-of-transform"><i class="fa fa-check"></i><b>4.5.2</b> Log scales instead of transform</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="visualization.html"><a href="visualization.html#graphs-from-grouped-data"><i class="fa fa-check"></i><b>4.6</b> Graphs from Grouped Data</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="visualization.html"><a href="visualization.html#faceted-graphs"><i class="fa fa-check"></i><b>4.6.1</b> Faceted graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="visualization.html"><a href="visualization.html#titles-subtitles-axis-labels-and-legend-position"><i class="fa fa-check"></i><b>4.7</b> Titles, Subtitles, Axis Labels, and Legend Position</a></li>
+<li class="chapter" data-level="4.8" data-path="visualization.html"><a href="visualization.html#pairs-plot"><i class="fa fa-check"></i><b>4.8</b> Pairs Plot</a></li>
+<li class="chapter" data-level="4.9" data-path="visualization.html"><a href="visualization.html#exercises-visualization"><i class="fa fa-check"></i><b>4.9</b> Exercises: Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="transformation.html"><a href="transformation.html"><i class="fa fa-check"></i><b>5</b> Data Transformation</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="transformation.html"><a href="transformation.html#joins"><i class="fa fa-check"></i><b>5.1</b> Data joins</a></li>
+<li class="chapter" data-level="5.2" data-path="transformation.html"><a href="transformation.html#set"><i class="fa fa-check"></i><b>5.2</b> Set operations</a></li>
+<li class="chapter" data-level="5.3" data-path="transformation.html"><a href="transformation.html#binding"><i class="fa fa-check"></i><b>5.3</b> Binding rows and columns</a></li>
+<li class="chapter" data-level="5.4" data-path="transformation.html"><a href="transformation.html#pivots"><i class="fa fa-check"></i><b>5.4</b> Pivoting data frames</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="transformation.html"><a href="transformation.html#pivot_longer"><i class="fa fa-check"></i><b>5.4.1</b> <code>pivot_longer</code></a></li>
+<li class="chapter" data-level="5.4.2" data-path="transformation.html"><a href="transformation.html#pivot_wider"><i class="fa fa-check"></i><b>5.4.2</b> <code>pivot_wider</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="transformation.html"><a href="transformation.html#combining-transformation-methods-to-create-a-free_y-faceted-graph"><i class="fa fa-check"></i><b>5.5</b> Combining transformation methods to create a <code>free_y</code> faceted graph</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="transformation.html"><a href="transformation.html#air-pollutant-emissions-trends-epa"><i class="fa fa-check"></i><b>5.5.1</b> Air pollutant emissions trends (EPA)</a></li>
+<li class="chapter" data-level="5.5.2" data-path="transformation.html"><a href="transformation.html#flux-tower-data"><i class="fa fa-check"></i><b>5.5.2</b> Flux tower data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="transformation.html"><a href="transformation.html#exercise-transformation"><i class="fa fa-check"></i><b>5.6</b> Exercise: Transformation</a></li>
+</ul></li>
+<li class="part"><span><b>II Spatial</b></span></li>
+<li class="chapter" data-level="6" data-path="spatial.html"><a href="spatial.html"><i class="fa fa-check"></i><b>6</b> Spatial Data and Maps</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="spatial.html"><a href="spatial.html#spatial-data"><i class="fa fa-check"></i><b>6.1</b> Spatial Data</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="spatial.html"><a href="spatial.html#simple-geometry-building-in-sf"><i class="fa fa-check"></i><b>6.1.1</b> Simple geometry building in sf</a></li>
+<li class="chapter" data-level="6.1.2" data-path="spatial.html"><a href="spatial.html#building-points-from-a-data-frame"><i class="fa fa-check"></i><b>6.1.2</b> Building points from a data frame</a></li>
+<li class="chapter" data-level="6.1.3" data-path="spatial.html"><a href="spatial.html#spatvectors-in-terra"><i class="fa fa-check"></i><b>6.1.3</b> SpatVectors in <code>terra</code></a></li>
+<li class="chapter" data-level="6.1.4" data-path="spatial.html"><a href="spatial.html#creating-features-from-shapefiles"><i class="fa fa-check"></i><b>6.1.4</b> Creating features from shapefiles</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="spatial.html"><a href="spatial.html#coordinate-referencing-systems"><i class="fa fa-check"></i><b>6.2</b> Coordinate Referencing Systems</a></li>
+<li class="chapter" data-level="6.3" data-path="spatial.html"><a href="spatial.html#creating-sf-data-from-data-frames"><i class="fa fa-check"></i><b>6.3</b> Creating sf Data from Data Frames</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="spatial.html"><a href="spatial.html#removing-geometry"><i class="fa fa-check"></i><b>6.3.1</b> <em>Removing</em> geometry</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="spatial.html"><a href="spatial.html#base-rs-plot-with-terra"><i class="fa fa-check"></i><b>6.4</b> Base R’s <code>plot()</code> with <code>terra</code></a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="spatial.html"><a href="spatial.html#using-maptiles-to-create-a-basemap"><i class="fa fa-check"></i><b>6.4.1</b> Using maptiles to create a basemap</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="spatial.html"><a href="spatial.html#raster-data"><i class="fa fa-check"></i><b>6.5</b> Raster data</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="spatial.html"><a href="spatial.html#building-rasters"><i class="fa fa-check"></i><b>6.5.1</b> Building rasters</a></li>
+<li class="chapter" data-level="6.5.2" data-path="spatial.html"><a href="spatial.html#vector-to-raster-conversion"><i class="fa fa-check"></i><b>6.5.2</b> Vector to raster conversion</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="spatial.html"><a href="spatial.html#ggplot2-for-maps"><i class="fa fa-check"></i><b>6.6</b> ggplot2 for Maps</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="spatial.html"><a href="spatial.html#rasters-in-ggplot2"><i class="fa fa-check"></i><b>6.6.1</b> Rasters in ggplot2</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="spatial.html"><a href="spatial.html#using-bounding-boxes-to-zoom-to-the-extent-of-data-layers-in-any-mapping-package"><i class="fa fa-check"></i><b>6.7</b> Using bounding boxes to zoom to the extent of data layers (in any mapping package)</a></li>
+<li class="chapter" data-level="6.8" data-path="spatial.html"><a href="spatial.html#tmap"><i class="fa fa-check"></i><b>6.8</b> tmap</a>
+<ul>
+<li class="chapter" data-level="6.8.1" data-path="spatial.html"><a href="spatial.html#color"><i class="fa fa-check"></i><b>6.8.1</b> Color</a></li>
+<li class="chapter" data-level="6.8.2" data-path="spatial.html"><a href="spatial.html#basemap-with-tmap"><i class="fa fa-check"></i><b>6.8.2</b> Basemap with tmap</a></li>
+</ul></li>
+<li class="chapter" data-level="6.9" data-path="spatial.html"><a href="spatial.html#interactive-maps"><i class="fa fa-check"></i><b>6.9</b> Interactive Maps</a>
+<ul>
+<li class="chapter" data-level="6.9.1" data-path="spatial.html"><a href="spatial.html#leaflet"><i class="fa fa-check"></i><b>6.9.1</b> Leaflet</a></li>
+<li class="chapter" data-level="6.9.2" data-path="spatial.html"><a href="spatial.html#mapview"><i class="fa fa-check"></i><b>6.9.2</b> Mapview</a></li>
+<li class="chapter" data-level="6.9.3" data-path="spatial.html"><a href="spatial.html#tmap-view-mode"><i class="fa fa-check"></i><b>6.9.3</b> tmap (view mode)</a></li>
+<li class="chapter" data-level="6.9.4" data-path="spatial.html"><a href="spatial.html#interactive-mapping-of-individual-penguins-abstracted-from-a-big-dataset"><i class="fa fa-check"></i><b>6.9.4</b> Interactive mapping of individual penguins abstracted from a big dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="6.10" data-path="spatial.html"><a href="spatial.html#exercises-spatial-data-and-maps"><i class="fa fa-check"></i><b>6.10</b> Exercises: Spatial Data and Maps</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="spatial-analysis.html"><a href="spatial-analysis.html"><i class="fa fa-check"></i><b>7</b> Spatial Analysis</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#data-frame-operations"><i class="fa fa-check"></i><b>7.1</b> Data Frame Operations</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#GroupedSummaries"><i class="fa fa-check"></i><b>7.1.1</b> Using grouped summaries, and filtering by a selection</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-analysis-operations"><i class="fa fa-check"></i><b>7.2</b> Spatial Analysis Operations</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="spatial-analysis.html"><a href="spatial-analysis.html#using-topology-to-subset"><i class="fa fa-check"></i><b>7.2.1</b> Using topology to subset</a></li>
+<li class="chapter" data-level="7.2.2" data-path="spatial-analysis.html"><a href="spatial-analysis.html#centroid"><i class="fa fa-check"></i><b>7.2.2</b> Centroid</a></li>
+<li class="chapter" data-level="7.2.3" data-path="spatial-analysis.html"><a href="spatial-analysis.html#distance"><i class="fa fa-check"></i><b>7.2.3</b> Distance</a></li>
+<li class="chapter" data-level="7.2.4" data-path="spatial-analysis.html"><a href="spatial-analysis.html#buffers"><i class="fa fa-check"></i><b>7.2.4</b> Buffers</a></li>
+<li class="chapter" data-level="7.2.5" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-overlay-union-and-intersection"><i class="fa fa-check"></i><b>7.2.5</b> Spatial overlay: union and intersection</a></li>
+<li class="chapter" data-level="7.2.6" data-path="spatial-analysis.html"><a href="spatial-analysis.html#clip-with-st_crop"><i class="fa fa-check"></i><b>7.2.6</b> Clip with st_crop</a></li>
+<li class="chapter" data-level="7.2.7" data-path="spatial-analysis.html"><a href="spatial-analysis.html#spatial-join-with-st_join"><i class="fa fa-check"></i><b>7.2.7</b> Spatial join with <code>st_join</code></a></li>
+<li class="chapter" data-level="7.2.8" data-path="spatial-analysis.html"><a href="spatial-analysis.html#further-exploration-of-spatial-analysis"><i class="fa fa-check"></i><b>7.2.8</b> Further exploration of spatial analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="spatial-analysis.html"><a href="spatial-analysis.html#exercises-spatial-analysis"><i class="fa fa-check"></i><b>7.3</b> Exercises: Spatial Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="raster.html"><a href="raster.html"><i class="fa fa-check"></i><b>8</b> Raster Spatial Analysis</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="raster.html"><a href="raster.html#terrain"><i class="fa fa-check"></i><b>8.1</b> Terrain functions</a></li>
+<li class="chapter" data-level="8.2" data-path="raster.html"><a href="raster.html#map-algebra-in-terra"><i class="fa fa-check"></i><b>8.2</b> Map Algebra in terra</a></li>
+<li class="chapter" data-level="8.3" data-path="raster.html"><a href="raster.html#distance-1"><i class="fa fa-check"></i><b>8.3</b> Distance</a></li>
+<li class="chapter" data-level="8.4" data-path="raster.html"><a href="raster.html#extracting-values"><i class="fa fa-check"></i><b>8.4</b> Extracting Values</a></li>
+<li class="chapter" data-level="8.5" data-path="raster.html"><a href="raster.html#focal-statistics"><i class="fa fa-check"></i><b>8.5</b> Focal Statistics</a></li>
+<li class="chapter" data-level="8.6" data-path="raster.html"><a href="raster.html#zonal-statistics"><i class="fa fa-check"></i><b>8.6</b> Zonal Statistics</a></li>
+<li class="chapter" data-level="8.7" data-path="raster.html"><a href="raster.html#exercises-raster-spatial-analysis"><i class="fa fa-check"></i><b>8.7</b> Exercises: Raster Spatial Analysis</a></li>
+</ul></li>
+<li class="part"><span><b>III Statistics and Modeling</b></span></li>
+<li class="chapter" data-level="9" data-path="statistics.html"><a href="statistics.html"><i class="fa fa-check"></i><b>9</b> Statistical Summaries and Tests</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="statistics.html"><a href="statistics.html#goals-of-statistical-analysis"><i class="fa fa-check"></i><b>9.1</b> Goals of Statistical Analysis</a></li>
+<li class="chapter" data-level="9.2" data-path="statistics.html"><a href="statistics.html#summary-statistics"><i class="fa fa-check"></i><b>9.2</b> Summary Statistics</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="statistics.html"><a href="statistics.html#summarize-by-group-stratifying-a-summary"><i class="fa fa-check"></i><b>9.2.1</b> Summarize by group: <em>stratifying a summary</em></a></li>
+<li class="chapter" data-level="9.2.2" data-path="statistics.html"><a href="statistics.html#boxplot-for-visualizing-distributions-by-group"><i class="fa fa-check"></i><b>9.2.2</b> Boxplot for visualizing distributions by group</a></li>
+<li class="chapter" data-level="9.2.3" data-path="statistics.html"><a href="statistics.html#random"><i class="fa fa-check"></i><b>9.2.3</b> Generating pseudorandom numbers</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="statistics.html"><a href="statistics.html#correlation"><i class="fa fa-check"></i><b>9.3</b> Correlation r and Coefficient of Determination r<sup>2</sup></a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="statistics.html"><a href="statistics.html#displaying-correlation-in-a-pairs-plot"><i class="fa fa-check"></i><b>9.3.1</b> Displaying correlation in a pairs plot</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="statistics.html"><a href="statistics.html#statistical-tests"><i class="fa fa-check"></i><b>9.4</b> Statistical Tests</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="statistics.html"><a href="statistics.html#comparing-samples-and-groupings-with-a-t-test-and-a-non-parametric-kruskal-wallis-rank-sum-test"><i class="fa fa-check"></i><b>9.4.1</b> Comparing samples and groupings with a t test and a non-parametric Kruskal-Wallis Rank Sum test</a></li>
+<li class="chapter" data-level="9.4.2" data-path="statistics.html"><a href="statistics.html#analysis-of-variance"><i class="fa fa-check"></i><b>9.4.2</b> Analysis of variance</a></li>
+<li class="chapter" data-level="9.4.3" data-path="statistics.html"><a href="statistics.html#post-hoc-analysis-of-variance-with-tukeys-test"><i class="fa fa-check"></i><b>9.4.3</b> Post-Hoc Analysis of Variance with Tukey’s Test</a></li>
+<li class="chapter" data-level="9.4.4" data-path="statistics.html"><a href="statistics.html#testing-a-correlation"><i class="fa fa-check"></i><b>9.4.4</b> Testing a correlation</a></li>
+<li class="chapter" data-level="9.4.5" data-path="statistics.html"><a href="statistics.html#additional-resources"><i class="fa fa-check"></i><b>9.4.5</b> Additional resources</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="statistics.html"><a href="statistics.html#exercises-statistics"><i class="fa fa-check"></i><b>9.5</b> Exercises: Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="modeling.html"><a href="modeling.html"><i class="fa fa-check"></i><b>10</b> Modeling</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="modeling.html"><a href="modeling.html#some-common-statistical-models"><i class="fa fa-check"></i><b>10.1</b> Some Common Statistical Models</a></li>
+<li class="chapter" data-level="10.2" data-path="modeling.html"><a href="modeling.html#lm"><i class="fa fa-check"></i><b>10.2</b> Linear Model (<code>lm</code>)</a></li>
+<li class="chapter" data-level="10.3" data-path="modeling.html"><a href="modeling.html#spatial-influences-on-statistical-analysis"><i class="fa fa-check"></i><b>10.3</b> Spatial Influences on Statistical Analysis</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="modeling.html"><a href="modeling.html#mapping-residuals"><i class="fa fa-check"></i><b>10.3.1</b> Mapping residuals</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="modeling.html"><a href="modeling.html#analysis-of-covariance"><i class="fa fa-check"></i><b>10.4</b> Analysis of Covariance</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="modeling.html"><a href="modeling.html#tukey-test-for-the-ancova-model"><i class="fa fa-check"></i><b>10.4.1</b> Tukey test for the ANCOVA model</a></li>
+<li class="chapter" data-level="10.4.2" data-path="modeling.html"><a href="modeling.html#the-karst-water-chemistry-model"><i class="fa fa-check"></i><b>10.4.2</b> The karst water chemistry model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="modeling.html"><a href="modeling.html#generalized-linear-model-glm"><i class="fa fa-check"></i><b>10.5</b> Generalized linear model (GLM)</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="modeling.html"><a href="modeling.html#binomial-family-logistic-glm"><i class="fa fa-check"></i><b>10.5.1</b> Binomial family: Logistic GLM</a></li>
+<li class="chapter" data-level="10.5.2" data-path="modeling.html"><a href="modeling.html#logistic-landslide-model"><i class="fa fa-check"></i><b>10.5.2</b> Logistic landslide model</a></li>
+<li class="chapter" data-level="10.5.3" data-path="modeling.html"><a href="modeling.html#poisson-regression"><i class="fa fa-check"></i><b>10.5.3</b> Poisson regression</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="modeling.html"><a href="modeling.html#other-modeling-methods"><i class="fa fa-check"></i><b>10.6</b> Other modeling methods</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="modeling.html"><a href="modeling.html#curve-fitting"><i class="fa fa-check"></i><b>10.6.1</b> Curve fitting</a></li>
+<li class="chapter" data-level="10.6.2" data-path="modeling.html"><a href="modeling.html#models-employing-machine-learning"><i class="fa fa-check"></i><b>10.6.2</b> Models employing machine learning</a></li>
+</ul></li>
+<li class="chapter" data-level="10.7" data-path="modeling.html"><a href="modeling.html#exercises-modeling"><i class="fa fa-check"></i><b>10.7</b> Exercises: Modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="imagery.html"><a href="imagery.html"><i class="fa fa-check"></i><b>11</b> Imagery and Classification Models</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="imagery.html"><a href="imagery.html#reading-and-displaying-sentinel-2-imagery"><i class="fa fa-check"></i><b>11.1</b> Reading and Displaying Sentinel-2 Imagery</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="imagery.html"><a href="imagery.html#individual-bands"><i class="fa fa-check"></i><b>11.1.1</b> Individual bands</a></li>
+<li class="chapter" data-level="11.1.2" data-path="imagery.html"><a href="imagery.html#spectral-subsets-to-create-three-band-r-g-b-and-nir-r-g-for-visualization"><i class="fa fa-check"></i><b>11.1.2</b> Spectral subsets to create three-band R-G-B and NIR-R-G for visualization</a></li>
+<li class="chapter" data-level="11.1.3" data-path="imagery.html"><a href="imagery.html#crop-to-study-area-extent"><i class="fa fa-check"></i><b>11.1.3</b> Crop to study area extent</a></li>
+<li class="chapter" data-level="11.1.4" data-path="imagery.html"><a href="imagery.html#saving-results"><i class="fa fa-check"></i><b>11.1.4</b> Saving results</a></li>
+<li class="chapter" data-level="11.1.5" data-path="imagery.html"><a href="imagery.html#band-scatter-plots"><i class="fa fa-check"></i><b>11.1.5</b> Band scatter plots</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="imagery.html"><a href="imagery.html#spectral-profiles"><i class="fa fa-check"></i><b>11.2</b> Spectral Profiles</a></li>
+<li class="chapter" data-level="11.3" data-path="imagery.html"><a href="imagery.html#map-algebra-and-vegetation-indices"><i class="fa fa-check"></i><b>11.3</b> Map Algebra and Vegetation Indices</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="imagery.html"><a href="imagery.html#vegetation-indices"><i class="fa fa-check"></i><b>11.3.1</b> Vegetation indices</a></li>
+<li class="chapter" data-level="11.3.2" data-path="imagery.html"><a href="imagery.html#histogram-1"><i class="fa fa-check"></i><b>11.3.2</b> Histogram</a></li>
+<li class="chapter" data-level="11.3.3" data-path="imagery.html"><a href="imagery.html#other-vegetation-indices"><i class="fa fa-check"></i><b>11.3.3</b> Other vegetation indices</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="imagery.html"><a href="imagery.html#unsupervised-classification-with-k-means"><i class="fa fa-check"></i><b>11.4</b> Unsupervised Classification with k-means</a></li>
+<li class="chapter" data-level="11.5" data-path="imagery.html"><a href="imagery.html#machine-learning-classification-of-imagery"><i class="fa fa-check"></i><b>11.5</b> Machine Learning Classification of Imagery</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="imagery.html"><a href="imagery.html#read-imagery-and-training-data-and-extract-sample-values-for-training"><i class="fa fa-check"></i><b>11.5.1</b> Read imagery and training data and extract sample values for training</a></li>
+<li class="chapter" data-level="11.5.2" data-path="imagery.html"><a href="imagery.html#training-the-cart-model"><i class="fa fa-check"></i><b>11.5.2</b> Training the CART model</a></li>
+<li class="chapter" data-level="11.5.3" data-path="imagery.html"><a href="imagery.html#prediction-using-the-cart-model"><i class="fa fa-check"></i><b>11.5.3</b> Prediction using the CART model</a></li>
+<li class="chapter" data-level="11.5.4" data-path="imagery.html"><a href="imagery.html#validating-the-model"><i class="fa fa-check"></i><b>11.5.4</b> Validating the model</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="imagery.html"><a href="imagery.html#classifying-with-10-m-sentinel-2-imagery"><i class="fa fa-check"></i><b>11.6</b> Classifying with 10 m Sentinel-2 Imagery</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="imagery.html"><a href="imagery.html#subset-bands-10-m"><i class="fa fa-check"></i><b>11.6.1</b> Subset bands (10 m)</a></li>
+<li class="chapter" data-level="11.6.2" data-path="imagery.html"><a href="imagery.html#crop-to-rcv-extent-and-extract-pixel-values"><i class="fa fa-check"></i><b>11.6.2</b> Crop to RCV extent and extract pixel values</a></li>
+<li class="chapter" data-level="11.6.3" data-path="imagery.html"><a href="imagery.html#training-the-cart-model-10-m-and-plot-the-tree"><i class="fa fa-check"></i><b>11.6.3</b> Training the CART model (10 m) and plot the tree</a></li>
+<li class="chapter" data-level="11.6.4" data-path="imagery.html"><a href="imagery.html#prediction-using-the-cart-model-10-m"><i class="fa fa-check"></i><b>11.6.4</b> Prediction using the CART model (10 m)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="imagery.html"><a href="imagery.html#classification-using-multiple-images-capturing-phenology"><i class="fa fa-check"></i><b>11.7</b> Classification Using Multiple Images Capturing Phenology</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="imagery.html"><a href="imagery.html#create-a-10-band-stack-from-both-images"><i class="fa fa-check"></i><b>11.7.1</b> Create a 10-band stack from both images</a></li>
+<li class="chapter" data-level="11.7.2" data-path="imagery.html"><a href="imagery.html#extract-the-training-data-10-m-spring-summer"><i class="fa fa-check"></i><b>11.7.2</b> Extract the training data (10 m spring + summer)</a></li>
+<li class="chapter" data-level="11.7.3" data-path="imagery.html"><a href="imagery.html#cart-model-and-prediction-10-m-spring-summer"><i class="fa fa-check"></i><b>11.7.3</b> CART model and prediction (10 m spring + summer)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.8" data-path="imagery.html"><a href="imagery.html#classification-using-multiple-images-capturing-phenology-20m"><i class="fa fa-check"></i><b>11.8</b> Classification Using Multiple Images Capturing Phenology : 20m</a>
+<ul>
+<li class="chapter" data-level="11.8.1" data-path="imagery.html"><a href="imagery.html#create-a-18-band-stack-from-both-images"><i class="fa fa-check"></i><b>11.8.1</b> Create a 18-band stack from both images</a></li>
+<li class="chapter" data-level="11.8.2" data-path="imagery.html"><a href="imagery.html#extract-the-training-data-20-m-spring-summer"><i class="fa fa-check"></i><b>11.8.2</b> Extract the training data (20 m spring + summer)</a></li>
+<li class="chapter" data-level="11.8.3" data-path="imagery.html"><a href="imagery.html#cart-model-and-prediction-20-m-spring-summer"><i class="fa fa-check"></i><b>11.8.3</b> CART model and prediction (20 m spring + summer)</a></li>
+</ul></li>
+<li class="chapter" data-level="11.9" data-path="imagery.html"><a href="imagery.html#conclusions-and-next-steps-for-imagery-classification"><i class="fa fa-check"></i><b>11.9</b> Conclusions and Next Steps for Imagery Classification</a></li>
+<li class="chapter" data-level="11.10" data-path="imagery.html"><a href="imagery.html#exercises-imagery-analysis-and-classification-models"><i class="fa fa-check"></i><b>11.10</b> Exercises: Imagery Analysis and Classification Models</a></li>
+</ul></li>
+<li class="part"><span><b>IV Time Series</b></span></li>
+<li class="chapter" data-level="12" data-path="ts.html"><a href="ts.html"><i class="fa fa-check"></i><b>12</b> Time Series Visualization and Analysis</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="ts.html"><a href="ts.html#structure-seasonality-and-decomposition-of-time-series"><i class="fa fa-check"></i><b>12.1</b> Structure, Seasonality, and Decomposition of Time Series</a></li>
+<li class="chapter" data-level="12.2" data-path="ts.html"><a href="ts.html#creation-of-time-series-ts-data"><i class="fa fa-check"></i><b>12.2</b> Creation of Time Series (ts) Data</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="ts.html"><a href="ts.html#frequency-start-and-end-parameters-for-ts"><i class="fa fa-check"></i><b>12.2.1</b> Frequency, start, and end parameters for <code>ts()</code></a></li>
+<li class="chapter" data-level="12.2.2" data-path="ts.html"><a href="ts.html#associating-times-with-time-series"><i class="fa fa-check"></i><b>12.2.2</b> Associating times with time series</a></li>
+<li class="chapter" data-level="12.2.3" data-path="ts.html"><a href="ts.html#subsetting-time-series-by-times"><i class="fa fa-check"></i><b>12.2.3</b> Subsetting time series by times</a></li>
+<li class="chapter" data-level="12.2.4" data-path="ts.html"><a href="ts.html#changing-the-frequency-to-use-a-different-period"><i class="fa fa-check"></i><b>12.2.4</b> Changing the frequency to use a different period</a></li>
+<li class="chapter" data-level="12.2.5" data-path="ts.html"><a href="ts.html#time-stamps-and-extensible-time-series"><i class="fa fa-check"></i><b>12.2.5</b> Time stamps and extensible time series</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="ts.html"><a href="ts.html#data-smoothing-moving-average-ma"><i class="fa fa-check"></i><b>12.3</b> Data smoothing: moving average (<code>ma</code>)</a></li>
+<li class="chapter" data-level="12.4" data-path="ts.html"><a href="ts.html#decomposition-of-data-logger-data-marble-mountains"><i class="fa fa-check"></i><b>12.4</b> Decomposition of data logger data: Marble Mountains</a></li>
+<li class="chapter" data-level="12.5" data-path="ts.html"><a href="ts.html#facet-graphs-for-comparing-variables-over-time"><i class="fa fa-check"></i><b>12.5</b> Facet Graphs for Comparing Variables over Time</a></li>
+<li class="chapter" data-level="12.6" data-path="ts.html"><a href="ts.html#lag-regression"><i class="fa fa-check"></i><b>12.6</b> Lag Regression</a>
+<ul>
+<li class="chapter" data-level="12.6.1" data-path="ts.html"><a href="ts.html#the-lag-regression-using-a-lag-function-in-a-linear-model"><i class="fa fa-check"></i><b>12.6.1</b> The lag regression, using a lag function in a linear model</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="ts.html"><a href="ts.html#ensemble-summary-statistics"><i class="fa fa-check"></i><b>12.7</b> Ensemble Summary Statistics</a></li>
+<li class="chapter" data-level="12.8" data-path="ts.html"><a href="ts.html#learning-more-about-time-series-in-r"><i class="fa fa-check"></i><b>12.8</b> Learning more about Time Series in R</a></li>
+<li class="chapter" data-level="12.9" data-path="ts.html"><a href="ts.html#exercises-time-series"><i class="fa fa-check"></i><b>12.9</b> Exercises: Time Series</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction to Environmental Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="statistics" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">Chapter 9</span> Statistical Summaries and Tests<a href="statistics.html#statistics" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><img src="EnvDataScience_files/figure-html/StatSummariesTestsChapter-1.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div id="goals-of-statistical-analysis" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Goals of Statistical Analysis<a href="statistics.html#goals-of-statistical-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To frame how we might approach statistical analysis and modeling, there are various goals that are commonly involved:</p>
+<ul>
+<li><p>To understand our data</p>
+<ul>
+<li>nature of our data, through summary statistics and various graphics like histograms</li>
+<li>spatial statistical analysis</li>
+<li>time series analysis</li>
+</ul></li>
+<li><p>To <em>group</em> or <em>classify</em> things based on their properties</p>
+<ul>
+<li>using factors to define groups, and deriving grouped summaries</li>
+<li>comparing <em>observed</em> vs <em>expected</em> counts or probabilities</li>
+</ul></li>
+<li><p>To understand how variables relate to one another</p>
+<ul>
+<li>or maybe even explain variations in other variables, through correlation analysis</li>
+</ul></li>
+<li><p>To <em>model</em> behavior and maybe <em>predict</em> it</p>
+<ul>
+<li>various linear models</li>
+</ul></li>
+<li><p>To <em>confirm</em> our observations from exploration (field/lab/vis)</p>
+<ul>
+<li>inferential statistics e.g. difference of means tests, ANOVA, <span class="math inline">\(\chi^2\)</span></li>
+</ul></li>
+<li><p>To have the confidence to draw conclusions, make informed decisions</p></li>
+<li><p>To help <em>communicate</em> our work</p></li>
+</ul>
+<p>These goals can be seen in the context of a typical research paper or thesis outline in environmental science:</p>
+<ul>
+<li><p>Introduction</p></li>
+<li><p>Literature Review</p></li>
+<li><p>Methodology</p></li>
+<li><p>Results</p>
+<ul>
+<li>field, lab, geospatial data</li>
+</ul></li>
+<li><p>Analysis</p>
+<ul>
+<li>statistical analysis</li>
+<li>qualitative analysis</li>
+<li>visualization</li>
+</ul></li>
+<li><p>Discussion</p>
+<ul>
+<li>making sense of analysis</li>
+<li>possibly recursive, with visualization</li>
+</ul></li>
+<li><p>Conclusion</p>
+<ul>
+<li>conclusion about what the above shows</li>
+<li>new questions for further research</li>
+<li>possible policy recommendation</li>
+</ul></li>
+</ul>
+<p>The scope and theory of statistical analysis and models is extensive, and there are many good books on the subject that employ the R language, including sources that focus on environmental topics like water resources (e.g. <span class="citation">Helsel et al. (<a href="#ref-StatisticalMethodsWaterResources">2020</a>)</span>). This chapter is a short review of some of these methods and how they apply to environmental data science.</p>
+</div>
+<div id="summary-statistics" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Summary Statistics<a href="statistics.html#summary-statistics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Summary statistics such as mean, standard deviation, variance, minimum, maximum, and range are derived in quite a few R functions, commonly as a parameter or a sub-function (see <code>mutate</code>). An overall simple statistical summary is very easy to do in base R:</p>
+<div class="sourceCode" id="cb660"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb660-1"><a href="statistics.html#cb660-1" tabindex="-1"></a><span class="fu">summary</span>(tidy_eucoak)</span></code></pre></div>
+<pre><code>##         site         site #             tree          Date           
+##  Length   :180   Min.   :1.000   Length   :180   Min.   :2006-11-08  
+##  N.unique :  8   1st Qu.:2.000   N.unique :  2   1st Qu.:2006-12-07  
+##  N.blank  :  0   Median :4.000   N.blank  :  0   Median :2007-01-30  
+##  Min.nchar:  3   Mean   :4.422   Min.nchar:  3   Mean   :2007-01-29  
+##  Max.nchar:  3   3rd Qu.:6.000   Max.nchar:  3   3rd Qu.:2007-03-22  
+##                  Max.   :8.000                   Max.   :2007-05-07  
+##                                                                      
+##        month        rain_mm      rain_subcanopy      slope      
+##  Length   :180   Min.   : 1.00   Min.   : 1.00   Min.   : 9.00  
+##  N.unique :  7   1st Qu.:16.00   1st Qu.:16.00   1st Qu.:12.00  
+##  N.blank  :  0   Median :28.50   Median :30.00   Median :24.00  
+##  Min.nchar:  8   Mean   :37.99   Mean   :34.84   Mean   :20.48  
+##  Max.nchar:  9   3rd Qu.:63.25   3rd Qu.:50.00   3rd Qu.:27.00  
+##                  Max.   :99.00   Max.   :98.00   Max.   :32.00  
+##                  NAs    :36      NAs    :4                      
+##      aspect         runoff_L      surface_tension runoff_rainfall_ratio
+##  Min.   :100.0   Min.   : 0.000   Min.   :28.51   Min.   :0.00000      
+##  1st Qu.:143.0   1st Qu.: 0.000   1st Qu.:37.40   1st Qu.:0.00000      
+##  Median :196.0   Median : 0.825   Median :62.60   Median :0.03347      
+##  Mean   :186.6   Mean   : 2.244   Mean   :55.73   Mean   :0.05981      
+##  3rd Qu.:221.8   3rd Qu.: 3.200   3rd Qu.:72.75   3rd Qu.:0.08474      
+##  Max.   :296.0   Max.   :16.000   Max.   :72.75   Max.   :0.42000      
+##                  NAs    :8        NAs    :44      NAs    :8</code></pre>
+<div id="summarize-by-group-stratifying-a-summary" class="section level3 hasAnchor" number="9.2.1">
+<h3><span class="header-section-number">9.2.1</span> Summarize by group: <em>stratifying a summary</em><a href="statistics.html#summarize-by-group-stratifying-a-summary" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In the visualization chapter and elsewhere, we’ve seen the value of adding symbolization based on a categorical variable or factor. Summarizing by group has a similar benefit, and provides a tabular output in the form of a data frame, and the tidyverse makes it easy to extract several summary statistics at once. For instance, for the euc/oak study, we can create variables of the mean and maximum runoff, the mean and standard deviation of rainfall, for each of the sites. This table alone provides a useful output, but we can also use it in further analyses.</p>
+<div class="sourceCode" id="cb662"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb662-1"><a href="statistics.html#cb662-1" tabindex="-1"></a>eucoakrainfallrunoffTDR <span class="sc">%&gt;%</span></span>
+<span id="cb662-2"><a href="statistics.html#cb662-2" tabindex="-1"></a>  <span class="fu">group_by</span>(site) <span class="sc">%&gt;%</span></span>
+<span id="cb662-3"><a href="statistics.html#cb662-3" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb662-4"><a href="statistics.html#cb662-4" tabindex="-1"></a>    <span class="at">rain =</span> <span class="fu">mean</span>(rain_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb662-5"><a href="statistics.html#cb662-5" tabindex="-1"></a>    <span class="at">rainSD =</span> <span class="fu">sd</span>(rain_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb662-6"><a href="statistics.html#cb662-6" tabindex="-1"></a>    <span class="at">runoffL_oak =</span> <span class="fu">mean</span>(runoffL_oak, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb662-7"><a href="statistics.html#cb662-7" tabindex="-1"></a>    <span class="at">runoffL_euc =</span> <span class="fu">mean</span>(runoffL_euc, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb662-8"><a href="statistics.html#cb662-8" tabindex="-1"></a>    <span class="at">runoffL_oakMax =</span> <span class="fu">max</span>(runoffL_oak, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb662-9"><a href="statistics.html#cb662-9" tabindex="-1"></a>    <span class="at">runoffL_eucMax =</span> <span class="fu">max</span>(runoffL_euc, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb662-10"><a href="statistics.html#cb662-10" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>## # A tibble: 8 × 7
+##   site   rain rainSD runoffL_oak runoffL_euc runoffL_oakMax runoffL_eucMax
+##   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;
+## 1 AB1    48.4   28.2      6.80         6.03          6.80            6.03 
+## 2 AB2    34.1   27.9      4.91         3.65          4.91            3.65 
+## 3 KM1    48     32.0      1.94         0.592         1.94            0.592
+## 4 PR1    56.5   19.1      0.459        2.31          0.459           2.31 
+## 5 TP1    38.4   29.5      0.877        1.66          0.877           1.66 
+## 6 TP2    34.3   29.2      0.0955       1.53          0.0955          1.53 
+## 7 TP3    32.1   28.4      0.381        0.815         0.381           0.815
+## 8 TP4    32.5   28.2      0.231        2.83          0.231           2.83</code></pre>
+</div>
+<div id="boxplot-for-visualizing-distributions-by-group" class="section level3 hasAnchor" number="9.2.2">
+<h3><span class="header-section-number">9.2.2</span> Boxplot for visualizing distributions by group<a href="statistics.html#boxplot-for-visualizing-distributions-by-group" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We’ve looked at this already in the visualization chapter, but a Tukey boxplot is a good way to visualize distributions by group. In this soil CO<sub>2</sub> study of the Marble Mountains <span class="citation">(<a href="#ref-marblesCO2">Davis et al. 2001</a>)</span> (Figure <a href="statistics.html#fig:statTukey">9.1</a>), some sites had much greater variance, and some sites tended to be low vs high (Figure <a href="statistics.html#fig:statCO2avgbysite">9.2</a>).</p>
+<div class="sourceCode" id="cb664"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb664-1"><a href="statistics.html#cb664-1" tabindex="-1"></a>soilCO2_97<span class="sc">$</span>SITE <span class="ot">&lt;-</span> <span class="fu">factor</span>(soilCO2_97<span class="sc">$</span>SITE)</span>
+<span id="cb664-2"><a href="statistics.html#cb664-2" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> soilCO2_97, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> SITE, <span class="at">y =</span> CO2pct)) <span class="sc">+</span></span>
+<span id="cb664-3"><a href="statistics.html#cb664-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statTukey"></span>
+<img src="EnvDataScience_files/figure-html/statTukey-1.png" alt="Tukey boxplot by group" width="75%" />
+<p class="caption">
+FIGURE 9.1: Tukey boxplot by group
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statCO2avgbysite"></span>
+<img src="EnvDataScience_files/figure-html/statCO2avgbysite-1.png" alt="Marble Mountains average soil carbon dioxide per site" width="75%" />
+<p class="caption">
+FIGURE 9.2: Marble Mountains average soil carbon dioxide per site
+</p>
+</div>
+</div>
+<div id="random" class="section level3 hasAnchor" number="9.2.3">
+<h3><span class="header-section-number">9.2.3</span> Generating pseudorandom numbers<a href="statistics.html#random" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Functions commonly used in R books for quickly creating a lot of numbers to display (often with a histogram <a href="visualization.html#histogram">4.3.1</a>) are those that generate pseudorandom numbers. These are also useful in statistical methods that need a lot of these, such as in Monte Carlo simulation. The two most commonly used are:</p>
+<ul>
+<li><strong><code>runif()</code></strong> generates a vector of <code>n</code> pseudorandom numbers ranging by default from <code>min=0</code> to <code>max=1</code> (Figure <a href="statistics.html#fig:statrunif">9.3</a>).</li>
+<li><strong><code>rnorm()</code></strong> generates a vector of <code>n</code> normally distributed pseudorandom numbers with a default <code>mean=0</code> and <code>sd=0</code> (Figures <a href="statistics.html#fig:statrnorm">9.4</a> and <a href="statistics.html#fig:statrnormDens">9.5</a>)</li>
+</ul>
+<p>Figure <a href="statistics.html#fig:statrnomrunif">9.6</a> shows both in action as x and y.</p>
+<div class="sourceCode" id="cb665"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb665-1"><a href="statistics.html#cb665-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">runif</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="at">min=</span><span class="dv">10</span>, <span class="at">max=</span><span class="dv">20</span>))</span>
+<span id="cb665-2"><a href="statistics.html#cb665-2" tabindex="-1"></a><span class="fu">names</span>(x) <span class="ot">&lt;-</span> <span class="st">&#39;x&#39;</span></span>
+<span id="cb665-3"><a href="statistics.html#cb665-3" tabindex="-1"></a><span class="fu">ggplot</span>(x, <span class="fu">aes</span>(<span class="at">x=</span>x)) <span class="sc">+</span> <span class="fu">geom_histogram</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statrunif"></span>
+<img src="EnvDataScience_files/figure-html/statrunif-1.png" alt="Random uniform histogram" width="75%" />
+<p class="caption">
+FIGURE 9.3: Random uniform histogram
+</p>
+</div>
+<div class="sourceCode" id="cb666"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb666-1"><a href="statistics.html#cb666-1" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="at">mean=</span><span class="dv">100</span>, <span class="at">sd=</span><span class="dv">10</span>))</span>
+<span id="cb666-2"><a href="statistics.html#cb666-2" tabindex="-1"></a><span class="fu">names</span>(y) <span class="ot">&lt;-</span> <span class="st">&#39;y&#39;</span></span>
+<span id="cb666-3"><a href="statistics.html#cb666-3" tabindex="-1"></a><span class="fu">ggplot</span>(y, <span class="fu">aes</span>(<span class="at">x=</span>y)) <span class="sc">+</span> <span class="fu">geom_histogram</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statrnorm"></span>
+<img src="EnvDataScience_files/figure-html/statrnorm-1.png" alt="Random normal histogram" width="75%" />
+<p class="caption">
+FIGURE 9.4: Random normal histogram
+</p>
+</div>
+<div class="sourceCode" id="cb667"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb667-1"><a href="statistics.html#cb667-1" tabindex="-1"></a><span class="fu">ggplot</span>(y, <span class="fu">aes</span>(<span class="at">x=</span>y)) <span class="sc">+</span> <span class="fu">geom_density</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statrnormDens"></span>
+<img src="EnvDataScience_files/figure-html/statrnormDens-1.png" alt="Random normal density plot" width="75%" />
+<p class="caption">
+FIGURE 9.5: Random normal density plot
+</p>
+</div>
+<div class="sourceCode" id="cb668"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb668-1"><a href="statistics.html#cb668-1" tabindex="-1"></a>xy <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(x,y)</span></code></pre></div>
+<div class="sourceCode" id="cb669"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb669-1"><a href="statistics.html#cb669-1" tabindex="-1"></a><span class="fu">ggplot</span>(xy, <span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statrnomrunif"></span>
+<img src="EnvDataScience_files/figure-html/statrnomrunif-1.png" alt="Random normal plotted against random uniform" width="75%" />
+<p class="caption">
+FIGURE 9.6: Random normal plotted against random uniform
+</p>
+</div>
+</div>
+</div>
+<div id="correlation" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> Correlation r and Coefficient of Determination r<sup>2</sup><a href="statistics.html#correlation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In the visualization chapter, we looked at creating scatter plots and also arrays of scatter plots where we could compare variables to visually see if they might be positively or negatively correlated. A statistic that is commonly used for this is the <em>Pearson product-moment correlation coefficient</em> or r statistic.</p>
+<p>We’ll look at the formula for r below, but it’s easier to just use the <code>cor</code> function. You just need the two variables as vector inputs in R to return the r statistic. Squaring r to r<sup>2</sup> is the <em>coefficient of determination</em> and can be interpreted as the amount of the variation in the dependent variable y that that is “explained” by variation in the independent variable x. This coefficient will always be positive, with a maximum of 1 or 100%.</p>
+<p>If we create two random variables, uniform or normal, there shouldn’t be any correlation. We’ll do this five times each set:</p>
+<div class="sourceCode" id="cb670"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb670-1"><a href="statistics.html#cb670-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {<span class="fu">print</span>(<span class="fu">paste</span>(i, <span class="fu">cor</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>), <span class="fu">rnorm</span>(<span class="dv">100</span>))))}</span></code></pre></div>
+<pre><code>## [1] &quot;1 -0.306867610791146&quot;
+## [1] &quot;2 0.0435334582689279&quot;
+## [1] &quot;3 0.0218834471816236&quot;
+## [1] &quot;4 -0.0505322386278771&quot;
+## [1] &quot;5 -0.0100788763936654&quot;</code></pre>
+<div class="sourceCode" id="cb672"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb672-1"><a href="statistics.html#cb672-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {<span class="fu">print</span>(<span class="fu">paste</span>(i, <span class="fu">cor</span>(<span class="fu">runif</span>(<span class="dv">100</span>), <span class="fu">runif</span>(<span class="dv">100</span>))))}</span></code></pre></div>
+<pre><code>## [1] &quot;1 -0.000369334235807692&quot;
+## [1] &quot;2 0.0104243143064686&quot;
+## [1] &quot;3 0.0100473186730334&quot;
+## [1] &quot;4 -0.0206269090624089&quot;
+## [1] &quot;5 0.158031281575223&quot;</code></pre>
+<div class="sourceCode" id="cb674"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb674-1"><a href="statistics.html#cb674-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {<span class="fu">print</span>(<span class="fu">paste</span>(i, <span class="fu">cor</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>), <span class="fu">runif</span>(<span class="dv">100</span>))))}</span></code></pre></div>
+<pre><code>## [1] &quot;1 0.0594965540459601&quot;
+## [1] &quot;2 0.0308884565713835&quot;
+## [1] &quot;3 0.0666190005779386&quot;
+## [1] &quot;4 -0.113543452263837&quot;
+## [1] &quot;5 -0.0126068334715897&quot;</code></pre>
+<p>But variables such as temperature and elevation in the Sierra will be strongly negatively correlated, as seen in the scatter plot and the r value close to -1, and have a high r<sup>2</sup> (Figure <a href="statistics.html#fig:statNegScatter">9.7</a>).</p>
+<div class="sourceCode" id="cb676"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb676-1"><a href="statistics.html#cb676-1" tabindex="-1"></a><span class="fu">library</span>(igisci); <span class="fu">library</span>(tidyverse)</span>
+<span id="cb676-2"><a href="statistics.html#cb676-2" tabindex="-1"></a>sierra <span class="ot">&lt;-</span> sierraFeb <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(TEMPERATURE))</span>
+<span id="cb676-3"><a href="statistics.html#cb676-3" tabindex="-1"></a>elev <span class="ot">&lt;-</span> sierra<span class="sc">$</span>ELEVATION; tC <span class="ot">&lt;-</span> sierra<span class="sc">$</span>TEMPERATURE</span>
+<span id="cb676-4"><a href="statistics.html#cb676-4" tabindex="-1"></a><span class="fu">plot</span>(elev, tC)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statNegScatter"></span>
+<img src="EnvDataScience_files/figure-html/statNegScatter-1.png" alt="Scatter plot illustrating negative correlation" width="75%" />
+<p class="caption">
+FIGURE 9.7: Scatter plot illustrating negative correlation
+</p>
+</div>
+<div class="sourceCode" id="cb677"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb677-1"><a href="statistics.html#cb677-1" tabindex="-1"></a><span class="fu">cor</span>(elev, tC)</span></code></pre></div>
+<pre><code>## [1] -0.9357801</code></pre>
+<div class="sourceCode" id="cb679"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb679-1"><a href="statistics.html#cb679-1" tabindex="-1"></a><span class="fu">cor</span>(elev, tC)<span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
+<pre><code>## [1] 0.8756845</code></pre>
+<p>While you don’t need to use this, since the <code>cor</code> function is easier to type, it’s interesting to know that the formula for Pearson’s correlation coefficient is something that you can actually code in R, taking advantage of its vectorization methods:</p>
+<p><span class="math display">\[
+r = \frac{\sum{(x_i-\overline{x})(y_i-\overline{y})}}{\sqrt{\sum{(x_i-\overline{x})^2\sum(y_i-\overline{y})^2}}}
+\]</span></p>
+<div class="sourceCode" id="cb681"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb681-1"><a href="statistics.html#cb681-1" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">sum</span>((elev<span class="sc">-</span><span class="fu">mean</span>(elev))<span class="sc">*</span>(tC<span class="sc">-</span><span class="fu">mean</span>(tC)))<span class="sc">/</span></span>
+<span id="cb681-2"><a href="statistics.html#cb681-2" tabindex="-1"></a>     <span class="fu">sqrt</span>(<span class="fu">sum</span>((elev<span class="sc">-</span><span class="fu">mean</span>(elev))<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span><span class="fu">sum</span>((tC<span class="sc">-</span><span class="fu">mean</span>(tC))<span class="sc">^</span><span class="dv">2</span>)))</span>
+<span id="cb681-3"><a href="statistics.html#cb681-3" tabindex="-1"></a>r</span></code></pre></div>
+<pre><code>## [1] -0.9357801</code></pre>
+<div class="sourceCode" id="cb683"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb683-1"><a href="statistics.html#cb683-1" tabindex="-1"></a>r<span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
+<pre><code>## [1] 0.8756845</code></pre>
+<p>Another version of the formula runs faster, so might be what R uses, but you’ll never notice the time difference:</p>
+<p><span class="math display">\[
+r = \frac{n(\sum{xy})-(\sum{x})(\sum{y})}{\sqrt{(n\sum{x^2}-(\sum{x})^2)(n\sum{y^2}-(\sum{y})^2)}}
+\]</span></p>
+<div class="sourceCode" id="cb685"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb685-1"><a href="statistics.html#cb685-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(elev)</span>
+<span id="cb685-2"><a href="statistics.html#cb685-2" tabindex="-1"></a>r <span class="ot">&lt;-</span> (n<span class="sc">*</span><span class="fu">sum</span>(elev<span class="sc">*</span>tC)<span class="sc">-</span><span class="fu">sum</span>(elev)<span class="sc">*</span><span class="fu">sum</span>(tC))<span class="sc">/</span></span>
+<span id="cb685-3"><a href="statistics.html#cb685-3" tabindex="-1"></a>  <span class="fu">sqrt</span>((n<span class="sc">*</span><span class="fu">sum</span>(elev<span class="sc">^</span><span class="dv">2</span>)<span class="sc">-</span><span class="fu">sum</span>(elev)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span>(n<span class="sc">*</span><span class="fu">sum</span>(tC<span class="sc">^</span><span class="dv">2</span>)<span class="sc">-</span><span class="fu">sum</span>(tC)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb685-4"><a href="statistics.html#cb685-4" tabindex="-1"></a>r</span></code></pre></div>
+<pre><code>## [1] -0.9357801</code></pre>
+<div class="sourceCode" id="cb687"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb687-1"><a href="statistics.html#cb687-1" tabindex="-1"></a>r<span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
+<pre><code>## [1] 0.8756845</code></pre>
+<p>… and as you can see, all three methods give the same results.</p>
+<div id="displaying-correlation-in-a-pairs-plot" class="section level3 hasAnchor" number="9.3.1">
+<h3><span class="header-section-number">9.3.1</span> Displaying correlation in a pairs plot<a href="statistics.html#displaying-correlation-in-a-pairs-plot" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We can use another type of pairs plot from the <strong>psych</strong> package to look at the correlation coefficient in the upper-right part of the pairs plot, since correlation can be determined between x and y or y and x; the result is the same. In contrast to what we’ll see in regression models, there doesn’t have to be one <em>explanatory</em> (or independent) variable and one <em>response</em> (or dependent) variable; either one will do. The r value shows both the direction (positive or negative) and the magnitude of the correlation, with values closer to 1 or -1 being more correlated (Figure <a href="statistics.html#fig:statPairs">9.8</a>).</p>
+<div class="sourceCode" id="cb689"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb689-1"><a href="statistics.html#cb689-1" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb689-2"><a href="statistics.html#cb689-2" tabindex="-1"></a>sierraFeb <span class="sc">%&gt;%</span></span>
+<span id="cb689-3"><a href="statistics.html#cb689-3" tabindex="-1"></a>     dplyr<span class="sc">::</span><span class="fu">select</span>(ELEVATION<span class="sc">:</span>TEMPERATURE) <span class="sc">%&gt;%</span></span>
+<span id="cb689-4"><a href="statistics.html#cb689-4" tabindex="-1"></a>     <span class="fu">pairs.panels</span>(<span class="at">method =</span> <span class="st">&quot;pearson&quot;</span>, <span class="co"># correlation method</span></span>
+<span id="cb689-5"><a href="statistics.html#cb689-5" tabindex="-1"></a>             <span class="at">hist.col =</span> <span class="st">&quot;#00AFBB&quot;</span>,</span>
+<span id="cb689-6"><a href="statistics.html#cb689-6" tabindex="-1"></a>             <span class="at">density =</span> <span class="cn">TRUE</span>, <span class="co"># show density plots</span></span>
+<span id="cb689-7"><a href="statistics.html#cb689-7" tabindex="-1"></a>             <span class="at">ellipses =</span> F, <span class="at">smooth =</span> F) <span class="co"># unneeded  </span></span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statPairs"></span>
+<img src="EnvDataScience_files/figure-html/statPairs-1.png" alt="Pairs plot with r values" width="75%" />
+<p class="caption">
+FIGURE 9.8: Pairs plot with r values
+</p>
+</div>
+<p>We can clearly see in the graphs the negative relationships between elevation and temperature and between latitude and longitude (what is that telling us?), and these correspond to strongly negative correlation coefficients.</p>
+<p><strong>One problem with Pearson</strong>: While there’s nothing wrong with the correlation coefficient, Pearson’s name, along with some other pioneers of statistics like Fisher, is tainted by an association with the racist field of <em>eugenics</em>. But the mathematics is not to blame, and the correlation coefficient is still as useful as ever. Maybe we can just say that Pearson <em>discovered</em> the correlation coefficient…</p>
+</div>
+</div>
+<div id="statistical-tests" class="section level2 hasAnchor" number="9.4">
+<h2><span class="header-section-number">9.4</span> Statistical Tests<a href="statistics.html#statistical-tests" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Tests that compare our data to other data or look at relationships among variables are important statistical methods, and you should refer to statistical references to best understand how to apply the appropriate methods for your research.</p>
+<div id="comparing-samples-and-groupings-with-a-t-test-and-a-non-parametric-kruskal-wallis-rank-sum-test" class="section level3 hasAnchor" number="9.4.1">
+<h3><span class="header-section-number">9.4.1</span> Comparing samples and groupings with a t test and a non-parametric Kruskal-Wallis Rank Sum test<a href="statistics.html#comparing-samples-and-groupings-with-a-t-test-and-a-non-parametric-kruskal-wallis-rank-sum-test" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A common need in environmental research is to compare samples of a phenomenon (e.g. Figure <a href="statistics.html#fig:statNDVIpheno">9.9</a>) or compare samples with an assumed standard population. The simplest application of this is the t-test, which can only involve comparing two samples or one sample with a population. After this, we’ll look at analysis of variance, extending this to allow for more than two groups. Start by building <code>XSptsPheno</code> from code in the Histogram section (<a href="visualization.html#histogram">4.3.1</a>) of the Visualization chapter, then proceed:</p>
+<div class="sourceCode" id="cb690"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb690-1"><a href="statistics.html#cb690-1" tabindex="-1"></a>XSptsPheno <span class="sc">%&gt;%</span></span>
+<span id="cb690-2"><a href="statistics.html#cb690-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(NDVI, <span class="at">fill=</span>phenology)) <span class="sc">+</span></span>
+<span id="cb690-3"><a href="statistics.html#cb690-3" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha=</span><span class="fl">0.2</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statNDVIpheno"></span>
+<img src="EnvDataScience_files/figure-html/statNDVIpheno-1.png" alt="NDVI by phenology" width="75%" />
+<p class="caption">
+FIGURE 9.9: NDVI by phenology
+</p>
+</div>
+<div class="sourceCode" id="cb691"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb691-1"><a href="statistics.html#cb691-1" tabindex="-1"></a><span class="fu">t.test</span>(NDVI<span class="sc">~</span>phenology, <span class="at">data=</span>XSptsPheno) </span></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  NDVI by phenology
+## t = 5.4952, df = 52.03, p-value = 1.19e-06
+## alternative hypothesis: true difference in means between group growing and group senescent is not equal to 0
+## 95 percent confidence interval:
+##  0.1421785 0.3057412
+## sample estimates:
+##   mean in group growing mean in group senescent 
+##               0.5901186               0.3661588</code></pre>
+<p>One condition for using a t test is that our data is normally distributed. While these data sets <em>appear</em> reasonably normal, though with a bit of bimodality especially for the senescent group, the Shapiro-Wilk test (which uses a null hypothesis of normal) has a p value &lt; 0.05 for the senescent group, so the data can’t be assumed to be normal.</p>
+<div class="sourceCode" id="cb693"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb693-1"><a href="statistics.html#cb693-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(XSptsPheno<span class="sc">$</span>NDVI[XSptsPheno<span class="sc">$</span>phenology<span class="sc">==</span><span class="st">&quot;growing&quot;</span>])</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  XSptsPheno$NDVI[XSptsPheno$phenology == &quot;growing&quot;]
+## W = 0.93608, p-value = 0.07918</code></pre>
+<div class="sourceCode" id="cb695"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb695-1"><a href="statistics.html#cb695-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(XSptsPheno<span class="sc">$</span>NDVI[XSptsPheno<span class="sc">$</span>phenology<span class="sc">==</span><span class="st">&quot;senescent&quot;</span>])</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  XSptsPheno$NDVI[XSptsPheno$phenology == &quot;senescent&quot;]
+## W = 0.88728, p-value = 0.004925</code></pre>
+<p>Therefore we should use a non-parametric alternative such as the
+Kruskal-Wallis Rank Sum test:</p>
+<div class="sourceCode" id="cb697"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb697-1"><a href="statistics.html#cb697-1" tabindex="-1"></a><span class="fu">kruskal.test</span>(NDVI<span class="sc">~</span>phenology, <span class="at">data=</span>XSptsPheno)</span></code></pre></div>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  NDVI by phenology
+## Kruskal-Wallis chi-squared = 19.164, df = 1, p-value = 1.199e-05</code></pre>
+<p><strong>A bit of a review on significance tests and p values</strong></p>
+<p>First, each type of test will be testing a particular summary statistic, like the t test is comparing means and the analysis of variance will be comparing variances. In confirmatory statistical tests, you’re always seeing if you can reject the null hypothesis that there’s no difference, so in the t test or the rank sum test above that compares two samples, it’s that there’s no difference between two samples.</p>
+<p>There will of course nearly always be some difference, so you might think that you’d always reject the null hypothesis that there’s no difference. That’s where random error and probability comes in. You can accept a certain amount of error – say 5% – to be able to say that the difference in values could have occurred by chance. That 5% or 0.05 is often called the “significance level” and is the probability of the two values being the same that you’re willing to accept. (The remainder 0.95 is often called the confidence level, the extent to which you’re confident that rejecting the null hypothesis and accepting the working hypothesis is correct.)</p>
+<p>When R reports the p (or Pr) probability value, you compare that value to that significance level to see if it’s lower, and then use that to possibly reject the null hypothesis and accept the working hypothesis. R will simply report the p value and commonly show asterisks along with it to indicate if it’s lower than various common significance levels, like 0.1, 0.05, 0.01, and 0.001.</p>
+<div id="runoff-and-sediment-yield-under-eucalyptus-vs-oaks-is-there-a-difference" class="section level4 hasAnchor" number="9.4.1.1">
+<h4><span class="header-section-number">9.4.1.1</span> Runoff and Sediment Yield under Eucalyptus vs Oaks – is there a difference?<a href="statistics.html#runoff-and-sediment-yield-under-eucalyptus-vs-oaks-is-there-a-difference" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Starting with the Data Abstraction chapter, one of the data sets we’ve been looking at is from a study of runoff and sediment yield under paired eucalyptus and coast live oak sites, and we might want to analyze this data statistically to consider some basic research questions. These are discussed at greater length in <span class="citation">Thompson et al. (<a href="#ref-eucoak">2016</a>)</span>, but the key questions are:</p>
+<ul>
+<li><em>Is the runoff under eucalyptus canopy significantly different from that under oaks?</em></li>
+<li><em>Is the sediment yield under eucalyptus canopy significantly different from that under oaks?</em></li>
+</ul>
+<p>We’ll start with the first, since this was the focus on the first part of the study where multiple variables that influence runoff were measured, such as soil hydrophobicity resulting from the chemical effects of eucalyptus, and any rainfall contrasts at each site and between sites. For runoff, we’ll then start by test for normality of each of the two samples (euc and oak) which shows clearly that both samples are non-normal.</p>
+<div class="sourceCode" id="cb699"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb699-1"><a href="statistics.html#cb699-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(tidy_eucoak<span class="sc">$</span>runoff_L[tidy_eucoak<span class="sc">$</span>tree <span class="sc">==</span> <span class="st">&quot;euc&quot;</span>])</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  tidy_eucoak$runoff_L[tidy_eucoak$tree == &quot;euc&quot;]
+## W = 0.74241, p-value = 4.724e-11</code></pre>
+<div class="sourceCode" id="cb701"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb701-1"><a href="statistics.html#cb701-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(tidy_eucoak<span class="sc">$</span>runoff_L[tidy_eucoak<span class="sc">$</span>tree <span class="sc">==</span> <span class="st">&quot;oak&quot;</span>])</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  tidy_eucoak$runoff_L[tidy_eucoak$tree == &quot;oak&quot;]
+## W = 0.71744, p-value = 1.698e-11</code></pre>
+<p>So we might apply the non-parametric Kruskal-Wallis test …</p>
+<div class="sourceCode" id="cb703"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb703-1"><a href="statistics.html#cb703-1" tabindex="-1"></a><span class="fu">kruskal.test</span>(runoff_L<span class="sc">~</span>tree, <span class="at">data=</span>tidy_eucoak)</span></code></pre></div>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  runoff_L by tree
+## Kruskal-Wallis chi-squared = 2.2991, df = 1, p-value = 0.1294</code></pre>
+<p>… and no significant difference can be seen. If we look at the data graphically, this makes sense, since the distributions are not dissimilar (Figure <a href="statistics.html#fig:statEucOakRunoff">9.10</a>).</p>
+<div class="sourceCode" id="cb705"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb705-1"><a href="statistics.html#cb705-1" tabindex="-1"></a>tidy_eucoak <span class="sc">%&gt;%</span></span>
+<span id="cb705-2"><a href="statistics.html#cb705-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">log</span>(runoff_L),<span class="at">fill=</span>tree)) <span class="sc">+</span></span>
+<span id="cb705-3"><a href="statistics.html#cb705-3" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha=</span><span class="fl">0.2</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statEucOakRunoff"></span>
+<img src="EnvDataScience_files/figure-html/statEucOakRunoff-1.png" alt="Runoff under eucalyptus and oak in Bay Area sites" width="75%" />
+<p class="caption">
+FIGURE 9.10: Runoff under eucalyptus and oak in Bay Area sites
+</p>
+</div>
+<p>However, some of this may result from major variations among sites, which is apparent in a site-grouped boxplot (Figure <a href="statistics.html#fig:statSiteGrouped">9.11</a>).</p>
+<div class="sourceCode" id="cb706"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb706-1"><a href="statistics.html#cb706-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tidy_eucoak) <span class="sc">+</span></span>
+<span id="cb706-2"><a href="statistics.html#cb706-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>site, <span class="at">y=</span>runoff_L, <span class="at">color=</span>tree))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statSiteGrouped"></span>
+<img src="EnvDataScience_files/figure-html/statSiteGrouped-1.png" alt="Runoff at various sites contrasting euc and oak" width="75%" />
+<p class="caption">
+FIGURE 9.11: Runoff at various sites contrasting euc and oak
+</p>
+</div>
+<p>We might restrict our analysis to Tilden Park sites in the East Bay, where there’s more of a difference (Figure <a href="statistics.html#fig:statTildenSites">9.12</a>), but the sample size is very small.</p>
+<div class="sourceCode" id="cb707"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb707-1"><a href="statistics.html#cb707-1" tabindex="-1"></a>tilden <span class="ot">&lt;-</span> tidy_eucoak <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">str_detect</span>(tidy_eucoak<span class="sc">$</span>site,<span class="st">&quot;TP&quot;</span>))</span>
+<span id="cb707-2"><a href="statistics.html#cb707-2" tabindex="-1"></a>tilden <span class="sc">%&gt;%</span></span>
+<span id="cb707-3"><a href="statistics.html#cb707-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">log</span>(runoff_L),<span class="at">fill=</span>tree)) <span class="sc">+</span></span>
+<span id="cb707-4"><a href="statistics.html#cb707-4" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha=</span><span class="fl">0.2</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statTildenSites"></span>
+<img src="EnvDataScience_files/figure-html/statTildenSites-1.png" alt="East Bay sites" width="75%" />
+<p class="caption">
+FIGURE 9.12: East Bay sites
+</p>
+</div>
+<div class="sourceCode" id="cb708"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb708-1"><a href="statistics.html#cb708-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(tilden<span class="sc">$</span>runoff_L[tilden<span class="sc">$</span>tree <span class="sc">==</span> <span class="st">&quot;euc&quot;</span>])</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  tilden$runoff_L[tilden$tree == &quot;euc&quot;]
+## W = 0.73933, p-value = 1.764e-07</code></pre>
+<div class="sourceCode" id="cb710"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb710-1"><a href="statistics.html#cb710-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(tilden<span class="sc">$</span>runoff_L[tilden<span class="sc">$</span>tree <span class="sc">==</span> <span class="st">&quot;oak&quot;</span>])</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  tilden$runoff_L[tilden$tree == &quot;oak&quot;]
+## W = 0.59535, p-value = 8.529e-10</code></pre>
+<p>So once again, as is common with small sample sets, we need a non-parametric test.</p>
+<div class="sourceCode" id="cb712"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb712-1"><a href="statistics.html#cb712-1" tabindex="-1"></a><span class="fu">kruskal.test</span>(runoff_L<span class="sc">~</span>tree, <span class="at">data=</span>tilden)</span></code></pre></div>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  runoff_L by tree
+## Kruskal-Wallis chi-squared = 14.527, df = 1, p-value = 0.0001382</code></pre>
+<p><strong>Sediment Yield</strong></p>
+<p>In the year runoff was studied, there were no runoff events sufficient to mobilize sediments. The next year, January had a big event, so we collected sediments and processed them in the lab.</p>
+<p>From the basic sediment yield question listed above we can consider two variants:</p>
+<ul>
+<li>Is there a difference between eucs and oaks in terms of fine sediment yield?</li>
+<li>Is there a difference between eucs and oaks in terms of total sediment yield? (includes litter)</li>
+</ul>
+<p>So here, we will need to extract fine and total sediment yield from the data and derive group statistics by site (Figure <a href="statistics.html#fig:statEucOakSediment">9.13</a>). As usual, we’ll use a faceted density plot to visualize the distributions (Figure <a href="statistics.html#fig:statEucOakFacetSediment">9.14</a>). Then we’ll run the test.</p>
+<div class="sourceCode" id="cb714"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb714-1"><a href="statistics.html#cb714-1" tabindex="-1"></a>eucoaksed <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;eucoak/eucoaksediment.csv&quot;</span>))</span>
+<span id="cb714-2"><a href="statistics.html#cb714-2" tabindex="-1"></a><span class="fu">summary</span>(eucoaksed)</span></code></pre></div>
+<pre><code>##          id            site          trtype       slope        bulkDensity   
+##  Length   :14   Length   :14   Length   :14   Min.   : 9.00   Min.   :0.960  
+##  N.unique :14   N.unique : 7   N.unique : 2   1st Qu.:12.00   1st Qu.:1.060  
+##  N.blank  : 0   N.blank  : 0   N.blank  : 0   Median :21.00   Median :1.125  
+##  Min.nchar: 5   Min.nchar: 3   Min.nchar: 3   Mean   :20.04   Mean   :1.156  
+##  Max.nchar: 5   Max.nchar: 3   Max.nchar: 3   3rd Qu.:25.00   3rd Qu.:1.245  
+##                                               Max.   :32.00   Max.   :1.490  
+##                                                                              
+##      litter         Jan08rain     mean_runoff_ratio med_runoff_ratio 
+##  Min.   : 25.00   Min.   :228.1   Min.   :0.00450   Min.   :0.00000  
+##  1st Qu.: 51.25   1st Qu.:290.8   1st Qu.:0.02285   1st Qu.:0.01105  
+##  Median : 77.00   Median :301.1   Median :0.04835   Median :0.04950  
+##  Mean   : 76.64   Mean   :298.5   Mean   :0.06679   Mean   :0.06179  
+##  3rd Qu.: 95.75   3rd Qu.:317.0   3rd Qu.:0.12172   3rd Qu.:0.09492  
+##  Max.   :135.00   Max.   :328.5   Max.   :0.16480   Max.   :0.16430  
+##                                                                      
+##  std_runoff_ratio     fines_g         litter_g        total_g      
+##  Min.   :0.01070   Min.   : 7.50   Min.   :14.00   Min.   : 23.50  
+##  1st Qu.:0.01642   1st Qu.:13.30   1st Qu.:18.80   1st Qu.: 35.00  
+##  Median :0.02740   Median :18.10   Median :40.40   Median : 60.50  
+##  Mean   :0.04355   Mean   :27.77   Mean   :41.32   Mean   : 69.12  
+##  3rd Qu.:0.05735   3rd Qu.:45.00   3rd Qu.:57.50   3rd Qu.: 95.50  
+##  Max.   :0.11480   Max.   :66.70   Max.   :97.80   Max.   :125.90  
+##                    NAs    :1       NAs    :1       NAs    :1       
+##  fineTotalRatio   fineRainRatio  
+##  Min.   :0.1300   Min.   :0.025  
+##  1st Qu.:0.2700   1st Qu.:0.044  
+##  Median :0.3900   Median :0.064  
+##  Mean   :0.3715   Mean   :0.097  
+##  3rd Qu.:0.4900   3rd Qu.:0.141  
+##  Max.   :0.5500   Max.   :0.293  
+##  NAs    :1        NAs    :1</code></pre>
+<div class="sourceCode" id="cb716"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb716-1"><a href="statistics.html#cb716-1" tabindex="-1"></a>eucoaksed <span class="sc">%&gt;%</span></span>
+<span id="cb716-2"><a href="statistics.html#cb716-2" tabindex="-1"></a>  <span class="fu">group_by</span>(trtype) <span class="sc">%&gt;%</span></span>
+<span id="cb716-3"><a href="statistics.html#cb716-3" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">meanfines =</span> <span class="fu">mean</span>(fines_g, <span class="at">na.rm=</span>T), <span class="at">sdfines =</span> <span class="fu">sd</span>(fines_g, <span class="at">na.rm=</span>T),</span>
+<span id="cb716-4"><a href="statistics.html#cb716-4" tabindex="-1"></a>            <span class="at">meantotal =</span> <span class="fu">mean</span>(total_g, <span class="at">na.rm=</span>T), <span class="at">sdtotal =</span> <span class="fu">sd</span>(total_g, <span class="at">na.rm=</span>T))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 5
+##   trtype meanfines sdfines meantotal sdtotal
+##   &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 euc         14.2    3.50      48.6    35.0
+## 2 oak         39.4   20.4       86.7    26.2</code></pre>
+<div class="sourceCode" id="cb718"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb718-1"><a href="statistics.html#cb718-1" tabindex="-1"></a>eucoakLong <span class="ot">&lt;-</span> eucoaksed <span class="sc">%&gt;%</span> </span>
+<span id="cb718-2"><a href="statistics.html#cb718-2" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">col=</span><span class="fu">c</span>(fines_g,litter_g), </span>
+<span id="cb718-3"><a href="statistics.html#cb718-3" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;sed_type&quot;</span>, </span>
+<span id="cb718-4"><a href="statistics.html#cb718-4" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;sed_g&quot;</span>)</span>
+<span id="cb718-5"><a href="statistics.html#cb718-5" tabindex="-1"></a>eucoakLong <span class="sc">%&gt;%</span></span>
+<span id="cb718-6"><a href="statistics.html#cb718-6" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(trtype, sed_g, <span class="at">col=</span>sed_type)) <span class="sc">+</span> </span>
+<span id="cb718-7"><a href="statistics.html#cb718-7" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statEucOakSediment"></span>
+<img src="EnvDataScience_files/figure-html/statEucOakSediment-1.png" alt="Eucalyptus and oak sediment runoff box plots" width="75%" />
+<p class="caption">
+FIGURE 9.13: Eucalyptus and oak sediment runoff box plots
+</p>
+</div>
+<div class="sourceCode" id="cb719"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb719-1"><a href="statistics.html#cb719-1" tabindex="-1"></a>eucoakLong <span class="sc">%&gt;%</span></span>
+<span id="cb719-2"><a href="statistics.html#cb719-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(sed_g, <span class="at">col=</span>sed_type)) <span class="sc">+</span> </span>
+<span id="cb719-3"><a href="statistics.html#cb719-3" tabindex="-1"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span></span>
+<span id="cb719-4"><a href="statistics.html#cb719-4" tabindex="-1"></a>  <span class="fu">facet_grid</span>(trtype <span class="sc">~</span> .)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statEucOakFacetSediment"></span>
+<img src="EnvDataScience_files/figure-html/statEucOakFacetSediment-1.png" alt="Facet density plot of eucalyptus and oak sediment runoff" width="75%" />
+<p class="caption">
+FIGURE 9.14: Facet density plot of eucalyptus and oak sediment runoff
+</p>
+</div>
+<p><strong>Tests of euc vs oak based on fine sediments:</strong></p>
+<div class="sourceCode" id="cb720"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb720-1"><a href="statistics.html#cb720-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(eucoaksed<span class="sc">$</span>fines_g[eucoaksed<span class="sc">$</span>trtype <span class="sc">==</span> <span class="st">&quot;euc&quot;</span>])</span>
+<span id="cb720-2"><a href="statistics.html#cb720-2" tabindex="-1"></a><span class="fu">shapiro.test</span>(eucoaksed<span class="sc">$</span>fines_g[eucoaksed<span class="sc">$</span>trtype <span class="sc">==</span> <span class="st">&quot;oak&quot;</span>])</span>
+<span id="cb720-3"><a href="statistics.html#cb720-3" tabindex="-1"></a><span class="fu">t.test</span>(fines_g<span class="sc">~</span>trtype, <span class="at">data=</span>eucoaksed) </span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  eucoaksed$fines_g[eucoaksed$trtype == &quot;euc&quot;]
+## W = 0.9374, p-value = 0.6383</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  eucoaksed$fines_g[eucoaksed$trtype == &quot;oak&quot;]
+## W = 0.96659, p-value = 0.8729</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  fines_g by trtype
+## t = -3.2102, df = 6.4104, p-value = 0.01675
+## alternative hypothesis: true difference in means between group euc and group oak is not equal to 0
+## 95 percent confidence interval:
+##  -44.059797  -6.278299
+## sample estimates:
+## mean in group euc mean in group oak 
+##          14.21667          39.38571</code></pre>
+<p><strong>Tests of euc vs oak based on total sediments:</strong></p>
+<div class="sourceCode" id="cb724"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb724-1"><a href="statistics.html#cb724-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(eucoaksed<span class="sc">$</span>total_g[eucoaksed<span class="sc">$</span>trtype <span class="sc">==</span> <span class="st">&quot;euc&quot;</span>])</span>
+<span id="cb724-2"><a href="statistics.html#cb724-2" tabindex="-1"></a><span class="fu">shapiro.test</span>(eucoaksed<span class="sc">$</span>total_g[eucoaksed<span class="sc">$</span>trtype <span class="sc">==</span> <span class="st">&quot;oak&quot;</span>])</span>
+<span id="cb724-3"><a href="statistics.html#cb724-3" tabindex="-1"></a><span class="fu">kruskal.test</span>(total_g<span class="sc">~</span>trtype, <span class="at">data=</span>eucoaksed) </span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  eucoaksed$total_g[eucoaksed$trtype == &quot;euc&quot;]
+## W = 0.76405, p-value = 0.02725</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  eucoaksed$total_g[eucoaksed$trtype == &quot;oak&quot;]
+## W = 0.94988, p-value = 0.7286</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  total_g by trtype
+## Kruskal-Wallis chi-squared = 3.449, df = 1, p-value = 0.06329</code></pre>
+<p>So we used a t test for the <code>fines_g</code>, and the test suggests that there’s a significant difference in sediment yield for fines, but the Kruskal-Wallis test on total sediment (including litter) did not show a significant difference. Both results support the conclusion that oaks in this study produced more soil erosion, largely because the Eucalyptus stands generate so much litter cover, and that litter also made the total sediment yield not significantly different. See <span class="citation">Thompson et al. (<a href="#ref-eucoak">2016</a>)</span> for more information on this study and its conclusions.</p>
+</div>
+</div>
+<div id="analysis-of-variance" class="section level3 hasAnchor" number="9.4.2">
+<h3><span class="header-section-number">9.4.2</span> Analysis of variance<a href="statistics.html#analysis-of-variance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The purpose of analysis of variance (ANOVA) is to compare groups based upon continuous variables. It can be thought of as an extension of a t test where you have more than two groups, or as a linear model where one variable is a factor. In a confirmatory statistical test, you’ll want to see if you can reject the null hypothesis that there’s no difference between the within-sample variances and the between-sample variances.</p>
+<ul>
+<li>The response variable is a continuous variable</li>
+<li>The explanatory variable is the grouping – categorical (a factor in R)</li>
+</ul>
+<p>From a study of a karst system in Tennessee <span class="citation">(<a href="#ref-davis1993geomorphology">Davis and Brook 1993</a>)</span>, we might ask the question:</p>
+<p>Are water samples from streams draining sandstone, limestone, and shale (Figure <a href="statistics.html#fig:statSinkingCoveSampling">9.15</a>) different based on solutes measured as total hardness (TH)?</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statSinkingCoveSampling"></span>
+<img src="img/waterSampling.png" alt="Water sampling in varying lithologies in a karst area" width="75%" />
+<p class="caption">
+FIGURE 9.15: Water sampling in varying lithologies in a karst area
+</p>
+</div>
+<p>We can look at this spatially (Figure <a href="statistics.html#fig:statSinkingCoveHardness">9.16</a>) as well as by variables graphically (Figure <a href="statistics.html#fig:statTHbyLithology">9.17</a>).</p>
+<div class="sourceCode" id="cb728"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb728-1"><a href="statistics.html#cb728-1" tabindex="-1"></a><span class="fu">library</span>(igisci)</span>
+<span id="cb728-2"><a href="statistics.html#cb728-2" tabindex="-1"></a><span class="fu">library</span>(sf); <span class="fu">library</span>(tidyverse); <span class="fu">library</span>(readxl); <span class="fu">library</span>(tmap); <span class="fu">library</span>(terra)</span>
+<span id="cb728-3"><a href="statistics.html#cb728-3" tabindex="-1"></a>wChemData <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="fu">ex</span>(<span class="st">&quot;SinkingCove/SinkingCoveWaterChem.xlsx&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb728-4"><a href="statistics.html#cb728-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">siteLoc =</span> <span class="fu">str_sub</span>(Site,<span class="at">start=</span><span class="dv">1</span><span class="dt">L</span>, <span class="at">end=</span><span class="dv">1</span><span class="dt">L</span>))</span>
+<span id="cb728-5"><a href="statistics.html#cb728-5" tabindex="-1"></a>wChemTrunk <span class="ot">&lt;-</span> wChemData <span class="sc">%&gt;%</span> <span class="fu">filter</span>(siteLoc <span class="sc">==</span> <span class="st">&quot;T&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">siteType =</span> <span class="st">&quot;trunk&quot;</span>)</span>
+<span id="cb728-6"><a href="statistics.html#cb728-6" tabindex="-1"></a>wChemDrip <span class="ot">&lt;-</span> wChemData <span class="sc">%&gt;%</span> <span class="fu">filter</span>(siteLoc <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;D&quot;</span>,<span class="st">&quot;S&quot;</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">siteType =</span> <span class="st">&quot;dripwater&quot;</span>)</span>
+<span id="cb728-7"><a href="statistics.html#cb728-7" tabindex="-1"></a>wChemTrib <span class="ot">&lt;-</span> wChemData <span class="sc">%&gt;%</span> <span class="fu">filter</span>(siteLoc <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;B&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;K&quot;</span>, <span class="st">&quot;W&quot;</span>, <span class="st">&quot;P&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb728-8"><a href="statistics.html#cb728-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">siteType =</span> <span class="st">&quot;tributary&quot;</span>)</span>
+<span id="cb728-9"><a href="statistics.html#cb728-9" tabindex="-1"></a>wChemData <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(wChemTrunk, wChemDrip, wChemTrib)</span>
+<span id="cb728-10"><a href="statistics.html#cb728-10" tabindex="-1"></a>wChemData<span class="sc">$</span>siteType <span class="ot">&lt;-</span> <span class="fu">factor</span>(wChemData<span class="sc">$</span>siteType)</span>
+<span id="cb728-11"><a href="statistics.html#cb728-11" tabindex="-1"></a>wChemData<span class="sc">$</span>Lithology <span class="ot">&lt;-</span> <span class="fu">factor</span>(wChemData<span class="sc">$</span>Lithology)</span>
+<span id="cb728-12"><a href="statistics.html#cb728-12" tabindex="-1"></a>sites <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">ex</span>(<span class="st">&quot;SinkingCove/SinkingCoveSites.csv&quot;</span>))</span>
+<span id="cb728-13"><a href="statistics.html#cb728-13" tabindex="-1"></a>wChem <span class="ot">&lt;-</span> wChemData <span class="sc">%&gt;%</span></span>
+<span id="cb728-14"><a href="statistics.html#cb728-14" tabindex="-1"></a>  <span class="fu">left_join</span>(sites, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;Site&quot;</span> <span class="ot">=</span> <span class="st">&quot;site&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb728-15"><a href="statistics.html#cb728-15" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>), <span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb728-16"><a href="statistics.html#cb728-16" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&quot;plot&quot;</span>)</span>
+<span id="cb728-17"><a href="statistics.html#cb728-17" tabindex="-1"></a>DEM <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="fu">ex</span>(<span class="st">&quot;SinkingCove/DEM_SinkingCoveUTM.tif&quot;</span>))   </span>
+<span id="cb728-18"><a href="statistics.html#cb728-18" tabindex="-1"></a>slope <span class="ot">&lt;-</span> <span class="fu">terrain</span>(DEM, <span class="at">v=</span><span class="st">&#39;slope&#39;</span>)</span>
+<span id="cb728-19"><a href="statistics.html#cb728-19" tabindex="-1"></a>aspect <span class="ot">&lt;-</span> <span class="fu">terrain</span>(DEM, <span class="at">v=</span><span class="st">&#39;aspect&#39;</span>)</span>
+<span id="cb728-20"><a href="statistics.html#cb728-20" tabindex="-1"></a>hillsh <span class="ot">&lt;-</span> <span class="fu">shade</span>(slope<span class="sc">/</span><span class="dv">180</span><span class="sc">*</span>pi, aspect<span class="sc">/</span><span class="dv">180</span><span class="sc">*</span>pi, <span class="dv">40</span>, <span class="dv">330</span>) </span>
+<span id="cb728-21"><a href="statistics.html#cb728-21" tabindex="-1"></a>bounds <span class="ot">&lt;-</span> tmaptools<span class="sc">::</span><span class="fu">bb</span>(wChem, <span class="at">ext=</span><span class="fl">1.1</span>)</span>
+<span id="cb728-22"><a href="statistics.html#cb728-22" tabindex="-1"></a></span>
+<span id="cb728-23"><a href="statistics.html#cb728-23" tabindex="-1"></a>hillshCol <span class="ot">&lt;-</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="st">&quot;-brewer.greys&quot;</span>)</span>
+<span id="cb728-24"><a href="statistics.html#cb728-24" tabindex="-1"></a>terrainCol <span class="ot">&lt;-</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="fu">terrain.colors</span>(<span class="dv">9</span>))</span>
+<span id="cb728-25"><a href="statistics.html#cb728-25" tabindex="-1"></a></span>
+<span id="cb728-26"><a href="statistics.html#cb728-26" tabindex="-1"></a><span class="fu">tm_graticules</span>(<span class="at">labels.cardinal=</span>F) <span class="sc">+</span></span>
+<span id="cb728-27"><a href="statistics.html#cb728-27" tabindex="-1"></a>  <span class="fu">tm_shape</span>(hillsh,<span class="at">bbox=</span>bounds) <span class="sc">+</span></span>
+<span id="cb728-28"><a href="statistics.html#cb728-28" tabindex="-1"></a>    <span class="fu">tm_raster</span>(<span class="at">col.scale=</span>hillshCol, <span class="at">col.legend =</span> <span class="fu">tm_legend</span>(<span class="at">show=</span>F)) <span class="sc">+</span> </span>
+<span id="cb728-29"><a href="statistics.html#cb728-29" tabindex="-1"></a>  <span class="fu">tm_shape</span>(DEM) <span class="sc">+</span> </span>
+<span id="cb728-30"><a href="statistics.html#cb728-30" tabindex="-1"></a>    <span class="fu">tm_raster</span>(<span class="at">col.scale=</span>terrainCol, <span class="at">col_alpha=</span><span class="fl">0.5</span>,<span class="at">col.legend =</span> <span class="fu">tm_legend</span>(<span class="at">show=</span>F)) <span class="sc">+</span></span>
+<span id="cb728-31"><a href="statistics.html#cb728-31" tabindex="-1"></a>  <span class="fu">tm_shape</span>(wChem) <span class="sc">+</span></span>
+<span id="cb728-32"><a href="statistics.html#cb728-32" tabindex="-1"></a>    <span class="fu">tm_symbols</span>(<span class="at">size=</span><span class="st">&quot;TH&quot;</span>,</span>
+<span id="cb728-33"><a href="statistics.html#cb728-33" tabindex="-1"></a>               <span class="at">fill=</span><span class="st">&quot;Lithology&quot;</span>,</span>
+<span id="cb728-34"><a href="statistics.html#cb728-34" tabindex="-1"></a>               <span class="fu">tm_scale_continuous</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="fl">0.2</span>,<span class="dv">2</span>)), </span>
+<span id="cb728-35"><a href="statistics.html#cb728-35" tabindex="-1"></a>               <span class="at">shape=</span><span class="st">&quot;siteType&quot;</span>, </span>
+<span id="cb728-36"><a href="statistics.html#cb728-36" tabindex="-1"></a>               <span class="fu">tm_legend</span>(<span class="at">frame=</span>F)) <span class="sc">+</span></span>
+<span id="cb728-37"><a href="statistics.html#cb728-37" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">&quot;Upper Sinking Cove&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statSinkingCoveHardness"></span>
+<img src="EnvDataScience_files/figure-html/statSinkingCoveHardness-1.png" alt="Total hardness from dissolved carbonates at water sampling sites in Upper Sinking Cove, TN" width="75%" />
+<p class="caption">
+FIGURE 9.16: Total hardness from dissolved carbonates at water sampling sites in Upper Sinking Cove, TN
+</p>
+</div>
+<p>Before we run the analysis of variance tests, we’ll look at the data in another visual way, with histograms of total hardness, colored by site type, and faceted by lithology. We can already see that the groups are quite distinct, so there’ll be no surprises revealed in the analysis of variance.</p>
+<div class="sourceCode" id="cb729"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb729-1"><a href="statistics.html#cb729-1" tabindex="-1"></a>wChemData <span class="sc">%&gt;%</span></span>
+<span id="cb729-2"><a href="statistics.html#cb729-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>TH, <span class="at">fill=</span>siteType)) <span class="sc">+</span></span>
+<span id="cb729-3"><a href="statistics.html#cb729-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb729-4"><a href="statistics.html#cb729-4" tabindex="-1"></a>  <span class="fu">facet_grid</span>(Lithology <span class="sc">~</span> .)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statTHbyLithology"></span>
+<img src="EnvDataScience_files/figure-html/statTHbyLithology-1.png" alt="Sinking Cove dissolved carbonates as total hardness by lithology" width="75%" />
+<p class="caption">
+FIGURE 9.17: Sinking Cove dissolved carbonates as total hardness by lithology
+</p>
+</div>
+<p><strong>Analysis of Variance</strong>: An analysis of variance is run the same way as a linear model, and in fact you can sometimes use <code>lm()</code> instead of <code>aov()</code>, but the latter has advantages when checking the assumptions required for the model. Then the <code>anova()</code> function just displays the Analysis of Variance table, but you can see the same thing with <code>summary()</code>. You’ll find practitioners vary in their practice, so it can be confusing. We’ll start with deriving the model for total hardness to assess the factor <code>siteType</code>.</p>
+<div class="sourceCode" id="cb730"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb730-1"><a href="statistics.html#cb730-1" tabindex="-1"></a>aov_THsite <span class="ot">&lt;-</span> <span class="fu">aov</span>(TH<span class="sc">~</span>siteType, <span class="at">data =</span> wChemData)</span>
+<span id="cb730-2"><a href="statistics.html#cb730-2" tabindex="-1"></a><span class="fu">anova</span>(aov_THsite)</span></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: TH
+##           Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## siteType   2  79172   39586   20.59 1.071e-07 ***
+## Residuals 67 128815    1923                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb732"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb732-1"><a href="statistics.html#cb732-1" tabindex="-1"></a><span class="fu">summary</span>(aov_THsite)</span></code></pre></div>
+<pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## siteType     2  79172   39586   20.59 1.07e-07 ***
+## Residuals   67 128815    1923                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>So it seems that grouping by siteType is significant. To consider the validity of assumptions, we’ll start by checking that the variances are homogeneous, required for analysis of variance. This can be tested by looking for any relationship between residuals and fitted values, using the base plot system that knows what to do for this type of model, with option 1 plotting residuals against fitted values.</p>
+<div class="sourceCode" id="cb734"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb734-1"><a href="statistics.html#cb734-1" tabindex="-1"></a><span class="fu">plot</span>(aov_THsite, <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="EnvDataScience_files/figure-html/unnamed-chunk-263-1.png" alt="" width="75%" style="display: block; margin: auto;" />
+So that looks good, with no apparent relationship. Then we’ll check for normality of residuals with a Q-Q plot, option 2 when plotting this type of model. It should approximate a straight line, which it does reasonably well.</p>
+<div class="sourceCode" id="cb735"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb735-1"><a href="statistics.html#cb735-1" tabindex="-1"></a><span class="fu">plot</span>(aov_THsite, <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="EnvDataScience_files/figure-html/unnamed-chunk-264-1.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="post-hoc-analysis-of-variance-with-tukeys-test" class="section level3 hasAnchor" number="9.4.3">
+<h3><span class="header-section-number">9.4.3</span> Post-Hoc Analysis of Variance with Tukey’s Test<a href="statistics.html#post-hoc-analysis-of-variance-with-tukeys-test" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>“Post-Hoc Analysis” refers to analyzing a model that has been created, and one method for this with an analysis of variance model is the Tukey “Honest Significant Difference” method provided by the base R function <code>TukeyHSD()</code>. This is from the same John Tukey who we looked at earlier as a promoter of <em>exploratory data analysis</em> including visualization methods such as the Tukey boxplot.</p>
+<p>One thing the <code>TukeyHSD()</code> function does is compare all group pairings. If you only have two groups, the form of the output will look the same, but we have three groups, so let’s see what it shows. To run the test, we just provide our analysis of variance model <code>aov_THsite</code> to the function <code>TukeyHSD()</code>, with a confidence level.</p>
+<div class="sourceCode" id="cb736"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb736-1"><a href="statistics.html#cb736-1" tabindex="-1"></a><span class="fu">TukeyHSD</span>(aov_THsite, <span class="at">conf.level=</span>.<span class="dv">95</span>)</span></code></pre></div>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = TH ~ siteType, data = wChemData)
+## 
+## $siteType
+##                           diff        lwr        upr     p adj
+## tributary-dripwater  -80.93583 -117.39136 -44.480301 0.0000038
+## trunk-dripwater     -100.37818 -138.40394 -62.352427 0.0000001
+## trunk-tributary      -19.44235  -47.13149   8.246788 0.2191791</code></pre>
+<p>And here we see a surprise (though it shouldn’t really be a surprise if we look at the data): while dripwater is distinct from the other two, there’s no significant difference between trunk and tributary samples. This shouldn’t be a surprise since both trunk and tributary sources are flowing streams, while the dripwaters come from soils above via bedrock where they’re dissolving the calcium carbonate.</p>
+<p>We’ll do the same thing for the geology (or more specifically, lithology, which is rock type).</p>
+<div class="sourceCode" id="cb738"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb738-1"><a href="statistics.html#cb738-1" tabindex="-1"></a>aov_THlith <span class="ot">&lt;-</span> <span class="fu">aov</span>(TH<span class="sc">~</span>Lithology, <span class="at">data =</span> wChemData)</span>
+<span id="cb738-2"><a href="statistics.html#cb738-2" tabindex="-1"></a><span class="fu">anova</span>(aov_THlith)</span></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: TH
+##           Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## Lithology  3  98107   32702  19.643 3.278e-09 ***
+## Residuals 66 109881    1665                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>This grouping also appears significant, but let’s also try the TukeyHSD test:</p>
+<div class="sourceCode" id="cb740"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb740-1"><a href="statistics.html#cb740-1" tabindex="-1"></a><span class="fu">TukeyHSD</span>(aov_THlith, <span class="at">conf.level=</span>.<span class="dv">95</span> )</span></code></pre></div>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = TH ~ Lithology, data = wChemData)
+## 
+## $Lithology
+##                           diff        lwr        upr     p adj
+## mix-limestone        -65.76523  -94.39604 -37.134411 0.0000004
+## sandstone-limestone -110.86047 -161.67512 -60.045808 0.0000015
+## shale-limestone      -38.86047 -147.64815  69.927216 0.7826397
+## sandstone-mix        -45.09524  -98.61074   8.420267 0.1281941
+## shale-mix             26.90476  -83.17039 136.979916 0.9171930
+## shale-sandstone       72.00000  -45.80894 189.808935 0.3796721</code></pre>
+<p>That shows something useful: the only pairing that is significantly distinct is between sandstone and limestone. This is also not surprising because all of the sandstone is on the caprock so there’s no direct source of carbonates and none from upstream.</p>
+<p>Again considering assumptions, for homogeneity of variances, there’s no apparent relationship between residuals and fitted values:</p>
+<div class="sourceCode" id="cb742"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb742-1"><a href="statistics.html#cb742-1" tabindex="-1"></a><span class="fu">plot</span>(aov_THlith, <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="EnvDataScience_files/figure-html/unnamed-chunk-268-1.png" alt="" width="75%" style="display: block; margin: auto;" />
+And the Q-Q plot’s reasonable approximation of a straight line supports the assumption that the residuals are normally distributed.</p>
+<div class="sourceCode" id="cb743"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb743-1"><a href="statistics.html#cb743-1" tabindex="-1"></a><span class="fu">plot</span>(aov_THlith, <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="EnvDataScience_files/figure-html/unnamed-chunk-269-1.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<p>Some observations and caveats from the above:</p>
+<ul>
+<li>There’s pretty clearly a difference between surface waters (trunk and tributary) and cave dripwaters (from stalactites) in terms of solutes. Analysis of variance simply confirms the obvious.</li>
+<li>There’s also pretty clearly a difference among lithologies on the basis of solutes, not surprising since limestone is much more soluble than sandstones. Similarly, analysis of variance confirms the obvious.</li>
+<li>The data may not be sufficiently normally distributed, and limestone hardness values are bimodal (largely due to the inaccessibility of waters in the trunk cave passages traveling 2 km through the Bangor limestone <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>), though analysis of variance may be less sensitive to this than a t test.</li>
+<li>While shale creates springs, shale strata are very thin, with most of them in the “mix” category, or form the boundary between the two major limestone formations. Tributary streams appear to cross the shale in caves that were inaccessible for sampling. We visually confirmed this in one cave, but this exploration required some challenging rappel work to access, so we were not able to sample.</li>
+<li>The geologic structure here is essentially flat, with sandstones on the plateau surface and the most massive limestones – the Bangor and Monteagle limestones – all below 400 m elevation (Figure <a href="statistics.html#fig:statSinkingCoveStrat">9.18</a>).</li>
+</ul>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statSinkingCoveStrat"></span>
+<img src="img/UpperSinkingCoveGeology.png" alt="Upper Sinking Cove (Tennessee) stratigraphy" width="90%" />
+<p class="caption">
+FIGURE 9.18: Upper Sinking Cove (Tennessee) stratigraphy
+</p>
+</div>
+<ul>
+<li>While the rapid increase in solutes happens when Cave Cove Creek starts draining through the much more soluble limestone until it reaches saturation, the distance traveled by the water (reflected by a drop in elevation) can be seen (Figure <a href="statistics.html#fig:statSinkingCoveTHelevLith">9.19</a>).</li>
+</ul>
+<div class="sourceCode" id="cb744"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb744-1"><a href="statistics.html#cb744-1" tabindex="-1"></a>wChemData <span class="sc">%&gt;%</span></span>
+<span id="cb744-2"><a href="statistics.html#cb744-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Elevation, <span class="at">y=</span>TH, <span class="at">col=</span>Lithology)) <span class="sc">+</span> </span>
+<span id="cb744-3"><a href="statistics.html#cb744-3" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb744-4"><a href="statistics.html#cb744-4" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span> <span class="st">&quot;lm&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:statSinkingCoveTHelevLith"></span>
+<img src="EnvDataScience_files/figure-html/statSinkingCoveTHelevLith-1.png" alt="Sinking Cove dissolved carbonates as TH and elevation by lithology" width="75%" />
+<p class="caption">
+FIGURE 9.19: Sinking Cove dissolved carbonates as TH and elevation by lithology
+</p>
+</div>
+<blockquote>
+<p>As with other topics in these statistical chapters, there’s a lot more to learn, but fortunately there are many resources on statistical methods, since they cut across so many sciences. A more thorough coverage of the use of the one-way ANOVA test can be found at <a href="http://www.sthda.com/english/wiki/one-way-anova-test-in-r" class="uri">http://www.sthda.com/english/wiki/one-way-anova-test-in-r</a>. There’s also an example applied to the palmerpenguins data set we’ve used before, in this blog: <a href="https://statsandr.com/blog/anova-in-r" class="uri">https://statsandr.com/blog/anova-in-r</a> and many others.</p>
+</blockquote>
+</div>
+<div id="testing-a-correlation" class="section level3 hasAnchor" number="9.4.4">
+<h3><span class="header-section-number">9.4.4</span> Testing a correlation<a href="statistics.html#testing-a-correlation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We earlier looked at the correlation coefficient r. One test we can do is to see whether that correlation is significant:</p>
+<div class="sourceCode" id="cb745"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb745-1"><a href="statistics.html#cb745-1" tabindex="-1"></a><span class="fu">cor.test</span>(sierraFeb<span class="sc">$</span>TEMPERATURE, sierraFeb<span class="sc">$</span>ELEVATION)</span></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  sierraFeb$TEMPERATURE and sierraFeb$ELEVATION
+## t = -20.558, df = 60, p-value &lt; 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.9609478 -0.8952592
+## sample estimates:
+##        cor 
+## -0.9357801</code></pre>
+<p>So we can reject the null hypothesis that the correlation is equal to zero: the probability of getting a correlation of -0.936 is less than <span class="math inline">\(2.2\times 10^{-16}\)</span> and thus the “true correlation is not equal to 0”. So we can accept an alternative <em>working hypothesis</em> that they’re negatively correlated, and that – no surprise – <em>it gets colder as we go to higher elevations</em>, at least in February in the Sierra, where our data come from.</p>
+<p>In the next chapter, we’ll use this data to develop a linear model and get a similar result comparing the slope of the model predicting temperature from elevation…</p>
+</div>
+<div id="additional-resources" class="section level3 hasAnchor" number="9.4.5">
+<h3><span class="header-section-number">9.4.5</span> Additional resources<a href="statistics.html#additional-resources" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>As you might expect, there are <em>lots</em> of good statistical references based on R.</p>
+<p>One book also published at bookdown.org is Paula Moraga’s <em>Spatial Statistics for Data Science</em> (2023) available at <a href="https://www.paulamoraga.com/book-spatial/index.html" class="uri">https://www.paulamoraga.com/book-spatial/index.html</a>.</p>
+<div style="page-break-after: always;"></div>
+
+</div>
+</div>
+<div id="exercises-statistics" class="section level2 hasAnchor" number="9.5">
+<h2><span class="header-section-number">9.5</span> Exercises: Statistics<a href="statistics.html#exercises-statistics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-52" class="exercise"><strong>Exercise 9.1  </strong></span>Build a <code>soilvegJuly</code> data frame.</p>
+<ul>
+<li>Create a new RStudio project named Meadows.</li>
+<li>Create a soilveg tibble from “meadows/SoilVegSamples.csv” in the extdata.</li>
+<li>Have a look at this data frame and note that there is NA for SoilMoisture and NDVI for 8 of the records. These represent observations made in August, while the rest are all in July. While we have drone imagery and thus NDVI for these sites, as they are during the senescent period we don’t want to compare these with the July samples.</li>
+<li>Filter the data frame to only include records that are not NA (see 3.4.2.1) for SoilMoisture, and assign that to a new data frame <code>soilvegJuly</code>.</li>
+</ul>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-53" class="exercise"><strong>Exercise 9.2  </strong></span>Visualizations:</p>
+<p>Using graphical methods you learned in Chapter 4:</p>
+<ul>
+<li>Create a scatter plot of Soil Moisture vs NDVI, colored by veg (the three-character abbreviation of major vegetation types – <code>CAR</code> for Carex/sedge, <code>JUN</code> for Juncus/rush, <code>GRA</code> for mesic grasses and forbs, and <code>UPL</code> for more elevated (maybe by a meter) areas of sagebrush), for <code>soilvegJuly</code>. What we can see is that this is a small sample. This study involved a lot of drone imagery, probably 100s of GB of imagery, which was the main focus of the study – to detect channels – but a low density of soil and vegetation ground samples.</li>
+<li>Create a histogram of soil moisture colored by veg, also for the July data. We see the same story, with not very many samples, though suggestive of a multimodal distribution overall.</li>
+<li>Create a density plot of the same, using alpha = 0.5 to see everything with transparency.</li>
+</ul>
+<blockquote>
+<p>You can also use DominantVegetation, for this and the next question. The results may be a bit different.</p>
+</blockquote>
+</div>
+<p><img src="img/stats_ex2a.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="img/stats_ex2b.png" alt="" width="75%" style="display: block; margin: auto;" /><img src="img/stats_ex2c.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-54" class="exercise"><strong>Exercise 9.3  </strong></span>Tests, July data</p>
+<p>Using methods from 9.4.2, run an analysis of variance test of soil moisture ~ veg. Remember to specify the data, which should be just the July data., then do the same test for NDVI ~ veg. Interpret the results in a markdown section.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-55" class="exercise"><strong>Exercise 9.4  </strong></span>Meadow differences</p>
+<ul>
+<li>Now compare the meadows based on soil moisture in July, using a boxplot</li>
+<li>Then run an ANOVA test on this meadow grouping</li>
+</ul>
+</div>
+<p><img src="img/stats_ex4.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-56" class="exercise"><strong>Exercise 9.5  </strong></span>For the meadow data, create a pairs plot to find which variables are correlated along with their r values, and test the significance of that correlation and provide percentage of variation of one variable is explained by that of the other.</p>
+</div>
+<p><img src="img/stats_ex5.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-57" class="exercise"><strong>Exercise 9.6  </strong></span>Bulk density test, all data</p>
+<p>We’ll now look at bulk density for all samples (soilveg), including both July and August. Soil moisture and NDVI won’t be a part of this analysis, only bulk density and vegetation. Look at the distribution of all bulk density values, using both a histogram with 20 bins and a density plot, then run an ANOVA test of bulk density predicted by (~) veg. What does the Pr(&gt;F) value indicate?</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-58" class="exercise"><strong>Exercise 9.7  </strong></span>Carex or not?</p>
+<p>Derive a bulkDensityCAR data frame by mutating a new variable CAR derived as a boolean result of <code>veg == "CAR"</code>. This will group the vegetation points as either Carex or not, then use that in another ANOVA test to predict bulk density. What does the Pr(&gt;F) value indicate?</p>
+</div>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-marblesCO2" class="csl-entry">
+Davis, JD, P Amato, and R Kiefer. 2001. <span>“Soil Carbon Dioxide in a Summer-Dry Subalpine Karst, Marble Mountains, California, USA.”</span> <em>Zeitschrift Für Geomorphologie N.F.</em> 45 (3): 385–400. <a href="https://www.researchgate.net/publication/258333952_Soil_carbon_dioxide_in_a_summer-dry_subalpine_karst_Marble_Mountains_California_USA">https://www.researchgate.net/publication/258333952_Soil_carbon_dioxide_in_a_summer-dry_subalpine_karst_Marble_Mountains_California_USA</a>.
+</div>
+<div id="ref-davis1993geomorphology" class="csl-entry">
+Davis, Jerry D, and George A Brook. 1993. <span>“Geomorphology and Hydrology of Upper Sinking Cove, Cumberland Plateau, Tennessee.”</span> <em>Earth Surface Processes and Landforms</em> 18 (4): 339–62. <a href="https://doi.org/10.1002/esp.3290180404">https://doi.org/10.1002/esp.3290180404</a>.
+</div>
+<div id="ref-StatisticalMethodsWaterResources" class="csl-entry">
+Helsel, Dennis R., Robert M. Hirsch, Karen R. Ryberg, Stacey A. Archfield, and Edward J. Gilroy. 2020. <span>“Statistical Methods in Water Resources.”</span> Chap. A3 in <em>Hydrologic Analysis and Interpretation</em>. U.S. Geological Survey. <a href="https://pubs.usgs.gov/tm/04/a03/tm4a3.pdf">https://pubs.usgs.gov/tm/04/a03/tm4a3.pdf</a>.
+</div>
+<div id="ref-eucoak" class="csl-entry">
+Thompson, A, JD Davis, and AJ Oliphant. 2016. <span>“Surface Runoff and Soil Erosion Under Eucalyptus and Oak Canopy.”</span> <em>Earth Surface Processes and Landforms</em>, ahead of print. <a href="https://doi.org/10.1002/esp.3881">https://doi.org/10.1002/esp.3881</a>.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="2">
+<li id="fn2"><p>We tried very hard to get into that cave that must extend from upper Cave Cove then under Farmer Cove to a spring in Wolf Cove – we have dye traces to prove it.<a href="statistics.html#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="raster.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="modeling.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section"
+  },
+  "book_filename": "envdatasci",
+  "toc_depth": 4
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

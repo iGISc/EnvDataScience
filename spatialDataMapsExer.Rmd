@@ -1,0 +1,166 @@
+
+## Exercises: Spatial Data and Maps
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(include=T, echo=F)
+```
+
+**Project preparation**: Create a new RStudio project, and name it "Spatial". We're going to use this for data we create and new data we want to bring in. We'll still be reading in data from the data package, but working in this project we'll be getting used to (a) working with our own data and (b) storing data to be used for later projects. Once we've created the project, we'll want to create a `data` folder to store data in. This code should do this:
+
+```{r include=T, echo=T}
+dirname <- "data"
+if (!dir.exists(dirname)) {
+  dir.create(dirname)
+}
+```
+
+::: exercise
+Using the method of building simple sf geometries, build a simple $1\times1$ square object and plot it. Remember that you have to close the polygon, so the first vertex is the same as the last (of 5) vertices.
+:::
+
+```{r maps.ex1}
+
+```
+
+::: exercise
+Build a map in ggplot of Colorado, Wyoming, and Utah with these boundary vertices in GCS. As with the square, remember to close each figure, and assign the crs to what is needed for GCS: 4326. 
+
+-   Colorado: (-109,41),(-102,41),(-102,37),(-109,37)
+-   Wyoming: (-111,45),(-104,45),(-104,41),(-111,41)
+-   Utah: (-114,42),(-111,42),(-111,41),(-109,41),(-109,37),(-114,37)
+:::
+
+```{r maps.ex2, echo=F}
+knitr::include_graphics(here::here("img","maps.ex2.png"))
+
+```
+
+::: exercise
+Add in the code for other western states and create kind of a western US map. Go ahead and use the following code:
+
+```{r include=T, echo=T}
+AZ <- st_polygon(list(rbind(c(-114,37),c(-109,37),c(-109,31.3),c(-111,31.3),
+  c(-114.8,32.5),c(-114.6,32.7),c(-114.1,34.3),c(-114.5,35),
+  c(-114.5,36),c(-114,36),c(-114,37))))
+NM <- st_polygon(list(rbind(c(-109,37),c(-103,37),c(-103,32),c(-106.6,32),
+  c(-106.5,31.8),c(-108.2,31.8),c(-108.2,31.3),c(-109,31.3),c(-109,37))))
+CA <- st_polygon(list(rbind(c(-124,42),c(-120,42),c(-120,39),c(-114.5,35),
+  c(-114.1,34.3),c(-114.6,32.7),c(-117,32.5),c(-118.5,34),c(-120.5,34.5),
+  c(-122,36.5),c(-121.8,36.8),c(-122,37),c(-122.4,37.3),c(-122.5,37.8),
+  c(-123,38),c(-123.7,39),c(-124,40),c(-124.4,40.5),c(-124,41),c(-124,42))))
+NV <- st_polygon(list(rbind(c(-120,42),c(-114,42),c(-114,36),c(-114.5,36),
+  c(-114.5,35),c(-120,39),c(-120,42))))
+OR <- st_polygon(list(rbind(c(-124,42),c(-124.5,43),
+  c(-124,46),c(-123,46),c(-122.7,45.5),c(-119,46),c(-117,46),
+  c(-116.5,45.5),c(-117.2,44.5),c(-117,44),
+  c(-117,42),c(-120,42),c(-124,42))))
+WA <- st_polygon(list(rbind(c(-124,46),c(-124.8,48.4),c(-123,48),
+  c(-123,49),c(-117,49),
+  c(-117,46),c(-119,46),c(-122.7,45.5),c(-123,46),c(-124,46))))
+ID <- st_polygon(list(rbind(c(-117,49),
+  c(-116,49),c(-116,48),c(-114.4,46.5),c(-114.4,45.5),
+  c(-114,45.6),c(-113,44.5),c(-111,44.5),
+  c(-111,42),c(-114,42),c(-117,42),
+  c(-117,44),c(-117.2,44.5),c(-116.5,45.5),
+  c(-117,46),c(-117,49))))
+MT <- st_polygon(list(rbind(c(-116,49),c(-104,49),
+  c(-104,45),c(-111,45),
+  c(-111,44.5),c(-113,44.5),c(-114,45.6),c(-114.4,45.5),
+  c(-114.4,46.5),c(-116,48),c(-116,49))))
+```
+
+Then build sfcWestStates from these geometries using the methods in 6.1.1.2, specifying GCS (4326) as the crs, and plot with methods from 6.6.
+
+```{r maps.ex3, echo=F}
+knitr::include_graphics(here::here("img","maps.ex3.png"))
+```
+:::
+
+::: exercise
+Create western states using methods from 6.1.1.3, adding the fields `name`, `abb`, `area_sqkm`, and `population`, and create a map labeling with the name. Note that the added fields need to be in the same order as the boundaries created above. Also remember to make the area and pop variables numeric, which will happen if they're brought in as a vector along with character variables. Apply methods from 6.6 and references on R color systems to get higher values shaded darker, to follow cartographic figure-ground contrast convention.
+
+-   Colorado, CO, 269837, 5758736
+-   Wyoming, WY, 253600, 578759
+-   Utah, UT, 84899, 3205958
+-   Arizona, AZ, 295234, 7278717
+-   New Mexico, NM, 314917, 2096829
+-   California, CA, 423970, 39368078
+-   Nevada, NV, 286382, 3080156
+-   Oregon, OR, 254806, 4237256
+-   Washington, WA, 184827, 7705281
+-   Idaho, ID, 216443, 1839106
+-   Montana, MT, 380800, 1085407
+:::
+
+```{r maps.ex4, echo=F}
+knitr::include_graphics(here::here("img","maps.ex4.png"))
+```
+
+::: exercise
+Store the W_States as a shape file in the data folder with st_write. (Look up how to use st_write with ?st_write -- it's pretty simple.) Note that this will fail if it already exists, so include the parameter `delete_layer = TRUE` to allow overwrite.
+:::
+
+```{r maps.ex5, results='hide'}
+
+```
+
+::: exercise
+**Highest Peaks**: Create a tibble for the highest peaks in the western states, with the following names, elevations in m, longitude and latitude, use methods from 6.1.2  to create spatial data from it, and add them to that map. Then write the shapefile out again as "data/peaks.shp" again allowing overwriting.
+
+-   Wheeler Peak, 4011, -105.4, 36.5
+-   Mt. Whitney, 4421, -118.2, 36.5
+-   Boundary Peak, 4007, -118.35, 37.9
+-   Kings Peak, 4120, -110.3, 40.8
+-   Gannett Peak, 4209, -109, 43.2
+-   Mt. Elbert, 4401, -106.4, 39.1
+-   Humphreys Peak, 3852, -111.7, 35.4
+-   Mt. Hood, 3428, -121.7, 45.4
+-   Mt. Rainier, 4392, -121.8, 46.9
+-   Borah Peak, 3859, -113.8, 44.1
+-   Granite Peak, 3903, -109.8, 45.1
+
+Note: the easiest way to do this is with the method in 3.2.2, using the above data.
+
+:::
+
+```{r maps.ex6, results='hide'}
+
+```
+And finally create a map showing peaks labeled and the states filled based on area. Use cartographic methods from either 6.6 or 6.8.
+
+```{r mapsHighestPeaksGoal, echo=F, out.width="50%"}
+knitr::include_graphics(here::here("img","maps.ex6.png"))
+```
+
+::: exercise
+**California freeways**. From the CA_counties and CAfreeways feature data in igisci, make a simple map (using methods from 6.6), with freeways colored red.
+:::
+
+```{r maps_ex7, echo=F}
+knitr::include_graphics(here::here("img","maps.ex7.png"))
+```
+
+::: exercise
+After adding the terra library, create a raster from the built-in `volcano` matrix of elevations from Auckland's **Maunga Whau Volcano**, and use plot() to display it. We'd do more with that dataset, but we don't know what the cell size is.
+:::
+
+```{r maps_ex8, echo=F}
+knitr::include_graphics(here::here("img","maps.ex8.png"))
+```
+
+::: exercise
+**Western States tmap**: Use tmap to create a map from the W_States (polygons) and peaksp (points) data we created earlier. Include a basemap with no labels (I've used "CartoDB.VoyagerNoLabels" and Esri.WorldShadedRelief"). Hints: you'll want to use tm_text with text set to "peak" to label the points. Use this as an opportunity to test the geospatial data you've written earlier by using methods from 6.1.4 to read them. Experiment with `tm_symbol` sizes, `xmod`, and `ymod` settings with `tm_text`.  A tm_text option we haven't used before is to left-justify text by including `options=opt_tm_text(just="left")`
+:::
+
+```{r maps_ex9, echo=F}
+knitr::include_graphics(here::here("img","maps.ex9.png"))
+```
+
+::: exercise
+**tmap view mode**. Also using the western states data, create a similar tmap in view mode, but setting the basemap server to `"Esri.WorldImagery"`. 
+
+:::
+
+```{r, echo=F}
+knitr::include_graphics(here::here("img","tmapExample.png"))
+```

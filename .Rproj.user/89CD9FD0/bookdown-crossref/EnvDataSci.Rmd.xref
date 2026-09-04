@@ -1,0 +1,500 @@
+h1:chapter00.chapter_section Background, Goals and Data
+h2:environmental-data-science Environmental Data Science
+fig:indexEDS Environmental data science
+h2:environmental-data-and-methods Environmental Data and Methods
+h2:goals Goals
+h3:some-definitions Some definitions:
+h2:exploratory-data-analysis Exploratory Data Analysis
+h2:software-and-data Software and Data
+h3:data Data
+fig:indexCAcounties California counties simple features data in igisci package
+h2:acknowledgements Acknowledgements
+h1:part-exploratory-data-analysis (PART) Exploratory Data Analysis
+h1:introduction Introduction to R
+h2:data-objects Data Objects
+h3:scalars-and-assignment Scalars and assignment
+h2:functions Functions
+h2:expressions Expressions and Statements
+h2:class Data Classes
+h3:integers Integers
+h2:rectangular-data Rectangular Data
+fig:introRectangular Variables, observations, and values in rectangular data
+h2:data-structures-in-r Data Structures in R
+h3:vector Vectors
+h4:NA NA
+h4:creating-a-vector-from-a-sequence Creating a vector from a sequence
+h4:vectorization Vectorization and vector arithmetic
+h4:plotting-vectors Plotting vectors
+fig:twoplots Temperature plotted by index (left) and elevation (right)
+h4:named-indices Named indices
+h4:length-of-a-vector Length of a vector
+h3:list Lists
+h3:matrix Matrices
+h4:dimensions-for-arrays-and-matrices Dimensions for arrays and matrices
+h4:length-of-a-matrix Length of a matrix?
+h3:dataframes Data frames
+fig:introPenguins The three penguin species in palmerpenguins. Photos by KB Gorman. Used with permission
+fig:introPenguinMorphometry Diagram of penguin head with indication of bill length and bill depth (from Horst, Hill, and Gorman (2020), used with permission)
+fig:introPalmerStation Palmer Station, Antarctic Peninsula
+h4:creating-a-data-frame-out-of-a-matrix Creating a data frame out of a matrix
+tab:introSierraKable Temperatures (Feb), elevations, and latitudes of 12 Sierra stations
+fig:introTempElev Temperature and elevation scatter plot
+h4:creating-a-data-frame-directly-from-vectors Creating a data frame directly from vectors
+h4:read-a-data-frame-from-a-csv Read a data frame from a CSV
+fig:introTRIDT TRI dataframe -- DT datatable output
+h4:reorganizing-data-frames Reorganizing data frames
+h4:length-of-a-data-frame Length of a data frame
+h3:factors Factors
+h4:categorical-data-and-factors Categorical data and factors
+h2:accessors Accessors and Subsetting
+h3:subsetting  Subsetting
+h3:the-mysterious-double-bracket  The mysterious double bracket
+h3:accessing-a-vector-from-a-data-frame  Accessing a vector from a data frame
+h2:programming Programming scripts in RStudio
+h3:functions-writing  : creating your own
+h3:if-conditional-operations  : conditional operations
+h3:for  loops
+h4:a-for-loop-with-an-internal-if..else A  loop with an internal ..
+fig:introCrudeRiverMap Crude river map using x y coordinates
+fig:introLongProfile Longitudinal profile built from cumulative distances and elevation
+h3:subsetting-with-logic Subsetting with logic
+h3:apply Apply functions
+h2:rstudio RStudio projects
+h3:rmarkdown R Markdown
+h2:exercises-introduction-to-r Exercises: Introduction to R
+h1:abstraction Data Abstraction
+fig:Abstraction Visualization of some abstracted data from the EPA Toxic Release Inventory
+h2:tidyverse The Tidyverse
+h2:tibbles Tibbles
+h3:building-a-tibble-from-vectors Building a tibble from vectors
+h4:combining-built-in-data-of-various-types Combining built-in data of various types
+h3:tribble tribble
+tab:tribble Peaks tibble
+h3:csv read_csv
+h2:summarizing-variable-distributions Summarizing variable distributions
+(ref:eucoakRef) Euc-Oak paired plot runoff and erosion study ()
+fig:absEucOakStudy (ref:eucoakRef)
+fig:absEucOakSites Eucalyptus/Oak paired site locations
+h3:stratifying-variables-by-site-using-a-tukey-box-plot Stratifying variables by site using a Tukey box plot
+fig:absTukeyBoxplot Tukey boxplot of runoff under eucalyptus canopy
+h2:dplyr Database operations
+h3:pipe Select, mutate, and the pipe
+tab:eucoak6table EucOak data reorganized a bit, first 6
+h4:review-creating-penguins-from-penguins_raw Review: creating penguins from penguins_raw
+h4:helper-functions-for-dplyrselect Helper functions for 
+h3:filter Filtering observations
+tab:absDateFilteredEucOak Date-filtered EucOak data
+h4:filtering-out-na-with-is.na Filtering out  with 
+h3:subsetting-data-with-base-rs-subset Subsetting data with base R’s 
+h3:writing-a-data-frame-to-a-csv Writing a data frame to a csv
+h3:group-summary Summarize by group
+tab:eval EucOak data summarized by site
+tab:absEucOaksummary EucOak data summarized by site
+h3:count Count
+h3:sorting-after-summarizing Sorting after summarizing
+h3:the-dot-operator The dot operator
+h2:stringr String abstraction
+h3:detecting-matches Detecting matches
+h3:subset-string Subsetting strings
+h3:string-length String length
+h3:replacing-substrings-with-other-text-mutating-strings Replacing substrings with other text ( strings)
+h3:concatenating-and-splitting Concatenating and splitting
+h2:lubridate Dates and times with 
+h3:dates-used-for-annual-time-series Dates used for annual time series
+h2:extending-abstractions-with-functions Extending abstractions with functions
+h2:exercises-data-abstraction Exercises: Data Abstraction
+h1:visualization Visualization
+h2:plot-in-base-r plot in base R
+fig:visFlipperLength Flipper length by mass and by species, base plot system. The Antarctic peninsula penguin data set is from @palmer.
+h2:ggplot2 ggplot2
+h2:plotting-one-variable Plotting one variable
+fig:visSimpleBarGraph Simple bar graph of meadow vegetation samples
+h3:histogram Histogram
+fig:visNDVIknuthson Distribution of NDVI, Knuthson Meadow
+fig:visTemperaturesHisto Distribution of Average Monthly Temperatures, Sierra Nevada
+fig:visCumHisto Cumulative Distribution of Average Monthly Temperatures, Sierra Nevada
+h4:building-a-histogram-from-a-time-series Building a histogram from a time series
+h3:density-plot Density plot
+fig:visDensNDVI Density plot of NDVI, Knuthson Meadow
+fig:visDensityAlpha Comparative density plot using alpha setting
+fig:visRunoffEucOak Runoff under eucalyptus and oak in Bay Area sites
+h3:boxplot Boxplot
+fig:visBoxplotByRunoff Boxplot of runoff by site
+fig:visEucOakRunoffColored Runoff at Bay Area Sites, colored as eucalyptus and oak
+fig:visSoilGasSampling Marble Valley, Marble Mountains Wilderness, California
+fig:visMarblesSitesTopo Marble Mountains soil gas sampling sites, with surface topographic features and cave passages
+fig:visSoilTukey Visualizing soil CO2 data with a Tukey box plot
+h2:plotting-two-variables Plotting Two Variables
+h3:two-continuous-variables Two continuous variables
+fig:visSagehenScatterplot Scatter plot of discharge (Q) and specific electrical conductance (EC) for Sagehen Creek, California
+fig:visSagehenQEClog10 Q and EC for Sagehen Creek, using log10 scaling on both axes
+fig:visOneColor Setting one color for all points
+h3:two-variables-one-discrete Two variables, one discrete
+fig:vis2var1discrete Two variables, one discrete
+h3:color-systems Color systems
+h4:specifying-colors-to-use-for-a-graphical-element Specifying colors to use for a graphical element
+fig:visAestheticsPtsLines Using aesthetics settings for both points and lines
+h4:color-from-variable-in-aesthetics Color from variable, in aesthetics
+fig:visColorFromVar Color set within aes()
+fig:visSagehenQECcolorTemp Streamflow (Q) and specific electrical conductance (EC) for Sagehen Creek, colored by temperature
+fig:visGreenRed Channel slope as range from green to red, vertices sized by elevation
+fig:visGreenRedLongProf Channel slope as range of line colors on a longitudinal profile
+fig:visSlopeLong Channel slope by longitudinal distance as scatter points colored by slope
+h3:trend-line Trend line
+fig:visTrendLine Trend line with a linear model
+h2:general-symbology General Symbology
+h3:categorical-symbology Categorical symbology
+fig:visTRIcategorical EPA TRI, categorical symbology for industry sector
+h3:log-scales-instead-of-transform Log scales instead of transform
+fig:visLogScalesTRI Using log scales instead of transforming
+h2:graphs-from-grouped-data Graphs from Grouped Data
+fig:visNDVIpheno NDVI symbolized by vegetation in two seasons
+fig:visEucOakRainfallRunoff Eucalyptus and oak: rainfall and runoff
+h3:faceted-graphs Faceted graphs
+fig:visFacetedGraph Faceted graph alternative to color grouping (note that the y scale is the same for each)
+h2:titles-subtitles-axis-labels-and-legend-position Titles, Subtitles, Axis Labels, and Legend Position
+fig:visTitles Titles added
+h2:pairs-plot Pairs Plot
+fig:visPairsPlot Pairs plot for Sierra Nevada stations variables
+fig:visGGallyPenguins Enhanced GGally pairs plot for palmerpenguin data
+h2:exercises-visualization Exercises: Visualization
+h1:transformation Data Transformation
+h2:joins Data joins
+h2:set Set operations
+h2:binding Binding rows and columns
+h2:pivots Pivoting data frames
+h3:pivot_longer 
+fig:transPivotPheno Color classified by phenology, data created by a pivot
+fig:transEucOakPivot Euc vs oak graphs created using a pivot
+fig:transEucOakScatterplot Runoff/rainfall scatterplot colored by tree, created by pivot and binding rows
+h3:pivot_wider 
+h2:combining-transformation-methods-to-create-a-free_y-faceted-graph Combining transformation methods to create a  faceted graph
+h3:air-pollutant-emissions-trends-epa Air pollutant emissions trends (EPA)
+h4:the-free_y-faceted-graph The  faceted graph
+fig:USairpollution Facet graph of air pollutants in the US, 1990-2016
+h3:flux-tower-data Flux tower data
+fig:transLoneyFlux Flux tower installed at Loney Meadow, 2016. Photo credit: Darren Blackburn
+fig:transFacet free-y facet graph supported by pivot (note the y axis scaling varies among variables)
+h2:exercise-transformation Exercise: Transformation
+fig:transGoal10 Goal
+h1:part-spatial (PART) Spatial
+h1:spatial Spatial Data and Maps
+h2:spatial-data Spatial Data
+h3:simple-geometry-building-in-sf Simple geometry building in sf
+tab:mapsSimpleGeometrySF Some common sf functions for building geometries from coordinates
+h4:building-simple-sf-geometries Building simple sf geometries
+h4:maps Building geospatial points as sf columns ()
+fig:mapsGG2 A simple ggplot2 map built from scratch with hard-coded data as simple feature columns
+h4:building-an-sf-class-from-sf-columns. Building an sf class from sf columns.
+fig:mapsSFclass Using an sf class to build a map in ggplot2, displaying an attribute
+fig:mapsBaseR2states Base R plot of one attribute from two states
+h3:building-points-from-a-data-frame Building points from a data frame
+fig:mapsPtsBySF Points created from a dataframe with Simple Features
+h3:spatvectors-in-terra SpatVectors in 
+fig:mapsSpatVectorPtsLabels Simple plot of SpatVector point data with labels (note that overlapping labels may result, as seen here)
+fig:mapsGG2statesStations ggplot of twostates and stations
+fig:mapsSpatVectorsPlot Base R plot of twostates and stations SpatVectors
+h3:creating-features-from-shapefiles Creating features from shapefiles
+fig:mapsPlotBayAreaCo A simple plot of polygon data by default shows all variables
+fig:mapsBayAreaCo1var A single map with a legend is produced when a variable is specified
+h2:coordinate-referencing-systems Coordinate Referencing Systems
+h2:creating-sf-data-from-data-frames Creating sf Data from Data Frames
+fig:mapsPtsCreatedFromDF Points created from data frame with coordinate variables
+h3:removing-geometry  geometry
+h2:base-rs-plot-with-terra Base R’s  with 
+fig:mapsSpatVectorData Plotting SpatVector data with base R plot system
+fig:mapsBaseRaddTRUE Features added to the map using the base R plot system
+h3:using-maptiles-to-create-a-basemap Using maptiles to create a basemap
+fig:mapsMaptiles Using maptiles for a base map
+fig:mapsConvertedSF4tiles Converted sf data for map with tiles
+h2:raster-data Raster data
+h3:building-rasters Building rasters
+fig:mapsSpatRasterSpatVector Simple plot of a worldwide SpatRaster of 30-degree cells, with SpatVector of CA and NV added
+h3:vector-to-raster-conversion Vector to raster conversion
+fig:mapsStrRas Stream raster converted from stream features, with 30 m cells from an elevation raster template
+h4:what-if-we-have-no-raster-to-use-as-a-template What if we have no raster to use as a template?
+h4:plotting-some-existing-downloaded-raster-data Plotting some existing downloaded raster data
+fig:mapsSRTM Shuttle Radar Topography Mission (SRTM) image of Virgin River Canyon area, southern Utah
+h2:ggplot2-for-maps ggplot2 for Maps
+fig:mapsGGsimple simple ggplot map
+fig:mapsGGlabels labels added
+fig:mapsLegend repositioned legend
+fig:mapsZoom Using bbox to zoom into two counties
+h3:rasters-in-ggplot2 Rasters in ggplot2
+fig:mapsGGrasters Rasters displayed in ggplot by converting to points
+h2:using-bounding-boxes-to-zoom-to-the-extent-of-data-layers-in-any-mapping-package Using bounding boxes to zoom to the extent of data layers (in any mapping package)
+h2:tmap tmap
+fig:tmapWorld tmap with graticule
+h3:color Color
+fig:tmapColorVar tmap fill colored by variable
+fig:tmapCountyCategorical Categorical Fill
+fig:tmapMulti hillshade, borders and point symbols in tmap
+h3:basemap-with-tmap Basemap with tmap
+fig:tmapBasemapCAcounties California counties with a basemap in tmap
+h2:interactive-maps Interactive Maps
+h3:leaflet Leaflet
+fig:mapsLeafletSFSU Leaflet map showing the location of the SFSU Institute for Geographic Information Science with choices of basemaps
+h3:mapview Mapview
+h3:tmap-view-mode tmap (view mode)
+fig:tmapBaseMaps View (interactive) mode of tmap with selection of basemaps
+h3:interactive-mapping-of-individual-penguins-abstracted-from-a-big-dataset Interactive mapping of individual penguins abstracted from a big dataset
+fig:mapsPenguins
+h2:exercises-spatial-data-and-maps Exercises: Spatial Data and Maps
+h1:spatial-analysis Spatial Analysis
+h2:data-frame-operations Data Frame Operations
+fig:spanlBodie A Bodie scene, from Bodie State Historic Park (https://www.parks.ca.gov/)
+h3:GroupedSummaries Using grouped summaries, and filtering by a selection
+fig:spanlSierraData Sierra data
+h2:spatial-analysis-operations Spatial Analysis Operations
+h3:using-topology-to-subset Using topology to subset
+fig:spanlNSierra Northern Sierra stations and places
+h3:centroid Centroid
+fig:spanlCentroids California county centroids
+fig:spanlBayAreaTracts Map scaled to cover Bay Area tracts using a bbox
+h3:distance Distance
+h4:great-circle-distances Great circle distances
+fig:spanlNileMap Nile River points, colored by channel slope
+fig:spanlNileLong Nile River channel slope as range of colors from green to red, with great circle channel distances derived using the haversine method
+h4:distances-among-features Distances among features
+fig:spanlSelSoilCO2 Selection of soil CO2 sampling sites, July 1995
+fig:spanlSoilH2O Selection of soil CO2 and in-cave water samples
+h4:distance-to-the-nearest-feature-abstracted-from-distance-matrix Distance to the nearest feature, abstracted from distance matrix
+fig:spanlDistCO2streams Distance from CO2 samples to closest streams (not including lakes)
+h4:nearest-feature-detection Nearest feature detection
+fig:spanlDistStations Distance to towns (places) from weather stations
+h3:buffers Buffers
+fig:spanlTrailBuffer 100 m trail buffer, Marble Mountains
+h4:the-units-package The  package
+h3:spatial-overlay-union-and-intersection Spatial overlay: union and intersection
+fig:spanlUnionBuffer Unioned trail buffer, dissolving boundaries
+fig:spanlIntTrailStrBuff Intersection of trail and stream buffers
+fig:spanlUnion2buffs Union of two sets of buffer polygons
+h3:clip-with-st_crop Clip with st_crop
+fig:spanlCrop Cropping with specified x and y limits
+h4:sf-or-terra-for-vector-spatial-operations sf or terra for vector spatial operations?
+h3:spatial-join-with-st_join Spatial join with 
+fig:spanlTRIspatialJoin TRI points with census variables added via a spatial join
+h3:further-exploration-of-spatial-analysis Further exploration of spatial analysis
+h2:exercises-spatial-analysis Exercises: Spatial Analysis
+h1:raster Raster Spatial Analysis
+h2:terrain Terrain functions
+fig:rasMblElev Marble Mountains (California) elevation
+fig:rasSlope Slope
+fig:rasAspect Aspect
+fig:rasClassifiedSlope Classified slopes
+fig:rasHillshade Hillshade
+h2:map-algebra-in-terra Map Algebra in terra
+fig:rasMapAlgebra Map algebra conversion of elevations from metres to feet
+fig:rasSlopeGT30 Boolean: slope > 30
+fig:rasIntersection Boolean intersection: (slope > 30) * (elev > 2000)
+fig:rasSteepAreas Steep Areas
+h2:distance-1 Distance
+fig:rasStrDist Stream distance raster
+h2:extracting-values Extracting Values
+fig:rasRandomPtsMarbles Random points in the Marble Valley area, Marble Mountains, California
+fig:rasExtractedGeology Points colored by geology extracted from raster
+fig:rasElevByStrDist Elevation by stream distance, colored by geology, random point extraction
+fig:rasCarbonateGeol Dissolved calcium carbonate grouped by geology extracted at water sample points
+fig:rasSlopeElevGeol Slope by elevation colored by extracted geology
+fig:rasLogHardness Calcium carbonate total hardness at sample points, showing geologic units
+h2:focal-statistics Focal Statistics
+fig:rasFocalMean 9x9 focal mean of elevation
+fig:rasHillshFocalMean Hillshade of 9x9 focal mean of elevation
+fig:rasMblGeol Marble Mountains geology raster
+fig:rasModalGeol Modal geology in 9 by 9 neighborhoods
+h2:zonal-statistics Zonal Statistics
+h2:exercises-raster-spatial-analysis Exercises: Raster Spatial Analysis
+fig:rasGeolElevDistGoal Geology and elevation by stream and trail distance (goal)
+h1:part-statistics-and-modeling (PART) Statistics and Modeling
+h1:statistics Statistical Summaries and Tests
+h2:goals-of-statistical-analysis Goals of Statistical Analysis
+h2:summary-statistics Summary Statistics
+h3:summarize-by-group-stratifying-a-summary Summarize by group: 
+h3:boxplot-for-visualizing-distributions-by-group Boxplot for visualizing distributions by group
+fig:statTukey Tukey boxplot by group
+fig:statCO2avgbysite Marble Mountains average soil carbon dioxide per site
+h3:random Generating pseudorandom numbers
+fig:statrunif Random uniform histogram
+fig:statrnorm Random normal histogram
+fig:statrnormDens Random normal density plot
+fig:statrnomrunif Random normal plotted against random uniform
+h2:correlation Correlation r and Coefficient of Determination r
+fig:statNegScatter Scatter plot illustrating negative correlation
+h3:displaying-correlation-in-a-pairs-plot Displaying correlation in a pairs plot
+fig:statPairs Pairs plot with r values
+h2:statistical-tests Statistical Tests
+h3:comparing-samples-and-groupings-with-a-t-test-and-a-non-parametric-kruskal-wallis-rank-sum-test Comparing samples and groupings with a t test and a non-parametric Kruskal-Wallis Rank Sum test
+fig:statNDVIpheno NDVI by phenology
+h4:runoff-and-sediment-yield-under-eucalyptus-vs-oaks-is-there-a-difference Runoff and Sediment Yield under Eucalyptus vs Oaks – is there a difference?
+fig:statEucOakRunoff Runoff under eucalyptus and oak in Bay Area sites
+fig:statSiteGrouped Runoff at various sites contrasting euc and oak
+fig:statTildenSites East Bay sites
+fig:statEucOakSediment Eucalyptus and oak sediment runoff box plots
+fig:statEucOakFacetSediment Facet density plot of eucalyptus and oak sediment runoff
+h3:analysis-of-variance Analysis of variance
+fig:statSinkingCoveSampling Water sampling in varying lithologies in a karst area
+fig:statSinkingCoveHardness Total hardness from dissolved carbonates at water sampling sites in Upper Sinking Cove, TN
+fig:statTHbyLithology Sinking Cove dissolved carbonates as total hardness by lithology
+h3:post-hoc-analysis-of-variance-with-tukeys-test Post-Hoc Analysis of Variance with Tukey’s Test
+fig:statSinkingCoveStrat Upper Sinking Cove (Tennessee) stratigraphy
+fig:statSinkingCoveTHelevLith Sinking Cove dissolved carbonates as TH and elevation by lithology
+h3:testing-a-correlation Testing a correlation
+h3:additional-resources Additional resources
+h2:exercises-statistics Exercises: Statistics
+h1:modeling Modeling
+h2:some-common-statistical-models Some Common Statistical Models
+h2:lm Linear Model ()
+h2:spatial-influences-on-statistical-analysis Spatial Influences on Statistical Analysis
+h3:mapping-residuals Mapping residuals
+fig:modOrigFebTemp Original February temperature data
+fig:modPredictedTemp Temperature predicted by elevation model
+fig:modTempPredRas Temperature predicted by elevation raster
+fig:modResidualsTemp Residuals of temperature from model predictions by elevation
+h2:analysis-of-covariance Analysis of Covariance
+fig:modMeandering Meandering river
+fig:modBraided Braided river
+fig:modAnastomosed Anastomosed river
+fig:modQSrivers Q vs S with stream type
+h3:tukey-test-for-the-ancova-model Tukey test for the ANCOVA model
+h3:the-karst-water-chemistry-model The karst water chemistry model
+fig:modSinkingCoveHardness Total hardness from dissolved carbonates at water sampling sites in Upper Sinking Cove, TN
+h2:generalized-linear-model-glm Generalized linear model (GLM)
+h3:binomial-family-logistic-glm Binomial family: Logistic GLM
+h3:logistic-landslide-model Logistic landslide model
+fig:modLandslide Landslide in San Pedro Creek watershed
+fig:modSPlandslides Landslides in San Pedro Creek watershed
+fig:modSedSourceStudy Sediment source analysis
+fig:modSPrandomPts Raw random points
+fig:modRandomBuffer Landslides and buffers to exclude from random points
+fig:modRandomeExcluded Landslides and random points (excluded from slide buffers)
+h4:map-the-logistic-result Map the logistic result
+fig:modLogisticPredict Logistic model prediction of 1983 landslide probability
+h3:poisson-regression Poisson regression
+h4:seabird-poisson-model Seabird Poisson Model
+fig:modAlbatrossCounts Black-footed albatross counts, July 2006
+h2:other-modeling-methods Other modeling methods
+h3:curve-fitting Curve fitting
+h3:models-employing-machine-learning Models employing machine learning
+h2:exercises-modeling Exercises: Modeling
+h1:imagery Imagery and Classification Models
+h2:reading-and-displaying-sentinel-2-imagery Reading and Displaying Sentinel-2 Imagery
+h3:individual-bands Individual bands
+fig:img4bands
+h3:spectral-subsets-to-create-three-band-r-g-b-and-nir-r-g-for-visualization Spectral subsets to create three-band R-G-B and NIR-R-G for visualization
+fig:imgRGBscene
+h3:crop-to-study-area-extent Crop to study area extent
+fig:imgRCVcropRGB
+fig:imgFalseRCV
+h3:saving-results Saving results
+h3:band-scatter-plots Band scatter plots
+fig:imgRedNIRpairs
+h2:spectral-profiles Spectral Profiles
+fig:imgSpectralSignatures9
+fig:imgSpectralSignatures7
+fig:imgSpectralSignatures6
+h2:map-algebra-and-vegetation-indices Map Algebra and Vegetation Indices
+h3:vegetation-indices Vegetation indices
+fig:imgNDVI
+h3:histogram-1 Histogram
+fig:imgNDVIhisto
+h3:other-vegetation-indices Other vegetation indices
+fig:imgNDMIrcv20
+fig:imgNDMIrcv20histo
+fig:imgNDGIrcv20
+fig:imgNDGIrcv20histo
+h2:unsupervised-classification-with-k-means Unsupervised Classification with k-means
+fig:imgUnsupervised20m
+h2:machine-learning-classification-of-imagery Machine Learning Classification of Imagery
+h3:read-imagery-and-training-data-and-extract-sample-values-for-training Read imagery and training data and extract sample values for training
+fig:imgTrainingPolys Training samples over imagery basemap
+fig:imgTrainingFill Training samples over simple basemap
+h3:training-the-cart-model Training the CART model
+fig:imgCARTtree20m
+h3:prediction-using-the-cart-model Prediction using the CART model
+fig:imgCARTclassProb20m
+fig:imgCARThighestProb20m
+h3:validating-the-model Validating the model
+h4:the-overfit-model-problem The  problem
+h4:cross-validation-20-m-sentinel-2-cart-model Cross validation : 20 m Sentinel-2 CART model
+h4:accuracy-and-error-metrics Accuracy and error metrics
+h2:classifying-with-10-m-sentinel-2-imagery Classifying with 10 m Sentinel-2 Imagery
+h3:subset-bands-10-m Subset bands (10 m)
+h3:crop-to-rcv-extent-and-extract-pixel-values Crop to RCV extent and extract pixel values
+h3:training-the-cart-model-10-m-and-plot-the-tree Training the CART model (10 m) and plot the tree
+fig:imgCART10mTree 10 m CART regression tree
+h3:prediction-using-the-cart-model-10-m Prediction using the CART model (10 m)
+fig:imgCART10mProb
+fig:imgCART10mHighestProb
+h4:cross-validation-10-m-sentinel-2-cart-model Cross-validation : 10 m Sentinel-2 CART model
+h4:accuracy-metrics-10-m-sentinel-2-cart-model Accuracy metrics : 10 m Sentinel-2 CART model
+h2:classification-using-multiple-images-capturing-phenology Classification Using Multiple Images Capturing Phenology
+h3:create-a-10-band-stack-from-both-images Create a 10-band stack from both images
+h3:extract-the-training-data-10-m-spring-summer Extract the training data (10 m spring + summer)
+h3:cart-model-and-prediction-10-m-spring-summer CART model and prediction (10 m spring + summer)
+fig:imgCARTtreePheno CART decision tree, Sentinel 10-m, spring and summer 2021 images
+fig:imgCARTprobmapPheno CART classification, probabilities of each class, Sentinel-2 10 m, 2021 spring and summer phenology
+fig:imgCARThighestPheno CART classification, highest probability class, Sentinel-2 10 m, 2021 spring and summer phenology
+h4:cross-validation-cart-model-for-10-m-spring-summer Cross validation : CART model for 10 m spring + summer
+h4:accuracy-metrics-cart-model-for-10-m-spring-summer Accuracy metrics : CART model for 10 m spring + summer
+h2:classification-using-multiple-images-capturing-phenology-20m Classification Using Multiple Images Capturing Phenology : 20m
+h3:create-a-18-band-stack-from-both-images Create a 18-band stack from both images
+fig:imgSpectralSignatures7pheno
+h3:extract-the-training-data-20-m-spring-summer Extract the training data (20 m spring + summer)
+h3:cart-model-and-prediction-20-m-spring-summer CART model and prediction (20 m spring + summer)
+fig:imgCARTtreePheno20 CART decision tree, Sentinel 20-m, spring and summer 2021 images
+fig:imgCARTprobmapPheno20 CART classification, probabilities of each class, Sentinel-2 20 m, 2021 spring and summer phenology
+fig:imgCARThighestPheno20 CART classification, highest probability class, Sentinel-2 20 m, 2021 spring and summer phenology
+h4:cross-validation-cart-model-for-20-m-spring-summer Cross validation : CART model for 20 m spring + summer
+h4:accuracy-metrics-cart-model-for-20-m-spring-summer Accuracy metrics : CART model for 20 m spring + summer
+h2:conclusions-and-next-steps-for-imagery-classification Conclusions and Next Steps for Imagery Classification
+h2:exercises-imagery-analysis-and-classification-models Exercises: Imagery Analysis and Classification Models
+h1:part-time-series (PART) Time Series
+h1:ts Time Series Visualization and Analysis
+fig:timeRCVfluxtower Red Clover Valley eddy covariance flux tower installation
+fig:timeLoneyGraph Loney Meadow net ecosystem exchange (NEE) results (Blackburn et al. 2021)
+fig:timeNileTS Time series of Nile River flows
+h2:structure-seasonality-and-decomposition-of-time-series Structure, Seasonality, and Decomposition of Time Series
+fig:timeMaunaLoaDecomp Decomposition of Mauna Loa CO2 data
+fig:timeCO2stl Seasonal decomposition of time series using loess (stl) applied to CO2. Note that the vertical units for each panel is parts per million (ppm), and the bar on the right shows the size of ~2 ppm.
+h2:creation-of-time-series-ts-data Creation of Time Series (ts) Data
+fig:timeSFhiLo San Francisco monthly highs and lows as time series
+h3:frequency-start-and-end-parameters-for-ts Frequency, start, and end parameters for 
+fig:timeSFyearly SF data with yearly period
+fig:timeGG20year Greenhouse gases with 20 year observations, so 0.05 annual frequency
+h3:associating-times-with-time-series Associating times with time series
+h4:creating-a-time-series-from-web-scraped-mauna-loa-co2-data Creating a time series from web-scraped Mauna Loa CO2 data
+h3:subsetting-time-series-by-times Subsetting time series by times
+fig:timeSunspot Monthly sunspot activity from 1749 to 2013
+fig:timeSunspot19401970 Monthly sunspot activity from 1940 to 1970
+h3:changing-the-frequency-to-use-a-different-period Changing the frequency to use a different period
+fig:timeSunspot20years Sunspots of the first 20 years of data
+fig:timeSunspot11years 11-year sunspot cycle decomposition
+h3:time-stamps-and-extensible-time-series Time stamps and extensible time series
+h4:lubridate-and-julian-dates Lubridate and Julian dates
+h4:extensible-time-series-xts Extensible time series ()
+fig:timeSanPedroEcoli San Pedro Creek E. coli time series
+fig:timeSanPedroEcoliDecomp Decomposition of weekly E. coli data, annual period (frequency 52)
+h2:data-smoothing-moving-average-ma Data smoothing: moving average ()
+fig:timeMovingAvgEcoli Moving average (order=15) of E. coli data
+fig:timeCO2ggTS GHG CO2 time series
+fig:timeMovingAvgCO2 Moving average (order=7) of CO2 time series
+fig:timeRandomVar Random variation seen by subtracting moving average
+fig:timeEcoliSTL15 Decomposition using stl of a 15th-order moving average of E. coli data
+h2:decomposition-of-data-logger-data-marble-mountains Decomposition of data logger data: Marble Mountains
+fig:timeMblResurg Marble Mountains resurgence data logger design
+fig:timeMblResEquipment Marble Mountains resurgence data logger equipment
+fig:timeMblData Data logger data from the Marbles resurgence
+fig:timeMblh2oSTL stl decomposition of Marbles water level time series
+h2:facet-graphs-for-comparing-variables-over-time Facet Graphs for Comparing Variables over Time
+fig:timeLoneyFluxTower Flux tower installed at Loney Meadow, 2016. Photo credit: Darren Blackburn
+fig:timeLoneyFacet Facet plot with free y scale of Loney flux tower parameters
+h2:lag-regression Lag Regression
+fig:timeBugacRadTemp Scatter plot of Bugac solar radiation and air temperature
+fig:timeBugacSolsticeTS Solstice 8-day time series of solar radiation and temperature
+h3:the-lag-regression-using-a-lag-function-in-a-linear-model The lag regression, using a lag function in a linear model
+fig:timeBugacSolarradTemp Bugac solar radiation and temperature
+h2:ensemble-summary-statistics Ensemble Summary Statistics
+fig:timeManausEnsemble Manaus ensemble averages with error bars
+h2:learning-more-about-time-series-in-r Learning more about Time Series in R
+h2:exercises-time-series Exercises: Time Series
+

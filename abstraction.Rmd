@@ -1,0 +1,1012 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(include=T,echo=T,fig.show=T,results=T,warning=F,message=F,fig.align='center',out.width="75%")
+```
+
+# Data Abstraction {#abstraction}
+
+Abstracting data from large data sets (or even small ones) is critical
+to data science. The most common first step to visualization is
+abstracting the data in a form that allows for the visualization goal in
+mind. If you've ever worked with data in spreadsheets, you commonly will
+be faced with some kind of data manipulation to create meaningful
+graphs, unless that spreadsheet is specifically designed for it, but
+then doing something else with the data is going to require some work.
+
+```{r Abstraction, echo=F, fig.cap="Visualization of some abstracted data from the EPA Toxic Release Inventory"}
+library(igisci); library(tidyverse)
+TRI <- read_csv(ex("TRI/TRI_2017_CA.csv")) %>%
+  filter(`5.1_FUGITIVE_AIR` > 1000 & `5.2_STACK_AIR` > 5000)
+ggplot(data=TRI, aes(`5.2_STACK_AIR`,`5.1_FUGITIVE_AIR`,color=INDUSTRY_SECTOR,shape=CARCINOGEN,size=log(`ON-SITE_RELEASE_TOTAL`))) +
+       geom_point() + scale_x_log10() + scale_y_log10() +
+  guides(size="none")
+```
+
+Figure \@ref(fig:Abstraction) started with abstracting some data from
+EPA's Toxic Release Inventory (TRI) program, which holds data reported
+from a large number of facilities that must report either "stack" or
+"fugitive" air. Some of the abstraction had already happened when I used
+the EPA website to download data for particular years and only in
+California. But there's more we need to do, and we'll want to use some
+`dplyr` functions to help with it.
+
+At this point, we've learned the basics of working with the R language.
+From here we'll want to explore how to analyze data, statistically,
+spatially, and temporally. One part of this is abstracting information
+from existing data sets by selecting variables and observations and
+summarizing their statistics.
+
+In the previous chapter, we learned some abstraction methods in base R,
+such as selecting parts of data frames and applying some functions
+across the data frame. There's a lot we can do with these methods, and
+they continue to be developed and improved. We'll continue to use them,
+but they can employ some fairly arcane language. There are many packages
+that extend R's functionality, but some of the most important for data
+science can be found in the various packages of "The Tidyverse"
+[@wickham2016r], which has the philosophy of making data manipulation
+more intuitive.
+
+We'll start with \index{dplyr}**`dplyr`**, which includes an array of
+data manipulation tools, including **`select`** for selecting variables,
+**`filter`** for subsetting observations, **`summarize`** for reducing
+variables to summary statistics, typically stratified by groups, and
+**`mutate`** for creating new variables from mathematical expressions
+from existing variables. Some `dplyr` tools such as data joins we'll
+look at later in the data transformation chapter.
+
+## The Tidyverse {#tidyverse}
+
+The \index{tidyverse}tidyverse refers to a suite of R packages developed
+at RStudio (now *posit*) (see <https://posit.co> and
+[\<https://r4ds.had.co.nz\>](https://r4ds.had.co.nz){.uri}) for
+facilitating data processing and analysis. While R itself is designed
+around exploratory data analysis, the tidyverse takes it further. Some
+of the packages in the tidyverse that are widely used are:
+
+-   **`dplyr`** : \index{dplyr}data manipulation like a database
+-   **`readr`** : \index{readr}better methods for reading and writing
+    rectangular data
+-   **`tidyr`** : \index{tidyr}reorganization methods that extend
+    dplyr's database capabilities
+-   **`purrr`** : \index{purrr}expanded programming toolkit including
+    enhanced "apply" methods
+-   **`tibble`** : \index{tibble}improved data frame
+-   **`stringr`** : \index{stringr}string manipulation library
+-   **`ggplot2`** : \index{ggplot2}graphing system based on *the grammar
+    of graphics*
+
+In this chapter, we'll be mostly exploring **dplyr**, with a few other
+things thrown in like reading data frames with **readr**; and we'll also
+introduce a few other base R methods. For simplicity, we can just
+include `library(tidyverse)` to get everything, and of course the base R
+methods are already there.
+
+## Tibbles {#tibbles}
+
+\index{tibble}Tibbles are an improved type of data frame
+
+-   part of the tidyverse
+-   serve the same purpose as a data frame, and all data frame
+    operations work
+
+Advantages
+
+-   display better
+-   can be composed of more complex objects like lists, etc.
+-   can be grouped
+
+There multiple ways to create a tibble:
+
+-   Reading from a CSV using `read_csv()`. *Note the underscore, a
+    function naming convention in the tidyverse.*
+-   Using `tibble()` to either build from vectors or from scratch, or
+    convert from a different type of data frame.
+-   Using `tribble()` to build in code from scratch.
+-   Using various tidyverse functions that return tibbles.
+
+### Building a tibble from vectors
+
+We'll start by looking at a couple of built-in
+\index{character vectors}character vectors (there are lots of things
+like this in R):
+
+-   `letters` : lowercase letters
+-   `LETTERS` : uppercase letters
+
+```{r _Abstraction_}
+letters
+LETTERS
+```
+
+... then make a tibble of `letters`, `LETTERS`, and two random sets of
+26 values, one \index{rnorm}normally distributed, the other
+\index{runif}uniform:
+
+```{r abstraction.tibble, message=F, warning=F}
+norm <- rnorm(26)
+unif <- runif(26)
+library(tidyverse)
+tibble26 <- tibble(letters,LETTERS,norm,unif)
+tibble26
+```
+
+> See section \@ref(random) for more on creating random (or rather
+> *pseudo-random*) numbers in R.
+
+#### Combining built-in data of various types
+
+As we're starting to see, there are a lot of data sets that are built
+into base R. They tend to be fairly simple structures like vectors and
+time series, shown as "Values" in the Environment tab of RStudio. But we
+might want to combine them into tibbles to make them more useful.
+
+Have a look at the various data sets that together form data from the 50
+United States: character vectors `state.name` and `state.abb`, factors
+`state.region`, and a `state.x77` matrix.
+
+> Use ?state to learn more about this data
+
+You'll find that they each have a length of 50, and they happen to be in
+the same order by state. That will make it easy to combine them. Note in
+the following code that we provide better names for the vectors, but use
+`as_tibble` to get all of the variables, with their names, from the
+matrix `state.x77`.
+
+```{r abs.build_st}
+st <- bind_cols(Name=state.name, Abb=state.abb, Region=state.region, as_tibble(state.x77))
+head(st)
+```
+
+> Use the methods you've learned in RStudio to see what this tibble
+> contains, and note that not all variables are displayed in the simple
+> `head()` output above. Can you find `Frost`, the "mean number of days
+> with minimum temperature below freezing (1931-1960) in capital or
+> large city"? Those would probably be fewer now.
+
+### tribble {#tribble}
+
+*As long as you don't let them multiply in your starship*,
+\index{tribble}tribbles are handy for creating tibbles. (Or rather the
+`tribble` function is a handy way to create tibbles in code.) You simply
+create the variable names with a series of entries starting with a
+tilde, then the data is entered one row at a time. If you line them all
+up in your code one row at a time, it's easy to enter the data
+accurately (Table \@ref(tab:tribble)).
+
+```{r tribble}
+peaks <- tribble(
+  ~peak, ~elev, ~longitude, ~latitude,
+  "Mt. Whitney", 4421, -118.2, 36.5,
+  "Mt. Elbert", 4401, -106.4, 39.1,
+  "Mt. Hood", 3428, -121.7, 45.4,
+  "Mt. Rainier", 4392, -121.8, 46.9)
+knitr::kable(peaks, caption = 'Peaks tibble')
+```
+
+### read_csv {#csv}
+
+The \index{read csv}`read_csv` function does somewhat the same thing as
+`read.csv` in base R, but creates a tibble instead of a data.frame, and
+has some other properties we'll look at below.\index{igisci package}
+
+> Note that the code below accesses data we'll be using a lot, from EPA
+> Toxic Release Inventory (TRI) data. If you want to keep this data
+> organized in a separate project, you might consider creating a new
+> **`air_quality`** project. This is optional, and you can get by with
+> staying in one project since all of our data will be accessed from the
+> `igisci` package. But in your own work, you will find it useful to
+> create separate projects to keep things organized with your code and
+> data together.
+
+```{r abstraction.readcsv, message=F}
+library(tidyverse); library(igisci)
+TRI87 <- read_csv(ex("TRI/TRI_1987_BaySites.csv"))
+TRI87df <- read.csv(ex("TRI/TRI_1987_BaySites.csv"))
+TRI87b <- tibble(TRI87df)
+identical(TRI87, TRI87b)
+```
+
+Note that they're not identical. *So what's the difference between*
+\index{read\_csv}`read_csv` and \index{read.csv}`read.csv`? Why would we
+use one over the other? Since their names are so similar, you may
+accidentally choose one or the other. Some things to consider:
+
+-   To use read_csv, you need to load the `readr` or `tidyverse`
+    library, or use `readr::read_csv`.
+-   The `read.csv` function "fixes" some things and sometimes that might
+    be desired: problematic variable names like `MLY-TAVG-NORMAL` become
+    `MLY.TAVG.NORMAL` -- but this may create problems if those original
+    names are a standard designation.
+-   With `read.csv`, numbers stored as characters are converted to
+    numbers: "01" becomes 1, "02" becomes 2, etc.
+-   There are other known problems that read_csv avoids.
+
+**Recommendation**: Use `read_csv` and `write_csv`.
+
+> You can still just call tibbles "data frames", since they are still
+> data frames, and in this book we'll follow that practice.
+
+## Summarizing variable distributions
+
+A simple \index{statistical summary}statistical summary is very easy to
+do in R, and we'll use \index{eucoak data}**`eucoak`** data in the
+`igisci` package from a study of comparative runoff and erosion under
+eucalyptus and oak canopies [@eucoak]. In this study (Figure
+\@ref(fig:absEucOakStudy)), we looked at the amount of runoff and
+erosion captured in Gerlach troughs on paired eucalyptus and oak sites
+in the San Francisco Bay Area. *You might consider creating a `eucoak`
+project, since we'll be referencing this data set in several places.*
+
+(ref:eucoakRef) Euc-Oak paired plot runoff and erosion study (@eucoak)
+
+```{r absEucOakStudy, out.width="75%", fig.align="center", fig.cap = "(ref:eucoakRef)", echo=F}
+knitr::include_graphics(here::here("img", "eucoak.png"))
+```
+
+```{r abstraction.summary}
+library(igisci)
+summary(eucoakrainfallrunoffTDR)
+```
+
+In the summary output, how are character variables handled differently
+from numeric ones?
+
+Remembering what we discussed in the previous chapter, consider the
+`site` variable (Figure \@ref(fig:absEucOakSites)), and in particular
+its Length. Looking at the table, what does that length represent?
+
+```{r absEucOakSites, eval=F, echo=F, message=F, warning=F, fig.cap="Eucalyptus/Oak paired site locations"}
+library(tmap); library(sf); library(tidyverse); library(igisci); library(maptiles)
+sites <- read_csv(ex("eucoak/eucoakSites.csv"))
+sitesSF <- st_as_sf(sites, coords = c("long","lat"), crs=4326)
+hillshCol <- tm_scale_continuous(values = "-brewer.greys")
+basemap <- get_tiles(sitesSF, provider="Esri.WorldShadedRelief", forceDownload=T) #"Esri.WorldTerrain")
+bounds <- tmaptools::bb(sitesSF, ext=1.1)
+  tm_shape(basemap,bbox=bounds) + tm_rgb() +
+  tm_shape(sitesSF) + 
+    tm_symbols(shape=16, size=0.5) +
+    tm_text(text = "Site", size=1, hjust=0)# +
+  #tm_graticules(lines=F)
+```
+
+```{r include=F}
+knitr::include_graphics(here::here("img","eucoakSites.png"))
+# Had to do this since something caused this chapter to fail here.  The code above works fine, but not in the book
+```
+
+There are a couple of ways of removing duplicates from a data frame,
+such as the `unique()`\index{unique} and the similar
+`dplyr::distinct()`\index{distinct} functions. In the Transformation
+chapter, we'll use this as one step in paring down big data from
+groundwater wells.
+
+We could also use `unique()` to simply have a quick look at our list of
+subcanopy runoff measurement sites, which helps us consider using `site`
+as a factor for statistical analysis. Consider what these return:
+
+```{r}
+unique(eucoakrainfallrunoffTDR$site)
+```
+
+```{r}
+factor(eucoakrainfallrunoffTDR$site)
+```
+
+### Stratifying variables by site using a Tukey box plot
+
+A good way to look at variable distributions
+\index{stratified}stratified by a sample site factor is the Tukey box
+plot (Figure \@ref(fig:absTukeyBoxplot)). We'll be looking more at this
+and other visualization methods in the next chapter.
+
+```{r absTukeyBoxplot, warning=F, fig.cap="Tukey boxplot of runoff under eucalyptus canopy"}
+ggplot(data = eucoakrainfallrunoffTDR) + 
+  geom_boxplot(mapping = aes(x=site, y=runoffL_euc))
+```
+
+## Database operations {#dplyr}
+
+\index{dplyr}As part of exploring our data, we'll typically simplify or
+reduce it for our purposes. The following methods are quickly discovered
+to be essential as part of exploring and analyzing data.
+
+-   **select variable columns** you want to retain with `select`
+-   **filter observations** using logic, such as `population \> 10000`,
+    with `filter`
+-   **subset** data to do both filtering and variable selection, with
+    base R's `subset`
+-   **add** new variables and assign their values with `mutate`
+-   **sort** rows based on a field with `arrange`
+-   **summarize** by group
+
+### Select, mutate, and the pipe {#pipe}
+
+\index{pipe}\index{\%\>\%}Read the pipe operator **`%>%`** as "and
+then..." This is bigger than it sounds and opens up many possibilities.
+
+> You can also use **`|>`** as the pipe operator. Once you get used to where the `|` character is on your keyboard, you'll find that it makes your code a bit easier to read. *Every character adds up when you're interpreting code.*
+
+See the example below, and observe how the expression becomes several
+lines long. In the process, we'll see examples of new variables with
+\index{mutate}mutate and \index{select}selecting (and in the process
+*ordering*) variables (Table \@ref(tab:eucoak6table)).
+
+```{r}
+runoff <- eucoakrainfallrunoffTDR %>%
+  mutate(Date = as.Date(date,"%m/%d/%Y"),
+         rain_subcanopy = (rain_oak + rain_euc)/2) %>%
+  dplyr::select(site, Date, rain_mm, rain_subcanopy, 
+         runoffL_oak, runoffL_euc, slope_oak, slope_euc)
+```
+
+```{r eucoak6table, echo=F}
+library(kableExtra); library(tidyverse)
+if (knitr::is_latex_output()) {
+  knitr::kable(head(runoff), caption = 'EucOak data reorganized a bit, first 6', format="latex") %>% 
+    kable_styling(latex_options="scale_down")} else {
+  knitr::kable(head(runoff), caption = 'EucOak data reorganized a bit, first 6')
+  }
+```
+
+Another way of thinking of the pipe that is very useful is that whatever
+goes before it becomes the first parameter for any functions that
+follow. So in the example above:
+
+1.  The parameter `eucoakrainfallrunoffTDR` becomes the first for
+    `mutate()`, then
+2.  The result of the `mutate()` becomes the first parameter for
+    `dplyr::select()`
+
+> To just rename a variable, use `rename` instead of `mutate`. It will
+> stay in position.
+
+#### Review: creating penguins from penguins_raw
+
+To review some of these methods, it's useful to consider how the
+penguins data frame was created from the more complex penguins_raw data
+frame, both of which are part of the
+\index{palmerpenguins package}palmerpenguins package (@palmer). First
+let's look at `palmerpenguins::penguins_raw`:
+
+```{r message=F}
+library(palmerpenguins)
+library(tidyverse)
+library(lubridate)
+summary(penguins_raw)
+```
+
+Now let's create the simpler penguins data frame. We'll use rename for a
+couple, but most variables require mutation to manipulate strings (we'll
+get to that later), create factors, or convert to integers. And we'll
+rename some variables to avoid using backticks (the backward single
+quotation mark accessed just to the left of the `1` key and below the
+`Esc` key, and what you can use in markdown to create a monospaced font
+as I just used for `1` and `Esc`).
+
+```{r message=F}
+penguins <- penguins_raw %>%
+  rename(bill_length_mm = `Culmen Length (mm)`,
+         bill_depth_mm = `Culmen Depth (mm)`) %>%
+  mutate(species = factor(word(Species)),
+         island = factor(Island),
+         flipper_length_mm = as.integer(`Flipper Length (mm)`),
+         body_mass_g = as.integer(`Body Mass (g)`),
+         sex = factor(str_to_lower(Sex)),
+         year = as.integer(year(ymd(`Date Egg`)))) %>%
+  dplyr::select(species, island, bill_length_mm, bill_depth_mm, 
+                flipper_length_mm, body_mass_g, sex, year)
+summary(penguins)
+```
+
+Unfortunately, they don't end up as *exactly*
+\index{identical}identical, though all of the variables are identical as
+vectors:
+
+```{r}
+identical(penguins, palmerpenguins::penguins)
+```
+
+#### Helper functions for `dplyr::select()`
+
+In the \index{select}`select()` example above, we listed all of the
+variables, but there are a variety of helper functions for using logic
+to specify which variables to select:
+
+-   `contains("_")` or any substring of interest in the variable name
+-   `starts_with("runoff")`
+-   `ends_with("euc")`
+-   `everything()`
+-   `matches()` a regular expression
+-   `num_range("x",1:5)` for the common situation where a series of
+    variable names combine a string and a number
+-   `one_of(myList)` for when you have a group of variable names
+-   *range* of variables: e.g. `runoffL_oak:slope_euc` could have
+    followed `rain_subcanopy` above
+-   *all but*: preface a variable or a set of variable names with
+    **`-`** to select all others
+
+### Filtering observations {#filter}
+
+\index{filter}`filter` lets you select observations that meet criteria,
+similar to an SQL `WHERE` clause (Table
+\@ref(tab:absDateFilteredEucOak)).
+
+```{r }
+runoff2007 <- runoff %>%
+  filter(Date >= as.Date("04/01/2007", "%m/%d/%Y"))
+```
+
+```{r absDateFilteredEucOak, echo=F}
+library(kableExtra); library(tidyverse)
+if (knitr::is_latex_output()) {
+  knitr::kable(head(runoff2007), caption="Date-filtered EucOak data", format="latex") %>% 
+    kable_styling(latex_options="scale_down")} else {
+  knitr::kable(head(runoff2007), caption="Date-filtered EucOak data")}
+```
+
+#### Filtering out `NA` with `!is.na`
+
+\index{is.na}Here's a really important one. There are many times you
+need to avoid `NA`s. We thus commonly see summary statistics using
+`na.rm = TRUE` in order to *ignore* `NA`s when calculating a statistic
+like `mean`.
+
+To simply filter out NAs from a vector or a variable use a filter:
+
+```{r}
+feb_filt <- sierraFeb %>% filter(!is.na(TEMPERATURE))
+```
+
+### Subsetting data with base R's `subset`
+
+We've looked at selecting variables and filtering observations, both
+examples of *subsetting* data. We also learned in the previous chapter
+on base R methods that there are lots of ways of subsetting data, such
+as using accessors like `[]` and `$`. We'll look at another base R
+method that can do both variable selection and observation filtering in
+one step, which in some cases you might prefer.
+
+Let's look at a problem where we're subsetting the
+`palmerpenguins::pengins` data to just abstract the species and body
+mass of female penguins. We'd need to use both `filter` and `select` to
+accomplish this, but of course the pipe operator helps:
+
+```{r eval=F}
+library(palmerpenguins); library(dplyr)
+penguins |> filter(sex=="female") |> select(species,body_mass_g)
+```
+
+The exact same result can be achieved with base R's `subset` function,
+which if we use a pipe operator looks pretty similar:
+
+```{r}
+library(palmerpenguins)
+penguins |> subset(sex=="female", select=c(species,body_mass_g))
+```
+
+> As a review, how would you do this without the pipe?
+
+Given the option of either using `filter` and `select` or just `subset`
+in the above example, it's just personal preference, which is often
+driven by the desire to make code readable, and that can go either way.
+Then there's the desire to reduce the size of what functions you want to
+remember, which can also go either way; you still need to know what
+"select" means.
+
+Let's take our example a bit further and use `subset` to pick the most
+massive individual female penguin in the dataset. You could also do this
+with `filter`, but the key is using the `max` function.
+
+```{r}
+library(palmerpenguins)
+penguins |> subset(sex=="female", select=c(species,body_mass_g)) |>
+            subset(body_mass_g==max(body_mass_g))
+```
+
+In this case, there was a tie between the two most massive individuals.
+
+> It shouldn't surprise us that there are lots of ways of subsetting
+> data in R, since doing so helps us satisfy a key requirement of data
+> science: being able to wrangle big data into something that is able to
+> be visualized and understood.
+
+### Writing a data frame to a csv
+
+\index{write\_csv}Let's say you have created a data frame, maybe with
+read_csv
+
+`runoff20062007 <- read_csv(ex("eucoak/eucoakrainfallrunoffTDR.csv"))`
+
+Then you do some processing to change it, maybe adding variables,
+reorganizing, etc., and you want to write out your new `eucoak`, so you
+just need to use `write_csv`
+
+`write_csv(eucoak, "data/tidy_eucoak.csv")`
+
+> **Note** the use of a data folder `data`: Remember that your default
+> workspace (`wd` for *working directory*) is where your project file
+> resides (check what it is with `getwd()`), so by default you're saving
+> things in that wd. To keep things organized the above code is placing
+> data in a data folder within the wd.
+
+### Summarize by group {#group-summary}
+
+\index{summarize by group}\index{stratify}*You'll find that you need to
+use this all the time with real data.* Let's say you have a bunch of
+data where some *categorical* variable is defining a grouping, like our
+site field in the `eucoak` data. This is a form of *stratifying* our
+data\index{stratify}. We'd like to just create average slope, rainfall,
+and runoff for each site. Note that it involves two steps, first
+defining which field defines the group, then the various summary
+statistics we'd like to store. In this case, all of the slopes under
+`oak` remain the same for a given site -- it's a *site* characteristic
+-- and the same applies to the `euc` site, so we can just grab the first
+value (mean would have also worked of course) (Table
+\@ref(tab:absEucOaksummary)).
+
+```{r, warning=F, message=F}
+eucoakSiteAvg <- runoff %>%
+  group_by(site) %>%
+  summarize(
+    rain = mean(rain_mm, na.rm = TRUE),
+    rain_subcanopy = mean(rain_subcanopy, na.rm = TRUE),
+    runoffL_oak = mean(runoffL_oak, na.rm = TRUE),
+    runoffL_euc = mean(runoffL_euc, na.rm = TRUE),
+    slope_oak = first(slope_oak),
+    slope_euc = first(slope_euc)
+  )
+```
+
+```{r eval=F, include=F}
+knitr::kable(eucoakSiteAvg, caption="EucOak data summarized by site")
+```
+
+```{r absEucOaksummary, echo=F}
+library(kableExtra); library(tidyverse)
+if (knitr::is_latex_output()) {
+  knitr::kable(head(eucoakSiteAvg), caption="EucOak data summarized by site", format="latex") %>% 
+    kable_styling(latex_options="scale_down")} else {
+  knitr::kable(head(eucoakSiteAvg), caption="EucOak data summarized by site")}
+```
+
+**Summarizing by group with TRI data**
+
+```{r abstraction.summaryTRI, message=F, warning=F}
+library(igisci)
+TRI_BySite <- read_csv(ex("TRI/TRI_2017_CA.csv")) %>%
+  mutate(all_air = `5.1_FUGITIVE_AIR` + `5.2_STACK_AIR`) %>%
+  filter(all_air > 0) %>%
+  group_by(FACILITY_NAME) %>%
+  summarize(
+    FACILITY_NAME = first(FACILITY_NAME),
+    air_releases = sum(all_air, na.rm = TRUE),
+    mean_fugitive = mean(`5.1_FUGITIVE_AIR`, na.rm = TRUE), 
+    LATITUDE = first(LATITUDE), LONGITUDE = first(LONGITUDE))
+```
+
+> **Integer** variables might be used to define categories or groups.
+> Down the road, we'll run into situations where numeric variables might
+> be used to define groups, such as integer days of the year we'll find
+> useful in studying time series, but could also be zip codes, census
+> tracts, or other spatial enumeration units. Note that these are
+> *discrete*, not *continuous* values.
+
+### Count
+
+The \index{count}`count` function is a simple variant on summarizing by
+group, since the only statistic is the count of events. The factor to
+group by is simply provided as a parameter: `count(`*factor*`)`.
+
+```{r abstraction.count, message=F, warning=F}
+tidy_eucoak %>% count(tree)
+```
+
+Another way to create a count is to use `n()`:
+
+```{r abstraction.n, message=F, warning=F}
+tidy_eucoak %>%
+  group_by(tree) %>%
+  summarize(n = n())
+```
+
+### Sorting after summarizing
+
+\index{arrange}\index{sort}Using the marine debris data from the *Marine
+Debris Monitoring and Assessment Project* [@marineDebris], we can use
+`arrange` to sort by latitude, so we can see the beaches from south to
+north along the Pacific coast.
+
+```{r abstraction.sort, message=F, warning=F}
+shorelineLatLong <- ConcentrationReport %>%
+  group_by(`Shoreline Name`) %>%
+  summarize(
+    latitude = mean((`Latitude Start`+`Latitude End`)/2),
+    longitude = mean((`Longitude Start`+`Longitude End`)/2)
+  ) %>%
+  arrange(latitude)
+shorelineLatLong
+
+```
+
+### The dot operator
+
+\index{dot operator}\index{dot operator}The dot (**`.`**) operator
+refers to *here*, similar to UNIX syntax for accessing files in the
+current folder where the path is `"./filename"`. In a piped sequence,
+you might need to reference the object (like the data frame) the pipe is
+using, as you can see in the following code.
+
+-   The advantage of the pipe is you don't have to keep referencing the
+    data frame.
+-   The dot is then used to connect to items inside the data frame
+
+```{r abstraction.dot, message=F, warning=F}
+TRI87 <- read_csv(ex("TRI/TRI_1987_BaySites.csv"))
+stackrate <- TRI87 %>%
+  mutate(stackrate = stack_air/air_releases) %>%
+  .$stackrate
+head(stackrate)
+```
+
+## String abstraction {#stringr}
+
+\index{string abstraction}Character string manipulation is surprisingly
+critical to data analysis, and so the \index{stringr}**`stringr`**
+package was developed to provide a wider array of string processing
+tools than what is in base R, including functions for detecting matches,
+subsetting strings, managing lengths, replacing substrings with other
+text, and joining, splitting, and sorting strings.
+
+We'll look at some of the `stringr` functions, but a good way to learn
+about the wide array of functions is through the cheat sheet that can be
+downloaded from <https://www.rstudio.com/resources/cheatsheets/>
+
+### Detecting matches
+
+\index{string matches}These functions look for patterns within existing
+strings, which can then be used subset observations based on those
+patterns.
+
+-   **`str_detect`** detects patterns in a string, returns true or false
+    if detected
+-   **`str_locate`** detects patterns in a string, returns **start**
+    *and* **end** position if detected, or NA if not
+-   **`str_which`** returns the indices of strings that match a pattern
+-   **`str_count`** counts the number of matches in each string
+
+```{r include=F}
+library(tidyverse)
+library(igisci)
+```
+
+```{r abstraction.str.matches, results="hold"}
+str_detect(fruit,"qu")
+str_which(fruit, "qu")
+fruit[str_which(fruit,"qu")]
+```
+
+Note that `str_locate` returns a matrix with rows for each item where
+the substring is located with both `start` and `end` locations.
+
+```{r results="hold"}
+fruit_a <- fruit[str_count(fruit,"a")>1]
+fruit_a
+str_locate(fruit_a,"a")
+```
+
+The `str_locate_all` function carries this further and finds all
+locations of the substrings within the string.
+
+```{r results="hold"}
+fruit3a <- fruit[str_count(fruit,"a")==3]
+fruit3a
+str_locate_all(fruit3a,"a")
+
+```
+
+```{r results="hold"}
+qufruit <- fruit[str_which(fruit,"qu")]
+qufruit
+str_locate(qufruit, "qu")
+```
+
+### Subsetting strings {#subset-string}
+
+\index{string subsetting}Subsetting in this case includes its normal use
+of abstracting the observations specified by a match (similar to a
+filter for data frames), or just a specified part of a string specified
+by start and end character positions, or the part of the string that
+matches an expression.
+
+-   **`str_sub`** extracts a part of a string from a start to an end
+    character position
+-   **`str_subset`** returns the strings that contain a pattern match
+-   **`str_extract`** returns the first (or if `str_extract_all` then
+    all matches) pattern matches
+-   **`str_match`** returns the first (or `_all`) pattern match as a
+    matrix
+-   **`str_remove`** removes a specific substring (not on the cheat
+    sheet, but handy)
+
+```{r abstraction.subset, results="hold"}
+qfruit <- str_subset(fruit, "q")
+qfruit
+str_sub(qfruit,1,2)
+```
+
+```{r results="hold"}
+str_sub("94132",1,2)
+str_extract(qfruit,"[aeiou]")
+str_remove(str_subset(fruit,"fruit"), "fruit")
+```
+
+### String length
+
+\index{string length}The length of strings is often useful in an
+analysis process, either just knowing the length as an integer, or
+purposefully increasing or reducing it.
+
+-   **`str_length`** \index{str\_length}simply returns the length of the
+    string as an integer
+
+```{r abstraction.strlength, results='hold'}
+qfruit <- str_subset(fruit,"q")
+qfruit
+str_length(qfruit)
+```
+
+Don't confuse `str_length` with `length` (from base R), the length of an object like a vector. Both are highly useful.
+
+```{r}
+length(fruit)
+length(qfruit)
+```
+
+
+
+Using `str_locate` with `str_length`:
+
+```{r results='hold'}
+name <- "Inigo Montoya"
+str_length(name)
+firstname <- str_sub(name,1,str_locate(name," ")[1]-1)
+firstname
+lastname <- str_sub(name,str_locate(name," ")[1]+1,str_length(name))
+lastname
+```
+
+**Padding and trimming lengths**:
+
+-   **`str_pad`** \index{string pad}adds a specified character
+    (typically a space `" "`) to either end of a string
+-   **`str_trim`** \index{string trim}removes white space from either
+    end of a string
+
+Here's an example `str_pad` and `str_trim` (in this case, reversing the
+former):
+
+```{r results='hold'}
+str_pad(qfruit,10,"both")
+str_trim(str_pad(qfruit,10,"both"),"both")
+```
+
+### Replacing substrings with other text ("mutating" strings)
+
+\index{string substring replacement}These methods range from converting
+case to replacing substrings.
+
+-   **`str_to_lower`** converts strings to lowercase
+-   **`str_to_upper`** converts strings to uppercase
+-   **`str_to_title`** capitalizes strings (makes the first character of
+    each word uppercase)
+
+```{r abstraction.replace, results='hold'}
+str_to_lower(name)
+str_to_upper(name)
+str_to_title("for whom the bell tolls")
+```
+
+-   **`str_replace`** replaces the first matched pattern (or all with
+    `str_replace_all`) with a specified string
+-   **`str_sub`** a special use of this function to replace substrings
+    with a specified string
+
+```{r results='hold'}
+str_replace(qfruit,"q","z")
+str_sub(name,1,str_locate(name," ")[1]-1) <- "Diego"
+name
+```
+
+> The replacement mode of `str_sub` used above may seem pretty tortuous
+> and confusing. Why did we have to access `[1]` in
+> `str_locate(name," ")[1]`? Experiment with what you get with
+> `str_locate(name," ")` itself, and maybe consult the help system with
+> `?str_locate` (and run the examples), but you'll find this is one that
+> returns a matrix, and even if there's only one item located will still
+> have a `start` and `end` location. See what happens when you use it
+> *without* accessing `[1]`. You're seeing one effect of vectorization
+> -- **reuse**. It can be very confusing, but reuse of inputs is one of
+> the (very useful but still confusing) properties of vectorization. In
+> this case it creates duplication, creating a vector of names.
+
+### Concatenating and splitting
+
+\index{string concatenating and splitting}One very common string
+function is to concatenate strings, and somewhat less common is
+splitting them using a key separator like space, comma, or line end. One
+use of using str_c in the example below is to create a comparable join
+field based on a numeric character string that might need a zero or
+something at the left or right.
+
+-   **`str_c`** \index{str\_c}The `paste()` function in base R will
+    work, but you might want the default separator setting to be "" (as
+    does `paste0()`) instead of `" "`, so `str_c` is just `paste` with a
+    default "" separator, but you can also use `" "`.
+-   **`str_split`** \index{str\_split}splits a string into parts based
+    upon the detection of a specified separator like space, comma, or
+    line end. However, this ends up creating a list, which can be
+    confusing to use. If you're wanting to access a particular member of
+    a list of words, the `word` function is easier.
+-   **`word`** \index{word}lets you pick the first, second, or nth word
+    in a string of words.
+
+```{r abstraction.concat, message=F}
+library(stringr)
+phrase <- str_c("for","whom","the","bell","tolls",sep=" ")
+phrase
+str_split(phrase, " ")
+word(phrase,4)
+```
+
+... and of course, these methods can all be
+\index{vectorized}vectorized:
+
+```{r}
+sentences[1:4]
+word(sentences[1:4],2)
+```
+
+Example of `str_c` use to modify a variable needed for a join:
+
+```{r}
+csvPath <- system.file("extdata","CA/CA_MdInc.csv",package="igisci")
+CA_MdInc <- read_csv(csvPath)
+join_id <- str_c("0",CA_MdInc$NAME)
+# could also use str_pad(CA_MdInc$NAME,1,side="left",pad="0")
+head(CA_MdInc)
+head(join_id)
+```
+
+## Dates and times with `lubridate` {#lubridate}
+
+\index{dates and times}Simply stated, the \index{lubridate}`lubridate`
+package just makes it easier to work with dates and times. Dates and
+times are more difficult to work with than numbers and character
+strings, which is why `lubridate` was developed. The `lubridate` package
+is excellent at detecting and reading in dates and times -- it can
+"parse" many forms. Spend some time to make sure you know how to use it.
+We'll be using dates and times a lot, since many data sets include time
+stamps. See the cheat sheet for more information but the following
+examples may demonstrate that it's pretty easy to use, and does a good
+job of making your job easier.
+
+```{r abstraction.lubridate, results='hold'}
+library(lubridate)
+dmy("20 September 2020")
+dmy_hm("20 September 2020 10:45")
+mdy_hms("September 20, 2020 10:48")
+mdy_hm("9/20/20 10:50")
+mdy("9.20.20")
+```
+
+```{r results='hold'}
+start704 <- dmy_hm("24 August 2020 16:00")
+end704 <- mdy_hm("12/18/2020 4:45 pm")
+year(start704)
+month(start704)
+day(end704)
+hour(end704)
+```
+
+A bit of date math:
+
+```{r results='hold'}
+end704-start704
+as_date(end704)
+hms::as_hms(end704)
+```
+
+You will find that dates are typically displayed as yyyy-mm-dd, e.g.
+"2020-09-20" above. You can display them other ways of course, but it's
+useful to write dates this way since they sort better, with the highest
+order coming first.
+
+\index{explicit function calls}
+
+> Calling functions explicitly with `::`: Sometimes you need to specify
+> the package and function name this way, for instance, if more than one
+> package has a function of the same name. You can also use this method
+> to call a function without having loaded its library. Due to multiple
+> packages having certain common names (like `select`), it's common to
+> use this syntax, and you'll find that we'll use `dplyr::select(...)`
+> throughout this book.
+
+### Dates used for annual time series
+
+For obvious reasons, we'll use `lubridate` a lot when we get to time
+series. One date abstraction that will be particularly useful is day of
+the year, which can be abstracted from a date object as `yday`, which
+returns the day of the year starting with 1 for January 1 in any given
+year. Note that as with all of the date objects, you need to work with
+actual date objects, which we do in the following example, which creates
+a simple data frame table of month, day and day of year, then displays a
+subset that illustrates the utility:
+
+```{r}
+library(lubridate)
+library(tidyverse)
+Jan1 <- ymd("2022-01-01")
+Dec31 <- ymd("2022-12-31")
+year2022 <- as_date(Jan1:Dec31)
+ydayTable <- bind_cols(month=month(year2022),day=day(year2022),doy=yday(year2022))
+ydayTable[27:35,] 
+```
+
+## Extending abstractions with functions
+
+We've explored ways of extending base R to facilitate data abstraction,
+mostly focusing on the tidyverse in this chapter. There are many other
+packages that provide special capabilities, but we can also write our
+own, as we explored in the last chapter. Even simple functions of a few
+lines of code can make our main code more readable.
+
+We'll look at a simple extension of the `readxl::read_excel` function. A
+common practice in data logger spreadsheets is to have the variable
+names in the first row and the units (like °C or mm in the second row.)
+There's no good way to make use of those units in a data frame, so we
+typically will want to skip it. The `read_excel` function has a `skip`
+parameter that lets us skip the first row, and also the `col_names`
+parameter that allows us to either use the first row as variable names
+(the default, `TRUE`), get default names (`FALSE`), or provide a vector
+of variable names.
+
+We'll write a function that creates variable names out of the first two
+rows, so includes the units with the original variable name by
+vectorizing a `paste0`.
+
+```{r}
+library(igisci); library(tidyverse); library(readxl)
+```
+
+```{r}
+read_excel2 <- function(xl){
+  vnames <- read_excel(xl, n_max=0) |> names()
+  vunits <- read_excel(xl, n_max=0, skip=1) |> names()
+  read_excel(xl, skip=2, col_names=paste0(vnames,"_",vunits))
+}
+```
+
+Then this is a new function we can just use in our code later on. We'll
+be reading this kind of data a lot, so even a short function can make
+our main code easier to read.
+
+```{r message=F}
+read_excel2(ex("meadows/LoneyMeadow_30minCO2fluxes_Geog604.xls"))
+```
+
+> Note that this function accessed the `igisci::ex` function we're using
+> a lot. That function simply returns the path to the file, and that's
+> all we need as input to the `read_excel` function. It's not always a
+> good idea to write functions because we either need to make sure we
+> run it, or include it in a package that we need to load. This example
+> seemed worth it. There are many other functions you could build to do
+> operations you need repeatedly, and some of them may get pretty
+> complex, but you'll want to decide which to build.
+
+\pagebreak
+

@@ -1,0 +1,68 @@
+
+## Exercises: Modeling
+```{r echo=FALSE}
+knitr::opts_chunk$set(include=T, echo=F)
+```
+
+:::{.exercise}
+Add `LATITUDE` as a second independent variable after `ELEVATION` in the model predicting February temperatures. (You may need to see 7.1 for how to retain `LATITUDE` and `LONGITUDE` as variables, using `remove=F`) Then you'll need to change the regression formula to include both `ELEVATION + LATITUDE`. First derive and display the model summary results, and then answer the questions -- is the explanation better based on the $r^2$?
+:::
+```{r results="hide", message=F, warning=F}
+
+```
+
+
+:::{.exercise}
+Now map the **predictions** and **residuals**.
+:::
+
+```{r results="hide", message=F, warning=F}
+
+```
+
+
+```{r modPredictionGoal}
+knitr::include_graphics(here::here("img","model_ex2a.png"))
+knitr::include_graphics(here::here("img","model_ex2b.png"))
+```
+
+:::{.exercise}
+Can you see any potential for additional variables? What evidence might there be for local effects like topographically related microclimatology?
+:::
+
+:::{.exercise}
+Next we'll build and display a prediction raster from the above model, but we'll start by deriving the coefficients -- `b0`, `b1`, and `b2` -- that we'll need for the map algebra in the next step.
+:::
+
+:::{.exercise}
+To create the prediction raster we'll need a latitude raster. Use the following code to create a raster of the same dimensions as `elevSierra`, but with latitude assigned as z values to the cells. Then build and display a raster **prediction of temperature** from the model and the two explanatory rasters.
+```
+lats <- yFromCell(elevSierra, 1:ncell(elevSierra))
+latitude <- setValues(elevSierra,lats)
+```
+:::
+
+```{r modPredictionTempElevLat}
+
+knitr::include_graphics(here::here("img","model_ex5.png"))
+```
+
+
+:::{.exercise}
+Modify the code for the San Pedro Creek Watershed logistical model (10.5.2) to analyze 1975 landslides. Are the conclusions different?
+:::
+
+
+```{r}
+knitr::include_graphics(here::here("img","model_ex6.png"))
+```
+
+
+
+:::{.exercise}
+Optionally, using your own data that should have location information as well as other attributes, create a statistical model of your choice, and provide your assessment of the results, a prediction map, and where appropriate mapped residuals.  You'll probably want to create a new project for this with a `data` folder.
+:::
+
+:::{.exercise}
+Optionally, using your own data but with no location data needed, create a glm binomial model. If you don't have anything obvious, consider doing something like the study of a pet dog panting based on temperature. <https://bscheng.com/2016/10/23/logistic-regression-in-r/>
+:::

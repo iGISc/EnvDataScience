@@ -1,0 +1,86 @@
+## Exercises: Introduction to R
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(include=F)
+```
+
+:::{.exercise}
+Assign scalars for your name, city, state and zip code, and use `paste()` to combine them, and assign them to the object `me`. What is the class of `me`?
+:::
+```{r}
+
+```
+
+:::{.exercise}
+Knowing that trigonometric functions require angles (including azimuth directions) to be provided in radians, and that degrees can be converted into radians by dividing by 180 and multiplying that by pi, derive the sine of 30 degrees with an R expression. (Base R knows what pi is, so you can just use `pi`.)
+:::
+```{r}
+
+```
+
+:::{.exercise}
+If two sides of a right triangle on a map can be represented as $dX$ and $dY$ and the direct line path between them $c$, and the coordinates of two points on a map might be given as $(x1,y1)$ and $(x2,y2)$, with $dX=x2-x1$ and $dY=y2-y1$, use the Pythagorean theorem to derive the distance between them and assign that expression to $c$. Start by assigning the input scalars.
+
+```{r}
+
+```
+:::
+
+:::{.exercise}
+You can create a vector uniform random numbers from 0 to 1 using `runif(n=30)` where n=30 says to make 30 of them. Use the `round()` function to round *each* of the values (it vectorizes them), and provide what you created and explain what happened.
+
+```{r}
+
+```
+:::
+
+:::{.exercise}
+Create two vectors `x` and `y` of 10 numbers each with the c() function, then assigning to x and y. Then plot(x,y), and provide the three lines of code you used to do the assignment and plot.
+:::
+```{r}
+
+```
+
+:::{.exercise}
+Change your code from the previous question so that one value is NA (entered simply as `NA`, no quotation marks), and derive the mean value for x. Then add `,na.rm=T` to the parameters for `mean()`. Also do this for y. Describe your results and explain what happens.
+:::
+```{r}
+
+```
+
+:::{.exercise}
+Create two sequences, `a` and `b`, with `a` all odd numbers from 1 to 99, `b` all even numbers from 2 to 100. Then derive c through vector division of `b/a`. Plot a and c together as a scatterplot.
+:::
+
+```{r}
+
+```
+
+:::{.exercise}
+Referring to the **Matrices** section, create the same `sierradata` matrix using the same data vectors repeated here ...
+```{r}
+
+```
+
+... then convert it to a data frame (using the same `sierradata` object name), and *from that data frame* plot temperature (`tC`) against latitude (`lat`).
+
+```{r}
+
+```
+:::
+
+:::{.exercise}
+From that `sierradata` data frame, derive colmeans using the `mean` parameter on the columns `2` for `apply()`. 
+:::
+
+```{r}
+
+```
+
+:::{.exercise}
+Do the same thing with the sierra data frame with `sapply()`. 
+
+```{r}
+
+```
+:::

@@ -1,0 +1,685 @@
+```{r echo=FALSE}
+knitr::opts_chunk$set(include=T,echo=T,fig.show=T,results=T,warning=F,message=F,fig.align='center',out.width="75%")
+```
+
+# Modeling {#modeling}
+
+```{r ModelingChapter, echo=F, message=F, warning=F}
+library(igisci); library(tidyverse); library(ggpmisc)
+sierra <- sierraFeb %>%
+  filter(!is.na(TEMPERATURE))
+model1 = lm(TEMPERATURE ~ ELEVATION, data = sierra)
+cc = model1$coefficients
+sierra$resid = resid(model1)
+sierra$predict = predict(model1) 
+eqn = paste("temperature =", 
+            (round(cc[1], digits=2)), "+",  
+            (round(cc[2], digits=3)), "elevation")
+my.formula <- y~x
+ggplot(sierra, aes(x=ELEVATION, y=TEMPERATURE)) + 
+  geom_smooth(method="lm", se=FALSE, color="lightgrey") +
+  geom_segment(aes(xend=ELEVATION, yend=predict), alpha=.2) +
+  geom_point(aes(color=resid)) +
+  scale_color_gradient2(low="blue", mid="ivory2", high="red") +
+  guides(color="none") +
+  theme_bw() +
+  ggtitle(paste("linear model:", eqn,"and residuals (e)"))
+```
+
+\index{modeling}The purpose of a statistical model\index{statistical model} is to help understand what variables might best predict a phenomenon of interest, which ones have more or less influence, define a predictive equation with coefficients for each of the variables, and then apply that equation to predict values using the same input variables for other areas. This process requires samples with observations of the explanatory\index{explanatory variable} (or independent\index{independent variable}) and response\index{response variable} (or dependent\index{dependent variable}) variables in question.
+
+## Some Common Statistical Models
+
+There are many types of statistical models. Variables may be nominal (categorical) or interval/ratio data. You may be interested in predicting a continuous interval/ratio variable from other continuous variables, or predicting the probability of an occurrence (e.g. of a species), or maybe the count of something (also maybe a species). You may be needing to classify your phenomena based on continuous variables. \index{lm linear model}\index{glm generalized linear model}\index{aov}\index{gam}\index{tree}Here are some examples:
+
+-   `lm(y ~ x)` linear regression model with one explanatory variable
+-   `lm(y ~ x1 + x2 + x3)` multiple regression, a linear model with multiple explanatory variables
+-   `glm(y ~ x, family = poisson)` generalized linear model, poisson distribution; see ?family to see those supported, including binomial, gaussian, poisson, etc.
+-   `glm(y ~ x + y, family = binomial)` glm for logistic regression
+-   `aov(y ~ x)` analysis of variance (same as lm except in the summary)
+-   `gam(y ~ x)` generalized additive models
+-   `tree(y ~ x)` or `rpart(y ~ x)` regression/classification trees
+
+## Linear Model (`lm`) {#lm}
+
+\index{linear model lm}If we look at the Sierra February climate example, the regression line in the graph above shows the response variable temperature predicted by the explanatory variable elevation. Here's the code that produced the model and graph:
+
+```{r eval=F, message=F, warning=F}
+library(igisci); library(tidyverse)
+sierra <- sierraFeb %>%
+  filter(!is.na(TEMPERATURE))
+model1 = lm(TEMPERATURE ~ ELEVATION, data = sierra)
+cc = model1$coefficients
+sierra$resid = resid(model1)
+sierra$predict = predict(model1) 
+eqn = paste("temperature =", 
+            (round(cc[1], digits=2)), "+",  
+            (round(cc[2], digits=3)), "elevation + e")
+ggplot(sierra, aes(x=ELEVATION, y=TEMPERATURE)) + 
+  geom_smooth(method="lm", se=FALSE, color="lightgrey") +
+  geom_segment(aes(xend=ELEVATION, yend=predict), alpha=.2) +
+  geom_point(aes(color=resid)) +
+  scale_color_gradient2(low="blue", mid="ivory2", high="red") +
+  guides(color="none") +
+  theme_bw() +
+  ggtitle(paste("Residuals (e) from model: ",eqn))
+```
+
+The `summary()` \index{summary for model results}function can be used to look at the results statistically:
+
+```{r message=F, warning=F}
+summary(model1)
+```
+
+Probably the most important statistic is the \index{p}p value for the coefficient of the explanatory variable `ELEVATION`, which in this case is very small: $<2.2\times10^{-16}$.
+
+The graph shows not only the linear prediction line, but also the scatter plot of input points displayed with connecting offsets indicating the magnitude of the residual (error term) of the data point away from the prediction.
+
+**Making Predictions**
+
+\index{predictive model}We can use the linear equation and the coefficients derived for the intercept and the explanatory variable (and rounded a bit) to predict temperatures given the explanatory variable elevation, so:
+
+$$
+Temperature_{prediction} = 11.88 - 0.006{elevation}
+$$
+
+So with these coefficients\index{model coefficients}, we can apply the equation to a vector of elevations to predict temperature from those elevations:
+
+```{r message=F, warning=F}
+b0 <- model1$coefficients[1]
+b1 <- model1$coefficients[2]
+elevations <- c(500, 1000, 1500, 2000)
+elevations
+tempEstimate <- b0 + b1 * elevations
+tempEstimate
+```
+
+Next, we'll plot predictions and residuals on a map.
+
+## Spatial Influences on Statistical Analysis
+
+\index{spatial influences on statistical analysis}Spatial statistical analysis brings in the spatial dimension to a statistical analysis, ranging from visual analysis of patterns to specialized spatial statistical methods. There are many applications for these methods in environmental research, since spatial patterns are generally highly relevant. We might ask:
+
+-   What patterns can we see?
+-   What is the effect of scale?
+-   Relationships among variables -- do they vary spatially?
+
+In addition to helping to identify variables not considered in the model, the effect of local conditions and tendency of nearby observations to be related is rich for further exploration. Readers are encouraged to learn more about spatial statistics, and some methods (such as spatial regression models\index{spatial regression models}) are explored at https://rspatial.org/terra/analysis/ (@rspatial).
+
+But we'll use a fairly straightforward method that can help enlighten us about the effect of other variables and the influence of proximity -- mapping residuals. Mapping residuals is often enlightening since they can illustrate the influence of other variables. There's even a recent blog on this: <https://californiawaterblog.com/2021/10/17/sometimes-studying-the-variation-is-the-interesting-thing/?fbclid=IwAR1tfnj2SM_du6-jEd9h-AApRPO7w88TiPUbvTFz5dkagpQ1RMV04ZZYAr8>.
+
+### Mapping residuals
+
+\index{residuals, mapping}If we start with a map of February temperatures in the Sierra and try to model these as predicted by elevation, we might see the following result. (First we'll build the model again, though this is probably still in memory.)
+
+```{r model4mapResiduals, message=F, warning=F}
+library(tidyverse); library(terra); library(igisci); library(sf); library(tmap)
+sierra <- st_as_sf(filter(sierraFeb, !is.na(TEMPERATURE)), 
+                   coords=c("LONGITUDE", "LATITUDE"), remove=F, crs=4326)
+modelElev <- lm(TEMPERATURE ~ ELEVATION, data = sierra)
+summary(modelElev)
+```
+
+We can see from the model summary \index{model summary}that `ELEVATION` is significant as a predictor for `TEMPERATURE`, with a very low P value, and the R-squared value tells us that 87% of the variation in temperature might be "explained" by elevation. We'll store the residual (`resid`) and prediction (`predict`), and set up our mapping environment to create maps of the original data, prediction, and residuals.
+
+```{r results='hide'}
+cc <- modelElev$coefficients
+sierra$resid <- resid(modelElev)  # or we could have used mutate
+sierra$predict <- predict(modelElev) 
+eqn = paste("temperature =", 
+            (round(cc[1], digits=2)), "+",  
+            (round(cc[2], digits=3)), "elevation")
+ct <- st_read(system.file("extdata","sierra/CA_places.shp",package="igisci"))
+ct$AREANAME_pad <- paste0(str_replace_all(ct$AREANAME,'[A-Za-z]',' '),ct$AREANAME)
+bounds <- tmaptools::bb(sierra, ext=1.1)
+tempScale <- tm_scale_continuous(values="-brewer.rd_bu")
+```
+
+**The original data and the prediction map**
+
+Figure \@ref(fig:modOrigFebTemp) shows the original February temperature data, then Figure \@ref(fig:modPredictedTemp) displays the prediction of temperature by elevation at the same weather station locations using the linear model. 
+
+```{r modOrigFebTemp, out.width="90%", fig.cap="Original February temperature data"}
+tempScale <- tm_scale_continuous(values="-red_blue_diverging")
+hillsh <- rast(ex("CA/ca_hillsh_WGS84.tif"))
+mapBase <- tm_graticules(lines=F) +
+  tm_shape(hillsh, bbox=bounds) + 
+    tm_raster(col.scale=tm_scale_continuous(values="-brewer.greys"),
+              col.legend = tm_legend(show=F),col_alpha=0.7)
+mapTop = tm_shape(st_make_valid(CA_counties)) + tm_borders() +
+  tm_shape(ct) + tm_dots() + tm_text("AREANAME", size=0.5, xmod=1, ymod=1)
+  
+mapBase +   
+  tm_shape(sierra) +
+    tm_symbols(fill="TEMPERATURE",
+               fill.scale=tempScale, size=0.8,
+               fill.legend=tm_legend("°C",reverse=T,frame=F)) +
+  mapTop + tm_title("February Normals")
+```
+
+```{r modPredictedTemp, out.width="90%", fig.cap="Temperature predicted by elevation model"}
+mapBase +
+  tm_shape(sierra) +
+    tm_symbols(fill="predict", fill.scale=tempScale, size=0.8,
+               fill.legend=tm_legend(paste0(eqn,"\n°C"),reverse=T,frame=F)) +
+  mapTop + tm_title("February Prediction")
+```
+
+\index{prediction map, model}We can also use the model to predict temperatures from a raster of elevations, which should match the elevations at the weather stations, allowing us to predict temperature for the rest of the study area. We should have more confidence in the area (the Sierra Nevada and nearby areas) actually sampled by the stations, so we'll crop with the extent covering that area (though this will include more coastal areas that are likely to differ in February temperatures from patterns observed in the area sampled).
+
+We'll use GCS elevation raster data and map algebra to derive a prediction raster (Figure \@ref(fig:modTempPredRas)). Note that the `coef()` function is another way to extract the model coefficients.
+
+```{r modTempPredRas, out.width="90%", fig.cap="Temperature predicted by elevation raster"}
+elev <- rast(ex("CA/ca_elev_WGS84.tif"))
+elevSierra <- crop(elev, ext(-122, -118, 35, 41))  # GCS
+b0 <- coef(modelElev)[1]
+b1 <- coef(modelElev)[2]
+tempSierra <- b0 + b1 * elevSierra
+names(tempSierra) = "Predicted\nTemperature"
+mapBase +
+  tm_shape(tempSierra) + 
+    tm_raster(col.scale=tempScale,
+              col.legend=tm_legend(paste0(eqn,"\n°C"),reverse=T,frame=F)) +
+  mapTop + tm_title("February Prediction")
+```
+
+**The residuals**
+
+\index{residuals, mapping}To consider patterns where the simple elevation model *doesn't* work well, we can map the model residuals at the stations (Figure \@ref(fig:modResidualsTemp)).
+```{r modResidualsTemp, out.width="90%", fig.cap="Residuals of temperature from model predictions by elevation"}
+mapBase + 
+  tm_shape(sierra) +
+    tm_symbols(fill="resid", fill.scale=tempScale, size=0.8,
+               fill.legend=tm_legend("°C", reverse=T,frame=F)) +
+  mapTop + tm_title("February residuals")
+
+```
+
+Statistically, if the *residuals* from regression are spatially autocorrelated, we should look for patterns in the residuals to find other explanatory variables. However, we can visually see, based upon the pattern of the residuals, that there's at least one important explanatory variable not included in the model: latitude. We'll leave that for you to look at in the exercises.
+
+
+## Analysis of Covariance
+
+\index{analysis of covariance}\index{ANCOVA}Analysis of covariance, or ANCOVA, has the same purpose as ANOVA that we looked at under tests earlier, but also takes into account the influence of other variables called covariates. In this way, analysis of covariance combines a linear model with an analysis of variance.
+
+*"Are water samples from streams draining sandstone, limestone, and shale different based on carbonate solutes, while taking into account elevation?"*
+
+The response variable\index{response variable} is modeled from the factor (ANOVA) plus the covariate\index{covariate} (regression):
+
+-   ANOVA: `TH ~ lithology` where `TH` is total hardness, a measure of carbonate solutes
+
+-   Regression: `TH ~ elevation`
+
+-   ANCOVA: `TH ~ lithology + elevation`
+
+    -   Yet shouldn't involve interaction between `lithology` (factor) and `elevation` (covariate):
+
+However, as we'll see in a bit, this particular problem doesn't lend itself to ANCOVA because there's in fact a lot of interaction between lithology and elevation, because the Cumberland Plateau has essentially horizontal geologic structure, so all of the sandstone caprock is at the highest elevation. So we'll look at a better example.
+
+**Example: stream types distinguished by discharge and slope**
+
+Before we look at that water chemistry model predicted by lithology while taking elevation into consideration, we'll look at a clearer example of the use of ANCOVA, distinguishing stream types on the basis of discharge and slope.
+
+\index{rivers, ANCOVA}Three common river types are meandering (Figure \@ref(fig:modMeandering)), braided (Figure \@ref(fig:modBraided)), and anastomosed (Figure \@ref(fig:modAnastomosed)). 
+
+```{r modMeandering, fig.cap = "Meandering river", echo=F}
+knitr::include_graphics(here::here("img", "meanderingRiver.png"))
+```
+
+```{r modBraided, fig.cap = "Braided river", echo=F}
+knitr::include_graphics(here::here("img", "braided.png"))
+```
+
+```{r modAnastomosed, fig.cap = "Anastomosed river", echo=F}
+knitr::include_graphics(here::here("img", "anastomosed.png"))
+```
+
+For each, their slope varies by bankfull discharge in a relationship that looks something like Figure \@ref(fig:modQSrivers), which employs a log10 scale on both axes:
+
+```{r modQSrivers, fig.cap="Q vs S with stream type"}
+library(tidyverse)
+csvPath <- system.file("extdata","streams.csv", package="igisci")
+streams <- read_csv(csvPath)
+streams$strtype <- factor(streams$type, 
+                          labels=c("Anastomosing","Braided","Meandering"))
+library(scales) # needed for the trans_format function below
+ggplot(streams, aes(Q, S, color=strtype)) +
+  geom_point() + geom_smooth(method="lm", se = FALSE) + 
+  scale_x_continuous(trans=log10_trans(),
+                     labels = trans_format("log10", math_format(10^.x))) +
+  scale_y_continuous(trans=log10_trans(),
+                     labels = trans_format("log10", math_format(10^.x)))
+```
+
+One requirement for the ANCOVA model\index{ANCOVA requirements} is that there's no relationship between discharge (covariate) and channel type (factor). Another way of thinking about this is that the slope of the relationship between the covariate and response variable needs to be about the same for each group; only the intercept differs.  One good way to understand this is we're just adjusting the response variable by the group means of the covariate, which results in a simple adjustment the y intercept.  The groups have reasonably parallel slopes in the graph, at least for log-transformed data, so that's looking good. Here are two model definitions in R and what they mean for the analysis: 
+
+`log10(S) ~ strtype * log10(Q)` ... interaction between covariate and factor
+
+`log10(S) ~ strtype + log10(Q)` ... no interaction, parallel slopes
+
+In the ANCOVA process, if these models are not significantly different, we can remove the interaction term due to parsimony, and thus satisfy this ANCOVA requirement. So we can go through the process:
+
+```{r}
+ancova = lm(log10(S)~strtype*log10(Q), data=streams)
+anova(ancova)
+```
+**Now an additive model, which does not have that interaction:**
+```{r}
+ancova2 = lm(log10(S)~strtype+log10(Q), data=streams)
+anova(ancova2)
+```
+
+**Now see if the two models are significantly different:**
+```{r}
+anova(ancova,ancova2) # not significantly different, so simplification is justified
+```
+*They're not significantly different, so simplification is justified and appropriate in the interest of parsimony.*
+
+
+**Now we'll go one step further and remove the strtype term, which is just a simple regression:**
+```{r}
+SQlm = lm(log10(S)~log10(Q), data=streams)
+anova(SQlm)
+```
+
+
+**Is the ANCOVA model significantly different from a simple linear model with no factor?**
+
+```{r}
+anova(ancova2,SQlm)  # Goes too far: removing strtype significantly different
+```
+*Since removing the strtype produces a significantly different model, we've gone too far, so the strtype groupings mean something; the responses just have different means.*
+
+
+>You should have noticed above a surprising use of `anova()` to compare two models to see if they're different. As with other functions in R, it's always useful to use the help system, so you'll see with `?anova` that it has these two ways of working: as a summary for a single input model, and as a comparison when provided with multiple models.
+
+Alternatively, we can use R's step method for a more automated approach.
+
+```{r}
+ancova = lm(log10(S)~strtype*log10(Q), data=streams)
+step(ancova)
+```
+
+ANOVA and ANCOVA are applications of a linear model\index{ANOVA and ANCOVA as lm}. They use the `lm` model and the response variable is continuous and assumed normally distributed. The linear model for the stream types employing slope (S) and the covariate discharge (log~10~Q) was produced using:
+
+`mymodel <- lm(log10(S) ~ strtype + log10(Q))`
+
+Then as with standard ANOVA, we displayed the results using:
+
+`anova(mymodel)`
+
+### Tukey test for the ANCOVA model
+As we did with ANOVA in the last chapter, we can do a bit of post-hoc analysis with TukeyHSD. One minor difference with analysis of covariance is that you need to specify which variable you're analyzing by using the `which` parameter to specify the factor `strtype`.  Also, we need to use `aov()` instead of `lm()`, even though functionally they're the same.
+
+```{r}
+mymodel <- aov(log10(S) ~ strtype + log10(Q), data=streams)
+TukeyHSD(mymodel, conf.level=.95, which='strtype')
+```
+
+With this, we can be more confident in saying that all of the pairings are significantly distinct.
+
+### The karst water chemistry model
+We started off this section presenting the question: *"Are water samples from streams draining sandstone, limestone, and shale different based on carbonate solutes, while taking into account elevation?"* So let's look at that.
+
+We'll start by reviewing what we saw with the ANOVA test in the last chapter where we prepared the data to consider whether dissolved carbonates (measured as total hardness (TH)) was predicted by lithology. 
+
+```{r modSinkingCoveHardness, fig.cap="Total hardness from dissolved carbonates at water sampling sites in Upper Sinking Cove, TN"}
+library(igisci)
+library(sf); library(tidyverse); library(readxl); library(tmap); library(terra)
+wChemData <- read_excel(ex("SinkingCove/SinkingCoveWaterChem.xlsx")) %>%
+  mutate(siteLoc = str_sub(Site,start=1L, end=1L))
+wChemTrunk <- wChemData %>% filter(siteLoc == "T") %>% mutate(siteType = "trunk")
+wChemDrip <- wChemData %>% filter(siteLoc %in% c("D","S")) %>% mutate(siteType = "dripwater")
+wChemTrib <- wChemData %>% filter(siteLoc %in% c("B", "F", "K", "W", "P")) %>% 
+  mutate(siteType = "tributary")
+wChemData <- bind_rows(wChemTrunk, wChemDrip, wChemTrib)
+wChemData$siteType <- factor(wChemData$siteType)
+wChemData$Lithology <- factor(wChemData$Lithology)
+sites <- read_csv(ex("SinkingCove/SinkingCoveSites.csv"))
+wChem <- wChemData %>%
+  left_join(sites, by = c("Site" = "site")) %>%
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
+```
+
+**Plotting the relationship to see if ANCOVA might work**
+With ANCOVA we're seeing if a covariate (in this case elevation) plays a role in influencing the effect of lithology on TH.  We're looking for parallel relationships between groups defined by rock types. Do we have that?
+
+```{r}
+library(scales)
+ggplot(wChemData, aes(Elevation,TH,col=Lithology)) +
+  geom_point() + geom_smooth(method="lm", se=F) +
+  scale_x_continuous(trans=log10_trans(),
+                     labels = trans_format("log10", math_format(10^.x))) +
+  scale_y_continuous(trans=log10_trans(),
+                     labels = trans_format("log10", math_format(10^.x)))
+```
+Right off the bat, we see a problem -- the samples are at very different elevations. This isn't surprising since geologic structure is nearly horizontal, with a sandstone caprock of the Cumberland Plateau meaning that any water samples from sandstone are from the maximum elevations. But let's see what happens with the same ANCOVA process. 
+
+**Starting with the interactive model we'll call ancova**:
+```{r}
+ancova = lm(log10(TH)~Lithology*log10(Elevation), data=wChemData)
+summary(ancova)
+anova(ancova)
+```
+
+**Now an additive model, which does not have that interaction**:
+```{r}
+ancova2 = lm(log10(TH)~Lithology+log10(Elevation), data=wChemData)
+anova(ancova2)
+```
+```{r}
+anova(ancova,ancova2)
+```
+The fairly low (less than 0.05) p value means the models are significantly different, so we need to stick with the interaction model. Elevation interacts with lithology due to the horizontal structure. A stepwise approach shows the same thing:
+
+```{r}
+ancova = lm(log10(TH)~Lithology*log10(Elevation), data=wChemData)
+step(ancova)
+```
+
+So this isn't something we can apply ANCOVA to, *but it's not surprising*.
+
+
+
+## Generalized linear model (GLM)
+
+The glm\index{glm}\index{generalized linear model glm} in R allows you to work with various types of data using various distributions, described as families such as:
+
+-   `gaussian` : normal distribution -- what is used with lm
+
+-   `binomial` : \index{binomial}logit\index{logit} -- used with probabilities\index{probabilities (for logit)}
+
+    -   used for *logistic regression*
+
+-   `poisson` : \index{poisson}for counts -- commonly used for species counts\index{species counts}
+
+See `help(glm)` for other examples
+
+### Binomial family: Logistic GLM
+
+We'll look at a couple of examples from data we've used before:  Eucs vs oaks and stream types.
+
+In both cases, we'll create *dummy variables* to handle categorical variables as continuous. Dummy variables simply have the value 1 or 0 representing whether a particular category is true or false, e.g. is the sample from a Eucalyptus grove or not. This is frequently used in linear modeling for predictor variables, but we're going to use them for a response variable. With the binomial glm family, this is called *logistic regression*\index{logistic regression}, where we're predicting the *probability* of something being true, though our input response data only has 0% or 100% values.
+
+In the case of eucs vs. oaks, we only have two categories, so choosing either one works the same -- if the sample is euc, it's not oak, and vice-versa. We'll create a variable `euc` to represent whether it's Eucalyptus or not.
+
+```{r include=F}
+library(tidyverse); library(igisci)
+```
+```{r eucoak.glm.binomial}
+eucoak <- tidy_eucoak |>
+  mutate(euc = (tree=="euc")*1)
+runoff_model <- glm(euc ~ rain_subcanopy + slope + aspect +
+                          surface_tension + runoff_L + runoff_rainfall_ratio, 
+                    family=binomial, 
+                    data=eucoak)
+summary(runoff_model)
+```
+
+So what we can see from this is that only `surface_tension` is significant in predicting whether samples are from Eucalyptus groves.
+
+> A simple example of predicting a dog panting or not (a binomial, since the dog either panted or didn't) related to temperature can be found at: <https://bscheng.com/2016/10/23/logistic-regression-in-r/>
+
+For **stream types**, we have three types -- meandering, braided, and anastomosed -- so we'll end up doing three separate logistic GLMs \index{logistic model of river types}. Earlier, we used analysis of covariance with this data, and that's probably the most useful approach, but let's just use logistic regression to look at the probability of a particular stream type from slope and discharge:
+
+```{r binomialglm, message=F, warning=F}
+library(igisci)
+library(tidyverse)
+streams <- read_csv(ex("streams.csv"))
+streams$strtype <- factor(streams$type,
+                          labels=c("Anastomosing","Braided","Meandering"))
+```
+
+For logistic regression, we need probability data, so locations where we know the probability of something being true. If you think about it, that's pretty difficult to know for an observation, but we might know whether something is true or not, like we observed the phenomenon or not, and so we just assign a probability of 1 if something is observed, and 0 if it's not. Since in the case of the stream types, we really have three different probabilities: whether it's true that the stream is anastomosing, whether it's braided, and whether it's meandering, so we'll create three *dummy variables* for that with values of 1 or 0: if it's braided, the value for braided is 1, otherwise it's 0; the same applies to all three dummy variables:
+
+```{r}
+streams <- streams %>%
+  mutate(braided = ifelse(type == "B", 1, 0),
+         meandering = ifelse(type == "M", 1, 0),
+         anastomosed = ifelse(type == "A", 1, 0))
+streams
+```
+
+Then we can run the logistic regression on each one:
+
+```{r message=F, warning=F}
+summary(glm(braided ~ log(Q) + log(S), family=binomial, data=streams))
+summary(glm(meandering ~ log(Q) + log(S), family=binomial, data=streams))
+summary(glm(anastomosed ~ log(Q) + log(S), family=binomial, data=streams))
+```
+
+So what we can see from this admittedly small sample is that:
+
+-   Predicting braided character from Q and S works pretty well, distinguishing these characteristics from the characteristics of all other streams (`braided==0`).
+-   Predicting anastomosed or meandering, however, isn't significant.
+
+We really need a larger sample size, and North American geomorphology has recently discovered the "anabranching" stream type (of which anastomosed is a type) that has long been recognized in Australia, and its characteristics range across meandering at least, so muddying the waters...
+
+### Logistic landslide model
+
+\index{logistic landslide model}\index{landslide model}With its active tectonics, steep slopes and relatively common intense rain events during the winter season, coastal California has a propensity for landslides. Pacifica has been the focus of many landslide studies by the USGS and others, with events ranging from coastal erosion influenced by wave action to landslides (Figure \@ref(fig:modLandslide)) and debris flows on steep hillslopes driven by positive pore pressure (@LandslidesBayArea1982).
+
+```{r modLandslide, fig.align = 'center', out.width = "75%", fig.cap = "Landslide in San Pedro Creek watershed", echo=F}
+knitr::include_graphics(here::here("img", "P1020951_25.png"))
+```
+
+Also see the relevant section in the San Pedro Creek Virtual Fieldtrip story map: @SanPedroCreekWatershedVirtualFieldtrip.
+
+Landslides detected in San Pedro Creek Watershed in Pacifica, CA, are in the SanPedro folder of extdata. Landslides were detected on aerial photography from 1941, 1955, 1975, 1983, and 1997 (Figure \@ref(fig:modSPlandslides)), and confirmed in the field during a study in the early 2000s (@Sims2004, @DavisBlesius2015) (Figure \@ref(fig:modSedSourceStudy)). 
+
+```{r landslides, warning=F, message=F, results='hide'}
+library(igisci); library(sf); library(tidyverse); library(terra)
+slides <- st_read(ex("SanPedro/slideCentroids.shp")) %>%
+  mutate(IsSlide = 1)
+slides$Visible <- factor(slides$Visible)
+trails <- st_read(ex("SanPedro/trails.shp"))
+streams <- st_read(ex("SanPedro/streams.shp"))
+wshed <- st_read(ex("SanPedro/SPCWatershed.shp"))
+```
+
+```{r modSPlandslides, fig.cap="Landslides in San Pedro Creek watershed"}
+ggplot(data=slides) + geom_sf(aes(col=Visible)) + 
+  scale_color_brewer(palette="Spectral") +
+  geom_sf(data=streams, col="blue") +
+  geom_sf(data=wshed, fill=NA)
+  
+```
+
+```{r modSedSourceStudy, fig.align = 'center', out.width = "75%", fig.cap = "Sediment source analysis", echo=F}
+knitr::include_graphics(here::here("img", "sedsource.png"))
+```
+
+We'll create a logistic regression \index{logistic regression}to compare landslide probability to various environmental factors. We'll use elevation, slope, and other derivatives, distance to streams, distance to trails, and the results of a physical model predicting slope stability as a stability index (SI), using slope and soil transmissivity data.
+
+At this point, we have data for *occurrences* \index{occurrence data}of landslides, and so for each point we assign the dummy variable `IsSlide = 1`. We don't have any *absence* \index{absence data}data, but we can create some using random points \index{random points}and assign them `IsSlide = 0`. It would probably be a good idea to avoid areas very close to the occurrences, but we'll just put random points everywhere and just remove the ones that don't have SI data.
+
+For the random \@ref(random) locations (Figure \@ref(fig:modSPrandomPts)), we'll set a seed so for the book the results will stay the same; and if we're good with that since it doesn't really matter what seed we use, we might as well use the answer to everything: 42.
+
+```{r modSPrandomPts, fig.cap="Raw random points"}
+library(terra)
+elev <- rast(ex("SanPedro/dem.tif"))
+SI <- rast(ex("SanPedro/SI.tif"))
+npts <- length(slides$Visible) * 2 # up it a little to get enough after clip
+set.seed(42)
+x <- runif(npts, min=xmin(elev), max=xmax(elev))
+y <- runif(npts, min=ymin(elev), max=ymax(elev))
+rsampsRaw <- st_as_sf(data.frame(x,y), coords = c("x","y"), crs=crs(elev))
+ggplot(data=rsampsRaw) + geom_sf(size=0.5) + 
+  geom_sf(data=streams, col="blue") +
+  geom_sf(data=wshed, fill=NA)
+```
+
+Now we have twice as many random points as we have landslides, within the rectangular extend of the watershed, as defined by the elevation raster. We doubled these because we need to exclude some points, yet still have enough to be roughly as many random points as slides. We'll exclude:
+
+-   all points outside the watershed
+-   points within 100 m of the landslide occurrences, the distance based on knowledge of the grain of landscape features (like spurs and swales) that might influence landslide occurrence
+
+```{r warning=F, message=F}
+slideBuff <- st_buffer(slides, 100)
+wshedNoSlide <- st_difference(wshed, st_union(slideBuff))
+```
+
+First, we'll just see what `st_difference()` returns:
+
+```{r}
+ggplot(wshedNoSlide) + geom_sf(fill="green")
+```
+
+The 100 m buffer \index{buffer exclusion}excludes all areas around all landslides in the data set (Figure \@ref(fig:modRandomBuffer)). We're going to run the model on specific years, but the best selection of landslide absences will be to exclude areas around all landslides we know of (Figure \@ref(fig:modRandomeExcluded)).
+
+```{r modRandomBuffer, fig.cap="Landslides and buffers to exclude from random points"}
+ggplot(data=slides) + geom_sf(aes(col=Visible)) + 
+  scale_color_brewer(palette="Spectral") +
+  geom_sf(data=streams, col="blue") +
+  geom_sf(data=wshedNoSlide, fill=NA)
+rsamps <- st_intersection(rsampsRaw,wshedNoSlide) %>%
+  mutate(IsSlide = 0)
+allPts <- bind_rows(slides, rsamps)
+```
+
+```{r modRandomeExcluded, fig.cap="Landslides and random points (excluded from slide buffers)"}
+ggplot(data=allPts) + geom_sf(aes(col=IsSlide)) + 
+  geom_sf(data=streams, col="blue") +
+  geom_sf(data=wshed, fill=NA)
+```
+
+Now we'll derive some environmental variables \index{environmental raster variables}as rasters and extract their values\index{extraction from rasters} to the slide/noslide point data set. We'll use the `shade` function to create a `hillshade` raster with the sun at the average noon angle from the south. 
+
+```{r extractSanPedro}
+slidesV <- vect(allPts)
+strms <- rasterize(vect(streams),elev)
+tr <- rasterize(vect(trails),elev)
+stD <- terra::distance(strms); names(stD) = "stD"
+trD <- terra::distance(tr); names(trD) = "trD"
+slope <- terrain(elev, v="slope")
+curv <- terrain(slope, v="slope")
+aspect <- terrain(elev, v="aspect")
+hillshade <- shade(slope/180*pi,aspect/180*pi,angle=53,direction=180)
+elev_ex <- terra::extract(elev, slidesV) %>% 
+  rename(elev=dem) %>% dplyr::select(-ID)
+SI_ex <- terra::extract(SI, slidesV) %>% dplyr::select(-ID)
+slope_ex <- terra::extract(slope, slidesV) %>% dplyr::select(-ID)
+curv_ex <- terra::extract(curv, slidesV) %>% 
+  rename(curv = slope) %>% dplyr::select(-ID)
+hillshade_ex <- terra::extract(hillshade, slidesV) %>% 
+  dplyr::select(-ID)
+stD_ex <- terra::extract(stD, slidesV) %>% dplyr::select(-ID)
+trD_ex <- terra::extract(trD, slidesV) %>% dplyr::select(-ID)
+slidePts <- cbind(allPts,elev_ex,SI_ex,slope_ex,curv_ex,hillshade_ex,stD_ex,trD_ex)
+slidesData <- as.data.frame(slidePts) %>%
+                            filter(!is.nan(SI)) %>% st_as_sf(crs=st_crs(slides))
+```
+
+We'll filter \index{filter for year}for just the slides in the 1983 imagery, and for the model also include all of the random points (detected with `NA` values for Visible):
+
+```{r}
+slides83 <- slidesData %>% filter(Visible == 1983)
+slides83plusr <- slidesData %>% filter(Visible == 1983 | is.na(Visible))
+```
+
+The logistic regression in the glm model uses the *binomial* family\index{binomial family glm}:
+
+```{r}
+summary(glm(IsSlide ~ SI + curv + elev + slope + hillshade + stD + trD, 
+            family=binomial, data=slides83plusr))
+
+```
+
+So while we might want to make sure that we've picked the right variables, some conclusions from this might be that stability index (`SI`) is not surprisingly a strong predictor of landslides, but also that other than elevation and curvature, the other variables are also significant.
+
+#### Map the logistic result
+
+\index{logistic result map}We should be able to map the results; we just need to use the formula for the model, which in our case will have six explanatory variables SI ($X_1$), elev ($X_2$), slope ($X_3$), hillshade ($X_4$), stD ($X_5$), and trD ($X_6$): $$p = \frac{e^{b_0+b_1X_1+b_2X_2+b_3X_3+b_4X_4+b_5X_5}}{1+e^{b_0+b_1X_1+b_2X_2+b_3X_3+b_4X_4+b_5X_5}}$$
+
+Then we retrieve the coefficients with `coef()` and use map algebra to create the prediction map, including dots for the landslides actually observed in 1983 (Figure \@ref(fig:modLogisticPredict)).
+
+```{r modLogisticPredict, fig.cap="Logistic model prediction of 1983 landslide probability"}
+library(tmap)
+SI_stD_model <- glm(IsSlide ~ SI + slope + hillshade + stD + trD, family=binomial, 
+                    data=slides83plusr)
+b0 <- coef(SI_stD_model)[1]
+b1 <- coef(SI_stD_model)[2]
+b2 <- coef(SI_stD_model)[3]
+b3 <- coef(SI_stD_model)[4]
+b4 <- coef(SI_stD_model)[5]
+b5 <- coef(SI_stD_model)[6]
+predictionMap <- (exp(b0+b1*SI+b2*slope+b3*hillshade+b4*stD+b5*trD))/
+  (1 + exp(b0+b1*SI+b2*slope+b3*hillshade+b4*stD+b5*trD))
+names(predictionMap) <- "probability\n1983"
+tm_shape(predictionMap) +
+    tm_raster(col.scale=tm_scale_continuous(values="carto.peach")) +
+  tm_shape(streams) + tm_lines(col="blue") +
+  tm_shape(wshed) + tm_borders(col="black") +
+  tm_shape(slides83) + 
+    tm_dots(fill="purple", size=0.25,
+            size.legend=tm_legend("1983 slides",frame=F)) +
+  tm_title("Landslides predicted by\nSI, slope, hillshade, streamD, trailD") + 
+  tm_graticules(lines=F)
+```
+
+### Poisson regression
+
+Poission regression (`family = poisson` in glm) is for analyzing counts\index{poisson model}. You might use this to determine which variables are significant predictors, or you might want to see where or when counts are particularly high, or higher than expected.  Or it might be applied to compare groupings.  For example, if instead of looking at differences among rock types in Sinking Cove based on chemical properties in water samples or measurements (where we applied ANOVA), we looked at differences in fish counts, that might be an application of poisson regression, as long as other data assumptions hold.
+
+#### Seabird Poisson Model
+
+This \index{seabird poisson model}model is further developed in a separate case study where we'll map a prediction, but we'll look at the basics for applying a poisson family model in glm: *seabird observations*.  The data is potentially suitable since its counts with known time intervals of observation effort and initial review of the data suggests that the mean of counts is reasonably similar to the variance. The data was collected through the ACCESS program (@ACCESS) and a thorough analysis is provided by @Studwell2017.
+
+```{r message=F, results='hide'}
+library(igisci); library(sf); library(tidyverse); library(tmap)
+library(maptiles)
+transects <- st_read(ex("SFmarine/transects.shp"))
+```
+
+One of the seabirds studies, the black-footed albatross\index{black-footed albatross}, has the lowest counts (so a relatively rare bird\index{bird}), and studies of its distribution may be informative. We'll look at counts collected during transect cruises\index{bird transects} in July 2006 (Figure \@ref(fig:modAlbatrossCounts)).
+
+```{r modAlbatrossCounts, message=F, warning=F, fig.cap="Black-footed albatross counts, July 2006"}
+tmap_mode("plot")
+transJul2006 <- transects %>%
+  filter(month==7 & year==2006 & avg_tem>0 & avg_sal>0 & avg_fluo>0)
+tm_basemap("Esri.NatGeoWorldMap") +
+  tm_shape(transJul2006) + tm_symbols(fill="bfal", size="bfal",
+                                      fill.scale=tm_scale_continuous(values="Greens"))
+```
+
+Prior studies have suggested that temperature\index{temperature}, salinity\index{salinity}, fluorescence\index{fluorescence}, depth\index{depth}, and various distances\index{distance (as explanatory variable)} might be good explanatory variables to use to look at spatial patterns, so we'll use these in the model. 
+
+```{r}
+summary(glm(bfal~avg_tem + avg_sal + avg_fluo + avg_dep +
+            dist_land + dist_isla + dist_200m + dist_cord, 
+            data=transJul2006, family=poisson))
+```
+
+We can see in the model coefficients\index{model coefficients} table several predictive variables that appear to be significant, which we'll want to explore further, and also map the results as we did with Sierra temperature data.
+
+- avg_tem
+- avg_sal
+- avg_dep
+- dist_land
+- dist_200m
+
+
+**Note** R will allow you to run glm on any family, but it's up to you to make sure it's appropriate. For example, if you provide a response variable that is *not* count data or doesn't fit the requirements for a poisson model, R will create a result but it's bogus. 
+
+## Other modeling methods
+
+### Curve fitting
+
+In general, what we're doing with linear models and other approaches can be considered curve fitting, and we've seen how we can manipulate our data by modeling with transformed data, at least log-transformed, then applied to a linear model using `lm`. We've also looked a bit at generalized linear models with `glm`, but there are other methods such as:
+
+- `poly` -- for polynomials
+- `nls` -- for nonlinear models
+
+In the addenda to this book, the Curve Fitting chapter explores a bit of polynomial models and nonlinear models, and you might want to have a look:
+
+https://bookdown.org/igisc/EnvDataSciAddenda/curve-fitting.html
+
+
+### Models employing machine learning
+
+Models using machine learning \index{machine learning}algorithms are commonly used in data science, fitting with its general exploratory and data-mining approach. There are many machine learning algorithms, and many resources for learning more about them, but they all share a basically black-box approach where a collection of variables are explored for patterns in input variables that help to explain a response variable. The latter is similar to more conventional statistical modeling describe above, with the difference being the machine learning approach -- think of robots going through your data looking for connections.
+
+We'll explore machine learning methods in the next chapter when we attempt to use them to classify satellite imagery, an important environmental application.
+
+
+\pagebreak
