@@ -1,0 +1,49 @@
+h1:part-time-series (PART) Time Series
+h1:ts Time Series Visualization and Analysis
+fig:timeRCVfluxtower Red Clover Valley eddy covariance flux tower installation
+fig:timeLoneyGraph Loney Meadow net ecosystem exchange (NEE) results (Blackburn et al. 2021)
+fig:timeNileTS Time series of Nile River flows
+h2:structure-seasonality-and-decomposition-of-time-series Structure, Seasonality, and Decomposition of Time Series
+fig:timeMaunaLoaDecomp Decomposition of Mauna Loa CO2 data
+fig:timeCO2stl Seasonal decomposition of time series using loess (stl) applied to CO2. Note that the vertical units for each panel is parts per million (ppm), and the bar on the right shows the size of ~2 ppm.
+h2:creation-of-time-series-ts-data Creation of Time Series (ts) Data
+fig:timeSFhiLo San Francisco monthly highs and lows as time series
+h3:frequency-start-and-end-parameters-for-ts Frequency, start, and end parameters for 
+fig:timeSFyearly SF data with yearly period
+fig:timeGG20year Greenhouse gases with 20 year observations, so 0.05 annual frequency
+h3:associating-times-with-time-series Associating times with time series
+h4:creating-a-time-series-from-web-scraped-mauna-loa-co2-data Creating a time series from web-scraped Mauna Loa CO2 data
+h3:subsetting-time-series-by-times Subsetting time series by times
+fig:timeSunspot Monthly sunspot activity from 1749 to 2013
+fig:timeSunspot19401970 Monthly sunspot activity from 1940 to 1970
+h3:changing-the-frequency-to-use-a-different-period Changing the frequency to use a different period
+fig:timeSunspot20years Sunspots of the first 20 years of data
+fig:timeSunspot11years 11-year sunspot cycle decomposition
+h3:time-stamps-and-extensible-time-series Time stamps and extensible time series
+h4:lubridate-and-julian-dates Lubridate and Julian dates
+h4:extensible-time-series-xts Extensible time series ()
+fig:timeSanPedroEcoli San Pedro Creek E. coli time series
+fig:timeSanPedroEcoliDecomp Decomposition of weekly E. coli data, annual period (frequency 52)
+h2:data-smoothing-moving-average-ma Data smoothing: moving average ()
+fig:timeMovingAvgEcoli Moving average (order=15) of E. coli data
+fig:timeCO2ggTS GHG CO2 time series
+fig:timeMovingAvgCO2 Moving average (order=7) of CO2 time series
+fig:timeRandomVar Random variation seen by subtracting moving average
+fig:timeEcoliSTL15 Decomposition using stl of a 15th-order moving average of E. coli data
+h2:decomposition-of-data-logger-data-marble-mountains Decomposition of data logger data: Marble Mountains
+fig:timeMblResurg Marble Mountains resurgence data logger design
+fig:timeMblResEquipment Marble Mountains resurgence data logger equipment
+fig:timeMblData Data logger data from the Marbles resurgence
+fig:timeMblh2oSTL stl decomposition of Marbles water level time series
+h2:facet-graphs-for-comparing-variables-over-time Facet Graphs for Comparing Variables over Time
+fig:timeLoneyFluxTower Flux tower installed at Loney Meadow, 2016. Photo credit: Darren Blackburn
+fig:timeLoneyFacet Facet plot with free y scale of Loney flux tower parameters
+h2:lag-regression Lag Regression
+fig:timeBugacRadTemp Scatter plot of Bugac solar radiation and air temperature
+fig:timeBugacSolsticeTS Solstice 8-day time series of solar radiation and temperature
+h3:the-lag-regression-using-a-lag-function-in-a-linear-model The lag regression, using a lag function in a linear model
+fig:timeBugacSolarradTemp Bugac solar radiation and temperature
+h2:ensemble-summary-statistics Ensemble Summary Statistics
+fig:timeManausEnsemble Manaus ensemble averages with error bars
+h2:learning-more-about-time-series-in-r Learning more about Time Series in R
+

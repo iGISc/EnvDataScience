@@ -683,7 +683,7 @@ Well, that’s nice, but it’s no different from what you get with just plottin
 <div class="sourceCode" id="cb976"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb976-1"><a href="ts.html#cb976-1" tabindex="-1"></a><span class="fu">plot</span>(co2ts)</span></code></pre></div>
 <p><img src="EnvDataScience_files/figure-html/unnamed-chunk-398-1.png" alt="" width="75%" style="display: block; margin: auto;" /></p>
 <blockquote>
-<p>This web-scraped CO2 data method is explored more in <a href="https://bookdown.org/igisc/EnvDataSciAddenda/atmospheric-co2-record-from-mauna-loa-hawaii.html" class="uri">https://bookdown.org/igisc/EnvDataSciAddenda/atmospheric-co2-record-from-mauna-loa-hawaii.html</a>, along with some related curve-fitting methods, also explored in the addenda.</p>
+<p>This web-scraped CO2 data method is explored more in the “Atmospheric CO2 Record from Mauna Loa, Hawaii” chapter of <em>Environmental Data Science Addenda</em> accessed at <a href="https://connect.posit.cloud/jerryddavis" class="uri">https://connect.posit.cloud/jerryddavis</a>.</p>
 </blockquote>
 </div>
 </div>
@@ -770,9 +770,9 @@ FIGURE 12.12: 11-year sunspot cycle decomposition
 <span id="cb990-2"><a href="ts.html#cb990-2" tabindex="-1"></a>           <span class="fu">yday</span>(d)<span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> <span class="fu">hour</span>(d)<span class="sc">/</span><span class="dv">24</span> <span class="sc">+</span> <span class="fu">minute</span>(d)<span class="sc">/</span><span class="dv">1440</span> <span class="sc">+</span> <span class="fu">second</span>(d)<span class="sc">/</span><span class="dv">86400</span>}</span>
 <span id="cb990-3"><a href="ts.html#cb990-3" tabindex="-1"></a>datetime <span class="ot">&lt;-</span> <span class="fu">now</span>()</span>
 <span id="cb990-4"><a href="ts.html#cb990-4" tabindex="-1"></a><span class="fu">print</span>(datetime)</span></code></pre></div>
-<pre><code>## [1] &quot;2026-09-04 09:14:12 PDT&quot;</code></pre>
+<pre><code>## [1] &quot;2026-09-04 20:08:06 PDT&quot;</code></pre>
 <div class="sourceCode" id="cb992"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb992-1"><a href="ts.html#cb992-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">ydayDec</span>(datetime), <span class="at">digits=</span><span class="dv">12</span>)</span></code></pre></div>
-<pre><code>## [1] 246.384861264</code></pre>
+<pre><code>## [1] 246.838968048</code></pre>
 </div>
 <div id="extensible-time-series-xts" class="section level4 hasAnchor" number="12.2.5.2">
 <h4><span class="header-section-number">12.2.5.2</span> Extensible time series (<code>xts</code>)<a href="ts.html#extensible-time-series-xts" class="anchor-section" aria-label="Anchor link to header"></a></h4>

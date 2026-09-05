@@ -1,0 +1,12 @@
+h1:chapter00.chapter_section Background, Goals and Data
+h2:environmental-data-science Environmental Data Science
+fig:indexEDS Environmental data science
+h2:environmental-data-and-methods Environmental Data and Methods
+h2:goals Goals
+h3:some-definitions Some definitions:
+h2:exploratory-data-analysis Exploratory Data Analysis
+h2:software-and-data Software and Data
+h3:data Data
+fig:indexCAcounties California counties simple features data in igisci package
+h2:acknowledgements Acknowledgements
+
